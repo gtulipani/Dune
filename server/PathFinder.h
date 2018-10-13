@@ -29,4 +29,6 @@ class PathFinder {
     std::stack<Point> getPath(Terrain& t, Point start, Point goal, Unit u);
 };
 
+void testPathFinder();
+
 #endif

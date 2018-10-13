@@ -16,7 +16,7 @@ Point::Point(std::size_t _row, std::size_t _col) {
 }
 
 std::string Point::getStr() const {
-    return std::to_string(this->row) + ";" + std::to_string(this->col);
+    return "(" + std::to_string(this->row) + ", " + std::to_string(this->col) + ")";
 }
 
 bool Point::operator==(const Point& other) const {

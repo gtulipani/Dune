@@ -64,3 +64,16 @@ std::stack<Point>PathFinder:: getPath(Terrain& t, Point start, Point goal, Unit 
     }
     return path;
 }
+
+void testPathFinder() {
+    Matrix m("Matrix");
+    Terrain t(m);
+    PathFinder pf;
+    Unit u;
+    std::stack<Point> path = pf.getPath(t, Point(6, 3), Point(4, 14), u);
+    while (!path.empty()) {
+        std::cout << path.top().getStr() << ", ";
+        path.pop();
+    }
+    std::cout << std::endl;
+}
