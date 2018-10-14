@@ -1,9 +1,8 @@
 #include "Matrix.h"
 
-#include <stdexcept>
 #include <string>
-#include <iostream>
 #include <fstream>
+//#include <BadFiLeException.h>
 
 Point::Point() {
     this->row = 0;
@@ -13,6 +12,13 @@ Point::Point() {
 Point::Point(std::size_t _row, std::size_t _col) {
     this->row = _row;
     this->col = _col;
+}
+
+Point::Point(std::string str) {
+    std::size_t n = str.find(',');
+    this->row = stoul(str.substr(1, n - 1));
+    std::size_t m = str.find(')');
+    this->col = stoul(str.substr(n + 2, m - n - 2));
 }
 
 std::string Point::getStr() const {
@@ -44,12 +50,10 @@ Matrix::Matrix(std::string fName) {
     for (i = 0; i < this->n && !file.eof(); i++) {
         for (j = 0; j < this->m && !file.eof(); j++) {
             file >> this->at(i, j);
-            std::cout << this->at(i, j) << " ";
         }
-        std::cout << std::endl;
     }
     if (i != this->n || j != this->m) {
-        throw "Error en el archivo";
+        throw "Error"/*BadFileException()*/;
     }
 }
 
@@ -84,10 +88,10 @@ void Matrix::range_check(std::size_t row, std::size_t col) const {
     }
 }
 
-std::size_t Matrix::rows() const noexcept {
+std::size_t Matrix::rows() const {
     return this->n;
 }
 
-std::size_t Matrix::cols() const noexcept {
+std::size_t Matrix::cols() const {
     return this->m;
 }

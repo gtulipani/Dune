@@ -12,6 +12,8 @@ struct Point {
 
     Point(std::size_t row, std::size_t col);
 
+    explicit Point(std::string str);
+
     std::string getStr() const;
 
     bool operator==(const Point& other) const;
@@ -31,9 +33,9 @@ class Matrix {
 
     Matrix(std::string fName);
 
-    std::size_t rows() const noexcept;
+    std::size_t rows() const;
 
-    std::size_t cols() const noexcept;
+    std::size_t cols() const;
 
     int& at(std::size_t row, std::size_t col);
 
