@@ -17,9 +17,9 @@ class Terrain {
     public:
     Terrain(Matrix& _mat);
 
-    std::vector<Point> getAdyacents(Point p, Unit u) /*const*/;
+    std::vector<Point> getAdyacents(Point p, Unit u) const;
 
-    int getCost(Point a, Point b, Unit u) /*const*/;
+    int getCost(Point a, Point b, Unit u) const;
 };
 
 #endif

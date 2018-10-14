@@ -6,7 +6,7 @@ Terrain::Terrain(Matrix& _mat) : mat(_mat) {}
  *  despues, ya que si es adyacente o no depende de mas cosas, y la matriz  *
  *  de terreno, no va a ser solo 1 o 0.                                     *
 */
-std::vector<Point> Terrain::getAdyacents(Point p, Unit u) {
+std::vector<Point> Terrain::getAdyacents(Point p, Unit u) const {
     std::vector<Point> ady;
     if (p.row > 0) {
         if (mat.at(p.row - 1, p.col) != 1) {
@@ -51,8 +51,8 @@ std::vector<Point> Terrain::getAdyacents(Point p, Unit u) {
     return ady;
 }
 
-int Terrain::getCost(Point a, Point b, Unit u) {
-    if (abs(a.row - b.row) == 1 && abs(a.col - b.col) == 1) {
+int Terrain::getCost(Point a, Point b, Unit u) const {
+    if (::abs(a.row - b.row) == 1 && ::abs(a.col - b.col) == 1) {
         return 1; // Si son diagonales
     }
     return 0;

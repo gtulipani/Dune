@@ -16,7 +16,8 @@ Point::Point(std::size_t _row, std::size_t _col) {
 }
 
 std::string Point::getStr() const {
-    return "(" + std::to_string(this->row) + ", " + std::to_string(this->col) + ")";
+    return "(" + std::to_string(this->row) + ", " +
+            std::to_string(this->col) + ")";
 }
 
 bool Point::operator==(const Point& other) const {
@@ -54,14 +55,23 @@ Matrix::Matrix(std::string fName) {
 
 int& Matrix::at(std::size_t row, std::size_t col) {
     range_check(row, col);
-    return vec[row * n + col];
+    return vec.at(row * n + col);
 }
 
 int& Matrix::at(Point a) {
     return at(a.row, a.col);
 }
 
-void Matrix::range_check(std::size_t row, std::size_t col) {
+const int& Matrix::at(std::size_t row, std::size_t col) const {
+    range_check(row, col);
+    return vec.at(row * n + col);
+}
+
+const int& Matrix::at(Point a) const {
+    return at(a.row, a.col);
+}
+
+void Matrix::range_check(std::size_t row, std::size_t col) const {
     if (row >= this->n) {
         throw std::out_of_range("Matrix::range_check: row (which is " +
                                 std::to_string(row) + ") >= this->rows()" +

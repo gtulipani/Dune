@@ -39,8 +39,12 @@ class Matrix {
 
     int& at(Point a);
 
+    const int& at(std::size_t row, std::size_t col) const;
+
+    const int& at(Point a) const;
+
     private:
-    void range_check(std::size_t row, std::size_t col);
+    void range_check(std::size_t row, std::size_t col) const;
 };
 
 #endif

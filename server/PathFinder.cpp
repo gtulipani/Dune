@@ -63,6 +63,8 @@ std::stack<Point>PathFinder:: getPath(Terrain& t, Point start, Point goal, Unit 
         current = came_from[current.getStr()];
     }
     return path;
+    /*  El algroitmo funciona bien, hay que ajustar los costos de las diagonales
+        para que no las elija siempre. */
 }
 
 void testPathFinder() {
