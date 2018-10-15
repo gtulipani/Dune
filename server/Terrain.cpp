@@ -52,7 +52,8 @@ std::vector<Point> Terrain::getAdyacents(Point p, Unit u) const {
 }
 
 int Terrain::getCost(Point a, Point b, Unit u) const {
-    if (::abs(a.row - b.row) == 1 && ::abs(a.col - b.col) == 1) {
+    if (std::abs((long)(a.row - b.row)) == 1 && std::abs((long)(a.col - b.col))
+    == 1) {
         return 1; // Si son diagonales
     }
     return 0;

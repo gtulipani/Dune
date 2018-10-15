@@ -1,4 +1,4 @@
-add_executable(server main.cpp)
+add_executable(server main.cpp PathFinder.cpp Matrix.cpp Terrain.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/commons) # include files from commons
 target_link_libraries(server commons)

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <cstdlib>
 //#include <BadFiLeException.h>
 
 Point::Point() {
@@ -35,7 +36,8 @@ bool Point::operator!=(const Point& other) const {
 }
 
 std::size_t Point::hDistanceTo(const Point& other) const {
-   return ::abs(this->row - other.row) + ::abs(this->col - other.col);
+   return static_cast<size_t>(std::abs((long)(this->row - other.row)) + std::abs((long)(this->col - other
+	  .col)));
 }
 
 Matrix::Matrix(std::size_t rows, std::size_t cols) : n(rows), m(cols) {
