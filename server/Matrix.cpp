@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
-//#include <BadFiLeException.h>
+#include <BadFileException.h>
 
 Point::Point() {
     this->row = 0;
@@ -55,7 +55,7 @@ Matrix::Matrix(std::string fName) {
         }
     }
     if (i != this->n || j != this->m) {
-        throw "Error"/*BadFileException()*/;
+        throw BadFileException();
     }
 }
 
