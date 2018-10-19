@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
-#include <BadFileException.h>
+#include "../commons/BadFileException.h"
 
 Point::Point() {
     this->row = 0;
@@ -33,6 +33,10 @@ bool Point::operator==(const Point& other) const {
 
 bool Point::operator!=(const Point& other) const {
     return !(*this == other);
+}
+
+Point Point::operator-(const Point& other) const {
+    return Point();
 }
 
 std::size_t Point::hDistanceTo(const Point& other) const {

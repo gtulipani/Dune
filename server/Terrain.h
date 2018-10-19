@@ -11,6 +11,8 @@
 #define PRECIPICIOS 4
 #define EDIFICIO 5
 
+#define TILE_SIZE 10
+
 class Terrain {
     Matrix mat;
 

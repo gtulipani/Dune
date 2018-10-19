@@ -20,6 +20,8 @@ struct Point {
 
     bool operator!=(const Point& other) const;
 
+    Point operator-(const Point& other) const;
+
     std::size_t hDistanceTo(const Point& other) const;
 };
 

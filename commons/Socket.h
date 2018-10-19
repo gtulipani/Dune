@@ -1,50 +1,54 @@
-#ifndef __COMMONS_SOCKET_H__
-#define __COMMONS_SOCKET_H__
+#ifndef __COMMENTS_SOCKET_H__
+#define __COMMENTS_SOCKET_H__
 
 #include <string>
-#include <iostream>
-
-#include "socket_t.h"
+#include <sys/types.h>
 
 class Socket {
-private:
-	bool initialized;
-	socket_t skt;
+    private:
+    int fd;
+    struct addrinfo * addrInfo;
+    struct addrinfo * iterator;
 
-	socket_t *getSkt();
+    explicit Socket(int fd);
 
-public:
-	Socket();
+    void start();
 
-	// Disabling the constructor by copy because it's a socket
-	Socket(const Socket &other) = delete;
+    public:
+    Socket();
 
-	Socket(Socket &&other) noexcept;
+    Socket(const char* host, const char* port);
 
-	void connect(std::string host, std::string port);
+    Socket(Socket&& other);
 
-	void bind(std::string port);
+    Socket& operator=(Socket&& other);
+    
+    bool valid() const;
 
-	Socket accept();
+    void connect();
 
-	void send(std::string source, unsigned long size);
+    void bindAndListen(unsigned int qsize);
 
-	void send_int(int num);
+    Socket acceptClient() const;
 
-	long receive(std::string &out, unsigned long size);
+    void sendInt32(int32_t n);
 
-	int receive_int();
+    int32_t receiveInt32();
 
-	void close();
+    void sendStr(const std::string& str);
 
-	~Socket();
+    unsigned int receiveStr(std::string& str, unsigned int size);
 
-	// Disabling the assignment by copy because it's a socket
-	Socket &operator=(const Socket &other) = delete;
+    void sendBuff(const char* buff, unsigned int size) const;
 
-	// Overloading the assignment by movement
-	Socket &operator=(Socket &&other) noexcept;
+    unsigned int receiveBuff(char* buff, unsigned int size) const;
+
+    void shutDown();
+
+    ~Socket();
+
+    Socket& operator=(const Socket& other) = delete;
+    Socket(Socket& other) = delete;
 };
 
-
-#endif //__COMMONS_SOCKET_H__
+#endif

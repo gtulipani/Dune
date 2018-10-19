@@ -1,5 +1,4 @@
-add_library(commons socket_t.c Socket.cpp ClientClosedSocketException.cpp
-        ConnectionRefusedException.cpp BadFileException.cpp)
+add_library(commons Socket.cpp SOException.cpp BadFileException.cpp Thread.cpp Lock.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib
