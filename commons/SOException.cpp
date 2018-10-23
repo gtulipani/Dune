@@ -1,7 +1,7 @@
 #include "SOException.h"
 
-#include <string.h> // For strerror
+#include <cerrno> // For errno
 
-SOException::SOException() : runtime_error(strerror(errno)) {}
+SOException::SOException() : runtime_error(std::strerror(errno)) {}
 
-SOException::SOException(std::string _errmsg) : runtime_error(_errmsg) {}
+SOException::SOException(std::string message) : runtime_error(message) {}

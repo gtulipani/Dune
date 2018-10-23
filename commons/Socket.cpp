@@ -108,7 +108,7 @@ void Socket::bindAndListen(unsigned int qsize) {
 Socket Socket::acceptClient() const {
     int fd = accept(this->fd, NULL, NULL);
     if (fd == -1) throw SOException();
-    return std::move(Socket(fd));
+    return Socket(fd);
 }
 
 #define INT32_SIZE 4
