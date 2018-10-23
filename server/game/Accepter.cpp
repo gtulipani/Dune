@@ -26,7 +26,7 @@ void Accepter::run() {
 void Accepter::removeFinishedClients() {
     unsigned int i = 0;
     while (i < clients.size()) {
-        if (clients.at(i)->hasFinished()) {
+        if (!clients.at(i)->isRunning()) {
             clients.at(i)->join();
             delete clients.at(i);
             clients.erase(clients.begin() + i);
@@ -43,6 +43,7 @@ void Accepter::deleteClients() {
         clients.at(i)->join();
         delete clients.at(i);
     }
+    clients.clear();
 }
 
 void Accepter::terminate() {

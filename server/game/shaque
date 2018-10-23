@@ -2,6 +2,7 @@
 #define __SHAQUE_H__
 
 #include <queue>
+#include <list>
 #include "Lock.h"
 
 template<typename T>
@@ -17,11 +18,14 @@ class shaque{
         queue.push(value);
     }
 
-    T& pop() {
+    std::list<T> popAll() {
         Lock l(m);
-        T& value = queue.front();
-        queue.pop();
-        return value;
+        std::list<T> list;
+        while (!queue.empty()) {
+            list.push_front(queue.front());
+            queue.pop();
+        }
+        return list;
     }
 
     bool empty() const {
