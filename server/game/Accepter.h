@@ -13,22 +13,17 @@ class Accepter : public Thread {
     Socket socket;
     std::vector<Client*> clients;
     shaque<std::string>& sharedQueue;
-    bool is_on;
 
     void removeFinishedClients();
 
     void deleteClients();
 
-    public:
-    explicit Accepter(std::string port, shaque<std::string>& sharedQueue);
-
     virtual void run() override;
 
-    virtual void stop() override;
+    virtual void terminate() override;
 
-    virtual bool hasFinished() const override;
-
-    ~Accepter();
+    public:
+    explicit Accepter(std::string port, shaque<std::string>& sharedQueue);
 };
 
 #endif // __ACCEPTER_H__

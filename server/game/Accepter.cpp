@@ -7,19 +7,17 @@
 Accepter::Accepter(std::string port, shaque<std::string>& _sharedQueue)
 : socket(nullptr, port.c_str()), sharedQueue(_sharedQueue) {
     socket.bindAndListen(MAX_CLIENTS_IN_WAIT);
-    is_on = false;
 }
 
 void Accepter::run() {
-    is_on = true;
-    while (is_on) {
+    while (this->isRunning()) {
         try {
             Socket peer = socket.acceptClient();
             clients.push_back(new Client(std::move(peer), sharedQueue));
             clients.back()->start();
             removeFinishedClients();
         } catch (const SOException& e) {
-            is_on = false;
+            this->stop();
         }
     }
     deleteClients();
@@ -47,18 +45,6 @@ void Accepter::deleteClients() {
     }
 }
 
-void Accepter::stop() {
-    is_on = false;
+void Accepter::terminate() {
     socket.shutDown();
-}
-
-bool Accepter::hasFinished() const {
-    return !is_on;
-}
-
-Accepter::~Accepter() {
-    if (is_on) {
-        socket.shutDown();
-        is_on = false;
-    }
 }

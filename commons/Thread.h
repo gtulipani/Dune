@@ -6,7 +6,13 @@
 class Thread {
     private:
     std::thread thread;
+    bool is_on;
  
+    protected:
+    virtual void terminate();
+
+    virtual void run() = 0;
+
     public:
     Thread();
 
@@ -14,11 +20,9 @@ class Thread {
 
     void join();
 
-    virtual void run() = 0;
+    bool isRunning() const;
 
-    virtual void stop() = 0;
-
-    virtual bool hasFinished() const = 0;
+    void stop();
 
     virtual ~Thread();
 

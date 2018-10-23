@@ -15,14 +15,12 @@ class Client : public Thread {
 
     void handleMsgSuccess(std::string msg);
 
-    public:
-    Client(Socket _socket, shaque<std::string> _sharedQueue);
-
     virtual void run() override;
 
-    virtual void stop() override;
+    virtual void terminate() override;
 
-    virtual bool hasFinished() const override;
+    public:
+    Client(Socket _socket, shaque<std::string> _sharedQueue);
 };
 
 #endif // __CLIENT_H__

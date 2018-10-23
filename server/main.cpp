@@ -31,8 +31,7 @@ int main(int argc, char *argv[]) {
 		Accepter accepter("8080", sharedQueue);
 		accepter.start();
 
-		while (std::cin.peek() != EXIT_CHAR) {
-		}
+		while (std::cin.peek() != EXIT_CHAR) {}
 
 		accepter.stop();
 		accepter.join();
