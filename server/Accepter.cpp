@@ -4,18 +4,20 @@
 
 #define MAX_CLIENTS_IN_WAIT 20
 
-Accepter::Accepter(std::string port) : socket(nullptr, port.c_str()) {
+Accepter::Accepter(std::string port, shaque<std::string>& _sharedQueue)
+: socket(nullptr, port.c_str()), sharedQueue(_sharedQueue) {
     socket.bindAndListen(MAX_CLIENTS_IN_WAIT);
-    is_on = true;
+    is_on = false;
 }
 
 void Accepter::run() {
+    is_on = true;
     while (is_on) {
         try {
             Socket peer = socket.acceptClient();
-            clients.push_back(new Client(std::move(peer)));
+            clients.push_back(new Client(std::move(peer), sharedQueue));
             clients.back()->start();
-            //removeFinishedClients();
+            removeFinishedClients();
         } catch (const SOException& e) {
             is_on = false;
         }
@@ -24,11 +26,14 @@ void Accepter::run() {
 }
 
 void Accepter::removeFinishedClients() {
-    for (unsigned int i = 0; i < clients.size(); i++) {
+    unsigned int i = 0;
+    while (i < clients.size()) {
         if (clients.at(i)->hasFinished()) {
-            clients.at(i)->join(); // For safety
+            clients.at(i)->join();
             delete clients.at(i);
             clients.erase(clients.begin() + i);
+        } else {
+            i++;
         }
     }
 }
@@ -45,6 +50,10 @@ void Accepter::deleteClients() {
 void Accepter::stop() {
     is_on = false;
     socket.shutDown();
+}
+
+bool Accepter::hasFinished() const {
+    return !is_on;
 }
 
 Accepter::~Accepter() {

@@ -1,0 +1,36 @@
+#ifndef __SHAQUE_H__
+#define __SHAQUE_H__
+
+#include <queue>
+#include "Lock.h"
+
+template<typename T>
+class shaque{
+    std::queue<T> queue;
+    std::mutex& m;
+
+    public:
+    explicit shaque(std::mutex& _m) : m(_m) {}
+
+    void push(const T& value) {
+        Lock l(m);
+        queue.push(value);
+    }
+
+    T& pop() {
+        Lock l(m);
+        T& value = queue.front();
+        queue.pop();
+        return value;
+    }
+
+    bool empty() const {
+        return queue.empty();
+    }
+
+    unsigned int size() const {
+        return queue.size();
+    }
+};
+
+#endif // __SHAQUE_H__

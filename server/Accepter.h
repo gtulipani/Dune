@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "shaque"
 #include "Socket.h"
 #include "Thread.h"
 #include "Client.h"
@@ -11,6 +12,7 @@ class Accepter : public Thread {
     private:
     Socket socket;
     std::vector<Client*> clients;
+    shaque<std::string>& sharedQueue;
     bool is_on;
 
     void removeFinishedClients();
@@ -18,13 +20,15 @@ class Accepter : public Thread {
     void deleteClients();
 
     public:
-    explicit Accepter(std::string port);
+    explicit Accepter(std::string port, shaque<std::string>& sharedQueue);
 
     virtual void run() override;
 
-    void stop();
+    virtual void stop() override;
+
+    virtual bool hasFinished() const override;
 
     ~Accepter();
 };
 
-#endif
+#endif // __ACCEPTER_H__

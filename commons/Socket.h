@@ -1,5 +1,5 @@
-#ifndef __COMMENTS_SOCKET_H__
-#define __COMMENTS_SOCKET_H__
+#ifndef __COMMONS_SOCKET_H__
+#define __COMMONS_SOCKET_H__
 
 #include <string>
 #include <sys/types.h>
@@ -51,4 +51,4 @@ class Socket {
     Socket(Socket& other) = delete;
 };
 
-#endif
+#endif // __COMMONS_SOCKET_H__

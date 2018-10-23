@@ -18,4 +18,4 @@ class Lock {
     Lock& operator=(Lock&&) = delete;
 };
 
-#endif
+#endif // __COMMONS_LOCK_H__

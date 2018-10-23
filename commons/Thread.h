@@ -16,6 +16,10 @@ class Thread {
 
     virtual void run() = 0;
 
+    virtual void stop() = 0;
+
+    virtual bool hasFinished() const = 0;
+
     virtual ~Thread();
 
     Thread(Thread&& other);
@@ -26,4 +30,4 @@ class Thread {
     Thread& operator=(const Thread&) = delete;
 };
 
-#endif
+#endif // __COMMONS_THREAD_H__
