@@ -1,16 +1,14 @@
 #include "PathFinder.h"
 
 #include <vector>
-#include <queue>
+#include "PriorityQueue.h"
 #include <stdexcept>
 
 #include <iostream>
 
 std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
-    typedef std::pair<int, std::string> PQElement;
-    std::priority_queue<PQElement, std::vector<PQElement>,
-        std::greater<PQElement> > frontier;
-    frontier.emplace(0, start.getStr());
+    PriorityQueue<Point> frontier;
+    frontier.push(start, 0);
 
     std::map<std::string, Point> came_from;
     std::map<std::string, int> cost_so_far;
@@ -18,7 +16,7 @@ std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
     cost_so_far[start.getStr()] = 0;
   
     while (!frontier.empty()) {
-        Point current = Point(frontier.top().second);
+        Point current = frontier.top();
         frontier.pop();
 
         if (current == goal) {
@@ -31,7 +29,7 @@ std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
                 || new_cost < cost_so_far[next.getStr()]) {
                 cost_so_far[next.getStr()] = new_cost;
                 int priority = new_cost + next.hDistanceTo(goal);
-                frontier.emplace(priority, next.getStr());
+                frontier.push(next, priority);
                 came_from[next.getStr()] = current;
             }
         }

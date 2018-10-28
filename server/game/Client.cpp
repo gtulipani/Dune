@@ -26,7 +26,7 @@ void Client::run() {
 }
 
 void Client::handleMsgError() {
-    this->send("Error");
+    this->send("ERROR");
     this->stop();
 }
 
