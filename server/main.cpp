@@ -5,7 +5,7 @@
 #include <thread>
 #include <mutex>
 #include "editor/include/Editor.h"
-#include "game/shaque"
+#include "game/shaque.h"
 #include "game/Accepter.h"
 #include "game/PathFinder.h"
 
@@ -24,11 +24,7 @@ int main(int argc, char *argv[]) {
 		std::cout << "Hello, World! I'm a Server" << std::endl;
 		testPathFinder();
 
-		std::mutex m;
-
-		shaque<std::string> sharedQueue(m);
-
-		Accepter accepter("8080", sharedQueue);
+		Accepter accepter("8080", 5);
 		accepter.start();
 
 		while (std::cin.peek() != EXIT_CHAR) {}

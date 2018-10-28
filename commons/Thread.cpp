@@ -5,6 +5,7 @@ Thread::Thread() {
 }
 
 void Thread::start() {
+    if (is_on) return;
     is_on = true;
     thread = std::thread(&Thread::run, this);
 }

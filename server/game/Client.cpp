@@ -1,16 +1,15 @@
 #include "Client.h"
 
 #include <iostream>
-#include "SOException.h"
+#include "../../commons/SOException.h"
 
-Client::Client(Socket _socket, shaque<std::string> _sharedQueue)
+Client::Client(Socket _socket, shaque<std::string>& _sharedQueue)
 : socket(std::move(_socket)), sharedQueue(_sharedQueue) {}
 
 void Client::run() {
-    int32_t msg_len;
-    int32_t n;
+    std::cout << "Client connected" << std::endl;
+    int32_t n, msg_len;
     std::string msg;
-    is_on = true;
     while (this->isRunning()) {
         try {
             msg_len = socket.receiveInt32();
@@ -27,15 +26,17 @@ void Client::run() {
 }
 
 void Client::handleMsgError() {
-    socket.sendInt32(5);
-    socket.sendStr("ERROR");
+    this->send("Error");
+    this->stop();
 }
 
-void Client::handleMsgSuccess(std::string msg) {
-    //sharedQueue.push(msg);
-    std::cout << msg << std::endl;
-    socket.sendInt32(2);
-    socket.sendStr("OK");
+void Client::handleMsgSuccess(const std::string& msg) {
+    sharedQueue.push(msg);
+}
+
+void Client::send(const std::string& msg) const {
+    socket.sendInt32(msg.length());
+    socket.sendStr(msg);
 }
 
 void Client::terminate() {

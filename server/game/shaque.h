@@ -3,10 +3,10 @@
 
 #include <queue>
 #include <list>
-#include "Lock.h"
+#include "../../commons/Lock.h"
 
 template<typename T>
-class shaque{
+class shaque {
     std::queue<T> queue;
     std::mutex& m;
 

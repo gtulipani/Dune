@@ -3,16 +3,19 @@
 
 #include <string>
 #include <vector>
-#include "shaque"
-#include "Socket.h"
-#include "Thread.h"
+#include "shaque.h"
+#include "../../commons/Socket.h"
+#include "../../commons/Thread.h"
 #include "Client.h"
+#include "Game.h"
 
 class Accepter : public Thread {
     private:
     Socket socket;
     std::vector<Client*> clients;
-    shaque<std::string>& sharedQueue;
+    Game game;
+    shaque<std::string> sharedQueue;
+    std::mutex m;
 
     void removeFinishedClients();
 
@@ -23,7 +26,7 @@ class Accepter : public Thread {
     virtual void terminate() override;
 
     public:
-    explicit Accepter(std::string port, shaque<std::string>& sharedQueue);
+    explicit Accepter(std::string port, unsigned int gameSize);
 };
 
 #endif // __ACCEPTER_H__

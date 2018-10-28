@@ -113,23 +113,23 @@ Socket Socket::acceptClient() const {
 
 #define INT32_SIZE 4
 
-void Socket::sendInt32(int32_t n) {
+void Socket::sendInt32(int32_t n) const {
     n = htonl(n);
     sendBuff((char*)&n, INT32_SIZE);
 }
 
-int32_t Socket::receiveInt32() {
+int32_t Socket::receiveInt32() const {
     int32_t n;
     receiveBuff((char*)&n, INT32_SIZE);
     n = ntohl(n);
     return n;
 }
 
-void Socket::sendStr(const std::string& str) {
+void Socket::sendStr(const std::string& str) const {
     sendBuff(str.c_str(), str.length());
 }
 
-unsigned int Socket::receiveStr(std::string& str, unsigned int size) {
+unsigned int Socket::receiveStr(std::string& str, unsigned int size) const {
     char* buff = new char[size + 1];
     unsigned int n = receiveBuff(buff, size);
     buff[n] = 0;

@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
-#include "BadFileException.h"
+#include "../../commons/BadFileException.h"
 
 Point::Point() {
     this->row = 0;

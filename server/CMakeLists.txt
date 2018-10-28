@@ -19,6 +19,8 @@ add_executable(server
         game/Terrain.cpp
         game/Accepter.cpp
         game/Client.cpp
+        game/Game.cpp
+        game/Unit.cpp
         editor/src/Editor.cpp
         editor/src/TerrainCellWidget.cpp)
 

@@ -31,13 +31,13 @@ class Socket {
 
     Socket acceptClient() const;
 
-    void sendInt32(int32_t n);
+    void sendInt32(int32_t n) const;
 
-    int32_t receiveInt32();
+    int32_t receiveInt32() const;
 
-    void sendStr(const std::string& str);
+    void sendStr(const std::string& str) const;
 
-    unsigned int receiveStr(std::string& str, unsigned int size);
+    unsigned int receiveStr(std::string& str, unsigned int size) const;
 
     void sendBuff(const char* buff, unsigned int size) const;
 
