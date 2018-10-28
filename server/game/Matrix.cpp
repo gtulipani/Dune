@@ -15,28 +15,12 @@ Point::Point(std::size_t _row, std::size_t _col) {
     this->col = _col;
 }
 
-Point::Point(std::string str) {
-    std::size_t n = str.find(',');
-    this->row = stoul(str.substr(1, n - 1));
-    std::size_t m = str.find(')');
-    this->col = stoul(str.substr(n + 2, m - n - 2));
-}
-
-std::string Point::getStr() const {
-    return "(" + std::to_string(this->row) + ", " +
-            std::to_string(this->col) + ")";
-}
-
 bool Point::operator==(const Point& other) const {
     return other.row == this->row && other.col == this->col;
 }
 
 bool Point::operator!=(const Point& other) const {
     return !(*this == other);
-}
-
-Point Point::operator-(const Point& other) const {
-    return Point();
 }
 
 std::size_t Point::hDistanceTo(const Point& other) const {

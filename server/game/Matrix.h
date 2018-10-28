@@ -12,15 +12,9 @@ struct Point {
 
     Point(std::size_t row, std::size_t col);
 
-    explicit Point(std::string str);
-
-    std::string getStr() const;
-
     bool operator==(const Point& other) const;
 
     bool operator!=(const Point& other) const;
-
-    Point operator-(const Point& other) const;
 
     std::size_t hDistanceTo(const Point& other) const;
 };
