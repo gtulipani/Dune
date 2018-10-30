@@ -1,32 +1,8 @@
 #include "Matrix.h"
 
-#include <string>
 #include <fstream>
 #include <cstdlib>
-#include "../../commons/BadFileException.h"
-
-Point::Point() {
-    this->row = 0;
-    this->col = 0;
-}
-
-Point::Point(std::size_t _row, std::size_t _col) {
-    this->row = _row;
-    this->col = _col;
-}
-
-bool Point::operator==(const Point& other) const {
-    return other.row == this->row && other.col == this->col;
-}
-
-bool Point::operator!=(const Point& other) const {
-    return !(*this == other);
-}
-
-std::size_t Point::hDistanceTo(const Point& other) const {
-   return static_cast<size_t>(std::abs((long)(this->row - other.row)) + std::abs((long)(this->col - other
-	  .col)));
-}
+#include "BadFileException.h"
 
 Matrix::Matrix(std::size_t rows, std::size_t cols) : n(rows), m(cols) {
     vec.resize(this->n * this->m);

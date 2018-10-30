@@ -1,8 +1,8 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include "Point.h"
 #include "Matrix.h"
-#include "Unit.h"
 
 #define ARENA 0
 #define DUNAS 1
@@ -19,9 +19,11 @@ class Terrain {
     public:
     Terrain(Matrix& _mat);
 
-    std::vector<Point> getAdyacents(Point p, Unit u) const;
+    Point findClosest(Point& p) const;
 
-    int getCost(Point a, Point b, Unit u) const;
+    std::vector<Point> getAdyacents(Point& p) const;
+
+    int getCost(Point& a, Point& b) const;
 };
 
 #endif

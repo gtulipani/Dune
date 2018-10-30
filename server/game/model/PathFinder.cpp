@@ -1,11 +1,7 @@
 #include "PathFinder.h"
 
-#include <vector>
 #include "PriorityQueue.h"
 #include <unordered_map>
-#include <stdexcept>
-
-#include <iostream>
 
 /* hash function for storing Point on unordered_map */
 namespace std {
@@ -24,11 +20,16 @@ namespace std {
 
 }
 
-std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
+std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u) {
+    goal = t.findClosest(goal);
+
     PriorityQueue<Point> frontier;
+    std::unordered_map<Point, Point> came_from;
+    std::unordered_map<Point, int> cost_so_far;
+
     frontier.push(start, 0);
-    std::unordered_map<Point, Point> came_from = {{start, start}};
-    std::unordered_map<Point, int> cost_so_far = {{start, 0}};
+    came_from[start] = start;
+    cost_so_far[start] = 0;
   
     while (!frontier.empty()) {
         Point current = frontier.top();
@@ -38,8 +39,12 @@ std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
             break;
         }
 
-        for (Point next : t.getAdyacents(current, u)) {
-            int new_cost = cost_so_far[current] + t.getCost(current, next, u);
+        std::vector<Point> adyacents = t.getAdyacents(current);
+        u.filterBadTiles(adyacents);
+
+        for (Point next : adyacents) {
+            int new_cost = cost_so_far[current] +
+                           t.getCost(current, next);
 
             if (cost_so_far.find(next) == cost_so_far.end() 
                 || new_cost < cost_so_far.at(next)) {
@@ -58,16 +63,4 @@ std::stack<Point> findPath(Terrain& t, Point start, Point goal, Unit u) {
         current = came_from[current];
     }
     return path;
-}
-
-void testPathFinder() {
-    Matrix m("Matrix");
-    Terrain t(m);
-    Unit u;
-    std::stack<Point> path = findPath(t, Point(6, 3), Point(4, 14), u);
-    while (!path.empty()) {
-        std::cout << "(" << path.top().row << ", " << path.top().col << "), ";
-        path.pop();
-    }
-    std::cout << std::endl;
 }

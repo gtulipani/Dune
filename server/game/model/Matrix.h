@@ -3,21 +3,7 @@
 
 #include <vector>
 #include <string>
-
-struct Point {
-    std::size_t row;
-    std::size_t col;
-
-    Point();
-
-    Point(std::size_t row, std::size_t col);
-
-    bool operator==(const Point& other) const;
-
-    bool operator!=(const Point& other) const;
-
-    std::size_t hDistanceTo(const Point& other) const;
-};
+#include "Point.h"
 
 class Matrix {
     std::vector<int> vec;

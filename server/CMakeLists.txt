@@ -14,13 +14,15 @@ include_directories(editor/include) # include files from the editor
 
 add_executable(server
         main.cpp
-        game/PathFinder.cpp
-        game/Matrix.cpp
-        game/Terrain.cpp
-        game/Accepter.cpp
-        game/Client.cpp
-        game/Game.cpp
-        game/Unit.cpp
+        game/model/PathFinder.cpp
+        game/model/Matrix.cpp
+        game/model/Point.cpp
+        game/model/Terrain.cpp
+        game/arch/Accepter.cpp
+        game/arch/Client.cpp
+        game/arch/Game.cpp
+        game/model/Unit.cpp
+        game/model/TileUtils.cpp
         editor/src/Editor.cpp
         editor/src/TerrainCellWidget.cpp)
 

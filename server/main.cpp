@@ -5,9 +5,8 @@
 #include <thread>
 #include <mutex>
 #include "editor/include/Editor.h"
-#include "game/shaque.h"
-#include "game/Accepter.h"
-#include "game/PathFinder.h"
+#include "game/arch/shaque.h"
+#include "game/arch/Accepter.h"
 
 #define EXIT_CHAR 'q'
 
@@ -22,7 +21,6 @@ int main(int argc, char *argv[]) {
 		return app.exec();
 	} else {
 		std::cout << "Hello, World! I'm a Server" << std::endl;
-		testPathFinder();
 
 		Accepter accepter("8080", 5);
 		accepter.start();
