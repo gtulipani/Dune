@@ -1,5 +1,5 @@
-#ifndef TERRAIN_H
-#define TERRAIN_H
+#ifndef __TERRAIN_H__
+#define __TERRAIN_H__
 
 #include "Point.h"
 #include "Matrix.h"

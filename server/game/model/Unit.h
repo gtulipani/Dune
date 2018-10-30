@@ -1,5 +1,5 @@
-#ifndef UNIT_H
-#define UNIT_H
+#ifndef __UNIT_H__
+#define __UNIT_H__
 
 #include <stack>
 #include "Point.h"

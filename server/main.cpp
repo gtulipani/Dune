@@ -4,11 +4,9 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
-#include "editor/include/Editor.h"
-#include "game/arch/shaque.h"
-#include "game/arch/Accepter.h"
 
-#define EXIT_CHAR 'q'
+#include "editor/include/Editor.h"
+#include "game/arch/Server.h"
 
 int main(int argc, char *argv[]) {
 	if (std::string(argv[1]) == "editor") {
@@ -22,13 +20,9 @@ int main(int argc, char *argv[]) {
 	} else {
 		std::cout << "Hello, World! I'm a Server" << std::endl;
 
-		Accepter accepter("8080", 5);
-		accepter.start();
-
-		while (std::cin.peek() != EXIT_CHAR) {}
-
-		accepter.stop();
-		accepter.join();
+		// Server receives a key-value file with the configuration
+		Server server(argv[1]);
+		server.start();
 	}
 	return 0;
 }

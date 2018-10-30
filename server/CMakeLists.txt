@@ -21,10 +21,14 @@ add_executable(server
         game/arch/Accepter.cpp
         game/arch/Client.cpp
         game/arch/Game.cpp
+        game/arch/Server.cpp
+        game/arch/GameConfiguration.cpp
         game/model/Unit.cpp
         game/model/TileUtils.cpp
+        game/model/Weapon.h
+        game/model/Soldier.h
         editor/src/Editor.cpp
-        editor/src/TerrainCellWidget.cpp)
+        editor/src/TerrainCellWidget.cpp )
 
 target_link_libraries(server commons Qt5::Widgets)
 
