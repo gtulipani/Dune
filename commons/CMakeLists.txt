@@ -4,6 +4,9 @@ add_library(commons
         BadFileException.cpp
         Thread.cpp
         Lock.cpp
+        Matrix.cpp
+        Point.cpp
+        Terrain.cpp
         JSONUtils.cpp
         json.hpp)
 

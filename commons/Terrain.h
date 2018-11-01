@@ -9,15 +9,17 @@
 #define ROCA 2
 #define CIMAS 3
 #define PRECIPICIOS 4
-#define EDIFICIO 5
+#define ESPECIA 5
+#define EDIFICIO 6
 
 #define TILE_SIZE 10
 
 class Terrain {
+private:
     Matrix mat;
 
-    public:
-    Terrain(Matrix& _mat);
+public:
+    explicit Terrain(Matrix& _mat);
 
     Point findClosest(Point& p) const;
 
