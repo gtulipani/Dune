@@ -143,7 +143,7 @@ void Socket::sendBuff(const char* buff, unsigned int size) const {
     int s;
 
     while (bytes_sent < size) {
-        s = send(this->fd, buff + bytes_sent, size - bytes_sent, 1);
+        s = send(this->fd, buff + bytes_sent, size - bytes_sent, MSG_NOSIGNAL);
         if (s == -1) {
             throw SOException();
         } else if (s == 0) {

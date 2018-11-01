@@ -1,6 +1,7 @@
 #include <fstream>
 
-#include "game/arch/GameConfiguration.h"
+#include "JSONUtils.h"
+#include "GameConfiguration.h"
 
 #define CONFIGURATION_BUILDINGS_KEY "buildings"
 #define CONFIGURATION_WEAPONS_KEY "weapons"
@@ -95,21 +96,8 @@ void GameConfiguration::parseGameConfiguration(json &configuration_json) {
 	}
 }
 
-/**
- * Private function that transforms the string from the file into a JSON
- */
-json GameConfiguration::parseAsJson(const string &game_units_parameters_path) {
-	fstream input_stream;
-	input_stream.open(game_units_parameters_path, ios::in);
-	string complete_json((istreambuf_iterator<char>(input_stream)),
-						 istreambuf_iterator<char>());
-	json json = json::parse(complete_json);
-	input_stream.close();
-	return json;
-}
-
 GameConfiguration::GameConfiguration(const string &config_file_path) {
-	json game_items_configuration = parseAsJson(config_file_path);
+	json game_items_configuration = json_utils::parseAsJson(config_file_path);
 	parseGameConfiguration(game_items_configuration);
 }
 

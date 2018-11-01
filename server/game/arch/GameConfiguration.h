@@ -9,8 +9,6 @@
 #include "game/model/Weapon.h"
 #include "game/model/Soldier.h"
 
-using namespace std;
-
 class GameConfiguration {
 private:
 	vector<Building> buildings;
@@ -27,8 +25,6 @@ private:
 	vector<Vehicle> parseVehiclesConfiguration(json &configuration_json);
 
 	void parseGameConfiguration(json &configuration_json);
-
-	json parseAsJson(const string &game_units_parameters_path);
 
 public:
 	explicit GameConfiguration(const string &config_file_path);

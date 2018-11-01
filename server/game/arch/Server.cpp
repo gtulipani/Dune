@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <string>
 // Libraries used for getting files from directory in POSIX
 #include <sys/types.h>
 #include <dirent.h>
@@ -10,6 +11,7 @@
 #include "Server.h"
 #include "shaque.h"
 #include "Accepter.h"
+#include "../model/Map.h"
 
 #define KEY_VALUE_SEPARATOR '='
 #define EXIT_CHAR 'q'
@@ -18,6 +20,8 @@
 #define MAPS_PATH_KEY "maps_path"
 #define UNITS_PROPERTIES_PATH_KEY "units_properties_file_path"
 
+const string MAP_EXTENSION = ".map";
+
 const vector<string> Server::VALID_KEYS = {
 		PORT_KEY,
 		MAPS_PATH_KEY,
@@ -25,15 +29,30 @@ const vector<string> Server::VALID_KEYS = {
 };
 
 /**
+ * Private function that checks the extension from each file parsed in the
+ * directory
+ */
+bool Server::hasExpectedExtension(const string &file_to_add) {
+	return (file_to_add.size() >= MAP_EXTENSION.size() &&
+			file_to_add.compare(file_to_add.size() - MAP_EXTENSION.size(),
+								MAP_EXTENSION.size(), MAP_EXTENSION) == 0);
+}
+
+/**
  * Private function that gets the names of all the files existing in the path
  * passed as parameter in UNIX
  */
 vector<string> Server::getFilesFromPath(const string &path) {
 	vector<string> files;
-	DIR* dirp = opendir(path.c_str());
-	struct dirent * dp;
+	DIR *dirp = opendir(path.c_str());
+	struct dirent *dp;
 	while ((dp = readdir(dirp)) != nullptr) {
-		files.emplace_back(path + "/" + dp->d_name);
+		if (hasExpectedExtension(dp->d_name)) {
+			string complete_name(path);
+			files.emplace_back(
+					move(complete_name.append(("/")).append
+					(dp->d_name)));
+		}
 	}
 	closedir(dirp);
 	return files;
@@ -62,7 +81,8 @@ ConfigMap Server::parseConfigurationFile(const string &config_file_path) {
 	return key_values_map;
 }
 
-Server::Server(string port, string maps_path, GameConfiguration game_configuration) :
+Server::Server(string port, string maps_path,
+			   GameConfiguration game_configuration) :
 		port(move(port)),
 		maps_list(getFilesFromPath(maps_path)),
 		game_configuration(move(game_configuration)) {}
@@ -77,10 +97,10 @@ Server::Server(ConfigMap config_map) : Server(
 }
 
 Server::Server(const std::string &config_map_file_path) :
-	Server(parseConfigurationFile(config_map_file_path)) {}
+		Server(parseConfigurationFile(config_map_file_path)) {}
 
 void Server::start() {
-
+	Map map(maps_list[0]);
 	Accepter accepter(port, 5);
 	accepter.start();
 
