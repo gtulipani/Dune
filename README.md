@@ -1,11 +1,12 @@
 # Dune
 ## Building and Running
 ### Build
-The Application has 4 different [CMake](https://en.wikipedia.org/wiki/CMake) 
+The Application has 4¡5 different [CMake](https://en.wikipedia.org/wiki/CMake) 
 files:
 - One CMake at the root path from the project that defines each one of the goals
 - One CMake under `server` directory that builds all the server-related files
 - One CMake under `client` directory that builds all the client-related files
+- One CMake under `editor` directory that builds all the editor-related files
 - One CMake under `commons` directory that builds a [Static Library](https://en.wikipedia.org/wiki/Static_library)
 with the shared resources between the server and the client
 
@@ -48,16 +49,38 @@ The output should be similar to:
 [100%] Built target client
 ```
 
+#### Build Editor
+1. Execute `make editor`. This will create and executable called: `editor`.
+The output should be similar to:
+```
+[ 50%] Built target commons
+Scanning dependencies of target editor_autogen
+[ 58%] Automatic MOC and UIC for target editor
+[ 58%] Built target editor_autogen
+Scanning dependencies of target editor
+[ 66%] Building CXX object editor/CMakeFiles/editor.dir/main.cpp.o
+[ 75%] Building CXX object editor/CMakeFiles/editor.dir/src/Editor.cpp.o
+[ 83%] Building CXX object editor/CMakeFiles/editor.dir/src/TerrainCellWidget.cpp.o
+[ 91%] Building CXX object editor/CMakeFiles/editor.dir/editor_autogen/mocs_compilation.cpp.o
+[100%] Linking CXX executable editor
+[100%] Built target editor
+```
+
 #### Install Application
 1. Execute `make install`. This will install the Application in the machine. 
 The output should be similar to:
 ```
-[ 46%] Built target commons
-[ 84%] Built target server
-[100%] Built target client
+[ 22%] Built target commons
+[ 70%] Built target server
+[ 77%] Built target client
+[ 81%] Automatic MOC and UIC for target editor
+[ 81%] Built target editor_autogen
+[100%] Built target editor
 Install the project...
 -- Install configuration: "Debug"
--- Installing: /usr/local/bin/server
--- Installing: /usr/local/bin/client
+-- Up-to-date: /usr/local/bin/server
+-- Up-to-date: /usr/local/bin/client
 -- Installing: /usr/local/lib/libcommons.a
+-- Installing: /usr/local/bin/editor
+
 ```
