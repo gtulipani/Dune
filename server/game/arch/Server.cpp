@@ -3,6 +3,9 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+// Libraries used for getting files from directory in POSIX
+#include <sys/types.h>
+#include <dirent.h>
 
 #include "Server.h"
 #include "shaque.h"
@@ -20,6 +23,21 @@ const vector<string> Server::VALID_KEYS = {
 		MAPS_PATH_KEY,
 		UNITS_PROPERTIES_PATH_KEY
 };
+
+/**
+ * Private function that gets the names of all the files existing in the path
+ * passed as parameter in UNIX
+ */
+vector<string> Server::getFilesFromPath(const string &path) {
+	vector<string> files;
+	DIR* dirp = opendir(path.c_str());
+	struct dirent * dp;
+	while ((dp = readdir(dirp)) != nullptr) {
+		files.emplace_back(path + "/" + dp->d_name);
+	}
+	closedir(dirp);
+	return files;
+}
 
 /**
  * Private function that creates a ConfigMap based on a file of key values
@@ -46,7 +64,7 @@ ConfigMap Server::parseConfigurationFile(const string &config_file_path) {
 
 Server::Server(string port, string maps_path, GameConfiguration game_configuration) :
 		port(move(port)),
-		maps_path(move(maps_path)),
+		maps_list(getFilesFromPath(maps_path)),
 		game_configuration(move(game_configuration)) {}
 
 Server::Server(ConfigMap config_map) : Server(
@@ -62,6 +80,7 @@ Server::Server(const std::string &config_map_file_path) :
 	Server(parseConfigurationFile(config_map_file_path)) {}
 
 void Server::start() {
+
 	Accepter accepter(port, 5);
 	accepter.start();
 

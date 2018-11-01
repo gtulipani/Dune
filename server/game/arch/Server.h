@@ -16,10 +16,12 @@ using namespace std;
 class Server {
 private:
 	string port;
-	string maps_path;
+	vector<string> maps_list;
 	GameConfiguration game_configuration;
 
 	static const vector<string> VALID_KEYS;
+
+	vector<string> getFilesFromPath(const string &path);
 
 	ConfigMap parseConfigurationFile(const string &config_file_path);
 
