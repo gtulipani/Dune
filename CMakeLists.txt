@@ -7,3 +7,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -pedantic -pthread -ggd
 add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(commons)
+add_subdirectory(editor)

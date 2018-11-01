@@ -1,5 +1,5 @@
-#ifndef DUNE_TERRAINCELLWIDGET_H
-#define DUNE_TERRAINCELLWIDGET_H
+#ifndef __TERRAINCELLWIDGET_H__
+#define __TERRAINCELLWIDGET_H__
 
 #include <QtWidgets/QTableWidgetItem>
 
@@ -19,4 +19,4 @@ private:
 	std::string terrain;
 };
 
-#endif //DUNE_TERRAINCELLWIDGET_H
+#endif //__TERRAINCELLWIDGET_H__

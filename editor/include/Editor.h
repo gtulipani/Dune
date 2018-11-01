@@ -1,5 +1,5 @@
-#ifndef DUNE_EDITOR_H
-#define DUNE_EDITOR_H
+#ifndef __EDITOR_H__
+#define __EDITOR_H__
 
 #include <QWidget>
 #include <QtWidgets/QPushButton>
@@ -18,4 +18,4 @@ private:
 	void onTerrainClicked(QPushButton *terrainButton);
 };
 
-#endif //DUNE_EDITOR_H
+#endif //__EDITOR_H__
