@@ -8,7 +8,7 @@ using namespace std;
 using json = nlohmann::json;
 
 namespace json_utils {
-	json parseAsJson(const string &game_units_parameters_path);
+    json parseAsJson(const string &game_units_parameters_path);
 }
 
 #endif //__JSON_UTILS__

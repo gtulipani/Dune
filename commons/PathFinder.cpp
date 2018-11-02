@@ -1,27 +1,29 @@
-#include "PathFinder.h"
-
-#include "PriorityQueue.h"
+#include <stack>
 #include <unordered_map>
+
+#include "PathFinder.h"
+#include "Point.h"
+#include "Unit.h"
+#include "PriorityQueue.h"
 
 /* hash function for storing Point on unordered_map */
 namespace std {
 
-  template <>
-  struct hash<Point>
-  {
-    std::size_t operator()(const Point& p) const
-    {
-      // Compute individual hash values for row and
-      // col. Then combine them using XOR and bit
-      // shifting
-      return hash<std::size_t>()(p.row) ^ (hash<std::size_t>()(p.col) << 1);
-    }
-  };
+    template<>
+    struct hash<Point> {
+        std::size_t operator()(const Point &p) const {
+            // Compute individual hash values for row and
+            // col. Then combine them using XOR and bit
+            // shifting
+            return hash<std::size_t>()(p.row) ^ (hash<std::size_t>()(p.col) << 1);
+        }
+    };
 
 }
 
-std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u) {
-    goal = t.findClosest(goal);
+std::stack<Point> findPath(Map &map, Point &start, Point &goal, Unit &u) {
+    Terrain &terrain = map.getTerrain();
+    goal = terrain.findClosest(goal);
 
     PriorityQueue<Point> frontier;
     std::unordered_map<Point, Point> came_from;
@@ -30,7 +32,7 @@ std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u) {
     frontier.push(start, 0);
     came_from[start] = start;
     cost_so_far[start] = 0;
-  
+
     while (!frontier.empty()) {
         Point current = frontier.top();
         frontier.pop();
@@ -39,14 +41,14 @@ std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u) {
             break;
         }
 
-        std::vector<Point> adyacents = t.getAdyacents(current);
+        std::vector<Point> adyacents = terrain.getAdyacents(current);
         u.filterBadTiles(adyacents);
 
         for (Point next : adyacents) {
             int new_cost = cost_so_far[current] +
-                           t.getCost(current, next);
+                           terrain.getCost(current, next);
 
-            if (cost_so_far.find(next) == cost_so_far.end() 
+            if (cost_so_far.find(next) == cost_so_far.end()
                 || new_cost < cost_so_far.at(next)) {
                 cost_so_far[next] = new_cost;
                 int priority = new_cost + next.hDistanceTo(goal);
@@ -58,7 +60,7 @@ std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u) {
 
     Point current = goal;
     std::stack<Point> path;
-    while (current != start) { 
+    while (current != start) {
         path.push(current);
         current = came_from[current];
     }

@@ -22,20 +22,26 @@ int main() {
     socket.receiveStr(msg, n);
     std::cout << msg << std::endl;*/
 	try {
-		Matrix matrix("resources/maps/base.map");
+		//std::string images_base_path("resources/images/game/terrain");
+		//std::string maps_path("resources/maps/base.map");
+		std::string images_base_path("../../resources/images/game/terrain");
+		std::string maps_path("../../resources/maps/base.map");
+
+		Matrix matrix(maps_path);
 
 		int map_width = matrix.cols();
 		int map_height = matrix.rows();
 	    SdlWindow window(map_width * TERRAIN_WIDTH, map_height * TERRAIN_HEIGHT);
 		window.fill();
 
+
 		// Will use the map to identify each image during rendering
-        SdlTexture arena("resources/images/game/terrain/Arena.png", window);
-		SdlTexture cimas("resources/images/game/terrain/Cimas.png", window);
-		SdlTexture dunas("resources/images/game/terrain/Dunas.png", window);
-		SdlTexture especia("resources/images/game/terrain/Especia.png", window);
-		SdlTexture precipicios("resources/images/game/terrain/Precipicio.png", window);
-		SdlTexture roca("resources/images/game/terrain/Roca.png", window);
+        SdlTexture arena(images_base_path + "/Arena.png", window);
+		SdlTexture cimas(images_base_path + "/Cimas.png", window);
+		SdlTexture dunas(images_base_path + "/Dunas.png", window);
+		SdlTexture especia(images_base_path + "/Especia.png", window);
+		SdlTexture precipicios(images_base_path + "/Precipicio.png", window);
+		SdlTexture roca(images_base_path + "/Roca.png", window);
 		std::map<int, SdlTexture&> terrain_render_map = {
 				{ARENA, arena},
 				{CIMAS, cimas},
@@ -58,7 +64,7 @@ int main() {
 			// Render the terrain matrix
 			for (int col = 0; col < map_width; col++) {
 			    for (int row = 0; row < map_height; row++) {
-                    Area destArea((TERRAIN_WIDTH * col) + offset_x, (TERRAIN_HEIGHT * row) + offset_y, 20, 20);
+                    Area destArea((TERRAIN_WIDTH * col) + offset_x, (TERRAIN_HEIGHT * row) + offset_y, TERRAIN_WIDTH, TERRAIN_HEIGHT);
                     auto it = terrain_render_map.find(matrix.at(row, col));
 					if (it != terrain_render_map.end()) {
 						it->second.render(srcArea, destArea);

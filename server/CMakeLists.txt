@@ -5,10 +5,6 @@ include_directories(${CMAKE_SOURCE_DIR}/commons) # include files from commons
 
 add_executable(server
         main.cpp
-        game/model/Map.cpp
-        game/model/PathFinder.cpp
-        game/model/TileUtils.cpp
-        game/model/Unit.cpp
         game/arch/Accepter.cpp
         game/arch/Client.cpp
         game/arch/Game.cpp

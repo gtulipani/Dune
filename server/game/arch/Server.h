@@ -1,11 +1,15 @@
 #ifndef __SERVER_H__
 #define __SERVER_H__
 
+// STD Libraries
 #include <string>
 #include <vector>
 #include <map>
 
-#include "json.hpp"
+// Commons Libraries
+#include <json.hpp>
+
+// Server Libraries
 #include "GameConfiguration.h"
 
 typedef std::map<string, string> ConfigMap;

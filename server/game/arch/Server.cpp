@@ -1,3 +1,4 @@
+// Standard Libraries
 #include <utility>
 #include <fstream>
 #include <sstream>
@@ -8,14 +9,18 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+// Commons Libraries
+#include <Unit.h>
+#include <Event.h>
+
+// Server Libraries
 #include "Server.h"
 #include "shaque.h"
 #include "Accepter.h"
-#include "../model/Map.h"
+#include "Map.h"
 
 #define KEY_VALUE_SEPARATOR '='
 #define EXIT_CHAR 'q'
-
 #define PORT_KEY "port"
 #define MAPS_PATH_KEY "maps_path"
 #define UNITS_PROPERTIES_PATH_KEY "units_properties_file_path"
@@ -101,6 +106,22 @@ Server::Server(const std::string &config_map_file_path) :
 
 void Server::start() {
 	Map map(maps_list[0]);
+	Point source(0, 0);
+	Point destiny(600, 0);
+
+	Unit unit(map, source);
+	unit.goTo(destiny);
+	std::stack<Point> path = unit.getPath();
+	while(!path.empty())
+	{
+		Point partial_destiny(path.top());
+		path.pop();
+		Event movement_event("MOVEMENT", source, partial_destiny);
+		json serialized_message = movement_event;
+		cout << serialized_message << endl;
+		source = partial_destiny;
+	}
+
 	Accepter accepter(port, 5);
 	accepter.start();
 
@@ -108,4 +129,12 @@ void Server::start() {
 
 	accepter.stop();
 	accepter.join();
+}
+
+void to_json(json &j, const Event &s) {
+    j = json{
+            {"type",          s.type},
+            {"src",         (string) s.src},
+            {"dst",         (string )s.dst}
+    };
 }

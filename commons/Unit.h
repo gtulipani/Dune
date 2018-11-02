@@ -5,20 +5,22 @@
 #include "Point.h"
 #include "Terrain.h"
 #include "TileUtils.h"
+#include "Map.h"
 
 class Unit {
-    Point tilePosition;
+    Map &map;
     Point pixelPosition;
-    Point pixelGoal;
-    Terrain& t;
-    TileUtils& tileUtils;
-    std::stack<Point> path;
+    Point tilePosition;
 
+    Point pixelGoal;
+    std::stack<Point> path;
+    //Terrain& t;
+    //TileUtils& tileUtils;
 
     void stepTo(Point& goalPixel);
 
     public:
-    Unit(Terrain& _t, Point& initialPixelPosition, TileUtils& tileUtils);
+    Unit(Map& _m, Point& initialPixelPosition);
 
     void goTo(Point& pixelGoal);
 
@@ -26,9 +28,13 @@ class Unit {
 
     Point stepAndGetPixelPosition();
 
-    ~Unit();
+    std::stack<Point> getPath() {
+        return path;
+    }
+
+    ~Unit() = default;
 };
 
-std::stack<Point> findPath(Terrain& t, Point& start, Point& goal, Unit& u);
+std::stack<Point> findPath(Map& m, Point& start, Point& goal, Unit& u);
 
-#endif
+#endif //__UNIT_H_

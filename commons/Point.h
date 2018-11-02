@@ -1,6 +1,8 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
+#include <string>
+
 struct Point {
     unsigned int row;
     unsigned int col;
@@ -14,6 +16,9 @@ struct Point {
     bool operator!=(const Point& other) const;
 
     unsigned int hDistanceTo(const Point& other) const;
+
+    // Overloading the std::string casting to transform the point to string
+    explicit operator std::string() const;
 };
 
 #endif

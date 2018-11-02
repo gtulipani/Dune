@@ -1,18 +1,18 @@
 #include "Unit.h"
 
-Unit::Unit(Terrain& _t, Point& initialPixelPosition, TileUtils& _tileUtils)
-: t(_t), tileUtils(_tileUtils){
-    pixelPosition = initialPixelPosition;
-    tilePosition = tileUtils.getTileFromPixel(initialPixelPosition);
-}
+#define TILE_PIXEL_RATE 10
 
-void Unit::goTo(Point& _pixelGoal) {
+Unit::Unit(Map &_map, Point &initialPixelPosition)
+        : map(_map), pixelPosition(initialPixelPosition),
+          tilePosition(tile_utils::getTileFromPixel(initialPixelPosition, TILE_PIXEL_RATE)) {}
+
+void Unit::goTo(Point &_pixelGoal) {
     pixelGoal = _pixelGoal;
-    Point goalTile = tileUtils.getTileFromPixel(pixelGoal);
-    path = findPath(t, tilePosition, goalTile, *this);
+    Point goalTile = tile_utils::getTileFromPixel(pixelGoal, TILE_PIXEL_RATE);
+    path = findPath(map, tilePosition, goalTile, *this);
 }
 
-void Unit::stepTo(Point& pixel) {
+void Unit::stepTo(Point &pixel) {
     int row_dir = pixel.row - pixelPosition.row;
     int col_dir = pixel.col - pixelPosition.col;
 
@@ -36,26 +36,26 @@ Point Unit::stepAndGetPixelPosition() {
         }
     } else {
         /*  Si no, entonces debe fijarse cual es el proximo tile. */
-        Point& nextTile = path.top();
-        if (nextTile == tileUtils.getTileFromPixel(pixelGoal)) {
+        Point &nextTile = path.top();
+        if (nextTile == tile_utils::getTileFromPixel(pixelGoal, TILE_PIXEL_RATE)) {
             /*  Si el proximo tile es la meta final (o sea path tiene un solo
                 elemento), va directamente. Esto es para no ir al centro de un
                 tile y volver si el pixel estaba mas atras. */
             stepTo(pixelGoal);
-            if (tilePosition != tileUtils.getTileFromPixel(pixelPosition)) {
+            if (tilePosition != tile_utils::getTileFromPixel(pixelPosition, TILE_PIXEL_RATE)) {
                 /*  Si cambie de tile, estoy en el goal. Debo actualizar mi tile
                     position y hacer pop(). path queda vacio, lugo va
                     directamente. */
-                tilePosition = tileUtils.getTileFromPixel(pixelPosition);
+                tilePosition = tile_utils::getTileFromPixel(pixelPosition, TILE_PIXEL_RATE);
                 path.pop();
             }
         } else {
             /* Si el proximo no es la meta final, debo ir al centro del tile. */
-            Point goalPixel = tileUtils.getPixelFromTile(nextTile);
+            Point goalPixel = tile_utils::getPixelFromTile(nextTile, TILE_PIXEL_RATE);
             stepTo(goalPixel);
-            if (tilePosition != tileUtils.getTileFromPixel(pixelPosition)) {
+            if (tilePosition != tile_utils::getTileFromPixel(pixelPosition, TILE_PIXEL_RATE)) {
                 /* Si cambie de tile, debo actualizar mi tile position. */
-                tilePosition = tileUtils.getTileFromPixel(pixelPosition);
+                tilePosition = tile_utils::getTileFromPixel(pixelPosition, TILE_PIXEL_RATE);
                 /*  Solo hago el pop() cuando llegue al centro, para asegurarme
                     de llegar a el. */
                 if (pixelPosition == goalPixel) path.pop();
@@ -66,4 +66,4 @@ Point Unit::stepAndGetPixelPosition() {
     return pixelPosition;
 }
 
-void Unit::filterBadTiles(std::vector<Point>& tiles) const {}
+void Unit::filterBadTiles(std::vector<Point> &tiles) const {}

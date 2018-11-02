@@ -15,6 +15,8 @@ public:
 	explicit Map(Terrain terrain);
 
 	explicit Map(const string &file);
+
+	Terrain& getTerrain();
 };
 
 

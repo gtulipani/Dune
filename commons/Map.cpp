@@ -8,3 +8,7 @@ Terrain Map::parseFile(const std::string &file) {
 Map::Map(Terrain terrain) : terrain(std::move(terrain)) {}
 
 Map::Map(const std::string &file) : Map(parseFile(file)) {}
+
+Terrain& Map::getTerrain() {
+	return terrain;
+}
