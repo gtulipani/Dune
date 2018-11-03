@@ -8,9 +8,11 @@ Game::Game(shaque<std::string>& _sharedQueue, unsigned int _size)
 }
 
 void Game::run() {
+    std::cout << "Running..." << std::endl;
     while (this->isRunning()) {
         collectEvents();
         updateModel();
+        getState();
         updateClients();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
@@ -21,15 +23,24 @@ void Game::collectEvents() {
 }
 
 void Game::updateModel() {
-    for (std::string event : events) {
-        std::cout << event << std::endl;
+    if (!events.empty()) {
+        std::string strPos = events.front();
+        int i = strPos.find(',');
+        int row = std::stoi(strPos.substr(0, i));
+        int col = std::stoi(strPos.substr(i + 2));
+        Point goal = Point(row, col);
+        unit.goTo(goal);
     }
 }
 
+void Game::getState() {
+    Point pos = unit.stepAndGetPixelPosition();
+    std::string msg = pos.row + ", " + pos.col;
+    clients.back()->send(msg);
+}
+
 void Game::updateClients() {
-    for (const Client* client : clients) {
-        client->send("OK");
-    }
+
 }
 
 void Game::clientJoin(const Client* client) {

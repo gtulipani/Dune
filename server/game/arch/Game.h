@@ -5,6 +5,9 @@
 #include <vector>
 #include "Client.h"
 #include "shaque.h"
+#include "Game.h"
+#include "Unit.h"
+#include "Map.h"
 #include "../../commons/Thread.h"
 
 class Game : public Thread {
@@ -13,12 +16,17 @@ class Game : public Thread {
     std::vector<const Client*> clients;
     std::list<std::string> events;
     shaque<std::string>& sharedQueue;
+    const Map map = Map("Matrix");
+    const Point initial_pos = Point(6, 3);
+    Unit unit = Unit(map, initial_pos);
 
     virtual void run() override;
 
     void collectEvents();
 
     void updateModel();
+
+    void getState();
 
     void updateClients();
 

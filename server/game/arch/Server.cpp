@@ -105,24 +105,8 @@ Server::Server(const std::string &config_map_file_path) :
 		Server(parseConfigurationFile(config_map_file_path)) {}
 
 void Server::start() {
-	Map map(maps_list[0]);
-	Point source(0, 0);
-	Point destiny(600, 0);
 
-	Unit unit(map, source);
-	unit.goTo(destiny);
-	std::stack<Point> path = unit.getPath();
-	while(!path.empty())
-	{
-		Point partial_destiny(path.top());
-		path.pop();
-		Event movement_event("MOVEMENT", source, partial_destiny);
-		json serialized_message = movement_event;
-		cout << serialized_message << endl;
-		source = partial_destiny;
-	}
-
-	Accepter accepter(port, 5);
+	Accepter accepter(port, 1);
 	accepter.start();
 
 	while (std::cin.peek() != EXIT_CHAR) {}
