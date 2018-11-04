@@ -5,9 +5,10 @@
 #define MAX_CLIENTS_IN_WAIT 20
 
 Accepter::Accepter(std::string port, unsigned int gameSize) :
-socket(nullptr, port.c_str()), game(sharedQueue, gameSize),
-sharedQueue(m) {
-    socket.bindAndListen(MAX_CLIENTS_IN_WAIT);
+    socket(nullptr, port.c_str()),
+    sharedQueue(m),
+    game(sharedQueue, gameSize) {
+        socket.bindAndListen(MAX_CLIENTS_IN_WAIT);
 }
 
 void Accepter::run() {

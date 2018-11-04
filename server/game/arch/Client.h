@@ -1,6 +1,7 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 
+#include <Event.h>
 #include "shaque.h"
 #include "../../commons/Thread.h"
 #include "../../commons/Socket.h"
@@ -8,7 +9,7 @@
 class Client : public Thread {
     private:
     Socket socket;
-    shaque<std::string>& sharedQueue;
+    shaque<Event>& sharedQueue;
 
     void handleMsgError();
 
@@ -19,7 +20,7 @@ class Client : public Thread {
     virtual void terminate() override;
 
     public:
-    Client(Socket _socket, shaque<std::string>& _sharedQueue);
+    Client(Socket _socket, shaque<Event>& _sharedQueue);
 
     void send(const std::string& msg) const;
 };

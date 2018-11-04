@@ -12,9 +12,10 @@
 class Accepter : public Thread {
     private:
     Socket socket;
-    std::vector<Client*> clients;
+    shaque<Event> sharedQueue;
     Game game;
-    shaque<std::string> sharedQueue;
+    std::vector<Client*> clients;
+
     std::mutex m;
 
     void removeFinishedClients();

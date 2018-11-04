@@ -105,7 +105,6 @@ Server::Server(const std::string &config_map_file_path) :
 		Server(parseConfigurationFile(config_map_file_path)) {}
 
 void Server::start() {
-
 	Accepter accepter(port, 1);
 	accepter.start();
 
@@ -113,12 +112,4 @@ void Server::start() {
 
 	accepter.stop();
 	accepter.join();
-}
-
-void to_json(json &j, const Event &s) {
-    j = json{
-            {"type",          s.type},
-            {"src",         (string) s.src},
-            {"dst",         (string )s.dst}
-    };
 }

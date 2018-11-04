@@ -1,23 +1,30 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
+// STD Libraries
 #include <list>
 #include <vector>
+
+// Commons Libraries
+#include <Thread.h>
+#include <Map.h>
+#include <Unit.h>
+#include <Event.h>
+
+// Game Libraries
 #include "Client.h"
 #include "shaque.h"
-#include "Game.h"
-#include "Unit.h"
-#include "Map.h"
-#include "../../commons/Thread.h"
+
 
 class Game : public Thread {
     private:
     unsigned int size;
+    shaque<Event> events_queue;
+
     std::vector<const Client*> clients;
-    std::list<std::string> events;
-    shaque<std::string>& sharedQueue;
-    const Map map = Map("Matrix");
-    const Point initial_pos = Point(6, 3);
+    std::list<Event> events;
+    Map map = Map("maps/basic_map.map");
+    Point initial_pos = Point(0, 0);
     Unit unit = Unit(map, initial_pos);
 
     virtual void run() override;
@@ -26,12 +33,10 @@ class Game : public Thread {
 
     void updateModel();
 
-    void getState();
-
     void updateClients();
 
     public:
-    Game(shaque<std::string>& _sharedQueue, unsigned int _size);
+    Game(shaque<Event>& events_queue, unsigned int _size);
 
     void clientJoin(const Client* client);
 
