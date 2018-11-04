@@ -1,3 +1,5 @@
+#include "Server.h"
+
 // Standard Libraries
 #include <utility>
 #include <fstream>
@@ -14,9 +16,8 @@
 #include <Event.h>
 
 // Server Libraries
-#include "Server.h"
 #include "shaque.h"
-#include "Accepter.h"
+#include "AccepterThread.h"
 #include "Map.h"
 
 #define KEY_VALUE_SEPARATOR '='
@@ -105,7 +106,7 @@ Server::Server(const std::string &config_map_file_path) :
 		Server(parseConfigurationFile(config_map_file_path)) {}
 
 void Server::start() {
-	Accepter accepter(port, 1);
+	AccepterThread accepter(port, 1);
 	accepter.start();
 
 	while (std::cin.peek() != EXIT_CHAR) {}

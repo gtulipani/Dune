@@ -1,0 +1,142 @@
+#include "Client.h"
+
+// STL Libraries
+#include <iostream>
+
+// Commons Libraries
+#include <json.hpp>
+#include <Event.h>
+#include <Matrix.h>
+#include <Terrain.h>
+#include <EventHandler.h>
+
+// Client Libraries
+#include "Client.h"
+#include "SdlTexture.h"
+#include "SdlWindow.h"
+
+// SDL Libraries
+#include <SDL.h>
+
+#define TERRAIN_WIDTH 20
+#define TERRAIN_HEIGHT 20
+#define TERRAIN_RESOURCES_PATH string("../resources/images/game/terrain")
+
+using nlohmann::json;
+
+void Client::loadTerrainMatrix() {
+    Event event = EventHandler::receiveEvent(socket);
+    if (event.type == TERRAIN_SIZE) {
+        matrix = Matrix(event.dst.row, event.dst.col);
+        event = EventHandler::receiveEvent(socket);
+        do {
+            matrix.at(event.dst) = event.id;
+            event = EventHandler::receiveEvent(socket);
+        } while (event.type != TERRAIN_FINISHED_EVENT);
+    } else {
+        throw std::runtime_error("Unexpected event received: " + event.type);
+    }
+}
+
+void Client::waitForGameStart() {
+    while (!game_started) {
+        Event event = EventHandler::receiveEvent(socket);
+        game_started = (event.type == GAME_STARTED_EVENT);
+    }
+}
+
+Client::Client(string host, string port) : host(move(host)), port(move(port)), game_started(false) {}
+
+void Client::start() {
+    socket = Socket(host, port);
+    socket.connect();
+
+    try {
+        waitForGameStart();
+        loadTerrainMatrix();
+
+        width = matrix.cols();
+        height = matrix.rows();
+        window = SdlWindow(width * TERRAIN_WIDTH, height * TERRAIN_HEIGHT);
+        window.fill();
+
+        SdlTexture arena("Arena.png", window);
+        SdlTexture cimas("Cimas.png", window);
+        SdlTexture dunas("Dunas.png", window);
+        SdlTexture especia("Especia.png", window);
+        SdlTexture precipicio("Precipicio.png", window);
+        SdlTexture roca("Roca.png", window);
+
+        terrain_render_map = {
+                {ARENA, arena},
+                {CIMAS, cimas},
+                {DUNAS, dunas},
+                {ESPECIA, especia},
+                {PRECIPICIOS, precipicio},
+                {ROCA, roca}
+        };
+
+        // x, y, width, height
+        int offset_x = 0;
+        int offset_y = 0;
+        Area srcArea(offset_x, offset_y, TERRAIN_WIDTH, TERRAIN_HEIGHT);
+        bool running = true;
+
+        while (running) {
+            SDL_Event event;
+
+            window.fill();
+
+            // Render the terrain matrix
+            for (int col = 0; col < width; col++) {
+                for (int row = 0; row < height; row++) {
+                    Area destArea((TERRAIN_WIDTH * col) + offset_x, (TERRAIN_HEIGHT * row) + offset_y, TERRAIN_WIDTH, TERRAIN_HEIGHT);
+                    auto it = terrain_render_map.find(matrix.at(row, col));
+                    if (it != terrain_render_map.end()) {
+                        it->second.render(srcArea, destArea);
+                    }
+                }
+            }
+
+            SDL_WaitEvent(&event);
+            switch(event.type) {
+                case SDL_KEYDOWN: {
+                    auto & keyEvent = (SDL_KeyboardEvent&) event;
+                    switch (keyEvent.keysym.sym) {
+                        case SDLK_LEFT:
+                            offset_x -= TERRAIN_WIDTH;
+                            break;
+                        case SDLK_RIGHT:
+                            offset_x += TERRAIN_WIDTH;
+                            break;
+                        case SDLK_UP:
+                            offset_y -= TERRAIN_HEIGHT;
+                            break;
+                        case SDLK_DOWN:
+                            offset_y += TERRAIN_HEIGHT;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                    break;
+                case SDL_MOUSEMOTION:
+                    std::cout << "Oh! Mouse" << std::endl;
+                    break;
+                case SDL_QUIT:
+                    std::cout << "Quit :(" << std::endl;
+                    running = false;
+                    break;
+                default:
+                    break;
+            }
+            window.render();
+        }
+    } catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    socket.shutDown();
+
+    std::cout << "Client ended" << std::endl;
+}

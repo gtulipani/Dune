@@ -19,13 +19,16 @@ private:
     Matrix mat;
 
 public:
-    explicit Terrain(Matrix& _mat);
+    Terrain() = default;
+
+    explicit Terrain(Matrix);
 
     Point findClosest(Point& p) const;
 
     std::vector<Point> getAdyacents(Point& p) const;
 
     int getCost(Point& a, Point& b) const;
+    Matrix& getMatrix();
 };
 
 #endif

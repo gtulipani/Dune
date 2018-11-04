@@ -22,7 +22,7 @@ class shaque {
         Lock l(m);
         std::list<T> list;
         while (!queue.empty()) {
-            list.push_front(queue.front());
+            list.push_back(queue.front());
             queue.pop();
         }
         return list;

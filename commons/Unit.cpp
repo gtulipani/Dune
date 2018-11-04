@@ -2,14 +2,46 @@
 
 #define TILE_PIXEL_RATE 10
 
-Unit::Unit(Map &_map, Point &initialPixelPosition)
-        : map(_map), pixelPosition(initialPixelPosition),
+Unit::Unit(Terrain &_t, Point initialPixelPosition)
+        : terrain(_t), pixelPosition(std::move(initialPixelPosition)),
           tilePosition(tile_utils::getTileFromPixel(initialPixelPosition, TILE_PIXEL_RATE)) {}
+
+Unit::Unit(const Unit &other) : Unit(
+        other.terrain,
+        other.pixelPosition) {}
+
+Unit::Unit(Unit &&other) noexcept : Unit(
+        other.terrain,
+        std::move(other.pixelPosition)) {}
+
+Unit &Unit::operator=(const Unit &other) {
+    if (this == &other) {
+        return *this; // other is myself!
+    }
+
+    // Copy values
+    this->terrain = other.terrain;
+    this->pixelPosition = other.pixelPosition;
+
+    return *this;
+}
+
+Unit &Unit::operator=(Unit &&other) noexcept {
+    if (this == &other) {
+        return *this; // other is myself!
+    }
+
+    // Copy values
+    this->terrain = other.terrain;
+    this->pixelPosition = std::move(other.pixelPosition);
+
+    return *this;
+}
 
 void Unit::goTo(Point &_pixelGoal) {
     pixelGoal = _pixelGoal;
     Point goalTile = tile_utils::getTileFromPixel(pixelGoal, TILE_PIXEL_RATE);
-    path = findPath(map, tilePosition, goalTile, *this);
+    path = findPath(terrain, tilePosition, goalTile, *this);
 }
 
 void Unit::stepTo(Point &pixel) {

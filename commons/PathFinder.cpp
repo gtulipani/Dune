@@ -21,8 +21,7 @@ namespace std {
 
 }
 
-std::stack<Point> findPath(Map &map, Point &start, Point &goal, Unit &u) {
-    Terrain &terrain = map.getTerrain();
+std::stack<Point> findPath(Terrain &terrain, Point &start, Point &goal, Unit &u) {
     goal = terrain.findClosest(goal);
 
     PriorityQueue<Point> frontier;

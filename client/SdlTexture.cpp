@@ -9,8 +9,47 @@ SdlTexture::SdlTexture(const std::string &filename, const SdlWindow& window)
     this->texture = loadTexture(filename);
 }
 
+SdlTexture::SdlTexture(const SdlTexture &other) {
+    this->renderer = other.renderer;
+    this->texture = other.texture;
+}
+
+SdlTexture::SdlTexture(SdlTexture &&other) noexcept {
+    other.renderer = nullptr;
+    other.texture = nullptr;
+}
+
+SdlTexture &SdlTexture::operator=(const SdlTexture &other) {
+    if (this == &other) {
+        return *this; // other is myself!
+    }
+
+    // Copy values
+    this->renderer = other.renderer;
+    this->texture = other.texture;
+
+    return *this;
+}
+
+SdlTexture &SdlTexture::operator=(SdlTexture &&other) noexcept {
+    if (this == &other) {
+        return *this; // other is myself!
+    }
+
+    // Copy values
+    this->renderer = other.renderer;
+    this->texture = other.texture;
+
+    other.renderer = nullptr;
+    other.texture = nullptr;
+
+    return *this;
+}
+
 SdlTexture::~SdlTexture() {
-    SDL_DestroyTexture(this->texture);
+    if (this->texture != nullptr) {
+        SDL_DestroyTexture(this->texture);
+    }
 }
 
 SDL_Texture* SdlTexture::loadTexture(const std::string &filename) {

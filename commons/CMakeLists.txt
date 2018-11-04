@@ -13,7 +13,10 @@ add_library(commons
         Terrain.cpp
         Thread.cpp
         TileUtils.cpp
-        Unit.cpp Event.cpp Event.h)
+        Unit.cpp
+        Event.cpp
+        JSONConversion.cpp
+        EventHandler.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib

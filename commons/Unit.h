@@ -5,10 +5,9 @@
 #include "Point.h"
 #include "Terrain.h"
 #include "TileUtils.h"
-#include "Map.h"
 
 class Unit {
-    Map &map;
+    Terrain &terrain;
     Point pixelPosition;
     Point tilePosition;
 
@@ -20,7 +19,17 @@ class Unit {
     void stepTo(Point& goalPixel);
 
     public:
-    Unit(Map& _m, Point& initialPixelPosition);
+    Unit(Terrain& _t, Point initialPixelPosition);
+
+    Unit(const Unit &other);
+
+    Unit(Unit &&other) noexcept;
+
+    // Overloading the assignment by copy
+    Unit &operator=(const Unit &other);
+
+    // Overloading the assignment by movement
+    Unit &operator=(Unit &&other) noexcept;
 
     void goTo(Point& pixelGoal);
 
@@ -35,6 +44,6 @@ class Unit {
     ~Unit() = default;
 };
 
-std::stack<Point> findPath(Map& m, Point& start, Point& goal, Unit& u);
+std::stack<Point> findPath(Terrain& m, Point& start, Point& goal, Unit& u);
 
 #endif //__UNIT_H_
