@@ -4,7 +4,7 @@
 
 using json = nlohmann::json;
 
-#include "Tick.h"
+#include "../model/Tick.h"
 
 Game::Game(shaque<std::string> &events_queue, unsigned int _size)
         : events_queue(events_queue) {

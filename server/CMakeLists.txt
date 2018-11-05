@@ -9,7 +9,9 @@ add_executable(server
         game/arch/Client.cpp
         game/arch/Game.cpp
         game/arch/GameConfiguration.cpp
-        game/arch/Server.cpp)
+        game/arch/Server.cpp
+        game/model/GameObject.cpp
+        game/model/WalkingUnit.cpp)
 
 target_link_libraries(server commons)
 

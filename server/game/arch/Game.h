@@ -6,9 +6,9 @@
 #include <vector>
 
 // Commons Libraries
-#include <Thread.h>
-#include <Map.h>
-#include <WalkingUnit.h>
+#include "Thread.h"
+#include "Map.h"
+#include "../model/WalkingUnit.h"
 
 // Game Libraries
 #include "Client.h"

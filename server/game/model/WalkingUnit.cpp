@@ -137,4 +137,4 @@ void WalkingUnit::findPath(Point &goal) {
     }
 }
 
-void Unit::filterBadTiles(std::vector<Point> &tiles) const {}
+void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}
