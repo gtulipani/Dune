@@ -33,6 +33,10 @@ void ClientThread::send(const Event& event) const {
     EventHandler::sendEvent(socket, event);
 }
 
+void ClientThread::send(const MapConfigurationEvent& event) const {
+    EventHandler::sendEvent(socket, event);
+}
+
 void ClientThread::terminate() {
     socket.shutDown();
 }

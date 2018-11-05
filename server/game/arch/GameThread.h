@@ -26,7 +26,7 @@ private:
     Terrain terrain;
     Point initial_pos = Point(0, 0);
 
-    void pushMapTerrainEvent();
+    void sendMapConfigurationEvent();
 
     virtual void run() override;
 

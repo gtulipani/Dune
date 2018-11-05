@@ -23,3 +23,20 @@ Event EventHandler::receiveEvent(const Socket &socket) {
     message.get_to(event);
     return event;
 }
+
+void EventHandler::sendEvent(const Socket &socket, const MapConfigurationEvent &event) {
+    json json_event = event;
+    std::string msg = json_event.dump();
+    socket.sendInt32(msg.length());
+    socket.sendStr(msg);
+}
+
+MapConfigurationEvent EventHandler::receiveMapConfigurationEvent(const Socket &socket) {
+    int32_t n = socket.receiveInt32();
+    std::string msg;
+    socket.receiveStr(msg, n);
+    json message = json::parse(msg);
+    MapConfigurationEvent event;
+    message.get_to(event);
+    return event;
+}

@@ -14,7 +14,7 @@ add_library(commons
         Terrain.cpp
         Thread.cpp
         TileUtils.cpp
-        Unit.cpp)
+        Unit.cpp MapConfigurationEvent.cpp MapConfigurationEvent.h)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib

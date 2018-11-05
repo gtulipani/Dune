@@ -6,11 +6,10 @@
 // Commons Libraries
 #include <json.hpp>
 #include <Unit.h>
+#include <MapConfigurationEvent.h>
 
 // Server Libraries
 #include "ClientThread.h"
-
-// Event Types
 
 using json = nlohmann::json;
 
@@ -19,23 +18,14 @@ GameThread::GameThread(shaque<Event> &events_queue, unsigned int _size)
     size = _size;
 }
 
-void GameThread::pushMapTerrainEvent() {
-    // Probably should have a better way to do this?
-    Matrix matrix = terrain.getMatrix();
-    events_queue.push(Event(TERRAIN_SIZE, Point(matrix.rows(), matrix.cols())));
-    for (int col = 0; col < matrix.cols(); col++) {
-        for (int row = 0; row < matrix.rows(); row++) {
-            events_queue.push(
-                    Event(matrix.at(row, col), TERRAIN_EVENT, Point(row, col)));
-        }
-    }
-    events_queue.push(Event(TERRAIN_FINISHED_EVENT));
+void GameThread::sendMapConfigurationEvent() {
+    clients.back()->send(MapConfigurationEvent(terrain.getMatrix()));
 }
 
 void GameThread::run() {
     std::cout << "Running..." << std::endl;
 
-    pushMapTerrainEvent();
+    sendMapConfigurationEvent();
 
     Point destiny(0, 1);
     Event event(1, MOVEMENT_EVENT, destiny);

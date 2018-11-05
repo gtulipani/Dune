@@ -23,17 +23,8 @@
 using nlohmann::json;
 
 void Client::loadTerrainMatrix() {
-    Event event = EventHandler::receiveEvent(socket);
-    if (event.type == TERRAIN_SIZE) {
-        matrix = Matrix(event.dst.row, event.dst.col);
-        event = EventHandler::receiveEvent(socket);
-        do {
-            matrix.at(event.dst) = event.id;
-            event = EventHandler::receiveEvent(socket);
-        } while (event.type != TERRAIN_FINISHED_EVENT);
-    } else {
-        throw std::runtime_error("Unexpected event received: " + event.type);
-    }
+    MapConfigurationEvent event = EventHandler::receiveMapConfigurationEvent(socket);
+    matrix = event.matrix;
 }
 
 void Client::waitForGameStart() {

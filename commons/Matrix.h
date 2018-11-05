@@ -5,14 +5,14 @@
 #include <string>
 #include "Point.h"
 
-class Matrix {
+struct Matrix {
+public:
     std::vector<int> vec;
     int rows_quantity{};
     int columns_quantity{};
 
     void range_check(int row, int col) const;
 
-public:
     Matrix() = default;
 
     Matrix(int rows, int cols);

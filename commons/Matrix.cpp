@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include "BadFileException.h"
 
 Matrix::Matrix(int rows, int cols) : rows_quantity(rows), columns_quantity(cols) {

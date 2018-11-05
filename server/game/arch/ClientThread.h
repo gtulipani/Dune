@@ -2,6 +2,7 @@
 #define __CLIENT_THREAD_H__
 
 #include <Event.h>
+#include <MapConfigurationEvent.h>
 #include "shaque.h"
 #include "../../commons/Thread.h"
 #include "../../commons/Socket.h"
@@ -23,6 +24,8 @@ class ClientThread : public Thread {
     void send(const std::string& msg) const;
 
     void send(const Event& event) const;
+
+    void send(const MapConfigurationEvent& event) const;
 };
 
 #endif // __CLIENT_THREAD_H__
