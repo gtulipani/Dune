@@ -1,7 +1,7 @@
 # Dune
 ## Building and Running
 ### Build
-The Application has 4¡5 different [CMake](https://en.wikipedia.org/wiki/CMake) 
+The Application has 5 different [CMake](https://en.wikipedia.org/wiki/CMake) 
 files:
 - One CMake at the root path from the project that defines each one of the goals
 - One CMake under `server` directory that builds all the server-related files
@@ -84,3 +84,23 @@ Install the project...
 -- Installing: /usr/local/bin/editor
 
 ```
+
+### Run
+#### Server
+The application must be executed with the following syntax: `server [config_file]`
+##### Configuration File
+The Configuration File has the following format:
+```
+port=8080
+maps_path=resources/maps
+units_properties_file_path=resources/config/Game Configuration.json
+```
+##### Configuration File Parameter
+The application accepts the following parameters:
+1. `port`: string representing the port to expose.
+1. `maps_path`: string representing the path containing all the available maps.
+1. `units_properties_file_path`: string representing the path to the [JSON](https://en.wikipedia.org/wiki/JSON) File
+with all the game configuration.
+
+#### Client
+The application must be executed with the following syntax: `client [host] [port]`
