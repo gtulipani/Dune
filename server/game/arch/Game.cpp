@@ -4,24 +4,20 @@
 
 using json = nlohmann::json;
 
-Game::Game(shaque<Event> &events_queue, unsigned int _size)
+#include "Tick.h"
+
+Game::Game(shaque<std::string> &events_queue, unsigned int _size)
         : events_queue(events_queue) {
     size = _size;
 }
 
 void Game::run() {
-    std::cout << "Running..." << std::endl;
-    Point source = unit.stepAndGetPixelPosition();
-    Point destiny(0, 1);
-    Event event("MOVEMENT", source, destiny);
-    events_queue.push(event);
-
-    //sharedQueue.push("0,1");
     while (this->isRunning()) {
         collectEvents();
         updateModel();
+        tick();
         updateClients();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
     }
 }
 
@@ -30,20 +26,30 @@ void Game::collectEvents() {
 }
 
 void Game::updateModel() {
+    // Si hay un evento, quiere decir que el cliente hizo click para mover la
+    // unidad. Entonces se envio el punto, que parsea.
+    // Luego actualiza el modelo para decirle a la unidad que actualice su path.
+    // (goTo())
     if (!events.empty()) {
-        Event event = events.front();
-        Point destiny = event.getDestiny();
-        unit.goTo(destiny);
-        json event_json = event;
-        std::string msg = event_json.dump();
-        clients.back()->send(msg);
-        Point new_destiny = Point(destiny.row, destiny.col + 1);
-        Event new_event = Event("MOVEMENT", destiny, new_destiny);
-        events_queue.push(new_event);
+        std::string strPoint = events.back();
+        int i = strPoint.find(',');
+        int row = std::stoi(strPoint.substr(0, i));
+        int col = std::stoi(strPoint.substr(i + 2));
+        Point goal = Point(row, col);
+        unit.goTo(goal);
     }
 }
 
+void Game::tick() {
+    // Le avisa a la unidad que paso un tick, para que realice sus acciones
+    // correspondientes.
+    unit.tick();
+}
+
 void Game::updateClients() {
+    // Obtiene el estado de la unidad y se lo manda al cliente
+    Point p = unit.getPixelPosition();
+    clients.back()->send(p.row + ", " + p.col);
 }
 
 void Game::clientJoin(const Client *client) {

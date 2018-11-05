@@ -1,16 +1,8 @@
 #include "Unit.h"
 
-#define TILE_PIXEL_RATE 10
-
 Unit::Unit(Map &_map, Point &initialPixelPosition)
         : map(_map), pixelPosition(initialPixelPosition),
-          tilePosition(tile_utils::getTileFromPixel(initialPixelPosition, TILE_PIXEL_RATE)) {}
-
-void Unit::goTo(Point &_pixelGoal) {
-    pixelGoal = _pixelGoal;
-    Point goalTile = tile_utils::getTileFromPixel(pixelGoal, TILE_PIXEL_RATE);
-    path = findPath(map, tilePosition, goalTile, *this);
-}
+          tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)) {}
 
 void Unit::stepTo(Point &pixel) {
     int row_dir = pixel.row - pixelPosition.row;

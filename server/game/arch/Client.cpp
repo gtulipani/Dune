@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../../commons/SOException.h"
 
-Client::Client(Socket _socket, shaque<Event>& _sharedQueue)
+Client::Client(Socket _socket, shaque<std::string>& _sharedQueue)
 : socket(std::move(_socket)), sharedQueue(_sharedQueue) {}
 
 void Client::run() {
@@ -31,7 +31,7 @@ void Client::handleMsgError() {
 }
 
 void Client::handleMsgSuccess(const std::string& msg) {
-    //sharedQueue.push(msg);
+    sharedQueue.push(msg);
 }
 
 void Client::send(const std::string& msg) const {

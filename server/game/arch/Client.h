@@ -9,7 +9,7 @@
 class Client : public Thread {
     private:
     Socket socket;
-    shaque<Event>& sharedQueue;
+    shaque<std::string>& sharedQueue;
 
     void handleMsgError();
 
@@ -20,7 +20,7 @@ class Client : public Thread {
     virtual void terminate() override;
 
     public:
-    Client(Socket _socket, shaque<Event>& _sharedQueue);
+    Client(Socket _socket, shaque<std::string>& _sharedQueue);
 
     void send(const std::string& msg) const;
 };

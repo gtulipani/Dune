@@ -4,8 +4,8 @@
 #include "Point.h"
 
 namespace tile_utils {
-    Point getTileFromPixel(Point& pixel, int tile_size);
-    Point getPixelFromTile(Point& tile, int tile_size);
+    Point getTileFromPixel(Point& pixel);
+    Point getPixelFromTile(Point& tile);
 }
 
 #endif

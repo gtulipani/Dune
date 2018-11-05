@@ -28,10 +28,6 @@ class Unit {
 
     Point stepAndGetPixelPosition();
 
-    std::stack<Point> getPath() {
-        return path;
-    }
-
     ~Unit() = default;
 };
 

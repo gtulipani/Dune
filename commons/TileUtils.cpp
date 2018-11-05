@@ -1,12 +1,14 @@
 #include "TileUtils.h"
 
+#define TILE_PIXEL_RATE 32
+
 namespace tile_utils {
-    Point getTileFromPixel(Point &pixel, int tile_size) {
-        return {pixel.row / tile_size, pixel.col / tile_size};
+    Point getTileFromPixel(Point &pixel) {
+        return {pixel.row / TILE_PIXEL_RATE, pixel.col / TILE_PIXEL_RATE};
     }
 
-    Point getPixelFromTile(Point &tile, int tile_size) {
-        return {tile.row * tile_size, tile.col * tile_size};
+    Point getPixelFromTile(Point &tile) {
+        return {tile.row * TILE_PIXEL_RATE, tile.col * TILE_PIXEL_RATE};
     }
 
 }

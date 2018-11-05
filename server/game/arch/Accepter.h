@@ -12,7 +12,7 @@
 class Accepter : public Thread {
     private:
     Socket socket;
-    shaque<Event> sharedQueue;
+    shaque<std::string> sharedQueue;
     Game game;
     std::vector<Client*> clients;
 

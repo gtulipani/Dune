@@ -8,8 +8,7 @@
 // Commons Libraries
 #include <Thread.h>
 #include <Map.h>
-#include <Unit.h>
-#include <Event.h>
+#include <WalkingUnit.h>
 
 // Game Libraries
 #include "Client.h"
@@ -19,13 +18,13 @@
 class Game : public Thread {
     private:
     unsigned int size;
-    shaque<Event> events_queue;
+    shaque<std::string> events_queue;
 
     std::vector<const Client*> clients;
-    std::list<Event> events;
+    std::list<std::string> events;
     Map map = Map("maps/basic_map.map");
     Point initial_pos = Point(0, 0);
-    Unit unit = Unit(map, initial_pos);
+    WalkingUnit unit = WalkingUnit(map, initial_pos, 100);
 
     virtual void run() override;
 
@@ -35,8 +34,10 @@ class Game : public Thread {
 
     void updateClients();
 
+    void tick();
+
     public:
-    Game(shaque<Event>& events_queue, unsigned int _size);
+    Game(shaque<std::string>& events_queue, unsigned int _size);
 
     void clientJoin(const Client* client);
 

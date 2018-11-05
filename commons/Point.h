@@ -40,4 +40,18 @@ struct Point {
     friend void from_json(const json &j, Point &p);
 };
 
+namespace std {
+
+    template<>
+    struct hash<Point> {
+        std::size_t operator()(const Point &p) const {
+            // Compute individual hash values for row and
+            // col. Then combine them using XOR and bit
+            // shifting
+            return hash<std::size_t>()(p.row) ^ (hash<std::size_t>()(p.col) << 1);
+        }
+    };
+
+}
+
 #endif
