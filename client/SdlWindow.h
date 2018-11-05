@@ -8,14 +8,28 @@ struct SDL_Texture;
 
 class SdlWindow {
 public:
-    /**
-     * Ctor standalone
-     */
+    SdlWindow() = default;
+
     SdlWindow(int width, int height);
+
+    SdlWindow(const SdlWindow &other);
+
+    SdlWindow(SdlWindow &&other) noexcept;
+
+    // Overloading the assignment by copy
+    SdlWindow &operator=(const SdlWindow &other);
+
+    // Overloading the assignment by movement
+    SdlWindow &operator=(SdlWindow &&other) noexcept;
+
     ~SdlWindow();
+
     void fill();
+
     void fill(int r, int g, int b, int alpha);
+
     void render();
+
     SDL_Renderer* getRenderer() const;
 private:
     int width;

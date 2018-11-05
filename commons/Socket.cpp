@@ -16,7 +16,7 @@ Socket::Socket() {
     this->iterator = nullptr;
 }
 
-Socket::Socket(const char* host, const char* port) {
+Socket::Socket(const std::string& host, const std::string& port) {
     struct addrinfo hints;
     ::memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_family = AF_INET;
@@ -24,7 +24,7 @@ Socket::Socket(const char* host, const char* port) {
     hints.ai_flags = AI_PASSIVE; // Flag se ignora si host no es nullptr
 
     int s;
-    s = ::getaddrinfo(host, port, &hints, &(this->addrInfo));
+    s = ::getaddrinfo(host == "" ? nullptr : host.c_str(), port.c_str(), &hints, &(this->addrInfo));
     if (s != 0) throw SOException(::gai_strerror(s));
 
     this->iterator = this->addrInfo;

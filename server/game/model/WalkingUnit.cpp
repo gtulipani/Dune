@@ -3,11 +3,10 @@
 #include "PriorityQueue.h"
 #include "Tick.h"
 #include "TileUtils.h"
-#include "Map.h"
 #include "Terrain.h"
 
-WalkingUnit::WalkingUnit(Map& _map, Point& initialPixelPosition,
-unsigned int movespeed) : map(_map) {
+WalkingUnit::WalkingUnit(Terrain& _terrain, Point& initialPixelPosition,
+unsigned int movespeed) : terrain(_terrain) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     pixelPosition = initialPixelPosition;
@@ -92,7 +91,6 @@ void WalkingUnit::goTo(Point &_pixelGoal) {
 }
 
 void WalkingUnit::findPath(Point &goal) {
-    Terrain &terrain = map.getTerrain();
     goal = terrain.findClosest(goal);
 
     PriorityQueue<Point> frontier;

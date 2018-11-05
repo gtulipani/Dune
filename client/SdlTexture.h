@@ -9,17 +9,20 @@ class Area;
 
 class SdlTexture {
 public:
-    /**
-     * Crea un SDL_Texture, lanza una excepción si el filename es inválido
-     **/
     SdlTexture(const std::string &filename, const SdlWindow& window);
-    /**
-     * Libera la memoria reservada por la textura
-     **/
+
+    SdlTexture(const SdlTexture &other);
+
+    SdlTexture(SdlTexture &&other) noexcept;
+
+    // Overloading the assignment by copy
+    SdlTexture &operator=(const SdlTexture &other);
+
+    // Overloading the assignment by movement
+    SdlTexture &operator=(SdlTexture &&other) noexcept;
+
     ~SdlTexture();
-    /**
-     * Renderiza la textura cargada
-     **/
+
     int render(const Area& src, const Area& dest) const;
 private:
     SDL_Texture* loadTexture(const std::string &filename);

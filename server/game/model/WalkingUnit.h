@@ -6,13 +6,13 @@
 #include <stack>
 #include "Point.h"
 
-class Map;
+class Terrain;
 
 class WalkingUnit : public GameObject {
     unsigned int ticksPerStep;
     unsigned int counter;
     std::stack<Point> path;
-    Map &map;
+    Terrain &terrain;
     Point pixelGoal;
     Point pixelPosition;
     Point tilePosition;
@@ -29,7 +29,7 @@ class WalkingUnit : public GameObject {
 
     public:
      // Movespeed on pixels per second.
-    WalkingUnit(Map& map, Point& initialPixelPosition, unsigned int movespeed);
+    WalkingUnit(Terrain& terrain, Point& initialPixelPosition, unsigned int movespeed);
 
     virtual void tick() override;
 

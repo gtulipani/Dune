@@ -6,8 +6,9 @@ find_package(SDL2_image REQUIRED)
 add_executable(client
     main.cpp
     Area.cpp
-    SdlTexture.cpp
+    Client.cpp
     SdlException.cpp
+    SdlTexture.cpp
     SdlWindow.cpp)
 
 # Include files from SDL2

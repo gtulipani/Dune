@@ -1,6 +1,6 @@
 #include "Terrain.h"
 
-Terrain::Terrain(Matrix& _mat) : mat(_mat) {}
+Terrain::Terrain(Matrix mat) : mat(std::move(mat)) {}
 
 /*  Obviamente, esta funcion solo sirve para probar A*, hay que cambiarla   *
  *  despues, ya que si es adyacente o no depende de mas cosas, y la matriz  *
@@ -64,4 +64,8 @@ int Terrain::getCost(Point& a, Point& b) const {
     mas cercana disponible para esa unidad. */
 Point Terrain::findClosest(Point& p) const {
     return p;
+}
+
+Matrix& Terrain::getMatrix() {
+    return mat;
 }

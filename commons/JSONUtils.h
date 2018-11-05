@@ -3,6 +3,8 @@
 
 #include <string>
 #include "json.hpp"
+#include "Event.h"
+#include "Point.h"
 
 using namespace std;
 using json = nlohmann::json;

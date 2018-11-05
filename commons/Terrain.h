@@ -12,20 +12,23 @@
 #define ESPECIA 5
 #define EDIFICIO 6
 
-#define TILE_SIZE 10
+#define TILE_PIXEL_RATE 10
 
 class Terrain {
 private:
     Matrix mat;
 
 public:
-    explicit Terrain(Matrix& _mat);
+    Terrain() = default;
+
+    explicit Terrain(Matrix);
 
     Point findClosest(Point& p) const;
 
     std::vector<Point> getAdyacents(Point& p) const;
 
     int getCost(Point& a, Point& b) const;
+    Matrix& getMatrix();
 };
 
 #endif

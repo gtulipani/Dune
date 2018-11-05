@@ -5,16 +5,36 @@
 #include "Point.h"
 #include "json.hpp"
 
+#ifndef __EVENT_TYPES__
+#define __EVENT_TYPES__
+// Define the types of events
+#define TERRAIN_SIZE "TERRAIN_SIZE"
+#define TERRAIN_EVENT "TERRAIN"
+#define TERRAIN_FINISHED_EVENT "TERRAIN_FINISHED"
+#define MOVEMENT_EVENT "MOVEMENT"
+#define CONNECTION_SUCCESS_EVENT "CONNECTION_SUCCESS"
+#define GAME_STARTED_EVENT "GAME_STARTED"
+
+#endif
+
 using namespace std;
 using json = nlohmann::json;
 
-class Event {
-private:
-    string type;
-    Point src;
-    Point dst;
+struct Event {
 public:
-    Event(std::string type, Point src, Point dst);
+    int id{};
+    string type;
+    Point dst;
+
+    Event() = default;
+
+    explicit Event(string type);
+
+    Event(int id, string type);
+
+    Event(string type, Point dst);
+
+    Event(int id, string type, Point dst);
 
     Event(const Event &other);
 
@@ -26,11 +46,7 @@ public:
     // Overloading the assignment by movement
     Event &operator=(Event &&other) noexcept;
 
-    Point& getSource();
     Point& getDestiny();
-
-    friend void to_json(json &j, const Event &b);
-    friend void from_json(const json &j, Event &b);
 };
 
 

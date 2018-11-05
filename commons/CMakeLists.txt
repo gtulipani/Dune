@@ -1,9 +1,11 @@
 add_library(commons
         BadFileException.cpp
+        Event.cpp
+        EventHandler.cpp
         json.hpp
+        JSONConversion.cpp
         JSONUtils.cpp
         Lock.cpp
-        Map.cpp
         Matrix.cpp
         PathFinder.cpp
         Point.cpp
@@ -11,7 +13,8 @@ add_library(commons
         SOException.cpp
         Terrain.cpp
         Thread.cpp
-        TileUtils.cpp)
+        TileUtils.cpp
+        Unit.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib
