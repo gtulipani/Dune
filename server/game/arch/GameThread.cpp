@@ -5,11 +5,11 @@
 
 // Commons Libraries
 #include <json.hpp>
-#include <Unit.h>
 #include <MapConfigurationEvent.h>
 
 // Server Libraries
 #include "ClientThread.h"
+#include "../model/WalkingUnit.h"
 
 using json = nlohmann::json;
 
@@ -27,16 +27,16 @@ void GameThread::run() {
 
     sendMapConfigurationEvent();
 
-    Point destiny(0, 1);
+    Point destiny(0, 52);
     Event event(1, MOVEMENT_EVENT, destiny);
     events_queue.push(event);
-    Unit test_unit(terrain, initial_pos);
+    WalkingUnit test_unit(terrain, initial_pos, 10);
 
     while (this->isRunning()) {
         collectEvents();
         updateModel(test_unit);
-        updateClients();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        updateClients(test_unit);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -44,20 +44,20 @@ void GameThread::collectEvents() {
     events = events_queue.popAll();
 }
 
-void GameThread::updateModel(Unit &unit) {
+void GameThread::updateModel(WalkingUnit &unit) {
     for_each(events.begin(), events.end(), [&](Event event) {
        if (event.type == MOVEMENT_EVENT) {
            Point destiny = event.getDestiny();
            unit.goTo(destiny);
-           Point new_destiny = Point(destiny.row, destiny.col + 1);
-           Event new_event = Event(1, MOVEMENT_EVENT, new_destiny);
-           events_queue.push(new_event);
        }
-       clients.back()->send(event);
     });
+    unit.tick();
 }
 
-void GameThread::updateClients() {
+void GameThread::updateClients(WalkingUnit& unit) {
+    Point currentStep = unit.getPixelPosition();
+    Event event(1, MOVEMENT_EVENT, currentStep);
+    clients.back()->send(event);
 }
 
 void GameThread::clientJoin(const ClientThread *client) {

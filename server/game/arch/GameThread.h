@@ -14,7 +14,7 @@
 #include "shaque.h"
 
 class ClientThread;
-class Unit;
+class WalkingUnit;
 
 class GameThread : public Thread {
 private:
@@ -24,7 +24,7 @@ private:
     std::vector<const ClientThread*> clients;
     std::list<Event> events;
     Terrain terrain;
-    Point initial_pos = Point(0, 0);
+    Point initial_pos = Point(30, 20);
 
     void sendMapConfigurationEvent();
 
@@ -32,9 +32,9 @@ private:
 
     void collectEvents();
 
-    void updateModel(Unit& unit);
+    void updateModel(WalkingUnit& unit);
 
-    void updateClients();
+    void updateClients(WalkingUnit& unit);
 
     public:
     GameThread(shaque<Event>& events_queue, unsigned int _size);
