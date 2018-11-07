@@ -14,8 +14,6 @@ unsigned int movespeed) : terrain(_terrain) {
 }
 
 void WalkingUnit::tick() {
-    // Always start with base class tick
-    GameObject::tick();
     checkMovespeed();
 }
 
