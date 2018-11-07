@@ -7,14 +7,13 @@ add_library(commons
         JSONUtils.cpp
         Lock.cpp
         Matrix.cpp
-        PathFinder.cpp
         Point.cpp
         Socket.cpp
         SOException.cpp
         Terrain.cpp
         Thread.cpp
         TileUtils.cpp
-        Unit.cpp MapConfigurationEvent.cpp MapConfigurationEvent.h)
+        MapConfigurationEvent.cpp MapConfigurationEvent.h)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib

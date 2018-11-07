@@ -12,7 +12,6 @@
 #include <dirent.h>
 
 // Commons Libraries
-#include <Unit.h>
 #include <Event.h>
 
 // Server Libraries
