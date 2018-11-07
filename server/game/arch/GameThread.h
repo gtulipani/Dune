@@ -7,7 +7,7 @@
 
 // Commons Libraries
 #include <Thread.h>
-#include <Event.h>
+#include <events/ClientEvent.h>
 
 // Game Libraries
 #include "shaque.h"
@@ -19,10 +19,10 @@ class WalkingUnit;
 class GameThread : public Thread {
 private:
     unsigned int size;
-    shaque<Event> events_queue;
+    shaque<ClientEvent> events_queue;
 
     std::vector<const ClientThread*> clients;
-    std::list<Event> events;
+    std::list<ClientEvent> events;
     Terrain terrain;
     Point initial_pos = Point(30, 20);
 
@@ -37,7 +37,7 @@ private:
     void updateClients(WalkingUnit& unit);
 
     public:
-    GameThread(shaque<Event>& events_queue, unsigned int _size);
+    GameThread(shaque<ClientEvent>& events_queue, unsigned int _size);
 
     void clientJoin(const ClientThread* client);
 

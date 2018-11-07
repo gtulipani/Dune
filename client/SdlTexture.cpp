@@ -15,6 +15,9 @@ SdlTexture::SdlTexture(const SdlTexture &other) {
 }
 
 SdlTexture::SdlTexture(SdlTexture &&other) noexcept {
+    this->renderer = other.renderer;
+    this->texture = other.texture;
+
     other.renderer = nullptr;
     other.texture = nullptr;
 }

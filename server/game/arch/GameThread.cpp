@@ -4,9 +4,10 @@
 #include <iostream>
 
 // Commons Libraries
-#include <json.hpp>
-#include <MapConfigurationEvent.h>
-#include <Tick.h>
+#include <json/json.hpp>
+#include <events/MapConfigurationEvent.h>
+#include <events/GameStatusEvent.h>
+#include <Picturable.h>
 
 // Server Libraries
 #include "ClientThread.h"
@@ -14,12 +15,13 @@
 
 using json = nlohmann::json;
 
-GameThread::GameThread(shaque<Event> &events_queue, unsigned int _size)
+GameThread::GameThread(shaque<ClientEvent> &events_queue, unsigned int _size)
         : events_queue(events_queue), terrain(Matrix("resources/maps/base.map")) {
     size = _size;
 }
 
 void GameThread::sendMapConfigurationEvent() {
+    clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
     clients.back()->send(MapConfigurationEvent(terrain.getMatrix()));
 }
 
@@ -28,9 +30,15 @@ void GameThread::run() {
 
     sendMapConfigurationEvent();
 
-    Point destiny(0, 52);
-    Event event(1, MOVEMENT_EVENT, destiny);
-    events_queue.push(event);
+    // This block will be deleted in the future. The Server should probably transform Buildings, Units and the rest of
+    // the model to Picturables and then send the delta
+    Point picturable_origin(0, 0);
+    //ID, Type, Selected, Position, Life, Motion
+    std::vector<Picturable> picturables;
+    picturables.emplace_back(0, "LIGHT_INFANTRY", false, picturable_origin, 100, 0);
+    clients.back()->send(NotificationEvent(GAME_STATUS_EVENT));
+    clients.back()->send(GameStatusEvent(picturables));
+
     WalkingUnit test_unit(terrain, initial_pos, 10);
 
     while (this->isRunning()) {
@@ -46,19 +54,17 @@ void GameThread::collectEvents() {
 }
 
 void GameThread::updateModel(WalkingUnit &unit) {
-    for_each(events.begin(), events.end(), [&](Event event) {
-       if (event.type == MOVEMENT_EVENT) {
-           Point destiny = event.getDestiny();
-           unit.goTo(destiny);
-       }
+    for_each(events.begin(), events.end(), [&](ClientEvent event) {
+        //Do stuff
     });
-    unit.tick();
+    // Only in case of movement?
+    //unit.tick();
 }
 
 void GameThread::updateClients(WalkingUnit& unit) {
-    Point currentStep = unit.getPixelPosition();
-    Event event(1, MOVEMENT_EVENT, currentStep);
-    clients.back()->send(event);
+    /*Point currentStep = unit.getPixelPosition();
+    ClientEvent event(1, MOVEMENT_EVENT, currentStep);
+    clients.back()->send(event);*/
 }
 
 void GameThread::clientJoin(const ClientThread *client) {

@@ -1,7 +1,7 @@
 #ifndef __MAP_CONFIGURATION_EVENT_H__
 #define __MAP_CONFIGURATION_EVENT_H__
 
-#include "Matrix.h"
+#include "../Matrix.h"
 
 struct MapConfigurationEvent {
 public:

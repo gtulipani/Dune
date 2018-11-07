@@ -12,7 +12,7 @@
 #include <dirent.h>
 
 // Commons Libraries
-#include <Event.h>
+#include <events/ClientEvent.h>
 
 // Server Libraries
 #include "shaque.h"

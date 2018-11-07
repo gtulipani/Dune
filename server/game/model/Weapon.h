@@ -1,7 +1,7 @@
 #ifndef __WEAPON_H__
 #define __WEAPON_H__
 
-#include <json.hpp>
+#include <json/json.hpp>
 #include <string>
 
 using namespace std;

@@ -4,11 +4,11 @@
 #include <iostream>
 
 // Commons Libraries
-#include <json.hpp>
-#include <Event.h>
+#include <json/json.hpp>
+#include <events/NotificationEvent.h>
 #include <Matrix.h>
-#include <EventHandler.h>
 #include <TileUtils.h>
+#include <events/EventHandler.h>
 
 // Client Libraries
 #include "Client.h"
@@ -24,15 +24,26 @@
 
 using nlohmann::json;
 
-void Client::loadTerrainMatrix() {
-    MapConfigurationEvent event = EventHandler::receiveMapConfigurationEvent(socket);
-    matrix = event.matrix;
+void Client::getEvent() {
+    NotificationEvent notification_event = EventHandler::receiveNotificationEvent(socket);
+    if (notification_event.message == GAME_STARTED_EVENT) {
+        game_started = true;
+    } else if (notification_event.message == MAP_CONFIGURATION_EVENT) {
+        MapConfigurationEvent event = EventHandler::receiveMapConfigurationEvent(socket);
+        matrix = event.matrix;
+    } else if (notification_event.message == GAME_STATUS_EVENT) {
+        GameStatusEvent event = EventHandler::receiveGameStatusEvent(socket);
+        std::for_each(event.picturables.begin(), event.picturables.end(), [&](Picturable picturable) {
+            // Here comes the proper image from each picturable. Still missing some logic
+           picturables.emplace_back(SdlPicturable(picturable, SdlTexture(TERRAIN_RESOURCES_PATH + "/Arena.png", window)));
+        });
+    }
 }
 
 void Client::waitForGameStart() {
     while (!game_started) {
-        Event event = EventHandler::receiveEvent(socket);
-        game_started = (event.type == GAME_STARTED_EVENT);
+        NotificationEvent event = EventHandler::receiveNotificationEvent(socket);
+        game_started = (event.message == GAME_STARTED_EVENT);
     }
 }
 
@@ -44,7 +55,8 @@ void Client::start() {
 
     try {
         waitForGameStart();
-        loadTerrainMatrix();
+        // Load Matrix
+        getEvent();
 
         width = matrix.cols();
         height = matrix.rows();
@@ -73,6 +85,9 @@ void Client::start() {
         Area srcArea(offset_x, offset_y, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
         bool running = true;
 
+        // Get initial picturable in position 0,0
+        getEvent();
+
         while (running) {
             SDL_Event event;
 
@@ -88,6 +103,11 @@ void Client::start() {
                     }
                 }
             }
+
+            // Render the SdlPicturable
+            std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable sdlPicturable) {
+                sdlPicturable.render();
+            });
 
             SDL_WaitEvent(&event);
             switch(event.type) {

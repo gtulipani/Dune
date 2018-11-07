@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "JSONUtils.h"
+#include "json/JSONUtils.h"
 #include "GameConfiguration.h"
 
 #define CONFIGURATION_BUILDINGS_KEY "buildings"

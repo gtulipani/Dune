@@ -2,16 +2,16 @@
 
 #include <iostream>
 #include <SOException.h>
-#include <EventHandler.h>
+#include <events/EventHandler.h>
 
-ClientThread::ClientThread(Socket _socket, shaque<Event>& _sharedQueue)
+ClientThread::ClientThread(Socket _socket, shaque<ClientEvent>& _sharedQueue)
 : socket(std::move(_socket)), sharedQueue(_sharedQueue) {}
 
 void ClientThread::run() {
     std::cout << "Client connected" << std::endl;
     while (this->isRunning()) {
         try {
-            Event event = EventHandler::receiveEvent(socket);
+            ClientEvent event = EventHandler::receiveEvent(socket);
             sharedQueue.push(event);
         } catch (const SOException& e) {
             this->stop();
@@ -29,11 +29,19 @@ void ClientThread::send(const std::string& msg) const {
     socket.sendStr(msg);
 }
 
-void ClientThread::send(const Event& event) const {
+void ClientThread::send(const ClientEvent& event) const {
     EventHandler::sendEvent(socket, event);
 }
 
 void ClientThread::send(const MapConfigurationEvent& event) const {
+    EventHandler::sendEvent(socket, event);
+}
+
+void ClientThread::send(const GameStatusEvent& event) const {
+    EventHandler::sendEvent(socket, event);
+}
+
+void ClientThread::send(const NotificationEvent& event) const {
     EventHandler::sendEvent(socket, event);
 }
 

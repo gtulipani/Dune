@@ -138,6 +138,16 @@ unsigned int Socket::receiveStr(std::string& str, unsigned int size) const {
     return n;
 }
 
+unsigned int Socket::receiveWithSize(std::string& str) const {
+    int32_t bytes = receiveInt32();
+    return receiveStr(str, bytes);
+}
+
+void Socket::sendWithSize(const std::string& str) const {
+    sendInt32(str.length());
+    sendStr(str);
+}
+
 void Socket::sendBuff(const char* buff, unsigned int size) const {
     size_t bytes_sent = 0;
     int s;

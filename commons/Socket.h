@@ -5,7 +5,7 @@
 #include <sys/types.h>
 
 class Socket {
-    private:
+private:
     int fd;
     struct addrinfo * addrInfo;
     struct addrinfo * iterator;
@@ -14,7 +14,10 @@ class Socket {
 
     void start();
 
-    public:
+    void sendBuff(const char* buff, unsigned int size) const;
+
+    unsigned int receiveBuff(char* buff, unsigned int size) const;
+public:
     Socket();
 
     Socket(const std::string& host, const std::string& port);
@@ -39,9 +42,19 @@ class Socket {
 
     unsigned int receiveStr(std::string& str, unsigned int size) const;
 
-    void sendBuff(const char* buff, unsigned int size) const;
+    /*
+     * Sends two messages through the socket:
+     * 1) Int32 containing the quantity of bytes to be received
+     * 2) The message itself
+     */
+    unsigned int receiveWithSize(std::string& str) const;
 
-    unsigned int receiveBuff(char* buff, unsigned int size) const;
+    /*
+     * Sends two messages through the socket:
+     * 1) Int32 containing the quantity of bytes from the message
+     * 2) The message itself
+     */
+    void sendWithSize(const std::string& str) const;
 
     void shutDown();
 

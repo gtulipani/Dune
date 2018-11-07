@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "json.hpp"
+#include "json/json.hpp"
 #include "game/model/Building.h"
 #include "game/model/Vehicle.h"
 #include "game/model/Weapon.h"

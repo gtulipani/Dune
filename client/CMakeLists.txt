@@ -9,7 +9,7 @@ add_executable(client
     Client.cpp
     SdlException.cpp
     SdlTexture.cpp
-    SdlWindow.cpp)
+    SdlWindow.cpp SdlPicturable.cpp SdlPicturable.h)
 
 # Include files from SDL2
 include_directories(

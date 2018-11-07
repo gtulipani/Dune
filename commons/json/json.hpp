@@ -4009,7 +4009,7 @@ class json_sax_dom_parser
         errored = true;
         if (allow_exceptions)
         {
-            // determine the proper exception type from the id
+            // determine the proper exception type from the player_id
             switch ((ex.id / 100) % 100)
             {
                 case 1:
@@ -4267,7 +4267,7 @@ class json_sax_dom_callback_parser
         errored = true;
         if (allow_exceptions)
         {
-            // determine the proper exception type from the id
+            // determine the proper exception type from the player_id
             switch ((ex.id / 100) % 100)
             {
                 case 1:

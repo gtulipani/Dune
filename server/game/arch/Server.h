@@ -7,7 +7,7 @@
 #include <map>
 
 // Commons Libraries
-#include <json.hpp>
+#include <json/json.hpp>
 
 // Server Libraries
 #include "GameConfiguration.h"

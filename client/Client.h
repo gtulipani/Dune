@@ -12,6 +12,7 @@
 // Client Libraries
 #include "SdlTexture.h"
 #include "SdlWindow.h"
+#include "SdlPicturable.h"
 
 using namespace std;
 
@@ -27,9 +28,9 @@ private:
     Matrix matrix;
     SdlWindow window;
     std::map<int, SdlTexture&> terrain_render_map;
+    std::vector<SdlPicturable> picturables;
 
-    //std::map<int, SdlTexture> buildTerrainTextures(SdlWindow& window);
-    void loadTerrainMatrix();
+    void getEvent();
     void waitForGameStart();
 public:
     Client(string host, string port);

@@ -2,7 +2,7 @@
 #define __POINT_H__
 
 #include <string>
-#include "json.hpp"
+#include "json/json.hpp"
 
 using nlohmann::json;
 

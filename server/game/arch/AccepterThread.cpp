@@ -1,5 +1,8 @@
 #include "AccepterThread.h"
 
+// Commons Libraries
+#include <events/NotificationEvent.h>
+
 // Server Libraries
 #include "SOException.h"
 #include "ClientThread.h"
@@ -13,12 +16,12 @@ AccepterThread::AccepterThread(std::string port, unsigned int gameSize) :
         socket.bindAndListen(MAX_CLIENTS_IN_WAIT);
 }
 
-Event AccepterThread::buildConnectionSuccessEvent() {
-    return Event(CONNECTION_SUCCESS_EVENT);
+NotificationEvent AccepterThread::buildConnectionSuccessEvent() {
+    return NotificationEvent(CONNECTION_SUCCESS_EVENT);
 }
 
 void AccepterThread::notifyGameStart() {
-    Event event(GAME_STARTED_EVENT);
+    NotificationEvent event(GAME_STARTED_EVENT);
     std::for_each(clients.begin(), clients.end(), [event](ClientThread* client) {
         client->send(event);
     });

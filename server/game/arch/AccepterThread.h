@@ -11,16 +11,18 @@
 // Server Libraries
 #include "GameThread.h"
 
+class NotificationEvent;
+
 class AccepterThread : public Thread {
     private:
     Socket socket;
-    shaque<Event> sharedQueue;
+    shaque<ClientEvent> sharedQueue;
     GameThread game;
     std::vector<ClientThread*> clients;
 
     std::mutex m;
 
-    Event buildConnectionSuccessEvent();
+    NotificationEvent buildConnectionSuccessEvent();
 
     void notifyGameStart();
 
