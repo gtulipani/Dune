@@ -7,8 +7,8 @@
 #include <json.hpp>
 #include <Event.h>
 #include <Matrix.h>
-#include <Terrain.h>
 #include <EventHandler.h>
+#include <TileUtils.h>
 
 // Client Libraries
 #include "Client.h"
@@ -17,6 +17,8 @@
 
 // SDL Libraries
 #include <SDL.h>
+
+#define TILE_PIXEL_RATE 10
 
 #define TERRAIN_RESOURCES_PATH string("resources/images/game/terrain")
 

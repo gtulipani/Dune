@@ -8,10 +8,10 @@
 // Commons Libraries
 #include <Thread.h>
 #include <Event.h>
-#include <Terrain.h>
 
 // Game Libraries
 #include "shaque.h"
+#include "../model/Terrain.h"
 
 class ClientThread;
 class WalkingUnit;

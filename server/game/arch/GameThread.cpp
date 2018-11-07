@@ -6,6 +6,7 @@
 // Commons Libraries
 #include <json.hpp>
 #include <MapConfigurationEvent.h>
+#include <Tick.h>
 
 // Server Libraries
 #include "ClientThread.h"
@@ -36,7 +37,7 @@ void GameThread::run() {
         collectEvents();
         updateModel(test_unit);
         updateClients(test_unit);
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
     }
 }
 

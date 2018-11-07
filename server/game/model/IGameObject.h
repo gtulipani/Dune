@@ -3,7 +3,7 @@
 
 #include <string>
 
-class GameObject {
+class IGameObject {
     public:
     virtual void tick() = 0;
 

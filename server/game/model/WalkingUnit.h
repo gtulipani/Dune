@@ -1,14 +1,15 @@
 #ifndef __WALKING_UNIT_H__
 #define __WALKING_UNIT_H__
 
-#include "GameObject.h"
+#include "IGameObject.h"
 
 #include <stack>
 #include "Point.h"
+#include <Tick.h>
 
 class Terrain;
 
-class WalkingUnit : public GameObject {
+class WalkingUnit : public IGameObject {
     unsigned int ticksPerStep;
     unsigned int counter;
     std::stack<Point> path;
@@ -35,9 +36,15 @@ class WalkingUnit : public GameObject {
 
     void goTo(Point& _pixelGoal);
 
+    virtual bool haveYouChanged();
+
+    virtual std::string getState();
+
     Point getPixelPosition() const;
 
-    static unsigned int maxspeed(); // Returns maxspeed for walking units.
+    static unsigned int maxspeed() { // Returns maxspeed for walking units.
+        return TICKS_PER_SECOND;
+    }
 };
 
 #endif

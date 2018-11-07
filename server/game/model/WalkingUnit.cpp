@@ -1,8 +1,8 @@
 #include "WalkingUnit.h"
 
 #include "PriorityQueue.h"
-#include "Tick.h"
-#include "TileUtils.h"
+#include <Tick.h>
+#include <TileUtils.h>
 #include "Terrain.h"
 
 WalkingUnit::WalkingUnit(Terrain& _terrain, Point& initialPixelPosition,
@@ -131,6 +131,14 @@ void WalkingUnit::findPath(Point &goal) {
         path.push(current);
         current = came_from[current];
     }
+}
+
+bool WalkingUnit::haveYouChanged() {
+    return true;
+}
+
+std::string WalkingUnit::getState() {
+    return "";
 }
 
 void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}

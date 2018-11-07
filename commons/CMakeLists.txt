@@ -10,10 +10,9 @@ add_library(commons
         Point.cpp
         Socket.cpp
         SOException.cpp
-        Terrain.cpp
         Thread.cpp
-        TileUtils.cpp
-        MapConfigurationEvent.cpp MapConfigurationEvent.h)
+        MapConfigurationEvent.cpp
+        TileUtils.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib
