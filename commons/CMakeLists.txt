@@ -1,21 +1,22 @@
 add_library(commons
-        BadFileException.cpp
         events/ClientEvent.cpp
         events/EventHandler.cpp
+        events/GameStatusEvent.cpp
+        events/MapConfigurationEvent.cpp
+        events/NotificationEvent.cpp
         json/json.hpp
         json/JSONConversion.cpp
         json/JSONUtils.cpp
+        BadFileException.cpp
         Lock.cpp
         Matrix.cpp
+        Picturable.cpp
         Point.cpp
         Socket.cpp
         SOException.cpp
+        TerrainType.h
         Thread.cpp
-        TileUtils.cpp
-        events/MapConfigurationEvent.cpp
-        events/GameStatusEvent.cpp
-        Picturable.cpp
-        events/NotificationEvent.cpp)
+        TileUtils.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib

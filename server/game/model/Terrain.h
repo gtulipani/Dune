@@ -4,14 +4,6 @@
 #include "Point.h"
 #include "Matrix.h"
 
-#define ARENA 0
-#define DUNAS 1
-#define ROCA 2
-#define CIMAS 3
-#define PRECIPICIOS 4
-#define ESPECIA 5
-#define EDIFICIO 6
-
 #define TILE_PIXEL_RATE 10
 
 class Terrain {

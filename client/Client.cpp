@@ -9,6 +9,7 @@
 #include <Matrix.h>
 #include <TileUtils.h>
 #include <events/EventHandler.h>
+#include <TerrainType.h>
 
 // Client Libraries
 #include "Client.h"

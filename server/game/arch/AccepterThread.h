@@ -11,7 +11,7 @@
 // Server Libraries
 #include "GameThread.h"
 
-class NotificationEvent;
+struct NotificationEvent;
 
 class AccepterThread : public Thread {
     private:

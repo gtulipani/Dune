@@ -36,9 +36,9 @@ class WalkingUnit : public IGameObject {
 
     void goTo(Point& _pixelGoal);
 
-    virtual bool haveYouChanged();
+    bool haveYouChanged() override;
 
-    virtual std::string getState();
+    std::string getState() override;
 
     Point getPixelPosition() const;
 
