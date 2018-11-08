@@ -6,7 +6,6 @@
 #include <vector>
 
 // Commons Libraries
-#include <Thread.h>
 #include <events/ClientEvent.h>
 
 // Game Libraries
@@ -16,19 +15,17 @@
 class ClientThread;
 class WalkingUnit;
 
-class GameThread : public Thread {
-private:
-    unsigned int size;
-    shaque<ClientEvent> events_queue;
-
-    std::vector<const ClientThread*> clients;
+class Game {
+    private:
+    bool is_on;
+    shaque<ClientEvent>& events_queue;
+    const std::vector<ClientThread*>& clients;
     std::list<ClientEvent> events;
+
     Terrain terrain;
     Point initial_pos = Point(30, 20);
 
     void sendMapConfigurationEvent();
-
-    virtual void run() override;
 
     void collectEvents();
 
@@ -37,11 +34,11 @@ private:
     void updateClients(WalkingUnit& unit);
 
     public:
-    GameThread(shaque<ClientEvent>& events_queue, unsigned int _size);
+    Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);
 
-    void clientJoin(const ClientThread* client);
+    void start();
 
-    bool isReady();
+    void stop();
 };
 
 #endif // __GAME_THREAD_H__

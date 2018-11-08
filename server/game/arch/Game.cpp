@@ -1,4 +1,4 @@
-#include "GameThread.h"
+#include "Game.h"
 
 // STL Libraries
 #include <iostream>
@@ -15,17 +15,16 @@
 
 using json = nlohmann::json;
 
-GameThread::GameThread(shaque<ClientEvent> &events_queue, unsigned int _size)
-        : events_queue(events_queue), terrain(Matrix("resources/maps/base.map")) {
-    size = _size;
-}
+Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients)
+: events_queue(events_queue), terrain(Matrix("resources/maps/base.map")),
+clients(_clients) {}
 
-void GameThread::sendMapConfigurationEvent() {
+void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
     clients.back()->send(MapConfigurationEvent(terrain.getMatrix()));
 }
 
-void GameThread::run() {
+void Game::start() {
     std::cout << "Running..." << std::endl;
 
     sendMapConfigurationEvent();
@@ -41,7 +40,7 @@ void GameThread::run() {
 
     WalkingUnit test_unit(terrain, initial_pos, 10);
 
-    while (this->isRunning()) {
+    while (is_on) {
         collectEvents();
         updateModel(test_unit);
         updateClients(test_unit);
@@ -49,30 +48,24 @@ void GameThread::run() {
     }
 }
 
-void GameThread::collectEvents() {
+void Game::collectEvents() {
     events = events_queue.popAll();
 }
 
-void GameThread::updateModel(WalkingUnit &unit) {
+void Game::updateModel(WalkingUnit &unit) {
     for_each(events.begin(), events.end(), [&](ClientEvent event) {
-        //Do stuff
+        // Do stuff
     });
     // Only in case of movement?
     //unit.tick();
 }
 
-void GameThread::updateClients(WalkingUnit& unit) {
+void Game::updateClients(WalkingUnit& unit) {
     /*Point currentStep = unit.getPixelPosition();
     ClientEvent event(1, MOVEMENT_EVENT, currentStep);
     clients.back()->send(event);*/
 }
 
-void GameThread::clientJoin(const ClientThread *client) {
-    if (clients.size() != size) {
-        clients.push_back(client);
-    }
-}
-
-bool GameThread::isReady() {
-    return size == clients.size();
+void Game::stop() {
+    is_on = false;
 }

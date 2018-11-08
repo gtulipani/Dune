@@ -183,6 +183,10 @@ unsigned int Socket::receiveBuff(char* buff, unsigned int size) const {
     return bytes_recived;
 }
 
+bool Socket::valid() const {
+    return fd != -1;
+}
+
 void Socket::shutDown() {
     shutdown(this->fd, SHUT_RDWR);
 }

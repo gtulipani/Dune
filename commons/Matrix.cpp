@@ -14,7 +14,7 @@ Matrix::Matrix(std::string fName) {
     std::ifstream file(fName.c_str());
     file >> this->rows_quantity >> this->columns_quantity;
     vec.resize(this->rows_quantity * this->columns_quantity);
-    std::size_t i, j;
+    int i, j;
     for (i = 0; i < this->rows_quantity && !file.eof(); i++) {
         for (j = 0; j < this->columns_quantity && !file.eof(); j++) {
             file >> this->at(i, j);
