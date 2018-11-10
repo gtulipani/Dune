@@ -28,6 +28,7 @@ void Game::sendMapConfigurationEvent() {
 }
 
 void Game::start() {
+    is_on = true;
     std::cout << "Running..." << std::endl;
 
     sendMapConfigurationEvent();
@@ -37,16 +38,16 @@ void Game::start() {
     Point picturable_origin(0, 0);
     //ID, Type, Selected, Position, Life, Motion
     std::vector<Picturable> picturables;
-    picturables.emplace_back(0, LIGHT_INFANTRY, false, picturable_origin, 100, 0);
+    picturables.emplace_back(0, LIGHT_INFANTRY, 0, false, picturable_origin, 100);
     clients.back()->send(NotificationEvent(GAME_STATUS_EVENT));
     clients.back()->send(GameStatusEvent(picturables));
 
     // Manualy pushes two events.
     Point initial_pos(30, 21);
-    ClientEvent event1(0, LEFT_CLICK, initial_pos);
+    ClientEvent event1(0, LEFT_CLICK_TYPE, initial_pos);
     events_queue.push(event1);
     Point dest(0, 52);
-    ClientEvent event2(1, RIGHT_CLICK, dest);
+    ClientEvent event2(1, RIGHT_CLICK_TYPE, dest);
     events_queue.push(event2);
 
     while (is_on) {
@@ -63,7 +64,7 @@ void Game::collectEvents() {
 
 void Game::updateModel() {
     for (ClientEvent event : events) {
-        if (event.type == RIGHT_CLICK) {
+        if (event.type == LEFT_CLICK_TYPE) {
             GameObject* gameObject;
             try {
                 gameObject = positions.at(event.position);
@@ -72,12 +73,12 @@ void Game::updateModel() {
                 selectedObject->unselect();
                 selectedObject = nullptr;
             }
-        } else if (event.type == LEFT_CLICK) {
+        } else if (event.type == RIGHT_CLICK_TYPE) {
             if (selectedObject != nullptr) {
                 selectedObject->handleRightClick(event.position);
             }
-        } else if (event.type == CREATE_WALKING_UNIT) {
-            WalkingUnit* unit = new WalkingUnit(0, 0, terrain, event.position, 10);
+        } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
+            auto * unit = new WalkingUnit(0, 0, terrain, event.position, 10);
             gameObjects.push_back(unit);
             positions[event.position] = unit;
         }

@@ -7,10 +7,11 @@
 class GameObject {
     protected:
     int id;
+    int type;
+    int sprite;
     int health;
     bool selected;
     Point pixelPosition;
-    int sprite;
 
     public:
     GameObject(int _id, int _sprite);

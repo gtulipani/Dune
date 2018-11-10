@@ -5,15 +5,12 @@
 #include "../Point.h"
 #include "../json/json.hpp"
 
-#define LEFT_CLICK_TYPE "LEFT_CLICK"
 #define RIGHT_CLICK_TYPE "RIGHT_CLICK"
+#define LEFT_CLICK_TYPE "LEFT_CLICK"
+#define CREATE_WALKING_UNIT_TYPE "CREATE_WALKING_UNIT"
 
 using namespace std;
 using json = nlohmann::json;
-
-#define RIGHT_CLICK "RIGHT_CLICK"
-#define LEFT_CLICK "LEFT_CLICK"
-#define CREATE_WALKING_UNIT "CREATE_WALKING_UNIT"
 
 struct ClientEvent {
 public:

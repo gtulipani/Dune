@@ -6,7 +6,7 @@ GameObject::GameObject(int _id, int _sprite) {
 }
 
 Picturable GameObject::getState() const {
-    return {id, sprite, selected, pixelPosition, health};
+    return {id, type, sprite, selected, pixelPosition, health};
 }
 
 void GameObject::select() {

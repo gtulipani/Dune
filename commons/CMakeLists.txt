@@ -11,13 +11,13 @@ add_library(commons
         Lock.cpp
         Matrix.cpp
         Picturable.cpp
+        PicturableType.h
         Point.cpp
         Socket.cpp
         SOException.cpp
         TerrainType.h
         Thread.cpp
-        TileUtils.cpp
-        PicturableType.h)
+        TileUtils.cpp)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib
