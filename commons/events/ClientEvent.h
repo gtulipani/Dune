@@ -8,6 +8,10 @@
 using namespace std;
 using json = nlohmann::json;
 
+#define RIGHT_CLICK "RIGHT_CLICK"
+#define LEFT_CLICK "LEFT_CLICK"
+#define CREATE_WALKING_UNIT "CREATE_WALKING_UNIT"
+
 struct ClientEvent {
 public:
     int player_id{};

@@ -1,32 +1,29 @@
 #include "Picturable.h"
 
-Picturable::Picturable(int id, std::string type, bool selected, Point position, int life, int motion) :
+Picturable::Picturable(int id, int sprite, bool selected, Point position, int health) :
     id(id),
-    type(std::move(type)),
+    sprite(sprite),
     selected(selected),
     position(std::move(position)),
-    life(life),
-    motion(motion) {}
+    health(health) {}
 
 Picturable::Picturable(const Picturable &other) : Picturable(
         other.id,
-        other.type,
+        other.sprite,
         other.selected,
         other.position,
-        other.life,
-        other.motion) {}
+        other.health) {}
 
 Picturable::Picturable(Picturable &&other) noexcept : Picturable(
         other.id,
-        std::move(other.type),
+        other.sprite,
         other.selected,
         std::move(other.position),
-        other.life,
-        other.motion) {
+        other.health) {
     other.id = 0;
+    other.sprite = 0;
     other.selected = false;
-    other.life = 0;
-    other.motion = 0;
+    other.health = 0;
 }
 
 Picturable &Picturable::operator=(const Picturable &other) {
@@ -36,12 +33,10 @@ Picturable &Picturable::operator=(const Picturable &other) {
 
     // Copy values
     this->id = other.id;
-    this->type = other.type;
+    this->sprite = other.sprite;
     this->selected = other.selected;
     this->position = other.position;
-    this->life = other.life;
-    this->motion = other.motion;
-
+    this->health = other.health;
     return *this;
 }
 
@@ -52,16 +47,15 @@ Picturable &Picturable::operator=(Picturable &&other) noexcept {
 
     // Copy values
     this->id = other.id;
-    this->type = other.type;
+    this->sprite = other.sprite;
     this->selected = other.selected;
     this->position = other.position;
-    this->life = other.life;
-    this->motion = other.motion;
+    this->health = other.health;
 
     other.id = 0;
+    other.sprite = 0;
     other.selected = false;
-    other.life = 0;
-    other.motion = 0;
+    other.health = 0;
 
     return *this;
 }

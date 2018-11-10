@@ -10,6 +10,9 @@
 
 // Game Libraries
 #include "shaque.h"
+
+// Model Libraries
+#include "../model/GameObject.h"
 #include "../model/Terrain.h"
 
 class ClientThread;
@@ -23,15 +26,17 @@ class Game {
     std::list<ClientEvent> events;
 
     Terrain terrain;
-    Point initial_pos = Point(30, 20);
+    std::unordered_map<Point, GameObject*> positions;
+    std::vector<GameObject*> gameObjects;
+    GameObject* selectedObject;
 
     void sendMapConfigurationEvent();
 
     void collectEvents();
 
-    void updateModel(WalkingUnit& unit);
+    void updateModel();
 
-    void updateClients(WalkingUnit& unit);
+    void updateClients();
 
     public:
     Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);

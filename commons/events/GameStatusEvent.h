@@ -10,7 +10,7 @@ public:
 
     GameStatusEvent() = default;
 
-    explicit GameStatusEvent(std::vector<Picturable> matrix);
+    explicit GameStatusEvent(std::vector<Picturable> _picturables);
 
     GameStatusEvent(const GameStatusEvent &other);
 

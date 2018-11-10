@@ -7,15 +7,14 @@
 struct Picturable {
 public:
     int id{};
-    std::string type;
+    int sprite;
     bool selected{};
     Point position;
-    int life{};
-    int motion{};
+    int health{};
 
     Picturable() = default;
 
-    Picturable(int id, std::string type, bool selected, Point position, int life, int motion);
+    Picturable(int id, int sprite, bool selected, Point position, int health);
 
     Picturable(const Picturable &other);
 

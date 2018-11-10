@@ -5,8 +5,8 @@
 #include <TileUtils.h>
 #include "Terrain.h"
 
-WalkingUnit::WalkingUnit(Terrain& _terrain, Point& initialPixelPosition,
-unsigned int movespeed) : terrain(_terrain) {
+WalkingUnit::WalkingUnit(int id, int sprite, Terrain& _terrain, Point& initialPixelPosition,
+unsigned int movespeed) :  GameObject(id, sprite), terrain(_terrain) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     pixelPosition = initialPixelPosition;
@@ -15,10 +15,6 @@ unsigned int movespeed) : terrain(_terrain) {
 
 void WalkingUnit::tick() {
     checkMovespeed();
-}
-
-Point WalkingUnit::getPixelPosition() const {
-    return pixelPosition;
 }
 
 void WalkingUnit::checkMovespeed() {
@@ -82,7 +78,7 @@ void WalkingUnit::stepTo(Point &pixel) {
     pixelPosition.col += col_dir;
 }
 
-void WalkingUnit::goTo(Point &_pixelGoal) {
+void WalkingUnit::handleRightClick(const Point &_pixelGoal) {
     pixelGoal = _pixelGoal;
     Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
     findPath(goalTile);
@@ -133,12 +129,8 @@ void WalkingUnit::findPath(Point &goal) {
     }
 }
 
-bool WalkingUnit::haveYouChanged() {
+bool WalkingUnit::haveYouChanged() const {
     return true;
-}
-
-std::string WalkingUnit::getState() {
-    return "";
 }
 
 void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}

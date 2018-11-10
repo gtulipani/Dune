@@ -11,6 +11,7 @@ add_executable(server
         game/arch/ConfigMap.cpp
         game/arch/Game.cpp
         game/arch/ServerThread.cpp
+        game/model/GameObject.cpp
         game/model/WalkingUnit.cpp
         game/model/Terrain.cpp)
 
