@@ -1,6 +1,6 @@
 #ifndef __SDL_WINDOW_H__
 #define __SDL_WINDOW_H__
-#include "Area.h"
+#include "../arch/Area.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -12,12 +12,12 @@ public:
 
     SdlWindow(int width, int height);
 
-    SdlWindow(const SdlWindow &other);
+    SdlWindow(const SdlWindow &other) = delete;
 
     SdlWindow(SdlWindow &&other) noexcept;
 
     // Overloading the assignment by copy
-    SdlWindow &operator=(const SdlWindow &other);
+    SdlWindow &operator=(const SdlWindow &other) = delete;
 
     // Overloading the assignment by movement
     SdlWindow &operator=(SdlWindow &&other) noexcept;

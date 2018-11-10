@@ -5,7 +5,9 @@
 #include <Picturable.h>
 
 // Client Libraries
-#include "SdlTexture.h"
+#include "../sdl/SdlTexture.h"
+
+#define SIZE 10
 
 class SdlPicturable {
 private:
@@ -14,17 +16,17 @@ private:
 public:
     SdlPicturable(Picturable picturable, SdlTexture sdlTexture);
 
-    SdlPicturable(const SdlPicturable &other);
+    SdlPicturable(const SdlPicturable &other) = delete;
 
     SdlPicturable(SdlPicturable &&other) noexcept;
 
     // Overloading the assignment by copy
-    SdlPicturable &operator=(const SdlPicturable &other);
+    SdlPicturable &operator=(const SdlPicturable &other) = delete;
 
     // Overloading the assignment by movement
     SdlPicturable &operator=(SdlPicturable &&other) noexcept;
 
-    void render();
+    void render(int offset_x, int offset_y);
 };
 
 

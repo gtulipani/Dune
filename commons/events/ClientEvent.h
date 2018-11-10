@@ -5,6 +5,9 @@
 #include "../Point.h"
 #include "../json/json.hpp"
 
+#define LEFT_CLICK_TYPE "LEFT_CLICK"
+#define RIGHT_CLICK_TYPE "RIGHT_CLICK"
+
 using namespace std;
 using json = nlohmann::json;
 

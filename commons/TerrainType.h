@@ -1,7 +1,7 @@
 #ifndef __TERRAIN_TYPE_H_
 #define __TERRAIN_TYPE_H_
 
-enum TerrainType{
+typedef enum TerrainType {
     ARENA = 0,
     DUNAS = 1,
     ROCA = 2,

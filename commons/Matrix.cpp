@@ -35,9 +35,6 @@ Matrix::Matrix(Matrix &&other) noexcept : Matrix(
         other.rows_quantity,
         other.columns_quantity) {
     this->vec = std::move(other.vec);
-
-    other.rows_quantity = 0;
-    other.columns_quantity = 0;
 }
 
 Matrix &Matrix::operator=(const Matrix &other) {
@@ -62,9 +59,6 @@ Matrix &Matrix::operator=(Matrix &&other) noexcept {
     this->vec = std::move(other.vec);
     this->rows_quantity = other.rows_quantity;
     this->columns_quantity = other.columns_quantity;
-
-    other.rows_quantity = 0;
-    other.columns_quantity= 0;
 
     return *this;
 }

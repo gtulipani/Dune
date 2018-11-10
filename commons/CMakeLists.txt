@@ -16,7 +16,8 @@ add_library(commons
         SOException.cpp
         TerrainType.h
         Thread.cpp
-        TileUtils.cpp)
+        TileUtils.cpp
+        PicturableType.h)
 
 install(TARGETS commons
         LIBRARY DESTINATION lib

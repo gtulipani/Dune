@@ -47,6 +47,7 @@ void to_json(json &j, const Point &p) {
 }
 
 void from_json(const json &j, Point &p) {
+    std::cout << j << std::endl;
     j.at("row").get_to(p.row);
     j.at("column").get_to(p.col);
 }
@@ -60,6 +61,7 @@ void to_json(json &j, const NotificationEvent &e) {
 }
 
 void from_json(const json &j, NotificationEvent &p) {
+    std::cout << j << std::endl;
     j.at("message").get_to(p.message);
 }
 

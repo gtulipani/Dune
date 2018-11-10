@@ -9,6 +9,7 @@
 #include <events/MapConfigurationEvent.h>
 #include <events/GameStatusEvent.h>
 #include <Picturable.h>
+#include <PicturableType.h>
 
 // Server Libraries
 #include "ClientThread.h"
@@ -16,9 +17,10 @@
 
 using json = nlohmann::json;
 
-Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients)
-: events_queue(events_queue), clients(_clients),
-terrain(Matrix("resources/maps/base.map")) {}
+Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
+    events_queue(events_queue),
+    clients(_clients),
+    terrain(Matrix("resources/maps/base.map")) {}
 
 void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
@@ -29,6 +31,15 @@ void Game::start() {
     std::cout << "Running..." << std::endl;
 
     sendMapConfigurationEvent();
+
+    // This block will be deleted in the future. The Server should probably transform Buildings, Units and the rest of
+    // the model to Picturables and then send the delta
+    Point picturable_origin(0, 0);
+    //ID, Type, Selected, Position, Life, Motion
+    std::vector<Picturable> picturables;
+    picturables.emplace_back(0, LIGHT_INFANTRY, false, picturable_origin, 100, 0);
+    clients.back()->send(NotificationEvent(GAME_STATUS_EVENT));
+    clients.back()->send(GameStatusEvent(picturables));
 
     // Manualy pushes two events.
     Point initial_pos(30, 21);

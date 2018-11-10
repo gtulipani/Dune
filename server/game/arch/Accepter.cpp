@@ -35,6 +35,7 @@ void Accepter::start(shaque<ClientEvent>& sharedQueue) {
                 clients.push_back(new ClientThread(std::move(peer), sharedQueue));
                 clients.back()->start();
                 clients.back()->send(buildConnectionSuccessEvent());
+                notifyGameStart();
                 i++;
             }
         } catch (const SOException& e) {

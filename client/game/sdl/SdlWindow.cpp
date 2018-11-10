@@ -20,31 +20,17 @@ SdlWindow::SdlWindow(int width, int height) :
     }   
 }
 
-SdlWindow::SdlWindow(const SdlWindow &other) : SdlWindow(
-        other.width,
-        other.height) {}
-
-SdlWindow::SdlWindow(SdlWindow &&other) noexcept : SdlWindow(
-        other.width,
-        other.height) {
-    other.width = 0;
-    other.height = 0;
-    other.window = nullptr;
-    other.renderer = nullptr;
-}
-
-SdlWindow &SdlWindow::operator=(const SdlWindow &other) {
-    if (this == &other) {
-        return *this; // other is myself!
-    }
-
+SdlWindow::SdlWindow(SdlWindow &&other) noexcept {
     // Copy values
     this->width = other.width;
     this->height = other.height;
     this->window = other.window;
     this->renderer = other.renderer;
 
-    return *this;
+    other.width = 0;
+    other.height = 0;
+    other.window = nullptr;
+    other.renderer = nullptr;
 }
 
 SdlWindow &SdlWindow::operator=(SdlWindow &&other) noexcept {
@@ -68,7 +54,7 @@ SdlWindow &SdlWindow::operator=(SdlWindow &&other) noexcept {
 
 
 SdlWindow::~SdlWindow() {
-    std::cout << "Destruyendo" << std::endl;
+    std::cout << "Destruyendo SdlWindow()" << std::endl;
     if (this->renderer) {
         SDL_DestroyRenderer(this->renderer);
         this->renderer = nullptr;

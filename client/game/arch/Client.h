@@ -10,9 +10,11 @@
 #include <Matrix.h>
 
 // Client Libraries
-#include "SdlTexture.h"
-#include "SdlWindow.h"
 #include "SdlPicturable.h"
+#include "Game.h"
+#include "../sdl/SdlTexture.h"
+#include "../sdl/SdlWindow.h"
+
 
 using namespace std;
 
@@ -20,22 +22,17 @@ class Client {
 private:
     string host;
     string port;
-    bool game_started;
 
-    int width;
-    int height;
     Socket socket;
-    Matrix matrix;
-    SdlWindow window;
-    std::map<int, SdlTexture&> terrain_render_map;
-    std::vector<SdlPicturable> picturables;
+    Game game;
 
-    void getEvent();
-    void waitForGameStart();
+    void waitForEvent(std::string message);
 public:
     Client(string host, string port);
 
-    void start();
+    void connect();
+    void configure();
+    void startGame();
 };
 
 
