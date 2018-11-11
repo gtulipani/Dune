@@ -71,8 +71,9 @@ void Game::configure(Socket socket) {
 void Game::start() {
     main_window.fill();
 
-    // Get initial picturable in position 0,0
-    processEventFromSocket();
+    // Create initial unit in position 0,0
+    sendEvent(CREATE_WALKING_UNIT_TYPE, Point(0,0));
+
     main_window.render();
 
     bool running = true;

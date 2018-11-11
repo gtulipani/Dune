@@ -35,17 +35,6 @@ void Game::start() {
 
     sendMapConfigurationEvent();
 
-    // This block will be deleted in the future. The Server should probably transform Buildings, Units and the rest of
-    // the model to Picturables and then send the delta
-    //Point picturable_origin(0, 0);
-    //ID, Type, Selected, Position, Life, Motion
-    /*
-    std::vector<Picturable> picturables;
-    picturables.emplace_back(0, LIGHT_INFANTRY, 0, false, picturable_origin, 100);
-    clients.back()->send(NotificationEvent(GAME_STATUS_EVENT));
-    clients.back()->send(GameStatusEvent(picturables));
-    */
-
     test_events();
 
     while (is_on) {
