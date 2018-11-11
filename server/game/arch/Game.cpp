@@ -20,7 +20,9 @@ using json = nlohmann::json;
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
     events_queue(events_queue),
     clients(_clients),
-    terrain(Matrix("resources/maps/base.map")) {}
+    terrain(Matrix("resources/maps/base.map")) {
+        selectedObject = nullptr;
+    }
 
 void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
@@ -35,20 +37,16 @@ void Game::start() {
 
     // This block will be deleted in the future. The Server should probably transform Buildings, Units and the rest of
     // the model to Picturables and then send the delta
-    Point picturable_origin(0, 0);
+    //Point picturable_origin(0, 0);
     //ID, Type, Selected, Position, Life, Motion
+    /*
     std::vector<Picturable> picturables;
     picturables.emplace_back(0, LIGHT_INFANTRY, 0, false, picturable_origin, 100);
     clients.back()->send(NotificationEvent(GAME_STATUS_EVENT));
     clients.back()->send(GameStatusEvent(picturables));
+    */
 
-    // Manualy pushes two events.
-    Point initial_pos(30, 21);
-    ClientEvent event1(0, LEFT_CLICK_TYPE, initial_pos);
-    events_queue.push(event1);
-    Point dest(0, 52);
-    ClientEvent event2(1, RIGHT_CLICK_TYPE, dest);
-    events_queue.push(event2);
+    test_events();
 
     while (is_on) {
         collectEvents();
@@ -65,13 +63,14 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            GameObject* gameObject;
             try {
-                gameObject = positions.at(event.position);
-                gameObject->select();
+                selectedObject = positions.at(event.position);
+                selectedObject->select();
             } catch (const out_of_range& e) {
-                selectedObject->unselect();
-                selectedObject = nullptr;
+                if (selectedObject != nullptr) {
+                    selectedObject->unselect();
+                    selectedObject = nullptr;
+                }
             }
         } else if (event.type == RIGHT_CLICK_TYPE) {
             if (selectedObject != nullptr) {
@@ -108,4 +107,17 @@ void Game::updateClients() {
 
 void Game::stop() {
     is_on = false;
+}
+
+void Game::test_events() {
+    // In this space you can push some events to test functionality.
+    // In the future, these events will be pushed by Clients
+    Point initial_pos(30, 21);
+    ClientEvent event0(0, CREATE_WALKING_UNIT_TYPE, initial_pos);
+    events_queue.push(event0);
+    ClientEvent event1(0, LEFT_CLICK_TYPE, initial_pos);
+    events_queue.push(event1);
+    Point dest(0, 52);
+    ClientEvent event2(1, RIGHT_CLICK_TYPE, dest);
+    events_queue.push(event2);
 }

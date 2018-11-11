@@ -38,6 +38,8 @@ class Game {
 
     void updateClients();
 
+    void test_events();
+
     public:
     Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);
 
