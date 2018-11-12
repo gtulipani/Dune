@@ -80,8 +80,7 @@ void GameThread::run() {
 
         main_window.render();
 
-        bool running = true;
-        while (running) {
+        while (this->isRunning()) {
             SDL_Event event;
             SDL_PollEvent(&event);
             switch (event.type) {
@@ -94,7 +93,7 @@ void GameThread::run() {
                     break;
                 case SDL_QUIT:
                     std::cout << "Quit :(" << std::endl;
-                    running = false;
+                    this->stop();
                     break;
                 default:
                     break;
