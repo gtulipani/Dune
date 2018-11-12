@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 // Commons Libraries
+#include <TileUtils.h>
 #include <TerrainType.h>
 #include <PicturableType.h>
 
@@ -36,11 +37,11 @@ void MainWindow::fill() {
 }
 
 void MainWindow::render() {
-    Area srcArea(0, 0, SIZE, SIZE);
+    Area srcArea(0, 0, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
     // Render the terrain matrix
     for (int col = 0; col < matrix.columns_quantity; col++) {
         for (int row = 0; row < matrix.rows_quantity; row++) {
-            Area destArea((SIZE * col) + offset_x, (SIZE * row) + offset_y, SIZE, SIZE);
+            Area destArea((TILE_PIXEL_RATE * col) + offset_x, (TILE_PIXEL_RATE * row) + offset_y, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
             auto it = terrains.find(matrix.at(row, col));
             if (it != terrains.end()) {
                 it->second.render(srcArea, destArea);

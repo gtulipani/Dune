@@ -4,8 +4,6 @@
 #include "Point.h"
 #include "Matrix.h"
 
-#define TILE_PIXEL_RATE 10
-
 class Terrain {
 private:
     Matrix mat;
