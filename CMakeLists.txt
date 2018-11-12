@@ -9,4 +9,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -pthread -DJSON_Multiple
 add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(commons)
-add_subdirectory(editor)
+#add_subdirectory(editor)

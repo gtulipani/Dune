@@ -1,6 +1,6 @@
 #include <utility>
 
-#include "GameThread.h"
+#include "EventsLooperThread.h"
 
 // STL Libraries
 #include <iostream>
@@ -12,22 +12,22 @@
 // SDL Libraries
 #include <SDL.h>
 
-GameThread::GameThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages) :
+EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages) :
         game_status_events(game_status_events),
         output_messages(output_messages) {}
 
-void GameThread::pushEvent(std::string message, Point position) {
+void EventsLooperThread::pushEvent(std::string message, Point position) {
     output_messages.push(ClientEvent(1, std::move(message), std::move(position)));
 }
 
-void GameThread::processEvents() {
+void EventsLooperThread::processServerEvents() {
     std::list<GameStatusEvent> events = game_status_events.popAll();
     std::for_each(events.begin(), events.end(), [this](GameStatusEvent &event){
         main_window.processPicturables(event.picturables);
     });
 }
 
-void GameThread::processMouseEvent(SDL_Event &event) {
+void EventsLooperThread::processMouseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
@@ -42,7 +42,7 @@ void GameThread::processMouseEvent(SDL_Event &event) {
     }
 }
 
-void GameThread::processKeyDownEvent(SDL_Event &event) {
+void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     auto &key_event = (SDL_KeyboardEvent &) event;
     switch (key_event.keysym.sym) {
         case SDLK_LEFT:
@@ -62,12 +62,11 @@ void GameThread::processKeyDownEvent(SDL_Event &event) {
     }
 }
 
-void GameThread::configure(Matrix matrix) {
+void EventsLooperThread::configure(Matrix matrix) {
     this->terrain_matrix = std::move(matrix);
-    //main_window.configure(std::move(matrix));
 }
 
-void GameThread::run() {
+void EventsLooperThread::run() {
     try {
         main_window.configure(terrain_matrix);
         main_window.fill();
@@ -76,7 +75,7 @@ void GameThread::run() {
         pushEvent(CREATE_WALKING_UNIT_TYPE, Point(0, 0));
 
         // Process events received from the socket
-        processEvents();
+        processServerEvents();
 
         main_window.render();
 
@@ -99,10 +98,14 @@ void GameThread::run() {
                     break;
             }
             main_window.fill();
-            processEvents();
+            processServerEvents();
             main_window.render();
         }
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
+}
+
+void EventsLooperThread::terminate() {
+    this->stop();
 }

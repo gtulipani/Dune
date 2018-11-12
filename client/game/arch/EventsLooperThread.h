@@ -14,7 +14,7 @@
 
 union SDL_Event;
 
-class GameThread : public Thread {
+class EventsLooperThread : public Thread {
 private:
     shaque<GameStatusEvent> &game_status_events;
     shaque<ClientEvent> &output_messages;
@@ -23,14 +23,16 @@ private:
     Matrix terrain_matrix;
 
     void pushEvent(std::string message, Point position);
-    void processEvents();
+    void processServerEvents();
 
     void processMouseEvent(SDL_Event& event);
     void processKeyDownEvent(SDL_Event& event);
 
     void run() override;
+
+    void terminate() override;
 public:
-    GameThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages);
+    EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages);
 
     void configure(Matrix matrix);
 };
