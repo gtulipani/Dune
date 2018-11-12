@@ -11,6 +11,7 @@ class GameObject {
     int sprite;
     int health;
     bool selected;
+    bool haveIChanged;
     Point pixelPosition;
 
     public:
@@ -22,7 +23,7 @@ class GameObject {
 
     virtual bool haveYouChanged() const = 0;
 
-    virtual Picturable getState() const;
+    virtual Picturable getState();
 
     void select();
 

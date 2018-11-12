@@ -68,8 +68,6 @@ sharedQueue(m),
 game(sharedQueue, clients) {}
 
 void ServerThread::run() {
-	std::mutex m;
-	shaque<ClientEvent> sharedQueue(m);
 	accepter.start(sharedQueue);
 	if (!accepter.wasInterrupted()) {
 		game.start();

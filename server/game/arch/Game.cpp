@@ -35,7 +35,7 @@ void Game::start() {
 
     sendMapConfigurationEvent();
 
-    test_events();
+    //test_events();
 
     while (is_on) {
         collectEvents();
@@ -87,10 +87,12 @@ void Game::updateClients() {
         }
     }
 
-    // send the status of all objects that changed
-    for (ClientThread* client : clients) {
-        client->send(NotificationEvent(GAME_STATUS_EVENT));
-        client->send(GameStatusEvent(states));
+    if (!states.empty()) {
+        // send the status of all objects that changed
+        for (ClientThread* client : clients) {
+            client->send(NotificationEvent(GAME_STATUS_EVENT));
+            client->send(GameStatusEvent(states));
+        }
     }
 }
 

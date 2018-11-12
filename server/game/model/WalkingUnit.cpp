@@ -11,6 +11,7 @@ unsigned int movespeed) :  GameObject(id, sprite), terrain(_terrain) {
     counter = 0;
     pixelPosition = initialPixelPosition;
     tilePosition = tile_utils::getTileFromPixel(initialPixelPosition);
+    haveIChanged = true;
 }
 
 void WalkingUnit::tick() {
@@ -18,9 +19,12 @@ void WalkingUnit::tick() {
 }
 
 void WalkingUnit::checkMovespeed() {
-    if (counter == ticksPerStep) {
-        counter = 0;
+    if (counter == 0) {
+        Point prev_pos = this->pixelPosition;
         step();
+        haveIChanged = prev_pos != this->pixelPosition;
+    } else if (counter == ticksPerStep) {
+        counter = 0;
     } else {
         counter++;
     }
@@ -130,7 +134,7 @@ void WalkingUnit::findPath(Point &goal) {
 }
 
 bool WalkingUnit::haveYouChanged() const {
-    return true;
+    return haveIChanged;
 }
 
 void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}
