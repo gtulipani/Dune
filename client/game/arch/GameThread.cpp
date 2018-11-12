@@ -83,7 +83,7 @@ void GameThread::run() {
         bool running = true;
         while (running) {
             SDL_Event event;
-            SDL_WaitEvent(&event);
+            SDL_PollEvent(&event);
             switch (event.type) {
                 case SDL_KEYDOWN: {
                     processKeyDownEvent(event);
