@@ -34,9 +34,9 @@ private:
 
 	vector<string> getFilesFromPath(const std::string &path);
 
-	void run();
+	void run() override;
 
-	void terminate();
+	void terminate() override;
 
 public:
 	explicit ServerThread(const std::string &config_file_path);

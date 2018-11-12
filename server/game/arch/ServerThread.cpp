@@ -19,7 +19,7 @@
 #include "shaque.h"
 #include "ClientThread.h"
 #include "Accepter.h"
-#include "Game.h" 
+#include "Game.h"
 
 #define PORT_KEY "port"
 #define MAPS_PATH_KEY "maps_path"

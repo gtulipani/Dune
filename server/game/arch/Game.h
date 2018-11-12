@@ -1,5 +1,5 @@
-#ifndef __GAME_THREAD_H__
-#define __GAME_THREAD_H__
+#ifndef __GAME_H__
+#define __GAME_H__
 
 // STD Libraries
 #include <list>
@@ -48,4 +48,4 @@ class Game {
     void stop();
 };
 
-#endif // __GAME_THREAD_H__
+#endif // __GAME_H__

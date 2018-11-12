@@ -6,12 +6,12 @@ find_package(SDL2_image REQUIRED)
 add_executable(client
     main.cpp
         game/arch/Area.cpp
-        game/arch/Client.cpp
+        game/arch/ClientThread.cpp
         game/arch/MainWindow.cpp
         game/sdl/SdlException.cpp
         game/arch/SdlPicturable.cpp
         game/sdl/SdlTexture.cpp
-        game/sdl/SdlWindow.cpp game/arch/Game.cpp game/arch/Game.h)
+        game/sdl/SdlWindow.cpp game/arch/GameThread.cpp game/arch/GameThread.h)
 
 # Include files from SDL2
 include_directories(

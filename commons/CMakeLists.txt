@@ -13,6 +13,7 @@ add_library(commons
         Picturable.cpp
         PicturableType.h
         Point.cpp
+        shaque.h
         Socket.cpp
         SOException.cpp
         TerrainType.h

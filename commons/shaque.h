@@ -1,9 +1,12 @@
 #ifndef __SHAQUE_H__
 #define __SHAQUE_H__
 
+// STL Libraries
 #include <queue>
 #include <list>
-#include "../../commons/Lock.h"
+
+// Commons Libraries
+#include "Lock.h"
 
 template<typename T>
 class shaque {
@@ -16,6 +19,18 @@ class shaque {
     void push(const T& value) {
         Lock l(m);
         queue.push(value);
+    }
+
+    void push(const std::vector<T>& values) {
+        Lock l(m);
+        queue.push(values);
+    }
+
+    T pop() {
+        Lock l(m);
+        T value = queue.front();
+        queue.pop();
+        return value;
     }
 
     std::list<T> popAll() {
