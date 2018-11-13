@@ -31,11 +31,11 @@ void EventsLooperThread::processMouseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
-            pushEvent(LEFT_CLICK_TYPE, Point(mouse_event.x, mouse_event.y));
+            pushEvent(LEFT_CLICK_TYPE, Point(mouse_event.y, mouse_event.x));
             break;
         }
         case SDL_BUTTON_RIGHT: {
-            pushEvent(RIGHT_CLICK_TYPE, Point(mouse_event.x, mouse_event.y));
+            pushEvent(RIGHT_CLICK_TYPE, Point(mouse_event.y, mouse_event.x));
         }
         default:
             break;

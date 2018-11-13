@@ -27,6 +27,6 @@ SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
 void SdlPicturable::render(int offset_x, int offset_y) {
     // Still missing some work. Probably should migrate the movement to a different class called Camera or something similar
     Area srcArea(0, 0, PICTURABLE_SIZE, PICTURABLE_SIZE);
-    Area destArea((PICTURABLE_SIZE * picturable.position.col) + offset_x, (PICTURABLE_SIZE * picturable.position.row) + offset_y, 32, 32);
+    Area destArea((/*PICTURABLE_SIZE * */picturable.position.col) + offset_x, (/*PICTURABLE_SIZE * */picturable.position.row) + offset_y, 32, 32);
     sdlTexture.render(srcArea, destArea);
 }
