@@ -80,6 +80,7 @@ void EventsLooperThread::run() {
         main_window.render();
 
         while (this->isRunning()) {
+            // Calcular tiempo que tarda el ciclo y restarle eso al tiempo de sleep
             SDL_Event event;
             SDL_PollEvent(&event);
             switch (event.type) {
@@ -100,6 +101,7 @@ void EventsLooperThread::run() {
             main_window.fill();
             processServerEvents();
             main_window.render();
+            std::this_thread::sleep_for(std::chrono::milliseconds(30/* - Dt*/));
         }
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
