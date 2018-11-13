@@ -7,7 +7,7 @@
 
 struct Matrix {
 public:
-    std::vector<int> vec;
+    std::vector<char> vec;
     int rows_quantity{};
     int columns_quantity{};
 
@@ -33,13 +33,13 @@ public:
 
     int cols() const;
 
-    int& at(int row, int col);
+    char& at(int row, int col);
 
-    int& at(Point a);
+    char& at(Point a);
 
-    const int& at(int row, int col) const;
+    const char& at(int row, int col) const;
 
-    const int& at(Point a) const;
+    const char& at(Point a) const;
 
 };
 

@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-SdlWindow::SdlWindow(int width, int height) :
+SdlWindow::SdlWindow(int width, int height, int resolution_width, int resolution_height) :
         width(width), height(height) {
     int errCode = SDL_Init(SDL_INIT_VIDEO);
     if (errCode) {
@@ -17,7 +17,9 @@ SdlWindow::SdlWindow(int width, int height) :
         &this->window, &this->renderer);
     if (errCode) {
         throw SdlException("Error al crear ventana", SDL_GetError());
-    }   
+    }
+    SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    SDL_RenderSetLogicalSize(this->renderer, resolution_width, resolution_height);
 }
 
 SdlWindow::SdlWindow(SdlWindow &&other) noexcept {

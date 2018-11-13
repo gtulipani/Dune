@@ -10,7 +10,7 @@
 #include <TileUtils.h>
 
 // SDL Libraries
-#include <SDL.h>
+#include <SDL2/SDL_events.h>
 
 EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages) :
         game_status_events(game_status_events),
@@ -104,7 +104,7 @@ void EventsLooperThread::run() {
             std::this_thread::sleep_for(std::chrono::milliseconds(30/* - Dt*/));
         }
     } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Exception in EventsLooperThread: " << e.what() << std::endl;
     }
 }
 

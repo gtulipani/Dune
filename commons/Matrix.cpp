@@ -11,12 +11,12 @@ Matrix::Matrix(int rows, int cols) : rows_quantity(rows), columns_quantity(cols)
 }
 
 Matrix::Matrix(std::string fName) {
-    std::ifstream file(fName.c_str());
+    std::ifstream file(fName.c_str(), std::ifstream::in);
     file >> this->rows_quantity >> this->columns_quantity;
     vec.resize(this->rows_quantity * this->columns_quantity);
-    int i, j;
+    int i = 0, j = 0;
     for (i = 0; i < this->rows_quantity && !file.eof(); i++) {
-        for (j = 0; j < this->columns_quantity && !file.eof(); j++) {
+        for (j = 0; (j < this->columns_quantity) && !file.eof(); j++) {
             file >> this->at(i, j);
         }
     }
@@ -63,21 +63,21 @@ Matrix &Matrix::operator=(Matrix &&other) noexcept {
     return *this;
 }
 
-int& Matrix::at(int row, int col) {
+char& Matrix::at(int row, int col) {
     range_check(row, col);
     return vec.at((row * columns_quantity) + col);
 }
 
-int& Matrix::at(Point a) {
+char& Matrix::at(Point a) {
     return at(a.row, a.col);
 }
 
-const int& Matrix::at(int row, int col) const {
+const char& Matrix::at(int row, int col) const {
     range_check(row, col);
     return vec.at((row * columns_quantity + col));
 }
 
-const int& Matrix::at(Point a) const {
+const char& Matrix::at(Point a) const {
     return at(a.row, a.col);
 }
 

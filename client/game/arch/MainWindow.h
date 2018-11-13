@@ -20,8 +20,8 @@ class MainWindow {
 private:
     Matrix matrix;
     SdlWindow window{};
-    std::map<int, SdlTexture> terrains;
-    std::map<int, SdlTexture> units;
+    std::map<char, SdlTexture> terrains;
+    std::map<char, SdlTexture> units;
 
     int offset_x{};
     int offset_y{};

@@ -10,7 +10,7 @@ class SdlWindow {
 public:
     SdlWindow() = default;
 
-    SdlWindow(int width, int height);
+    SdlWindow(int width, int height, int resolution_width, int resolution_height);
 
     SdlWindow(const SdlWindow &other) = delete;
 

@@ -8,6 +8,9 @@
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
 
+#define MAIN_WINDOW_RESOLUTION_WIDTH 1920
+#define MAIN_WINDOW_RESOLUTION_HEIGHT 1080
+
 void MainWindow::buildUnits() {
     // Store units textures
     units.emplace(LIGHT_INFANTRY, SdlTexture(UNITS_RESOURCES_PATH + "/light_infantry.png", window));
@@ -24,10 +27,10 @@ void MainWindow::buildTerrains() {
 }
 
 void MainWindow::configure(Matrix matrix) {
-    int width = matrix.columns_quantity;
-    int height = matrix.rows_quantity;
+    int width = MAIN_WINDOW_RESOLUTION_WIDTH;
+    int height = MAIN_WINDOW_RESOLUTION_HEIGHT;
     this->matrix = std::move(matrix);
-    this->window = SdlWindow(width * SIZE, height * SIZE);
+    this->window = SdlWindow(width, height, MAIN_WINDOW_RESOLUTION_WIDTH, MAIN_WINDOW_RESOLUTION_HEIGHT);
     buildTerrains();
     buildUnits();
 }

@@ -24,8 +24,8 @@ SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
     return *this;
 }
 
-bool SdlPicturable::operator==(const SdlPicturable& other) const {
-    return other.picturable.id == this->picturable.id;
+bool SdlPicturable::operator==(const Picturable& other) const {
+    return other.id == this->picturable.id;
 }
 
 void SdlPicturable::render(int offset_x, int offset_y) {

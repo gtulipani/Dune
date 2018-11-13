@@ -32,7 +32,7 @@ void EventsReceptorThread::run() {
             }
         }
     } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Exception in EventsReceptorThread: " << e.what() << std::endl;
     }
 }
 

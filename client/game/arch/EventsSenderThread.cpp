@@ -20,7 +20,7 @@ void EventsSenderThread::run() {
             });
         }
     } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Exception in EventsSenderThread: " << e.what() << std::endl;
     }
 }
 

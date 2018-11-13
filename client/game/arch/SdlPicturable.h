@@ -26,7 +26,7 @@ public:
     // Overloading the assignment by movement
     SdlPicturable &operator=(SdlPicturable &&other) noexcept;
 
-    bool operator==(const SdlPicturable& other) const;
+    bool operator==(const Picturable& other) const;
 
     void render(int offset_x, int offset_y);
 };
