@@ -22,7 +22,9 @@ void WalkingUnit::checkMovespeed() {
     if (counter == 0) {
         Point prev_pos = this->pixelPosition;
         step();
-        haveIChanged = prev_pos != this->pixelPosition;
+        if (prev_pos != this->pixelPosition) {
+            haveIChanged = true;
+        }
     } else if (counter == ticksPerStep) {
         counter = 0;
     } else {
