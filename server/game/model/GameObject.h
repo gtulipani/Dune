@@ -9,25 +9,26 @@ class GameObject {
     int id;
     int type;
     int sprite;
-    int health;
     bool selected;
+    Point size;
+    int health;
     bool haveIChanged;
     Point pixelPosition;
 
     public:
-    GameObject(int _id, int _sprite);
+    GameObject(int _id, int _sprite, Point _size);
 
     virtual void tick() = 0;
 
     virtual void handleRightClick(const Point& pos) = 0;
 
+    bool tryToSelect(const Point& pos);
+
+    void unselect();
+
     virtual bool haveYouChanged() const = 0;
 
     virtual Picturable getState();
-
-    void select();
-
-    void unselect();
 };
 
 #endif

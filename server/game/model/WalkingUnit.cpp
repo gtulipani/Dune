@@ -5,8 +5,9 @@
 #include <TileUtils.h>
 #include "Terrain.h"
 
-WalkingUnit::WalkingUnit(int id, int sprite, Terrain& _terrain, Point& initialPixelPosition,
-unsigned int movespeed) :  GameObject(id, sprite), terrain(_terrain) {
+WalkingUnit::WalkingUnit(int id, int sprite, Point size, Terrain& _terrain,
+                            Point& initialPixelPosition,
+unsigned int movespeed) :  GameObject(id, sprite, size), terrain(_terrain) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     pixelPosition = initialPixelPosition;

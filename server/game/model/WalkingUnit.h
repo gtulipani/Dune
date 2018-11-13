@@ -29,7 +29,8 @@ class WalkingUnit : public GameObject {
 
     public:
      // Movespeed on pixels per second.
-    WalkingUnit(int id, int sprite, Terrain& terrain, Point& initialPixelPosition, unsigned int movespeed);
+    WalkingUnit(int id, int sprite, Point size, Terrain& terrain,
+                    Point& initialPixelPosition, unsigned int movespeed);
 
     virtual void tick() override;
 

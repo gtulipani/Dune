@@ -52,13 +52,16 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            try {
-                selectedObject = positions.at(event.position);
-                selectedObject->select();
-            } catch (const out_of_range& e) {
-                if (selectedObject != nullptr) {
-                    selectedObject->unselect();
-                    selectedObject = nullptr;
+            if (selectedObject != nullptr) {
+                selectedObject->unselect();
+                selectedObject = nullptr;
+            } 
+            for (GameObject* gameObject : gameObjects) {
+                bool success = gameObject->tryToSelect(event.position);
+                if (success) {
+                    selectedObject = gameObject;
+                    std::cout << "Unit selected!" <<std::endl;
+                    break;
                 }
             }
         } else if (event.type == RIGHT_CLICK_TYPE) {
@@ -66,9 +69,8 @@ void Game::updateModel() {
                 selectedObject->handleRightClick(event.position);
             }
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            auto * unit = new WalkingUnit(0, 0, terrain, event.position, 10);
+            auto * unit = new WalkingUnit(0, 0, {32, 32}, terrain, event.position, 10);
             gameObjects.push_back(unit);
-            positions[event.position] = unit;
         }
     }
 

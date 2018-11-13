@@ -26,7 +26,6 @@ class Game {
     std::list<ClientEvent> events;
 
     Terrain terrain;
-    std::unordered_map<Point, GameObject*> positions;
     std::vector<GameObject*> gameObjects;
     GameObject* selectedObject;
 
