@@ -57,14 +57,15 @@ void WalkingUnit::step() {
             }
         } else {
             /* Si el proximo no es la meta final, debo ir al centro del tile. */
-            Point goalPixel = tile_utils::getPixelFromTile(nextTile);
+            Point goalPixel = tile_utils::getTileCenter(nextTile);
             stepTo(goalPixel);
             if (tilePosition != tile_utils::getTileFromPixel(pixelPosition)) {
-                /* Si cambie de tile, debo actualizar mi tile position. */
-                tilePosition = tile_utils::getTileFromPixel(pixelPosition);
-                /*  Solo hago el pop() cuando llegue al centro, para asegurarme
-                    de llegar a el. */
-                if (pixelPosition == goalPixel) path.pop();
+                /*  Solo hago el cambio de tile cuando llegue al centro, para
+                    asegurarme de llegar a el. */
+                if (pixelPosition == goalPixel) {
+                    path.pop();
+                    tilePosition = tile_utils::getTileFromPixel(pixelPosition);
+                }
             }
         }
     }
@@ -127,6 +128,13 @@ void WalkingUnit::findPath(Point &goal) {
                 came_from[next] = current;
             }
         }
+    }
+
+    path = std::stack<Point>(); // clears path
+
+    if (came_from.find(goal) == came_from.end()) {
+        pixelGoal = pixelPosition;
+        return;
     }
 
     Point current = goal;

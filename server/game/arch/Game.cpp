@@ -114,3 +114,9 @@ void Game::test_events() {
     ClientEvent event2(1, RIGHT_CLICK_TYPE, dest);
     events_queue.push(event2);
 }
+
+Game::~Game() {
+    for (GameObject* gameObject : gameObjects) {
+        delete gameObject;
+    }
+}

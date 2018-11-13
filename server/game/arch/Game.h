@@ -45,6 +45,8 @@ class Game {
     void start();
 
     void stop();
+
+    ~Game();
 };
 
 #endif // __GAME_H__

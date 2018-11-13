@@ -6,8 +6,9 @@
 #define TILE_PIXEL_RATE 10
 
 namespace tile_utils {
-    Point getTileFromPixel(Point pixel);
-    Point getPixelFromTile(Point tile);
+    Point getTileFromPixel(const Point& pixel);
+    Point getTileTopLeft(const Point& tile);
+    Point getTileCenter(const Point& tile);
 }
 
 #endif

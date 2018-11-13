@@ -29,6 +29,8 @@ class GameObject {
     virtual bool haveYouChanged() const = 0;
 
     virtual Picturable getState();
+
+    virtual ~GameObject() = default;
 };
 
 #endif
