@@ -12,9 +12,9 @@
 class SdlPicturable {
 private:
     Picturable picturable;
-    SdlTexture sdlTexture;
+    SdlTexture &sdlTexture;
 public:
-    SdlPicturable(Picturable picturable, SdlTexture sdlTexture);
+    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture);
 
     SdlPicturable(const SdlPicturable &other) = delete;
 
@@ -25,6 +25,8 @@ public:
 
     // Overloading the assignment by movement
     SdlPicturable &operator=(SdlPicturable &&other) noexcept;
+
+    bool operator==(const SdlPicturable& other) const;
 
     void render(int offset_x, int offset_y);
 };

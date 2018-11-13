@@ -81,9 +81,16 @@ void MainWindow::move(enum Movement movement) {
 
 void MainWindow::processPicturables(std::vector<Picturable> picturables) {
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
-        auto it = units.find(picturable.type);
-        if (it != units.end()) {
-            this->picturables.emplace_back(picturable, it->second);
+        auto unit_it = units.find(picturable.type);
+        if (unit_it != units.end()) {
+            auto picturable_it = std::find(this->picturables.begin(), this->picturables.end(), picturable);
+            if (picturable_it != this->picturables.end()) {
+                // Replace existing one with the new one received from the GameStatusEvent
+                *picturable_it = SdlPicturable(picturable, unit_it->second);
+            } else {
+                // Create a new SdlPicturable
+                this->picturables.emplace_back(picturable, unit_it->second);
+            }
         }
     });
 }

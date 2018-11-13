@@ -4,13 +4,13 @@
 
 #define PICTURABLE_SIZE 32
 
-SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture sdlTexture) :
+SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture &sdlTexture) :
     picturable(std::move(picturable)),
-    sdlTexture(std::move(sdlTexture)) {}
+    sdlTexture(sdlTexture) {}
 
 SdlPicturable::SdlPicturable(SdlPicturable &&other) noexcept : SdlPicturable(
         std::move(other.picturable),
-        std::move(other.sdlTexture)) {}
+        other.sdlTexture) {}
 
 SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
     if (this == &other) {
@@ -19,9 +19,13 @@ SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
 
     // Copy values
     this->picturable = std::move(other.picturable);
-    this->sdlTexture = std::move(other.sdlTexture);
+    this->sdlTexture = other.sdlTexture;
 
     return *this;
+}
+
+bool SdlPicturable::operator==(const SdlPicturable& other) const {
+    return other.picturable.id == this->picturable.id;
 }
 
 void SdlPicturable::render(int offset_x, int offset_y) {
