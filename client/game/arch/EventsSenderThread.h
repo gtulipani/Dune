@@ -8,19 +8,22 @@
 #include <events/GameStatusEvent.h>
 #include <events/ClientEvent.h>
 
+// Client Libraries
+#include "BlockingQueue.hpp"
+
 using namespace std;
 
 class EventsSenderThread : public Thread {
 private:
     Socket &socket;
-    shaque<ClientEvent> &output_messages;
+    BlockingQueue<ClientEvent> &output_messages;
 
     void run() override;
 
     void terminate() override;
 
 public:
-    EventsSenderThread(Socket& socket, shaque<ClientEvent> &output_messages);
+    EventsSenderThread(Socket& socket, BlockingQueue<ClientEvent> &output_messages);
 };
 
 

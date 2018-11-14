@@ -5,10 +5,11 @@
 
 // Commons Libraries
 #include <json/json.hpp>
-#include <events/NotificationEvent.h>
 #include <Matrix.h>
+#include <SOException.h>
 #include <TileUtils.h>
 #include <events/EventHandler.h>
+#include <events/NotificationEvent.h>
 
 // Client Libraries
 #include "EventsReceptorThread.h"
@@ -22,7 +23,6 @@ EventsReceptorThread::EventsReceptorThread(Socket &socket, shaque<GameStatusEven
     game_status_events(game_status_events) {}
 
 void EventsReceptorThread::run() {
-    std::cout << "Starting EventsReceptorThread" << std::endl;
     try {
         while (this->isRunning()) {
             NotificationEvent notification_event = EventHandler::receiveNotificationEvent(socket);
@@ -31,6 +31,7 @@ void EventsReceptorThread::run() {
                 game_status_events.push(event);
             }
         }
+    } catch (SOException& e) {
     } catch (std::exception& e) {
         std::cout << "Exception in EventsReceptorThread: " << e.what() << std::endl;
     }

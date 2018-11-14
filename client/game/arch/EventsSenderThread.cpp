@@ -5,13 +5,15 @@
 
 // Commons Libraries
 #include <events/EventHandler.h>
+#include <SOException.h>
 
-EventsSenderThread::EventsSenderThread(Socket& socket, shaque<ClientEvent> &output_messages) :
+#define CONNECTION_LOST_EVENT "CONNECTION_LOST_EVENT"
+
+EventsSenderThread::EventsSenderThread(Socket& socket, BlockingQueue<ClientEvent> &output_messages) :
     socket(socket),
     output_messages(output_messages) {}
 
 void EventsSenderThread::run() {
-    std::cout << "Starting EventsSenderThread" << std::endl;
     try {
         while (this->isRunning()) {
             std::list<ClientEvent> events = output_messages.popAll();
@@ -19,11 +21,13 @@ void EventsSenderThread::run() {
                 EventHandler::sendEvent(socket, event);
             });
         }
+    } catch (SOException &e) {
     } catch (std::exception& e) {
         std::cout << "Exception in EventsSenderThread: " << e.what() << std::endl;
     }
 }
 
+// Interrupts the execution by inserting an event inside the BlockingQueue
 void EventsSenderThread::terminate() {
-    this->stop();
+    output_messages.push(ClientEvent(0, CONNECTION_LOST_EVENT, Point(0,0)));
 }

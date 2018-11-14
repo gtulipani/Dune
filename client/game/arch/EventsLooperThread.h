@@ -11,13 +11,14 @@
 
 // Client libraries
 #include "MainWindow.h"
+#include "BlockingQueue.hpp"
 
 union SDL_Event;
 
 class EventsLooperThread : public Thread {
 private:
     shaque<GameStatusEvent> &game_status_events;
-    shaque<ClientEvent> &output_messages;
+    BlockingQueue<ClientEvent> &output_messages;
     MainWindow main_window;
 
     Matrix terrain_matrix;
@@ -29,10 +30,8 @@ private:
     void processKeyDownEvent(SDL_Event& event);
 
     void run() override;
-
-    void terminate() override;
 public:
-    EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages);
+    EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages);
 
     void configure(Matrix matrix);
 };

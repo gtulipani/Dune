@@ -14,7 +14,7 @@
 
 #define MAXIMUM_SLEEP_TIME std::chrono::milliseconds(30)
 
-EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages) :
+EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages) :
         game_status_events(game_status_events),
         output_messages(output_messages) {}
 
@@ -95,9 +95,7 @@ void EventsLooperThread::run() {
                     processMouseEvent(event);
                     break;
                 case SDL_QUIT:
-                    std::cout << "Quit :(" << std::endl;
                     this->stop();
-                    break;
                 default:
                     break;
             }
@@ -115,8 +113,4 @@ void EventsLooperThread::run() {
     } catch (std::exception& e) {
         std::cout << "Exception in EventsLooperThread: " << e.what() << std::endl;
     }
-}
-
-void EventsLooperThread::terminate() {
-    this->stop();
 }

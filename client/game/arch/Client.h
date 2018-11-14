@@ -18,7 +18,7 @@ private:
     std::mutex game_status_mutex;
     std::mutex output_messages_mutex;
     shaque<GameStatusEvent> game_status_events;
-    shaque<ClientEvent> output_messages;
+    BlockingQueue<ClientEvent> output_messages;
     EventsLooperThread events_looper_thread;
     EventsReceptorThread events_receptor_thread;
     EventsSenderThread events_sender_thread;
