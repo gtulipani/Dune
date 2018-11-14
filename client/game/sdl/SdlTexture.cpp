@@ -4,6 +4,10 @@
 #include "SdlWindow.h"
 #include "SdlException.h"
 
+SdlTexture::SdlTexture(int width, int height, SDL_Renderer* renderer) : renderer(renderer) {
+    this->texture = createTexture(width, height);
+}
+
 SdlTexture::SdlTexture(const std::string &filename, const SdlWindow& window)
     : renderer(window.getRenderer()) {
     this->texture = loadTexture(filename);
@@ -64,6 +68,14 @@ SDL_Texture* SdlTexture::loadTexture(const std::string &filename) {
     return texture;
 }
 
+SDL_Texture* SdlTexture::createTexture(int width, int height) {
+    SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, width, height);
+    if (!texture) {
+        throw SdlException("Error al crear la textura", SDL_GetError());
+    }
+    return texture;
+}
+
 int SdlTexture::render(const Area& src, const Area& dest) const {
     SDL_Rect sdlSrc = {
             src.getX(), src.getY(),
@@ -75,4 +87,8 @@ int SdlTexture::render(const Area& src, const Area& dest) const {
     };
 
     return SDL_RenderCopy(this->renderer, this->texture, &sdlSrc, &sdlDest);
+}
+
+void SdlTexture::setAsTarget() const {
+    SDL_SetRenderTarget(this->renderer, this->texture);
 }

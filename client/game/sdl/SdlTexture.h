@@ -9,6 +9,10 @@ class Area;
 
 class SdlTexture {
 public:
+    SdlTexture() = default;
+
+    SdlTexture(int width, int height, SDL_Renderer* renderer);
+
     SdlTexture(const std::string &filename, const SdlWindow& window);
 
     SdlTexture(const SdlTexture &other);
@@ -24,8 +28,11 @@ public:
     ~SdlTexture();
 
     int render(const Area& src, const Area& dest) const;
+
+    void setAsTarget() const;
 private:
     SDL_Texture* loadTexture(const std::string &filename);
+    SDL_Texture* createTexture(int width, int height);
     SDL_Renderer* renderer;
     SDL_Texture* texture;
 };

@@ -18,7 +18,7 @@ SdlWindow::SdlWindow(int width, int height, int resolution_width, int resolution
     if (errCode) {
         throw SdlException("Error al crear ventana", SDL_GetError());
     }
-    SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    //SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
     SDL_RenderSetLogicalSize(this->renderer, resolution_width, resolution_height);
 }
 
@@ -80,6 +80,10 @@ void SdlWindow::fill() {
 
 void SdlWindow::render() {
     SDL_RenderPresent(this->renderer);
+}
+
+void SdlWindow::setAsTarget() const {
+    SDL_SetRenderTarget(this->renderer, nullptr);
 }
 
 

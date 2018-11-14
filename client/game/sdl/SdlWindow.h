@@ -31,6 +31,8 @@ public:
     void render();
 
     SDL_Renderer* getRenderer() const;
+
+    void setAsTarget() const;
 private:
     int width;
     int height;

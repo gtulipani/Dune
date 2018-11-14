@@ -7,11 +7,9 @@ void to_json(json &j, const Matrix &m) {
             {"rows_quantity",    m.rows_quantity},
             {"columns_quantity", m.columns_quantity}
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Matrix &m) {
-    std::cout << j << std::endl;
     j.at("vec").get_to(m.vec);
     j.at("rows_quantity").get_to(m.rows_quantity);
     j.at("columns_quantity").get_to(m.columns_quantity);
@@ -26,11 +24,9 @@ void to_json(json &j, const Picturable &p) {
             {"position", p.position},
             {"health",     p.health},
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Picturable &p) {
-    std::cout << j << std::endl;
     j.at("id").get_to(p.id);
     j.at("sprite").get_to(p.sprite);
     j.at("selected").get_to(p.selected);
@@ -47,7 +43,6 @@ void to_json(json &j, const Point &p) {
 }
 
 void from_json(const json &j, Point &p) {
-    std::cout << j << std::endl;
     j.at("row").get_to(p.row);
     j.at("column").get_to(p.col);
 }
@@ -57,11 +52,9 @@ void to_json(json &j, const NotificationEvent &e) {
     j = json{
             {"message",   e.message}
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, NotificationEvent &p) {
-    std::cout << j << std::endl;
     j.at("message").get_to(p.message);
 }
 
@@ -72,11 +65,9 @@ void to_json(json &j, const ClientEvent &e) {
             {"type", e.type},
             {"position",  e.position}
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, ClientEvent &e) {
-    std::cout << j << std::endl;
     j.at("player_id").get_to(e.player_id);
     j.at("type").get_to(e.type);
     j.at("position").get_to(e.position);
@@ -87,11 +78,9 @@ void to_json(json &j, const GameStatusEvent &e) {
     j = json{
             {"picturables", e.picturables}
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, GameStatusEvent &e) {
-    std::cout << j << std::endl;
     j.at("picturables").get_to(e.picturables);
 }
 
@@ -100,10 +89,8 @@ void to_json(json &j, const MapConfigurationEvent &m) {
     j = json{
             {"matrix", m.matrix}
     };
-    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, MapConfigurationEvent &m) {
-    std::cout << j << std::endl;
     j.at("matrix").get_to(m.matrix);
 }

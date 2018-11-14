@@ -18,8 +18,13 @@ typedef enum Movement {
 
 class MainWindow {
 private:
+    int width{};
+    int height{};
+    int rows_quantity{};
+    int columns_quantity{};
     Matrix matrix;
     SdlWindow window{};
+    SdlTexture terrain_texture;
     std::map<char, SdlTexture> terrains;
     std::map<char, SdlTexture> units;
 
@@ -41,11 +46,11 @@ public:
 
     void fill();
 
+    void preloadTerrainMatrix();
+
     void render();
 
     void move(enum Movement movement);
-
-    void leftClickEvent(int x, int y);
 
     void processPicturables(std::vector<Picturable> picturables);
 };

@@ -8,8 +8,10 @@
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
 
-#define MAIN_WINDOW_RESOLUTION_WIDTH 1920
-#define MAIN_WINDOW_RESOLUTION_HEIGHT 1080
+#define MAIN_WINDOW_WIDTH 1280
+#define MAIN_WINDOW_HEIGHT 720
+#define MAIN_WINDOW_RESOLUTION_WIDTH 800
+#define MAIN_WINDOW_RESOLUTION_HEIGHT 600
 
 void MainWindow::buildUnits() {
     // Store units textures
@@ -27,30 +29,50 @@ void MainWindow::buildTerrains() {
 }
 
 void MainWindow::configure(Matrix matrix) {
-    int width = MAIN_WINDOW_RESOLUTION_WIDTH;
-    int height = MAIN_WINDOW_RESOLUTION_HEIGHT;
+    this->width = MAIN_WINDOW_WIDTH;
+    this->height = MAIN_WINDOW_HEIGHT;
+    this->rows_quantity = matrix.rows_quantity;
+    this->columns_quantity = matrix.columns_quantity;
     this->matrix = std::move(matrix);
+
     this->window = SdlWindow(width, height, MAIN_WINDOW_RESOLUTION_WIDTH, MAIN_WINDOW_RESOLUTION_HEIGHT);
+    this->window.fill();
+
     buildTerrains();
     buildUnits();
+
+    this->terrain_texture = SdlTexture(width, height, this->window.getRenderer());
+    this->terrain_texture.setAsTarget();
+
+    preloadTerrainMatrix();
+
+    this->window.render();
+    this->window.setAsTarget();
+    //this->render();
 }
 
 void MainWindow::fill() {
     window.fill();
 }
 
-void MainWindow::render() {
+void MainWindow::preloadTerrainMatrix() {
     Area srcArea(0, 0, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
     // Render the terrain matrix
-    for (int col = 0; col < matrix.columns_quantity; col++) {
-        for (int row = 0; row < matrix.rows_quantity; row++) {
-            Area destArea((TILE_PIXEL_RATE * col) + offset_x, (TILE_PIXEL_RATE * row) + offset_y, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
+    for (int col = 0; col < this->columns_quantity; col++) {
+        for (int row = 0; row < this->rows_quantity; row++) {
+            Area destArea((TILE_PIXEL_RATE * col), (TILE_PIXEL_RATE * row), TILE_PIXEL_RATE, TILE_PIXEL_RATE);
             auto it = terrains.find(matrix.at(row, col));
             if (it != terrains.end()) {
                 it->second.render(srcArea, destArea);
             }
         }
     }
+}
+
+void MainWindow::render() {
+    Area srcArea(0, 0, this->width, this->height);
+    Area destArea(offset_x, offset_y, this->width, this->height);
+    this->terrain_texture.render(srcArea, destArea);
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable &sdlPicturable) {
