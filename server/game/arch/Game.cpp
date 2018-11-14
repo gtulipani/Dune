@@ -20,7 +20,7 @@ using json = nlohmann::json;
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
     events_queue(events_queue),
     clients(_clients),
-    terrain(Matrix("resources/maps/base.map")) {
+    terrain(Matrix("resources/maps/basic_map.map")) {
         selectedObject = nullptr;
     }
 

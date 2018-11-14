@@ -56,7 +56,6 @@ SdlWindow &SdlWindow::operator=(SdlWindow &&other) noexcept {
 
 
 SdlWindow::~SdlWindow() {
-    std::cout << "Destruyendo SdlWindow()" << std::endl;
     if (this->renderer) {
         SDL_DestroyRenderer(this->renderer);
         this->renderer = nullptr;

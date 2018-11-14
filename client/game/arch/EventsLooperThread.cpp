@@ -1,9 +1,9 @@
-#include <utility>
-
 #include "EventsLooperThread.h"
 
 // STL Libraries
+#include <chrono>
 #include <iostream>
+#include <utility>
 
 // Commons Libraries
 #include <events/EventHandler.h>
@@ -11,6 +11,8 @@
 
 // SDL Libraries
 #include <SDL2/SDL_events.h>
+
+#define MAXIMUM_SLEEP_TIME std::chrono::milliseconds(30)
 
 EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, shaque<ClientEvent> &output_messages) :
         game_status_events(game_status_events),
@@ -31,11 +33,11 @@ void EventsLooperThread::processMouseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
-            pushEvent(LEFT_CLICK_TYPE, Point(mouse_event.y, mouse_event.x));
+            pushEvent(LEFT_CLICK_TYPE, main_window.getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         case SDL_BUTTON_RIGHT: {
-            pushEvent(RIGHT_CLICK_TYPE, Point(mouse_event.y, mouse_event.x));
+            pushEvent(RIGHT_CLICK_TYPE, main_window.getRelativePoint(mouse_event.y, mouse_event.x));
         }
         default:
             break;
@@ -80,6 +82,7 @@ void EventsLooperThread::run() {
         main_window.render();
 
         while (this->isRunning()) {
+            auto start = std::chrono::steady_clock::now();
             // Calcular tiempo que tarda el ciclo y restarle eso al tiempo de sleep
             SDL_Event event;
             SDL_PollEvent(&event);
@@ -101,7 +104,13 @@ void EventsLooperThread::run() {
             main_window.fill();
             processServerEvents();
             main_window.render();
-            std::this_thread::sleep_for(std::chrono::milliseconds(30/* - Dt*/));
+
+            auto end = std::chrono::steady_clock::now();
+            auto execution_difference = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            std::this_thread::sleep_for(std::chrono::milliseconds(
+                    execution_difference > MAXIMUM_SLEEP_TIME
+                    ? MAXIMUM_SLEEP_TIME
+                    : MAXIMUM_SLEEP_TIME - execution_difference));
         }
     } catch (std::exception& e) {
         std::cout << "Exception in EventsLooperThread: " << e.what() << std::endl;

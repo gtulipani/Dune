@@ -44,6 +44,7 @@ void Client::start() {
         events_looper_thread.join();
         events_receptor_thread.join();
         events_sender_thread.join();
+        socket.shutDown();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }

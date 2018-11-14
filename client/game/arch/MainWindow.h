@@ -53,6 +53,8 @@ public:
     void move(enum Movement movement);
 
     void processPicturables(std::vector<Picturable> picturables);
+
+    Point getRelativePoint(int row, int column);
 };
 
 

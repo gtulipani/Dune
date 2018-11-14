@@ -29,13 +29,13 @@ void MainWindow::buildTerrains() {
 }
 
 void MainWindow::configure(Matrix matrix) {
-    this->width = MAIN_WINDOW_WIDTH;
-    this->height = MAIN_WINDOW_HEIGHT;
+    this->width = matrix.columns_quantity * TILE_PIXEL_RATE;
+    this->height = matrix.rows_quantity * TILE_PIXEL_RATE;
     this->rows_quantity = matrix.rows_quantity;
     this->columns_quantity = matrix.columns_quantity;
     this->matrix = std::move(matrix);
 
-    this->window = SdlWindow(width, height, MAIN_WINDOW_RESOLUTION_WIDTH, MAIN_WINDOW_RESOLUTION_HEIGHT);
+    this->window = SdlWindow(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_RESOLUTION_WIDTH, MAIN_WINDOW_RESOLUTION_HEIGHT);
     this->window.fill();
 
     buildTerrains();
@@ -48,7 +48,6 @@ void MainWindow::configure(Matrix matrix) {
 
     this->window.render();
     this->window.setAsTarget();
-    //this->render();
 }
 
 void MainWindow::fill() {
@@ -85,19 +84,27 @@ void MainWindow::render() {
 void MainWindow::move(enum Movement movement) {
     switch (movement) {
         case UP: {
-            offset_y -= SIZE;
+            if (offset_y < 0) {
+                offset_y += TILE_PIXEL_RATE;
+            }
             break;
         }
         case DOWN: {
-            offset_y += SIZE;
+            if ((offset_y + this->height - MAIN_WINDOW_RESOLUTION_HEIGHT) > 0) {
+                offset_y -= TILE_PIXEL_RATE;
+            }
             break;
         }
         case LEFT: {
-            offset_x -= SIZE;
+            if (offset_x < 0) {
+                offset_x += TILE_PIXEL_RATE;
+            }
             break;
         }
         case RIGHT: {
-            offset_x += SIZE;
+            if ((offset_x + this->width - MAIN_WINDOW_RESOLUTION_WIDTH) > 0) {
+                offset_x -= TILE_PIXEL_RATE;
+            }
             break;
         }
 
@@ -118,4 +125,8 @@ void MainWindow::processPicturables(std::vector<Picturable> picturables) {
             }
         }
     });
+}
+
+Point MainWindow::getRelativePoint(int row, int column) {
+    return {row - offset_y, column - offset_x};
 }
