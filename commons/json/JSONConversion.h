@@ -1,7 +1,6 @@
 #ifndef __JSON__CONVERSION_H__
 #define __JSON__CONVERSION_H__
 
-#include <iostream>
 #include "json.hpp"
 #include "../events/ClientEvent.h"
 #include "../events/MapConfigurationEvent.h"

@@ -1,17 +1,18 @@
-#ifndef __TERRAIN_H__
-#define __TERRAIN_H__
+#ifndef __MAP_H__
+#define __MAP_H__
 
+#include <vector>
 #include <Point.h>
 #include "Matrix.h"
 
-class Terrain {
-private:
-    Matrix mat;
-
+class Map {
 public:
-    Terrain() = default;
+    Matrix mat;
+    std::vector<Point> constructionCenterPositions;
 
-    explicit Terrain(const Matrix& _matrix);
+    Map() = default;
+
+    explicit Map(const Matrix& _matrix);
 
     Point findClosest(const Point& p) const;
 

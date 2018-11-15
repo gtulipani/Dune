@@ -5,6 +5,7 @@ include_directories(${CMAKE_SOURCE_DIR}/commons) # include files from commons
 
 add_executable(server
         main.cpp
+        game/json/JSONConversion.cpp
         game/arch/Accepter.cpp
         game/arch/ClientThread.cpp
         game/arch/GameConfiguration.cpp
@@ -14,7 +15,7 @@ add_executable(server
         game/arch/EventsHandler.cpp
         game/model/GameObject.cpp
         game/model/WalkingUnit.cpp
-        game/model/Terrain.cpp)
+        game/model/Map.cpp)
 
 target_link_libraries(server commons)
 

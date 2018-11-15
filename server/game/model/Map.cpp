@@ -1,12 +1,12 @@
-#include "Terrain.h"
+#include "Map.h"
 
-Terrain::Terrain(const Matrix& mat) : mat(std::move(mat)) {}
+Map::Map(const Matrix& mat) : mat(std::move(mat)) {}
 
 /*  Obviamente, esta funcion solo sirve para probar A*, hay que cambiarla   *
  *  despues, ya que si es adyacente o no depende de mas cosas, y la matriz  *
  *  de terreno, no va a ser solo 1 o 0.                                     *
 */
-std::vector<Point> Terrain::getAdyacents(const Point& p) const {
+std::vector<Point> Map::getAdyacents(const Point& p) const {
     std::vector<Point> ady;
     if (p.row > 0) {
         if (mat.at(p.row - 1, p.col) != 1) {
@@ -51,17 +51,17 @@ std::vector<Point> Terrain::getAdyacents(const Point& p) const {
     return ady;
 }
 
-int Terrain::getCost(const Point& a, const Point& b) const {
+int Map::getCost(const Point& a, const Point& b) const {
     return 0;
 }
 
 
 /*  Debe devolver p si el terreno esta disponible para la unidad, o la ubicacion
     mas cercana disponible para esa unidad. */
-Point Terrain::findClosest(const Point& p) const {
+Point Map::findClosest(const Point& p) const {
     return p;
 }
 
-Matrix& Terrain::getMatrix() {
+Matrix& Map::getMatrix() {
     return mat;
 }

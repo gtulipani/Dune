@@ -13,7 +13,7 @@
 
 // Model Libraries
 #include "EventsHandler.h"
-#include "../model/Terrain.h"
+#include "../model/Map.h"
 
 class ClientThread;
 class GameObject;
@@ -26,7 +26,7 @@ class Game {
     std::list<ClientEvent> events;
 
     std::list<GameObject*> gameObjects;
-    Terrain terrain;
+    Map map;
     EventsHandler eventsHandler;
 
     void sendMapConfigurationEvent();

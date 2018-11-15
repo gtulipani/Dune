@@ -19,11 +19,11 @@ using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
 events_queue(events_queue), clients(_clients),
-terrain(Matrix("resources/maps/basic_map.map")), eventsHandler(gameObjects, terrain) {}
+map(Matrix("resources/maps/basic_map.map")), eventsHandler(gameObjects, map) {}
 
 void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
-    clients.back()->send(MapConfigurationEvent(terrain.getMatrix()));
+    clients.back()->send(MapConfigurationEvent(map.getMatrix()));
 }
 
 void Game::start() {

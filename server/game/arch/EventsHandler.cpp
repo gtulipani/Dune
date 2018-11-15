@@ -1,11 +1,11 @@
 #include "EventsHandler.h"
 
-#include "../model/Terrain.h"
+#include "../model/Map.h"
 #include "../model/GameObject.h"
 #include "../model/WalkingUnit.h"
 
-EventsHandler::EventsHandler(std::list<GameObject*>& _gameObjects, Terrain& _terrain) :
-gameObjects(_gameObjects), terrain(_terrain) {}
+EventsHandler::EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map) :
+gameObjects(_gameObjects), map(_map) {}
 
 void EventsHandler::leftClick(const Point& point) {
     if (selectedObject != nullptr) {
@@ -28,6 +28,6 @@ void EventsHandler::rightClick(const Point& point) {
 }
 
 void EventsHandler::createWalkingUnit(const Point& point) {
-    auto * unit = new WalkingUnit(0, {32, 32}, point, terrain, 10);
+    auto * unit = new WalkingUnit(0, {32, 32}, point, map, 10);
     gameObjects.push_back(unit);
 }

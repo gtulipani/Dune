@@ -4,17 +4,17 @@
 #include <list>
 
 class GameObject;
-class Terrain;
+class Map;
 class Point;
 
 class EventsHandler {
     private:
     std::list<GameObject*>& gameObjects;
-    Terrain& terrain;
+    Map& map;
     GameObject* selectedObject = nullptr;
 
     public:
-    explicit EventsHandler(std::list<GameObject*>& _gameObjects, Terrain& _terrain);
+    explicit EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map);
 
     void leftClick(const Point& point);
 

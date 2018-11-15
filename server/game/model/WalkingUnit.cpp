@@ -3,11 +3,11 @@
 #include "PriorityQueue.h"
 #include <Tick.h>
 #include <TileUtils.h>
-#include "Terrain.h"
+#include "Map.h"
 
 WalkingUnit::WalkingUnit(int id, const Point& size,
-const Point& initialPosition, const Terrain& _terrain, unsigned int movespeed) :
-GameObject(id, size, initialPosition), terrain(_terrain) {
+const Point& initialPosition, const Map& _map, unsigned int movespeed) :
+GameObject(id, size, initialPosition), map(_map) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     tilePosition = tile_utils::getTileFromPixel(initialPosition);
@@ -94,7 +94,7 @@ void WalkingUnit::handleRightClick(const Point &_pixelGoal) {
 }
 
 void WalkingUnit::findPath(const Point &_goal) {
-    Point goal = terrain.findClosest(_goal);
+    Point goal = map.findClosest(_goal);
 
     PriorityQueue<Point> frontier;
     std::unordered_map<Point, Point> came_from;
@@ -114,12 +114,12 @@ void WalkingUnit::findPath(const Point &_goal) {
             break;
         }
 
-        std::vector<Point> adyacents = terrain.getAdyacents(current);
+        std::vector<Point> adyacents = map.getAdyacents(current);
         filterBadTiles(adyacents);
 
         for (Point next : adyacents) {
             int new_cost = cost_so_far[current] +
-                           terrain.getCost(current, next);
+                           map.getCost(current, next);
 
             if (cost_so_far.find(next) == cost_so_far.end()
                 || new_cost < cost_so_far.at(next)) {
