@@ -2,17 +2,15 @@
 
 #include <PicturableType.h>
 
-GameObject::GameObject(int _id, int _sprite, Point _size) {
+GameObject::GameObject(int _id, const Point& _size, const Point& initialPosition) {
     id = _id;
-    sprite = _sprite;
     size = _size;
-    selected = false;
-    haveIChanged = true;
+    pixelPosition = initialPosition;
 }
 
 Picturable GameObject::getState() {
     haveIChanged = false;
-    return {id, LIGHT_INFANTRY, sprite, selected, pixelPosition, health};
+    return {id, type, motion, selected, pixelPosition, health};
 }
 
 bool GameObject::tryToSelect(const Point& pos) {

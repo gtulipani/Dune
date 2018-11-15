@@ -12,11 +12,11 @@
 #include "shaque.h"
 
 // Model Libraries
-#include "../model/GameObject.h"
+#include "EventsHandler.h"
 #include "../model/Terrain.h"
 
 class ClientThread;
-class WalkingUnit;
+class GameObject;
 
 class Game {
     private:
@@ -25,9 +25,9 @@ class Game {
     const std::vector<ClientThread*>& clients;
     std::list<ClientEvent> events;
 
+    std::list<GameObject*> gameObjects;
     Terrain terrain;
-    std::vector<GameObject*> gameObjects;
-    GameObject* selectedObject;
+    EventsHandler eventsHandler;
 
     void sendMapConfigurationEvent();
 
@@ -38,6 +38,8 @@ class Game {
     void updateClients();
 
     void test_events();
+
+    void tick();
 
     public:
     Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);

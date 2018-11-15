@@ -7,7 +7,8 @@ typedef enum TerrainType {
     ROCA = '2',
     CIMAS = '3',
     PRECIPICIOS = '4',
-    ESPECIA = '5'
+    ESPECIA = '5',
+    EDIFICIOS = '6'
 } TerrainType;
 
 #endif //__TERRAIN_TYPE_H_

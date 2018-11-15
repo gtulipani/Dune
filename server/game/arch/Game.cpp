@@ -18,11 +18,8 @@
 using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
-    events_queue(events_queue),
-    clients(_clients),
-    terrain(Matrix("resources/maps/basic_map.map")) {
-        selectedObject = nullptr;
-    }
+events_queue(events_queue), clients(_clients),
+terrain(Matrix("resources/maps/basic_map.map")), eventsHandler(gameObjects, terrain) {}
 
 void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
@@ -40,6 +37,7 @@ void Game::start() {
     while (is_on) {
         collectEvents();
         updateModel();
+        tick();
         updateClients();
         std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
     }
@@ -52,28 +50,16 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            if (selectedObject != nullptr) {
-                selectedObject->unselect();
-                selectedObject = nullptr;
-            } 
-            for (GameObject* gameObject : gameObjects) {
-                bool success = gameObject->tryToSelect(event.position);
-                if (success) {
-                    selectedObject = gameObject;
-                    std::cout << "Unit selected!" <<std::endl;
-                    break;
-                }
-            }
+            eventsHandler.leftClick(event.position);
         } else if (event.type == RIGHT_CLICK_TYPE) {
-            if (selectedObject != nullptr) {
-                selectedObject->handleRightClick(event.position);
-            }
+            eventsHandler.rightClick(event.position);
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            auto * unit = new WalkingUnit(0, 0, {32, 32}, terrain, event.position, 10);
-            gameObjects.push_back(unit);
+            eventsHandler.createWalkingUnit(event.position);
         }
     }
+}
 
+void Game::tick() {
     for (GameObject* gameObject : gameObjects) {
         // We let know all the objects that time has passed
         gameObject->tick();
@@ -103,16 +89,7 @@ void Game::stop() {
 }
 
 void Game::test_events() {
-    // In this space you can push some events to test functionality.
-    // In the future, these events will be pushed by Clients
-    Point initial_pos(30, 21);
-    ClientEvent event0(0, CREATE_WALKING_UNIT_TYPE, initial_pos);
-    events_queue.push(event0);
-    ClientEvent event1(0, LEFT_CLICK_TYPE, initial_pos);
-    events_queue.push(event1);
-    Point dest(0, 52);
-    ClientEvent event2(1, RIGHT_CLICK_TYPE, dest);
-    events_queue.push(event2);
+    
 }
 
 Game::~Game() {

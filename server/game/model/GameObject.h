@@ -7,16 +7,16 @@
 class GameObject {
     protected:
     int id;
-    int type;
-    int sprite;
-    bool selected;
     Point size;
-    int health;
-    bool haveIChanged;
     Point pixelPosition;
+    const int type = 0;
+    int motion = 0;
+    bool selected = false;
+    int health = 500;
+    bool haveIChanged = true;
 
     public:
-    GameObject(int _id, int _sprite, Point _size);
+    GameObject(int _id, const Point& _size, const Point& initialPosition);
 
     virtual void tick() = 0;
 

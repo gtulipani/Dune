@@ -5,25 +5,26 @@
 #include <TileUtils.h>
 #include "Terrain.h"
 
-WalkingUnit::WalkingUnit(int id, int sprite, Point size, Terrain& _terrain,
-                            Point& initialPixelPosition,
-unsigned int movespeed) :  GameObject(id, sprite, size), terrain(_terrain) {
+WalkingUnit::WalkingUnit(int id, const Point& size,
+const Point& initialPosition, const Terrain& _terrain, unsigned int movespeed) :
+GameObject(id, size, initialPosition), terrain(_terrain) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
-    pixelPosition = initialPixelPosition;
-    tilePosition = tile_utils::getTileFromPixel(initialPixelPosition);
-    haveIChanged = true;
+    tilePosition = tile_utils::getTileFromPixel(initialPosition);
 }
 
 void WalkingUnit::tick() {
     checkMovespeed();
 }
 
+#define MAX_MOTION 5
+
 void WalkingUnit::checkMovespeed() {
     if (counter == 0) {
         Point prev_pos = this->pixelPosition;
         step();
         if (prev_pos != this->pixelPosition) {
+            motion = motion >= MAX_MOTION ? 0 : motion + 1;
             haveIChanged = true;
         }
     } else if (counter == ticksPerStep) {
@@ -71,7 +72,7 @@ void WalkingUnit::step() {
     }
 }
 
-void WalkingUnit::stepTo(Point &pixel) {
+void WalkingUnit::stepTo(const Point &pixel) {
     int row_dir = pixel.row - pixelPosition.row;
     int col_dir = pixel.col - pixelPosition.col;
 
@@ -92,8 +93,8 @@ void WalkingUnit::handleRightClick(const Point &_pixelGoal) {
     findPath(goalTile);
 }
 
-void WalkingUnit::findPath(Point &goal) {
-    goal = terrain.findClosest(goal);
+void WalkingUnit::findPath(const Point &_goal) {
+    Point goal = terrain.findClosest(_goal);
 
     PriorityQueue<Point> frontier;
     std::unordered_map<Point, Point> came_from;

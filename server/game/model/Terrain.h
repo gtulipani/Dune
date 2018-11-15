@@ -1,7 +1,7 @@
 #ifndef __TERRAIN_H__
 #define __TERRAIN_H__
 
-#include "Point.h"
+#include <Point.h>
 #include "Matrix.h"
 
 class Terrain {
@@ -11,13 +11,14 @@ private:
 public:
     Terrain() = default;
 
-    explicit Terrain(Matrix);
+    explicit Terrain(const Matrix& _matrix);
 
-    Point findClosest(Point& p) const;
+    Point findClosest(const Point& p) const;
 
-    std::vector<Point> getAdyacents(Point& p) const;
+    std::vector<Point> getAdyacents(const Point& p) const;
 
-    int getCost(Point& a, Point& b) const;
+    int getCost(const Point& a, const Point& b) const;
+
     Matrix& getMatrix();
 };
 

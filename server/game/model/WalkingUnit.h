@@ -13,7 +13,7 @@ class WalkingUnit : public GameObject {
     unsigned int ticksPerStep;
     unsigned int counter;
     std::stack<Point> path;
-    Terrain &terrain;
+    const Terrain &terrain;
     Point pixelGoal;
     Point tilePosition;
 
@@ -21,16 +21,16 @@ class WalkingUnit : public GameObject {
 
     void step();
 
-    void findPath(Point& goal);
+    void findPath(const Point& goal);
 
     void filterBadTiles(std::vector<Point> &tiles) const;
 
-    void stepTo(Point& goalPixel);
+    void stepTo(const Point& goalPixel);
 
     public:
      // Movespeed on pixels per second.
-    WalkingUnit(int id, int sprite, Point size, Terrain& terrain,
-                    Point& initialPixelPosition, unsigned int movespeed);
+    WalkingUnit(int id, const Point& size, const Point& initialPosition,
+                const Terrain& terrain, unsigned int movespeed);
 
     virtual void tick() override;
 
