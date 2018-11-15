@@ -17,8 +17,6 @@ public:
 
     Matrix(int rows, int cols);
 
-    explicit Matrix(std::string fName);
-
     Matrix(const Matrix &other);
 
     Matrix(Matrix &&other) noexcept;

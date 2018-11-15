@@ -15,6 +15,7 @@ add_executable(server
         game/arch/EventsHandler.cpp
         game/model/GameObject.cpp
         game/model/WalkingUnit.cpp
+        game/model/Building.cpp
         game/model/Map.cpp)
 
 target_link_libraries(server commons)

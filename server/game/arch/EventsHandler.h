@@ -16,6 +16,8 @@ class EventsHandler {
     public:
     explicit EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map);
 
+    void initializeMap();
+
     void leftClick(const Point& point);
 
     void rightClick(const Point& point);

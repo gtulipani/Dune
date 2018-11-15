@@ -6,20 +6,23 @@
 
 // Commons Libraries
 #include <json/json.hpp>
+#include <json/JSONUtils.h>
 #include <events/MapConfigurationEvent.h>
 #include <events/GameStatusEvent.h>
 #include <Picturable.h>
 #include <PicturableType.h>
 
 // Server Libraries
+#include "../json/JSONConversion.h"
 #include "ClientThread.h"
 #include "../model/WalkingUnit.h"
 
 using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
-events_queue(events_queue), clients(_clients),
-map(Matrix("resources/maps/basic_map.map")), eventsHandler(gameObjects, map) {}
+events_queue(events_queue), clients(_clients), eventsHandler(gameObjects, map) {
+    map = json_utils::parseAsJson("resources/maps/basic_map.json");
+}
 
 void Game::sendMapConfigurationEvent() {
     clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
@@ -31,6 +34,9 @@ void Game::start() {
     std::cout << "Running..." << std::endl;
 
     sendMapConfigurationEvent();
+
+    eventsHandler.initializeMap();
+    updateClients();
 
     //test_events();
 

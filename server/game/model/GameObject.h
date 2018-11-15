@@ -6,10 +6,10 @@
 
 class GameObject {
     protected:
-    int id;
+    const int id;
     Point size;
     Point pixelPosition;
-    const int type = 0;
+    int type = 0;
     int motion = 0;
     bool selected = false;
     int health = 500;
@@ -22,11 +22,11 @@ class GameObject {
 
     virtual void handleRightClick(const Point& pos) = 0;
 
-    bool tryToSelect(const Point& pos);
+    bool tryToSelect(const Point& clickPosition);
 
     void unselect();
 
-    virtual bool haveYouChanged() const = 0;
+    bool haveYouChanged() const;
 
     virtual Picturable getState();
 

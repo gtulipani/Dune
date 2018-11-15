@@ -12,6 +12,7 @@
  * Private function that knows how to parse the building from the JSON
  * @param buildings_json {@link json}
  */
+/*
 vector<Building>
 GameConfiguration::parseBuildingsConfiguration(json &buildings_json) {
 	vector<Building> buildings;
@@ -75,12 +76,13 @@ GameConfiguration::parseVehiclesConfiguration(json &vehicles_json) {
 	}
 	return vehicles;
 }
-
+*/
 /**
  * Private function that iterates over the main keys from the JSON and
  * executhe corresponding parsing function
  * @param configuration_json {@link json}
  */
+/*
 void GameConfiguration::parseGameConfiguration(json &configuration_json) {
 	for (json::iterator it = configuration_json.begin();
 		 it != configuration_json.end(); ++it) {
@@ -95,13 +97,14 @@ void GameConfiguration::parseGameConfiguration(json &configuration_json) {
 		}
 	}
 }
-
+*/
 GameConfiguration::GameConfiguration(const string &config_file_path) {
-	json game_items_configuration = json_utils::parseAsJson(config_file_path);
-	parseGameConfiguration(game_items_configuration);
+	//json game_items_configuration = json_utils::parseAsJson(config_file_path);
+	//parseGameConfiguration(game_items_configuration);
 }
 
 // JSON required functions
+/*
 void to_json(json &j, const Building &b) {
 	j = json{
 			{"name",             b.name},
@@ -177,3 +180,4 @@ void from_json(const json &j, Soldier &s) {
 	j.at("cost").get_to(s.cost);
 	j.at("life").get_to(s.life);
 }
+*/

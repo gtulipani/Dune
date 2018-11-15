@@ -2,8 +2,8 @@
 
 #include <PicturableType.h>
 
-GameObject::GameObject(int _id, const Point& _size, const Point& initialPosition) {
-    id = _id;
+GameObject::GameObject(int _id, const Point& _size, const Point& initialPosition) :
+id(_id) {
     size = _size;
     pixelPosition = initialPosition;
 }
@@ -13,8 +13,10 @@ Picturable GameObject::getState() {
     return {id, type, motion, selected, pixelPosition, health};
 }
 
-bool GameObject::tryToSelect(const Point& pos) {
-    if (pos.row - pixelPosition.row <=  size.row && pos.col - pixelPosition.col <= size.col) {
+bool GameObject::tryToSelect(const Point& clickPosition) {
+    int diffRow = clickPosition.row - pixelPosition.row;
+    int diffCol = clickPosition.col - pixelPosition.col;
+    if (diffRow >= 0 && diffCol >= 0 && diffRow <= size.row && diffCol <= size.col) {
         haveIChanged = true;
         selected = true;
         return true;
@@ -25,4 +27,8 @@ bool GameObject::tryToSelect(const Point& pos) {
 void GameObject::unselect() {
     haveIChanged = true;
     selected = false;
+}
+
+bool GameObject::haveYouChanged() const {
+    return haveIChanged;
 }

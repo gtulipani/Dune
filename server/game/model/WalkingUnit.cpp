@@ -145,8 +145,4 @@ void WalkingUnit::findPath(const Point &_goal) {
     }
 }
 
-bool WalkingUnit::haveYouChanged() const {
-    return haveIChanged;
-}
-
 void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}

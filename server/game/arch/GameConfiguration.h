@@ -11,6 +11,7 @@
 
 class GameConfiguration {
 private:
+/*
 	vector<Building> buildings;
 	vector<Weapon> weapons;
 	vector<Soldier> soldiers;
@@ -25,7 +26,7 @@ private:
 	vector<Vehicle> parseVehiclesConfiguration(json &configuration_json);
 
 	void parseGameConfiguration(json &configuration_json);
-
+*/
 public:
 	explicit GameConfiguration(const string &config_file_path);
 };

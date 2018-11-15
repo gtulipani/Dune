@@ -36,8 +36,6 @@ class WalkingUnit : public GameObject {
 
     void handleRightClick(const Point& _pixelGoal) override;
 
-    virtual bool haveYouChanged() const override;
-
     static unsigned int maxspeed() { // Returns maxspeed for walking units.
         return TICKS_PER_SECOND;
     }

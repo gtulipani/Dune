@@ -10,21 +10,6 @@ Matrix::Matrix(int rows, int cols) : rows_quantity(rows), columns_quantity(cols)
     vec.resize(this->rows_quantity * this->columns_quantity);
 }
 
-Matrix::Matrix(std::string fName) {
-    std::ifstream file(fName.c_str(), std::ifstream::in);
-    file >> this->rows_quantity >> this->columns_quantity;
-    vec.resize(this->rows_quantity * this->columns_quantity);
-    int i = 0, j = 0;
-    for (i = 0; i < this->rows_quantity && !file.eof(); i++) {
-        for (j = 0; (j < this->columns_quantity) && !file.eof(); j++) {
-            file >> this->at(i, j);
-        }
-    }
-    if (i != this->rows_quantity || j != this->columns_quantity) {
-        throw BadFileException();
-    }
-}
-
 Matrix::Matrix(const Matrix &other) : Matrix(
         other.rows_quantity,
         other.columns_quantity) {
