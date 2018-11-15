@@ -56,8 +56,8 @@ int Map::getCost(const Point& a, const Point& b) const {
 }
 
 void Map::update(TerrainType type, const Point& size, const Point& pos) {
-    for (int row = pos.row; row <= pos.row + size.row; row++) {
-        for (int col = pos.col; col <= pos.col + size.col; col++) {
+    for (int row = pos.row; row < pos.row + size.row; row++) {
+        for (int col = pos.col; col < pos.col + size.col; col++) {
             mat.at(row, col) = type;
         }
     }

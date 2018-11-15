@@ -5,9 +5,17 @@
 #include <TileUtils.h>
 #include "Map.h"
 
-WalkingUnit::WalkingUnit(int id, const Point& size,
-const Point& initialPosition, const Map& _map, unsigned int movespeed) :
-GameObject(id, size, initialPosition), map(_map) {
+Point fromDownCenterToTopLeft(const Point& pos, const Point& size) {
+    return {pos.row - size.row, pos.col - size.col / 2};
+}
+
+Point fromTopLeftToDownCenter(const Point& pos, const Point& size) {
+    return {pos.row + size.row, pos.col + size.col / 2};
+}
+
+WalkingUnit::WalkingUnit(int id, const Point& size, const Point& initialPosition,
+const Map& _map, unsigned int movespeed) :
+GameObject(id, size, fromDownCenterToTopLeft(initialPosition, size)), map(_map) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     tilePosition = tile_utils::getTileFromPixel(initialPosition);
@@ -35,10 +43,11 @@ void WalkingUnit::checkMovespeed() {
 }
 
 void WalkingUnit::step() {
+    Point feetPixelPosition = fromTopLeftToDownCenter(pixelPosition, size);
     if (path.empty()) {
         /*  Si path.empty() quiere decir que esta en el mismo tile que el goal.
             Entonces va directamente (si es que no llego ya). */
-        if (pixelGoal != pixelPosition) {
+        if (pixelGoal != feetPixelPosition) {
             stepTo(pixelGoal);
         }
     } else {
@@ -49,23 +58,23 @@ void WalkingUnit::step() {
                 elemento), va directamente. Esto es para no ir al centro de un
                 tile y volver si el pixel estaba mas atras. */
             stepTo(pixelGoal);
-            if (tilePosition != tile_utils::getTileFromPixel(pixelPosition)) {
+            if (tilePosition != tile_utils::getTileFromPixel(feetPixelPosition)) {
                 /*  Si cambie de tile, estoy en el goal. Debo actualizar mi tile
                     position y hacer pop(). path queda vacio, lugo va
                     directamente. */
-                tilePosition = tile_utils::getTileFromPixel(pixelPosition);
+                tilePosition = tile_utils::getTileFromPixel(feetPixelPosition);
                 path.pop();
             }
         } else {
             /* Si el proximo no es la meta final, debo ir al centro del tile. */
             Point goalPixel = tile_utils::getTileCenter(nextTile);
             stepTo(goalPixel);
-            if (tilePosition != tile_utils::getTileFromPixel(pixelPosition)) {
+            if (tilePosition != tile_utils::getTileFromPixel(feetPixelPosition)) {
                 /*  Solo hago el cambio de tile cuando llegue al centro, para
                     asegurarme de llegar a el. */
-                if (pixelPosition == goalPixel) {
+                if (feetPixelPosition == goalPixel) {
                     path.pop();
-                    tilePosition = tile_utils::getTileFromPixel(pixelPosition);
+                    tilePosition = tile_utils::getTileFromPixel(feetPixelPosition);
                 }
             }
         }
@@ -73,8 +82,9 @@ void WalkingUnit::step() {
 }
 
 void WalkingUnit::stepTo(const Point &pixel) {
-    int row_dir = pixel.row - pixelPosition.row;
-    int col_dir = pixel.col - pixelPosition.col;
+    Point _pixel = fromDownCenterToTopLeft(pixel, size);
+    int row_dir = _pixel.row - pixelPosition.row;
+    int col_dir = _pixel.col - pixelPosition.col;
 
     if (row_dir != 0) {
         row_dir = row_dir / std::abs(row_dir);
@@ -134,7 +144,7 @@ void WalkingUnit::findPath(const Point &_goal) {
     path = std::stack<Point>(); // clears path
 
     if (came_from.find(goal) == came_from.end()) {
-        pixelGoal = pixelPosition;
+        pixelGoal = fromTopLeftToDownCenter(pixelPosition, size);
         return;
     }
 
