@@ -1,4 +1,4 @@
-#include "EventsHandler.h"
+#include "GameControler.h"
 
 #include <TileUtils.h>
 
@@ -7,10 +7,10 @@
 #include "../model/WalkingUnit.h"
 #include "../model/Building.h"
 
-EventsHandler::EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map) :
+GameControler::GameControler(std::list<GameObject*>& _gameObjects, Map& _map) :
 gameObjects(_gameObjects), map(_map) {}
 
-void EventsHandler::initializeMap() {
+void GameControler::initializeMap() {
     for (Point tilePosition : map.constructionCenterPositions) {
         Point pixelPosition = tile_utils::getTileTopLeft(tilePosition);
         GameObject* constructionCenter = new Building(gameObjects.size(), Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), pixelPosition);
@@ -19,7 +19,7 @@ void EventsHandler::initializeMap() {
     }
 }
 
-void EventsHandler::leftClick(const Point& point) {
+void GameControler::leftClick(const Point& point) {
     if (selectedObject != nullptr) {
         selectedObject->unselect();
         selectedObject = nullptr;
@@ -33,13 +33,13 @@ void EventsHandler::leftClick(const Point& point) {
     }
 }
 
-void EventsHandler::rightClick(const Point& point) {
+void GameControler::rightClick(const Point& point) {
     if (selectedObject != nullptr) {
         selectedObject->handleRightClick(point);
     }
 }
 
-void EventsHandler::createWalkingUnit(const Point& point) {
+void GameControler::createWalkingUnit(const Point& point) {
     auto * unit = new WalkingUnit(gameObjects.size(), {32, 32}, point, map, 10);
     gameObjects.push_back(unit);
 }

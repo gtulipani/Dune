@@ -1,5 +1,5 @@
-#ifndef __EVENTS_HANDLER_H__
-#define __EVENTS_HANDLER_H__
+#ifndef __GAME_CONTROLER__
+#define __GAME_CONTROLER__
 
 #include <list>
 
@@ -7,14 +7,14 @@ class GameObject;
 class Map;
 class Point;
 
-class EventsHandler {
+class GameControler {
     private:
     std::list<GameObject*>& gameObjects;
     Map& map;
     GameObject* selectedObject = nullptr;
 
     public:
-    explicit EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map);
+    explicit GameControler(std::list<GameObject*>& _gameObjects, Map& _map);
 
     void initializeMap();
 
@@ -25,4 +25,4 @@ class EventsHandler {
     void createWalkingUnit(const Point& point);
 };
 
-#endif
+#endif // __GAME_CONTROLER__

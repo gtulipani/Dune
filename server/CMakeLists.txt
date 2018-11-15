@@ -12,7 +12,7 @@ add_executable(server
         game/arch/ConfigMap.cpp
         game/arch/Game.cpp
         game/arch/ServerThread.cpp
-        game/arch/EventsHandler.cpp
+        game/arch/GameControler.cpp
         game/model/GameObject.cpp
         game/model/WalkingUnit.cpp
         game/model/Building.cpp

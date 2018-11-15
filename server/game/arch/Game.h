@@ -12,7 +12,7 @@
 #include "shaque.h"
 
 // Model Libraries
-#include "EventsHandler.h"
+#include "GameControler.h"
 #include "../model/Map.h"
 
 class ClientThread;
@@ -27,7 +27,7 @@ class Game {
 
     std::list<GameObject*> gameObjects;
     Map map;
-    EventsHandler eventsHandler;
+    GameControler gameControler;
 
     void sendMapConfigurationEvent();
 

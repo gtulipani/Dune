@@ -20,7 +20,7 @@
 using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
-events_queue(events_queue), clients(_clients), eventsHandler(gameObjects, map) {
+events_queue(events_queue), clients(_clients), gameControler(gameObjects, map) {
     map = json_utils::parseAsJson("resources/maps/basic_map.json");
 }
 
@@ -35,7 +35,7 @@ void Game::start() {
 
     sendMapConfigurationEvent();
 
-    eventsHandler.initializeMap();
+    gameControler.initializeMap();
     updateClients();
 
     //test_events();
@@ -56,11 +56,11 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            eventsHandler.leftClick(event.position);
+            gameControler.leftClick(event.position);
         } else if (event.type == RIGHT_CLICK_TYPE) {
-            eventsHandler.rightClick(event.position);
+            gameControler.rightClick(event.position);
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            eventsHandler.createWalkingUnit(event.position);
+            gameControler.createWalkingUnit(event.position);
         }
     }
 }
