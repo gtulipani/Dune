@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <Point.h>
+#include <TerrainType.h>
 #include "Matrix.h"
 
 class Map {
@@ -13,6 +14,8 @@ public:
     Map() = default;
 
     explicit Map(const Matrix& _matrix);
+
+    void update(TerrainType type, const Point& size, const Point& pos);
 
     Point findClosest(const Point& p) const;
 

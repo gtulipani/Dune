@@ -11,9 +11,11 @@ EventsHandler::EventsHandler(std::list<GameObject*>& _gameObjects, Map& _map) :
 gameObjects(_gameObjects), map(_map) {}
 
 void EventsHandler::initializeMap() {
-    for (Point p : map.constructionCenterPositions) {
-        GameObject* constructionCenter = new Building(gameObjects.size(), Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), p);
+    for (Point tilePosition : map.constructionCenterPositions) {
+        Point pixelPosition = tile_utils::getTileTopLeft(tilePosition);
+        GameObject* constructionCenter = new Building(gameObjects.size(), Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), pixelPosition);
         gameObjects.push_back(constructionCenter);
+        map.update(EDIFICIOS, Point(3, 3), tilePosition);
     }
 }
 
