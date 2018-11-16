@@ -8,6 +8,7 @@
 #define RIGHT_CLICK_TYPE "RIGHT_CLICK"
 #define LEFT_CLICK_TYPE "LEFT_CLICK"
 #define CREATE_WALKING_UNIT_TYPE "CREATE_WALKING_UNIT"
+#define CREATE_COSECHADORA_TYPE "CREATE_COSECHADORA"
 
 using namespace std;
 using json = nlohmann::json;

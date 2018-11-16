@@ -10,11 +10,10 @@
 class Map;
 
 class WalkingUnit : public GameObject {
+    private:
     unsigned int ticksPerStep;
     unsigned int counter;
     std::stack<Point> path;
-    const Map &map;
-    Point pixelGoal;
     Point tilePosition;
 
     void checkMovespeed();
@@ -27,10 +26,14 @@ class WalkingUnit : public GameObject {
 
     void stepTo(const Point& goalPixel);
 
+    protected:
+    Map &map;
+    Point pixelGoal;
+
     public:
      // Movespeed on pixels per second.
     WalkingUnit(int id, const Point& size, const Point& initialPosition,
-                const Map& map, unsigned int movespeed);
+                Map& map, unsigned int movespeed);
 
     virtual void tick() override;
 

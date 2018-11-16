@@ -61,6 +61,8 @@ void Game::updateModel() {
             gameControler.rightClick(event.position);
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
             gameControler.createWalkingUnit(event.position);
+        } else if (event.type == CREATE_COSECHADORA_TYPE) {
+            gameControler.createCosechadora(event.position);
         }
     }
 }

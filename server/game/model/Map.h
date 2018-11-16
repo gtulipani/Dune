@@ -17,13 +17,15 @@ public:
 
     void update(TerrainType type, const Point& size, const Point& pos);
 
-    Point findClosest(const Point& p) const;
+    Point findClosestRefineria(const Point& p) const;
 
     std::vector<Point> getAdyacents(const Point& p) const;
 
     int getCost(const Point& a, const Point& b) const;
 
     Matrix& getMatrix();
+
+    bool especiaAt(const Point& pos) const;
 };
 
 #endif

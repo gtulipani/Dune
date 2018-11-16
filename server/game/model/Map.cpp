@@ -1,5 +1,7 @@
 #include "Map.h"
 
+#include <TileUtils.h>
+
 Map::Map(const Matrix& mat) : mat(std::move(mat)) {}
 
 /*  Obviamente, esta funcion solo sirve para probar A*, hay que cambiarla   *
@@ -63,12 +65,16 @@ void Map::update(TerrainType type, const Point& size, const Point& pos) {
     }
 }
 
-/*  Debe devolver p si el terreno esta disponible para la unidad, o la ubicacion
-    mas cercana disponible para esa unidad. */
-Point Map::findClosest(const Point& p) const {
-    return p;
-}
-
 Matrix& Map::getMatrix() {
     return mat;
+}
+
+bool Map::especiaAt(const Point& pos) const {
+    Point tile = tile_utils::getTileFromPixel(pos);
+    return mat.at(tile) == ESPECIA;
+}
+
+Point Map::findClosestRefineria(const Point& p) const {
+    // Perform a BFS
+    return {0, 0};
 }

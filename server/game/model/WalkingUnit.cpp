@@ -14,7 +14,7 @@ Point fromTopLeftToDownCenter(const Point& pos, const Point& size) {
 }
 
 WalkingUnit::WalkingUnit(int id, const Point& size, const Point& initialPosition,
-const Map& _map, unsigned int movespeed) :
+Map& _map, unsigned int movespeed) :
 GameObject(id, size, fromDownCenterToTopLeft(initialPosition, size)), map(_map) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
@@ -28,17 +28,13 @@ void WalkingUnit::tick() {
 #define MAX_MOTION 5
 
 void WalkingUnit::checkMovespeed() {
-    if (counter == 0) {
+    if (GameObject::checkCounter(counter, ticksPerStep)) {
         Point prev_pos = this->pixelPosition;
         step();
         if (prev_pos != this->pixelPosition) {
             motion = motion >= MAX_MOTION ? 0 : motion + 1;
             haveIChanged = true;
         }
-    } else if (counter == ticksPerStep) {
-        counter = 0;
-    } else {
-        counter++;
     }
 }
 
@@ -103,9 +99,7 @@ void WalkingUnit::handleRightClick(const Point &_pixelGoal) {
     findPath(goalTile);
 }
 
-void WalkingUnit::findPath(const Point &_goal) {
-    Point goal = map.findClosest(_goal);
-
+void WalkingUnit::findPath(const Point &goal) {
     PriorityQueue<Point> frontier;
     std::unordered_map<Point, Point> came_from;
     std::unordered_map<Point, int> cost_so_far;

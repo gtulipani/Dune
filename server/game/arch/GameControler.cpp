@@ -5,6 +5,7 @@
 #include "../model/Map.h"
 #include "../model/GameObject.h"
 #include "../model/WalkingUnit.h"
+#include "../model/Cosechadora.h"
 #include "../model/Building.h"
 
 GameControler::GameControler(std::list<GameObject*>& _gameObjects, Map& _map) :
@@ -41,5 +42,10 @@ void GameControler::rightClick(const Point& point) {
 
 void GameControler::createWalkingUnit(const Point& point) {
     auto * unit = new WalkingUnit(gameObjects.size(), {32, 32}, point, map, 10);
+    gameObjects.push_back(unit);
+}
+
+void GameControler::createCosechadora(const Point& point) {
+    auto * unit = new Cosechadora(gameObjects.size(), point, map);
     gameObjects.push_back(unit);
 }

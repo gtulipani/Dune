@@ -23,6 +23,8 @@ class GameControler {
     void rightClick(const Point& point);
 
     void createWalkingUnit(const Point& point);
+
+    void createCosechadora(const Point& point);
 };
 
 #endif // __GAME_CONTROLER__
