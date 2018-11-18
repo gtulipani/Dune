@@ -8,8 +8,8 @@ SdlTexture::SdlTexture(int width, int height, SDL_Renderer* renderer) : renderer
     this->texture = createTexture(width, height);
 }
 
-SdlTexture::SdlTexture(const std::string &filename, const SdlWindow& window)
-    : renderer(window.getRenderer()) {
+SdlTexture::SdlTexture(const std::string &filename, const SdlWindow* window)
+    : renderer(window->getRenderer()) {
     this->texture = loadTexture(filename);
 }
 

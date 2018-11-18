@@ -25,7 +25,7 @@ void EventsLooperThread::pushEvent(std::string message, Point position) {
 void EventsLooperThread::processServerEvents() {
     std::list<GameStatusEvent> events = game_status_events.popAll();
     std::for_each(events.begin(), events.end(), [this](GameStatusEvent &event){
-        main_window.processPicturables(event.picturables);
+        window_controller.processPicturables(event.picturables);
     });
 }
 
@@ -33,11 +33,11 @@ void EventsLooperThread::processMouseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
-            pushEvent(LEFT_CLICK_TYPE, main_window.getRelativePoint(mouse_event.y, mouse_event.x));
+            pushEvent(LEFT_CLICK_TYPE, window_controller.getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         case SDL_BUTTON_RIGHT: {
-            pushEvent(RIGHT_CLICK_TYPE, main_window.getRelativePoint(mouse_event.y, mouse_event.x));
+            pushEvent(RIGHT_CLICK_TYPE, window_controller.getRelativePoint(mouse_event.y, mouse_event.x));
         }
         default:
             break;
@@ -48,16 +48,16 @@ void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     auto &key_event = (SDL_KeyboardEvent &) event;
     switch (key_event.keysym.sym) {
         case SDLK_LEFT:
-            main_window.move(LEFT);
+            window_controller.move(LEFT);
             break;
         case SDLK_RIGHT:
-            main_window.move(RIGHT);
+            window_controller.move(RIGHT);
             break;
         case SDLK_UP:
-            main_window.move(UP);
+            window_controller.move(UP);
             break;
         case SDLK_DOWN:
-            main_window.move(DOWN);
+            window_controller.move(DOWN);
             break;
         default:
             break;
@@ -65,13 +65,12 @@ void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
 }
 
 void EventsLooperThread::configure(Matrix matrix) {
-    this->terrain_matrix = std::move(matrix);
+    this->window_controller.configure(std::move(matrix));
 }
 
 void EventsLooperThread::run() {
     try {
-        main_window.configure(terrain_matrix);
-        main_window.fill();
+        window_controller.fill();
 
         // Create initial unit in position 0,0
         pushEvent(CREATE_WALKING_UNIT_TYPE, Point(0, 0));
@@ -79,7 +78,7 @@ void EventsLooperThread::run() {
         // Process events received from the socket
         processServerEvents();
 
-        main_window.render();
+        window_controller.render();
 
         while (this->isRunning()) {
             auto start = std::chrono::steady_clock::now();
@@ -99,9 +98,9 @@ void EventsLooperThread::run() {
                 default:
                     break;
             }
-            main_window.fill();
+            window_controller.fill();
             processServerEvents();
-            main_window.render();
+            window_controller.render();
 
             auto end = std::chrono::steady_clock::now();
             auto execution_difference = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

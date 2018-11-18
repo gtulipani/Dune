@@ -7,12 +7,14 @@ add_executable(client
     main.cpp
         game/arch/Area.cpp
         game/arch/BlockingQueue.hpp
+        game/arch/ButtonsController.cpp
         game/arch/Client.cpp
         game/arch/EventsLooperThread.cpp
         game/arch/EventsReceptorThread.cpp
         game/arch/EventsSenderThread.cpp
-        game/arch/MainWindow.cpp
         game/arch/SdlPicturable.cpp
+        game/arch/TerrainController.cpp
+        game/arch/WindowController.cpp
         game/sdl/SdlException.cpp
         game/sdl/SdlTexture.cpp
         game/sdl/SdlWindow.cpp)

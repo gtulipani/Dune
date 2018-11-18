@@ -13,7 +13,7 @@ public:
 
     SdlTexture(int width, int height, SDL_Renderer* renderer);
 
-    SdlTexture(const std::string &filename, const SdlWindow& window);
+    SdlTexture(const std::string &filename, const SdlWindow* window);
 
     SdlTexture(const SdlTexture &other);
 

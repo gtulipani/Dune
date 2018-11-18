@@ -1,3 +1,4 @@
+#include <iostream>
 #include "JSONConversion.h"
 
 // Matrix Transformation
@@ -24,9 +25,11 @@ void to_json(json &j, const Picturable &p) {
             {"position", p.position},
             {"health",     p.health},
     };
+    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Picturable &p) {
+    std::cout << j << std::endl;
     j.at("id").get_to(p.id);
     j.at("sprite").get_to(p.sprite);
     j.at("selected").get_to(p.selected);
@@ -65,9 +68,11 @@ void to_json(json &j, const ClientEvent &e) {
             {"type", e.type},
             {"position",  e.position}
     };
+    std::cout << j << std::endl;
 }
 
 void from_json(const json &j, ClientEvent &e) {
+    std::cout << j << std::endl;
     j.at("player_id").get_to(e.player_id);
     j.at("type").get_to(e.type);
     j.at("position").get_to(e.position);

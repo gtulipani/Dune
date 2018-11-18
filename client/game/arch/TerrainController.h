@@ -1,13 +1,14 @@
-#ifndef __MAIN_WINDOW_H__
-#define __MAIN_WINDOW_H__
+#ifndef __TERRAIN_CONTROLLER_H__
+#define __TERRAIN_CONTROLLER_H__
 
 // Commons Libraries
 #include <Matrix.h>
-
-// Client Libraries
 #include "../sdl/SdlWindow.h"
 #include "../sdl/SdlTexture.h"
 #include "SdlPicturable.h"
+
+#define MAIN_WINDOW_RESOLUTION_WIDTH 800
+#define MAIN_WINDOW_RESOLUTION_HEIGHT 600
 
 typedef enum Movement {
     UP,
@@ -16,46 +17,43 @@ typedef enum Movement {
     RIGHT
 } Movement;
 
-class MainWindow {
+class TerrainController {
 private:
     int width{};
     int height{};
     int rows_quantity{};
     int columns_quantity{};
-    Matrix matrix;
-    SdlWindow window{};
-    SdlTexture terrain_texture;
-    std::map<char, SdlTexture> terrains;
-    std::map<char, SdlTexture> units;
+    SdlWindow* window;
+    Matrix matrix{};
+
+
+    SdlTexture terrain_texture{};
+
+    std::map<char, SdlTexture> terrains{};
+    std::map<char, SdlTexture> units{};
 
     int offset_x{};
     int offset_y{};
-    std::vector<SdlPicturable> picturables;
+    std::vector<SdlPicturable> picturables{};
 
+    void preloadTerrainMatrix();
     void buildUnits();
     void buildTerrains();
 public:
-    MainWindow() = default;
-
-    MainWindow(const MainWindow &other) = delete;
-
-    // Overloading the assignment by copy
-    MainWindow &operator=(const MainWindow &other) = delete;
+    explicit TerrainController(SdlWindow *window);
 
     void configure(Matrix matrix);
 
     void fill();
 
-    void preloadTerrainMatrix();
-
     void render();
-
-    void move(enum Movement movement);
 
     void processPicturables(std::vector<Picturable> picturables);
 
     Point getRelativePoint(int row, int column);
+
+    void move(enum Movement movement);
 };
 
 
-#endif //__MAIN_WINDOW_H__
+#endif //__TERRAIN_CONTROLLER_H__
