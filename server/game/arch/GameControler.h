@@ -3,29 +3,38 @@
 
 #include <vector>
 
+#include "../model/Map.h"
+
 class GameObject;
 class Map;
 class Point;
+class Picturable;
+class Player;
 
 class GameControler {
     private:
     unsigned int next_id = 0;
-    std::vector<GameObject*>& gameObjects;
+    std::vector<GameObject*> gameObjects;
     Map& map;
-    GameObject* selectedObject = nullptr;
+    std::vector<Player> players;
+    std::vector<GameObject*> selectedObjects;
 
     public:
-    explicit GameControler(std::vector<GameObject*>& _gameObjects, Map& _map);
+    explicit GameControler(Map& map);
 
-    void initializeMap();
+    void initialize(unsigned int number_of_players);
 
-    void leftClick(const Point& point);
+    void tick();
 
-    void rightClick(const Point& point);
+    std::vector<Picturable> getStates();
 
-    void createWalkingUnit(const Point& point);
+    void leftClick(unsigned int player_id, const Point& point);
 
-    void createCosechadora(const Point& point);
+    void rightClick(unsigned int player_id, const Point& point);
+
+    void createWalkingUnit(unsigned int player_id, const Point& point);
+
+    void createCosechadora(unsigned int player_id, const Point& point);
 
     void updateGameObjects();
 };

@@ -57,7 +57,7 @@ std::vector<std::string> ServerThread::getFilesFromPath(const std::string &path)
 	return files;
 }
 
-#define PLAYERS_PER_GAME 1
+#define PLAYERS_PER_GAME 2
 
 ServerThread::ServerThread(const std::string& configMapFilePath) :
 configMap(configMapFilePath),

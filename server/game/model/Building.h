@@ -9,6 +9,8 @@
 using namespace std;
 using json = nlohmann::json;
 
+class Player;
+
 class Building : public GameObject {
 private:
 /*
@@ -21,11 +23,11 @@ private:
 	*/
 public:
 	public:
-    Building(int _id, const Point& _size, const Point& initialPosition);
+    Building(Player& player, int _id, const Point& _size, const Point& initialPosition);
 
     virtual void tick() override;
 
-    virtual void handleRightClick(const Point& pos) override;
+    virtual void handleRightClick(Player& player, const Point& pos) override;
 
 	// Functions that are used to be parsed by json
 	//friend void to_json(json &j, const Building &b);

@@ -23,11 +23,11 @@ class Cosechadora : public WalkingUnit {
     Especia* target;
 
     public:
-    Cosechadora(int id, const Point& initialPosition, Map& map);
+    Cosechadora(Player& player, int id, const Point& initialPosition, Map& map);
 
     virtual void tick() override;
 
-    virtual void handleRightClick(const Point& pos) override;
+    virtual void handleRightClick(Player& player, const Point& pos) override;
 };
 
 #endif

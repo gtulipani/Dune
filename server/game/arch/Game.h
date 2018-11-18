@@ -16,6 +16,7 @@
 
 class ClientThread;
 class GameObject;
+class Player;
 
 class Game {
     private:
@@ -24,7 +25,6 @@ class Game {
     const std::vector<ClientThread*>& clients;
     std::list<ClientEvent> events;
 
-    std::vector<GameObject*> gameObjects;
     Map map;
     GameControler gameControler;
 
@@ -38,16 +38,12 @@ class Game {
 
     void test_events();
 
-    void tick();
-
     public:
     Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);
 
     void start();
 
     void stop();
-
-    ~Game();
 };
 
 #endif // __GAME_H__

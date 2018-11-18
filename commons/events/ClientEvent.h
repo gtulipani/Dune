@@ -15,7 +15,7 @@ using json = nlohmann::json;
 
 struct ClientEvent {
 public:
-    int player_id{};
+    unsigned int player_id{};
     string type;
     Point position;
 

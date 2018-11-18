@@ -9,13 +9,19 @@
 #include "../model/Especia.h"
 #include "../model/Building.h"
 
-GameControler::GameControler(std::vector<GameObject*>& _gameObjects, Map& _map) :
-gameObjects(_gameObjects), map(_map) {}
+GameControler::GameControler(Map& _map) :  map(_map) {}
 
-void GameControler::initializeMap() {
+void GameControler::initialize(unsigned int number_of_players) {
+
+    for (unsigned int i = 0; i < number_of_players; i++) {
+        players.emplace_back();
+        selectedObjects.push_back(nullptr);
+    }
+
+    unsigned int i = 0;
     for (Point tilePosition : map.constructionCenterPositions) {
         Point pixelPosition = tile_utils::getTileTopLeft(tilePosition);
-        GameObject* constructionCenter = new Building(next_id++, Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), pixelPosition);
+        GameObject* constructionCenter = new Building(players.at(i++), next_id++, Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), pixelPosition);
         gameObjects.push_back(constructionCenter);
         map.update(EDIFICIOS, Point(3, 3), tilePosition);
     }
@@ -27,34 +33,51 @@ void GameControler::initializeMap() {
     }
 }
 
-void GameControler::leftClick(const Point& point) {
-    if (selectedObject != nullptr) {
-        selectedObject->unselect();
-        selectedObject = nullptr;
+void GameControler::tick() {
+    for (GameObject* gameObject : gameObjects) {
+        // We let know all the objects that time has passed
+        gameObject->tick();
+    }
+}
+
+void GameControler::leftClick(unsigned int player_id, const Point& point) {
+    if (selectedObjects.at(player_id) != nullptr) {
+        selectedObjects.at(player_id)->unselect();
+        selectedObjects.at(player_id) = nullptr;
     }
     for (GameObject* gameObject : gameObjects) {
         bool success = gameObject->tryToSelect(point);
         if (success) {
-            selectedObject = gameObject;
+            selectedObjects.at(player_id) = gameObject;
             break;
         }
     }
 }
 
-void GameControler::rightClick(const Point& point) {
-    if (selectedObject != nullptr) {
-        selectedObject->handleRightClick(point);
+void GameControler::rightClick(unsigned int player_id, const Point& point) {
+    if (selectedObjects.at(player_id) != nullptr) {
+        selectedObjects.at(player_id)->handleRightClick(players.at(player_id), point);
     }
 }
 
-void GameControler::createWalkingUnit(const Point& point) {
-    auto * unit = new WalkingUnit(next_id++, {32, 32}, point, map, 10);
+void GameControler::createWalkingUnit(unsigned int player_id, const Point& point) {
+    auto * unit = new WalkingUnit(players.at(player_id), next_id++, {32, 32}, point, map, 10);
     gameObjects.push_back(unit);
 }
 
-void GameControler::createCosechadora(const Point& point) {
-    auto * unit = new Cosechadora(next_id++, point, map);
+void GameControler::createCosechadora(unsigned int player_id, const Point& point) {
+    auto * unit = new Cosechadora(players.at(player_id), next_id++, point, map);
     gameObjects.push_back(unit);
+}
+
+std::vector<Picturable> GameControler::getStates() {
+    std::vector<Picturable> states;
+    for (GameObject* gameObject : gameObjects) {
+        if (gameObject->haveYouChanged()) {
+            states.push_back(gameObject->getState());
+        }
+    }
+    return states;
 }
 
 void GameControler::updateGameObjects() {

@@ -2,8 +2,8 @@
 
 #include <PicturableType.h>
 
-GameObject::GameObject(int _id, const Point& _size, const Point& initialPosition) :
-id(_id) {
+GameObject::GameObject(Player& _player, int _id, const Point& _size, const Point& initialPosition) :
+player(_player), id(_id) {
     size = _size;
     pixelPosition = initialPosition;
 }

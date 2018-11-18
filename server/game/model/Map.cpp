@@ -80,7 +80,7 @@ std::vector<Especia*> Map::generateEspeciaFromId(int id) {
     std::vector<Point> points = mat.getPointsWith(ESPECIA);
     std::vector<Especia*> _especias;
     for (Point p : points) {
-        especias[p] = new Especia(id, p);
+        especias[p] = new Especia(gaia, id, p);
         _especias.push_back(especias.at(p));
         id++;
     }

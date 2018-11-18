@@ -6,11 +6,13 @@
 #include <Point.h>
 #include <TerrainType.h>
 #include "Matrix.h"
+#include "Player.h"
 
 class Especia;
 
 class Map {
 public:
+    Player gaia;
     Matrix mat;
     std::unordered_map<Point, Especia*> especias;
     std::vector<Point> constructionCenterPositions;

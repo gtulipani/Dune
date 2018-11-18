@@ -13,7 +13,7 @@ class Especia : public GameObject {
     bool hasCollector = false;
 
     public:
-    Especia(int id, const Point& initialPosition);
+    Especia(Player& player, int id, const Point& initialPosition);
 
     bool hasEspeciaLeft() const;
 
@@ -21,7 +21,7 @@ class Especia : public GameObject {
 
     virtual void tick() override;
 
-    virtual void handleRightClick(const Point& pos) override;
+    virtual void handleRightClick(Player& player, const Point& pos) override;
 
     Point getPosition() const;
 };

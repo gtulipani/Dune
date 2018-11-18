@@ -31,13 +31,13 @@ class WalkingUnit : public GameObject {
     Point pixelGoal;
 
     public:
-     // Movespeed on pixels per second.
-    WalkingUnit(int id, const Point& size, const Point& initialPosition,
+    // Movespeed on pixels per second.
+    WalkingUnit(Player& player, int id, const Point& size, const Point& initialPosition,
                 Map& map, unsigned int movespeed);
 
     virtual void tick() override;
 
-    virtual void handleRightClick(const Point& _pixelGoal) override;
+    virtual void handleRightClick(Player& player, const Point& _pixelGoal) override;
 
     static unsigned int maxspeed() { // Returns maxspeed for walking units.
         return TICKS_PER_SECOND;

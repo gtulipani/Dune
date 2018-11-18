@@ -20,13 +20,15 @@
 using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
-events_queue(events_queue), clients(_clients), gameControler(gameObjects, map) {
+events_queue(events_queue), clients(_clients), gameControler(map) {
     map = json_utils::parseAsJson("resources/maps/basic_map.json");
 }
 
 void Game::sendMapConfigurationEvent() {
-    clients.back()->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
-    clients.back()->send(MapConfigurationEvent(map.getMatrix()));
+    for (ClientThread* client : clients) {
+        client->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
+        client->send(MapConfigurationEvent(map.getMatrix()));
+    }
 }
 
 void Game::start() {
@@ -35,7 +37,7 @@ void Game::start() {
 
     sendMapConfigurationEvent();
 
-    gameControler.initializeMap();
+    gameControler.initialize(clients.size());
     updateClients();
 
     //test_events();
@@ -43,7 +45,7 @@ void Game::start() {
     while (is_on) {
         collectEvents();
         updateModel();
-        tick();
+        gameControler.tick();
         updateClients();
         std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
     }
@@ -56,32 +58,20 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            gameControler.leftClick(event.position);
+            gameControler.leftClick(event.player_id, event.position);
         } else if (event.type == RIGHT_CLICK_TYPE) {
-            gameControler.rightClick(event.position);
+            gameControler.rightClick(event.player_id, event.position);
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            gameControler.createWalkingUnit(event.position);
+            gameControler.createWalkingUnit(event.player_id, event.position);
         } else if (event.type == CREATE_COSECHADORA_TYPE) {
-            gameControler.createCosechadora(event.position);
+            gameControler.createCosechadora(event.player_id, event.position);
         }
-    }
-}
-
-void Game::tick() {
-    for (GameObject* gameObject : gameObjects) {
-        // We let know all the objects that time has passed
-        gameObject->tick();
     }
 }
 
 void Game::updateClients() {
     // get all the objects whos status has changed
-    std::vector<Picturable> states;
-    for (GameObject* gameObject : gameObjects) {
-        if (gameObject->haveYouChanged()) {
-            states.push_back(gameObject->getState());
-        }
-    }
+    std::vector<Picturable> states = gameControler.getStates();
 
     if (!states.empty()) {
         // send the status of all objects that changed
@@ -98,10 +88,4 @@ void Game::stop() {
 
 void Game::test_events() {
     
-}
-
-Game::~Game() {
-    for (GameObject* gameObject : gameObjects) {
-        delete gameObject;
-    }
 }

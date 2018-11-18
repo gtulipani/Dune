@@ -13,9 +13,9 @@ Point fromTopLeftToDownCenter(const Point& pos, const Point& size) {
     return {pos.row + size.row, pos.col + size.col / 2};
 }
 
-WalkingUnit::WalkingUnit(int id, const Point& size, const Point& initialPosition,
+WalkingUnit::WalkingUnit(Player& player, int id, const Point& size, const Point& initialPosition,
 Map& _map, unsigned int movespeed) :
-GameObject(id, size, fromDownCenterToTopLeft(initialPosition, size)), map(_map) {
+GameObject(player, id, size, fromDownCenterToTopLeft(initialPosition, size)), map(_map) {
     ticksPerStep = TO_TICKS(movespeed);
     counter = 0;
     tilePosition = tile_utils::getTileFromPixel(initialPosition);
@@ -93,10 +93,12 @@ void WalkingUnit::stepTo(const Point &pixel) {
     pixelPosition.col += col_dir;
 }
 
-void WalkingUnit::handleRightClick(const Point &_pixelGoal) {
-    pixelGoal = _pixelGoal;
-    Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
-    findPath(goalTile);
+void WalkingUnit::handleRightClick(Player& _player, const Point &_pixelGoal) {
+    if (&player == &_player) {
+        pixelGoal = _pixelGoal;
+        Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
+        findPath(goalTile);
+    }
 }
 
 void WalkingUnit::findPath(const Point &goal) {

@@ -2,8 +2,8 @@
 
 #include "TileUtils.h"
 
-Especia::Especia(int id, const Point& initialPosition) :
-GameObject(id, Point(TILE_PIXEL_RATE, TILE_PIXEL_RATE), initialPosition) {
+Especia::Especia(Player& player, int id, const Point& initialPosition) :
+GameObject(player, id, Point(TILE_PIXEL_RATE, TILE_PIXEL_RATE), initialPosition) {
     health = INITIAL_ESPECIA;
 }
 
@@ -14,7 +14,7 @@ Point Especia::getPosition() const {
 
 void Especia::tick() {}
 
-void Especia::handleRightClick(const Point& p) {}
+void Especia::handleRightClick(Player& player, const Point& p) {}
 
 bool Especia::hasEspeciaLeft() const {
     return !isDead();

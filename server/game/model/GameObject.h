@@ -4,8 +4,11 @@
 #include <string>
 #include <Picturable.h>
 
+class Player;
+
 class GameObject {
     protected:
+    Player& player;
     const int id;
     Point size;
     Point pixelPosition;
@@ -24,11 +27,11 @@ class GameObject {
     }
 
     public:
-    GameObject(int _id, const Point& _size, const Point& initialPosition);
+    GameObject(Player& _player, int _id, const Point& _size, const Point& initialPosition);
 
     virtual void tick() = 0;
 
-    virtual void handleRightClick(const Point& pos) = 0;
+    virtual void handleRightClick(Player& player, const Point& pos) = 0;
 
     bool tryToSelect(const Point& clickPosition);
 

@@ -5,8 +5,8 @@
 
 #include "Especia.h"
 
-Cosechadora::Cosechadora(int id, const Point& initialPosition, Map& map) :
-WalkingUnit(id, COSECHADORA_SIZE, initialPosition, map, COSECHADORA_MOVESPEED) {}
+Cosechadora::Cosechadora(Player& player, int id, const Point& initialPosition, Map& map) :
+WalkingUnit(player, id, COSECHADORA_SIZE, initialPosition, map, COSECHADORA_MOVESPEED) {}
 
 void Cosechadora::tick() {
     switch (state) {
@@ -21,12 +21,12 @@ void Cosechadora::tick() {
                 target->tryToGetSome(especia);
                 if (especia >= ESPECIA_MAX) {
                     Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                    WalkingUnit::handleRightClick(pos);
+                    WalkingUnit::handleRightClick(player, pos);
                     state = returning;
                 }
             } else {
                 Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                WalkingUnit::handleRightClick(pos);
+                WalkingUnit::handleRightClick(player, pos);
                 state = returning;
             }
             break;
@@ -38,7 +38,7 @@ void Cosechadora::tick() {
                 if (!target->hasEspeciaLeft()) {
                     state = waiting;
                 } else {
-                    WalkingUnit::handleRightClick(target->getPosition());
+                    WalkingUnit::handleRightClick(player, target->getPosition());
                     state = going;
                 }
             }
@@ -48,12 +48,12 @@ void Cosechadora::tick() {
     }
 }
 
-void Cosechadora::handleRightClick(const Point& pos) {
+void Cosechadora::handleRightClick(Player& player, const Point& pos) {
     if (map.especiaAt(pos)) {
         target = map.getEspeciaAt(pos);
-        WalkingUnit::handleRightClick(target->getPosition());
+        WalkingUnit::handleRightClick(player, target->getPosition());
         state = going;
     } else {
-        WalkingUnit::handleRightClick(pos);
+        WalkingUnit::handleRightClick(player, pos);
     }
 }
