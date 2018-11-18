@@ -32,3 +32,7 @@ void GameObject::unselect() {
 bool GameObject::haveYouChanged() const {
     return haveIChanged;
 }
+
+bool GameObject::isDead() const {
+    return health == 0;
+}

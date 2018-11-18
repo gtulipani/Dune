@@ -17,6 +17,7 @@ add_executable(server
         game/model/WalkingUnit.cpp
         game/model/Building.cpp
         game/model/Cosechadora.cpp
+        game/model/Especia.cpp
         game/model/Map.cpp)
 
 target_link_libraries(server commons)

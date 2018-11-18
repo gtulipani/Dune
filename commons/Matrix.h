@@ -39,6 +39,8 @@ public:
 
     const char& at(Point a) const;
 
+    std::vector<Point> getPointsWith(const char& value) const;
+
 };
 
 #endif

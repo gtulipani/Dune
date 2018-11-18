@@ -1,6 +1,8 @@
 #include "Map.h"
 
 #include <TileUtils.h>
+#include <TerrainType.h>
+#include "Especia.h"
 
 Map::Map(const Matrix& mat) : mat(std::move(mat)) {}
 
@@ -74,7 +76,22 @@ bool Map::especiaAt(const Point& pos) const {
     return mat.at(tile) == ESPECIA;
 }
 
+std::vector<Especia*> Map::generateEspeciaFromId(int id) {
+    std::vector<Point> points = mat.getPointsWith(ESPECIA);
+    std::vector<Especia*> _especias;
+    for (Point p : points) {
+        especias[p] = new Especia(id, p);
+        _especias.push_back(especias.at(p));
+        id++;
+    }
+    return _especias;
+}
+
 Point Map::findClosestRefineria(const Point& p) const {
     // Perform a BFS
     return {0, 0};
+}
+
+Especia* Map::getEspeciaAt(const Point& pos) {
+    return especias.at(pos);
 }

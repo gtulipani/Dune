@@ -2,7 +2,6 @@
 #define __GAME_H__
 
 // STD Libraries
-#include <list>
 #include <vector>
 
 // Commons Libraries
@@ -25,7 +24,7 @@ class Game {
     const std::vector<ClientThread*>& clients;
     std::list<ClientEvent> events;
 
-    std::list<GameObject*> gameObjects;
+    std::vector<GameObject*> gameObjects;
     Map map;
     GameControler gameControler;
 

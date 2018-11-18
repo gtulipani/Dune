@@ -86,3 +86,11 @@ int Matrix::rows() const {
 int Matrix::cols() const {
     return this->columns_quantity;
 }
+
+std::vector<Point> Matrix::getPointsWith(const char& value) const {
+    std::vector<Point> points;
+    for (unsigned int i = 0; i < vec.size(); i++) {
+        if (vec.at(i) == value) points.emplace_back(i / rows_quantity, i % rows_quantity);
+    }
+    return points;
+}

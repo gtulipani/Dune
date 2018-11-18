@@ -11,9 +11,9 @@ class GameObject {
     Point pixelPosition;
     int type = 0;
     int motion = 0;
-    bool selected = false;
-    int health = 500;
     bool haveIChanged = true;
+    int health = 500;
+    bool selected = false;
 
     static bool checkCounter(unsigned int& counter, unsigned int max) {
         if (counter == 0) {
@@ -37,6 +37,8 @@ class GameObject {
     bool haveYouChanged() const;
 
     virtual Picturable getState();
+
+    bool isDead() const;
 
     virtual ~GameObject() = default;
 };

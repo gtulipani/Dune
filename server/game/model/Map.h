@@ -2,13 +2,17 @@
 #define __MAP_H__
 
 #include <vector>
+#include <map>
 #include <Point.h>
 #include <TerrainType.h>
 #include "Matrix.h"
 
+class Especia;
+
 class Map {
 public:
     Matrix mat;
+    std::unordered_map<Point, Especia*> especias;
     std::vector<Point> constructionCenterPositions;
 
     Map() = default;
@@ -25,7 +29,11 @@ public:
 
     Matrix& getMatrix();
 
+    std::vector<Especia*> generateEspeciaFromId(int id);
+
     bool especiaAt(const Point& pos) const;
+
+    Especia* getEspeciaAt(const Point& pos);
 };
 
 #endif

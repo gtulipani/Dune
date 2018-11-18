@@ -3,6 +3,8 @@
 #include "TileUtils.h"
 #include "Map.h"
 
+#include "Especia.h"
+
 Cosechadora::Cosechadora(int id, const Point& initialPosition, Map& map) :
 WalkingUnit(id, COSECHADORA_SIZE, initialPosition, map, COSECHADORA_MOVESPEED) {}
 
@@ -15,13 +17,17 @@ void Cosechadora::tick() {
             }
             break;
         case collecting:
-            if (GameObject::checkCounter(counter, TICKS_PER_UNIT_COLLECTED)) {
-                especia++;
+            if (target->hasEspeciaLeft()) {
+                target->tryToGetSome(especia);
                 if (especia >= ESPECIA_MAX) {
                     Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
                     WalkingUnit::handleRightClick(pos);
                     state = returning;
                 }
+            } else {
+                Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
+                WalkingUnit::handleRightClick(pos);
+                state = returning;
             }
             break;
         case returning:
@@ -29,8 +35,12 @@ void Cosechadora::tick() {
             if (pixelPosition == pixelGoal) {
                 //player.addEspecia(200);
                 especia = 0;
-                WalkingUnit::handleRightClick(target);
-                state = going;
+                if (!target->hasEspeciaLeft()) {
+                    state = waiting;
+                } else {
+                    WalkingUnit::handleRightClick(target->getPosition());
+                    state = going;
+                }
             }
             break;
         case waiting:
@@ -40,8 +50,8 @@ void Cosechadora::tick() {
 
 void Cosechadora::handleRightClick(const Point& pos) {
     if (map.especiaAt(pos)) {
-        target = tile_utils::getTileCenter(pos);
-        WalkingUnit::handleRightClick(target);
+        target = map.getEspeciaAt(pos);
+        WalkingUnit::handleRightClick(target->getPosition());
         state = going;
     } else {
         WalkingUnit::handleRightClick(pos);
