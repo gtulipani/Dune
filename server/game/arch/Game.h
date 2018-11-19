@@ -30,6 +30,8 @@ class Game {
 
     void sendMapConfigurationEvent();
 
+    void sendIDsEvent();
+
     void collectEvents();
 
     void updateModel();

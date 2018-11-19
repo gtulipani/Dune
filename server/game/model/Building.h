@@ -11,8 +11,11 @@ using json = nlohmann::json;
 
 class Player;
 
+#define BUILDING_HEALTH 1000
+
 class Building : public GameObject {
 private:
+	unsigned int counter = 0;
 /*
 	string name;
 	int energy{};
@@ -23,11 +26,15 @@ private:
 	*/
 public:
 	public:
-    Building(Player& player, int _id, const Point& _size, const Point& initialPosition);
+    Building(Player& player, int _id, const Point& _size);
 
     virtual void tick() override;
 
     virtual void handleRightClick(Player& player, const Point& pos) override;
+
+	void finishConstruction();
+
+	void locateAt(const Point& _pixelPosition);
 
 	// Functions that are used to be parsed by json
 	//friend void to_json(json &j, const Building &b);

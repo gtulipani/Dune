@@ -31,11 +31,22 @@ void Game::sendMapConfigurationEvent() {
     }
 }
 
+void Game::sendIDsEvent() {
+    unsigned int i = 0;
+    for (ClientThread* client : clients) {
+        ClientEvent event;
+        event.player_id = i;
+        i++;
+        client->send(event);
+    }
+}
+
 void Game::start() {
     is_on = true;
     std::cout << "Running..." << std::endl;
 
     sendMapConfigurationEvent();
+    //sendIDsEvent();
 
     gameControler.initialize(clients.size());
     updateClients();
@@ -66,7 +77,9 @@ void Game::updateModel() {
         } else if (event.type == CREATE_COSECHADORA_TYPE) {
             gameControler.createCosechadora(event.player_id, event.position);
         } else if (event.type == CREATE_BUILDING_TYPE) {
-            gameControler.createBuilding(event.player_id, event.position);
+            gameControler.createBuilding(event.player_id);
+        } else if (event.type == LOCATE_BUILDING_TYPE) {
+            gameControler.putBuildingAt(event.player_id, event.position);
         }
     }
 }
