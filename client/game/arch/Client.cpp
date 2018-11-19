@@ -14,8 +14,8 @@ void Client::waitForEvent(std::string message) {
     }
 }
 
-Matrix Client::receiveTerrainMatrix() {
-    return EventHandler::receiveMapConfigurationEvent(socket).matrix;
+GameConfigurationEvent Client::receiveGameConfiguration() {
+    return EventHandler::receiveGameConfigurationEvent(socket);
 }
 
 Client::Client(string host, string port) :
@@ -34,8 +34,9 @@ void Client::start() {
 
         waitForEvent(CONNECTION_SUCCESS_EVENT);
         waitForEvent(GAME_STARTED_EVENT);
-        waitForEvent(MAP_CONFIGURATION_EVENT);
-        events_looper_thread.configure(receiveTerrainMatrix());
+        waitForEvent(GAME_CONFIGURATION_EVENT);
+        GameConfigurationEvent event = receiveGameConfiguration();
+        events_looper_thread.configure(event.player_id, event.matrix);
 
         events_looper_thread.start();
         events_receptor_thread.start();

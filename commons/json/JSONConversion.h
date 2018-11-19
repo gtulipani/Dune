@@ -3,7 +3,7 @@
 
 #include "json.hpp"
 #include "../events/ClientEvent.h"
-#include "../events/MapConfigurationEvent.h"
+#include "../events/GameConfigurationEvent.h"
 #include "../events/GameStatusEvent.h"
 #include "../events/NotificationEvent.h"
 #include "../Point.h"
@@ -34,8 +34,8 @@ void from_json(const json &j, ClientEvent &e);
 void to_json(json &j, const GameStatusEvent &e);
 void from_json(const json &j, GameStatusEvent &e);
 
-// MapConfigurationEvent Transformation
-void to_json(json &j, const MapConfigurationEvent &m);
-void from_json(const json &j, MapConfigurationEvent &m);
+// GameConfigurationEvent Transformation
+void to_json(json &j, const GameConfigurationEvent &m);
+void from_json(const json &j, GameConfigurationEvent &m);
 
 #endif //__JSON__CONVERSION_H__

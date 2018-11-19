@@ -20,7 +20,7 @@ EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_even
         output_messages(output_messages) {}
 
 void EventsLooperThread::pushEvent(std::string message, Point position) {
-    output_messages.push(ClientEvent(1, std::move(message), std::move(position)));
+    output_messages.push(ClientEvent(this->player_id, std::move(message), std::move(position)));
 }
 
 bool EventsLooperThread::processServerEvents() {
@@ -57,7 +57,8 @@ bool EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     }
 }
 
-void EventsLooperThread::configure(Matrix matrix) {
+void EventsLooperThread::configure(unsigned int player_id, Matrix matrix) {
+    this->player_id = player_id;
     this->window_controller.configure(std::move(matrix));
 }
 

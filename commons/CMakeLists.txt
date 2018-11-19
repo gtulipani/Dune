@@ -2,7 +2,7 @@ add_library(commons
         events/ClientEvent.cpp
         events/EventHandler.cpp
         events/GameStatusEvent.cpp
-        events/MapConfigurationEvent.cpp
+        events/GameConfigurationEvent.cpp
         events/NotificationEvent.cpp
         json/json.hpp
         json/JSONConversion.cpp

@@ -12,7 +12,7 @@ void EventHandler::sendEvent(const Socket &socket, const ClientEvent &event) {
     socket.sendWithSize(json_event.dump());
 }
 
-void EventHandler::sendEvent(const Socket &socket, const MapConfigurationEvent &event) {
+void EventHandler::sendEvent(const Socket &socket, const GameConfigurationEvent &event) {
     json json_event = event;
     socket.sendWithSize(json_event.dump());
 }
@@ -36,11 +36,11 @@ ClientEvent EventHandler::receiveEvent(const Socket &socket) {
     return event;
 }
 
-MapConfigurationEvent EventHandler::receiveMapConfigurationEvent(const Socket &socket) {
+GameConfigurationEvent EventHandler::receiveGameConfigurationEvent(const Socket &socket) {
     std::string msg;
     socket.receiveWithSize(msg);
     json message = json::parse(msg);
-    MapConfigurationEvent event;
+    GameConfigurationEvent event;
     message.get_to(event);
     return event;
 }

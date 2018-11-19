@@ -29,11 +29,7 @@ void ClientThread::send(const std::string& msg) const {
     socket.sendStr(msg);
 }
 
-void ClientThread::send(const ClientEvent& event) const {
-    EventHandler::sendEvent(socket, event);
-}
-
-void ClientThread::send(const MapConfigurationEvent& event) const {
+void ClientThread::send(const GameConfigurationEvent& event) const {
     EventHandler::sendEvent(socket, event);
 }
 

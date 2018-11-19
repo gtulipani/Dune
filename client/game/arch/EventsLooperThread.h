@@ -17,6 +17,7 @@ union SDL_Event;
 
 class EventsLooperThread : public Thread {
 private:
+    unsigned int player_id{};
     shaque<GameStatusEvent> &game_status_events;
     BlockingQueue<ClientEvent> &output_messages;
     WindowController window_controller;
@@ -31,7 +32,7 @@ private:
 public:
     EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages);
 
-    void configure(Matrix matrix);
+    void configure(unsigned int player_id, Matrix matrix);
 };
 
 

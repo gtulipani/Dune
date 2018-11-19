@@ -5,6 +5,7 @@
 #include <shaque.h>
 #include <events/ClientEvent.h>
 #include <events/GameStatusEvent.h>
+#include <events/GameConfigurationEvent.h>
 
 // Client Libraries
 #include "EventsLooperThread.h"
@@ -26,7 +27,7 @@ private:
     Socket socket;
 
     void waitForEvent(string message);
-    Matrix receiveTerrainMatrix();
+    GameConfigurationEvent receiveGameConfiguration();
 
 public:
     Client(string host, string port);

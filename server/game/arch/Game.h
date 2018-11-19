@@ -28,9 +28,7 @@ class Game {
     Map map;
     GameControler gameControler;
 
-    void sendMapConfigurationEvent();
-
-    void sendIDsEvent();
+    void sendGameConfigurationEvent();
 
     void collectEvents();
 

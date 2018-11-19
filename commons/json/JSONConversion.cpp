@@ -89,13 +89,15 @@ void from_json(const json &j, GameStatusEvent &e) {
     j.at("picturables").get_to(e.picturables);
 }
 
-// MapConfigurationEvent Transformation
-void to_json(json &j, const MapConfigurationEvent &m) {
+// GameConfigurationEvent Transformation
+void to_json(json &j, const GameConfigurationEvent &g) {
     j = json{
-            {"matrix", m.matrix}
+            {"player_id", g.player_id},
+            {"matrix", g.matrix}
     };
 }
 
-void from_json(const json &j, MapConfigurationEvent &m) {
-    j.at("matrix").get_to(m.matrix);
+void from_json(const json &j, GameConfigurationEvent &g) {
+    j.at("player_id").get_to(g.player_id);
+    j.at("matrix").get_to(g.matrix);
 }

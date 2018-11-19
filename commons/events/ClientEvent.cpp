@@ -1,7 +1,7 @@
 #include "ClientEvent.h"
 
-ClientEvent::ClientEvent(int id, string type, Point position) :
-        player_id(id),
+ClientEvent::ClientEvent(unsigned int player_id, string type, Point position) :
+        player_id(player_id),
         type(move(type)),
         position(move(position)) {}
 

@@ -7,7 +7,7 @@
 // Commons Libraries
 #include <json/json.hpp>
 #include <json/JSONUtils.h>
-#include <events/MapConfigurationEvent.h>
+#include <events/GameConfigurationEvent.h>
 #include <events/GameStatusEvent.h>
 #include <Picturable.h>
 
@@ -23,20 +23,12 @@ events_queue(events_queue), clients(_clients), gameControler(map) {
     map = json_utils::parseAsJson("resources/maps/basic_map.json");
 }
 
-void Game::sendMapConfigurationEvent() {
+void Game::sendGameConfigurationEvent() {
+    unsigned int player_id = 0;
     for (ClientThread* client : clients) {
-        client->send(NotificationEvent(MAP_CONFIGURATION_EVENT));
-        client->send(MapConfigurationEvent(map.getMatrix()));
-    }
-}
-
-void Game::sendIDsEvent() {
-    unsigned int i = 0;
-    for (ClientThread* client : clients) {
-        ClientEvent event;
-        event.player_id = i;
-        i++;
-        client->send(event);
+        client->send(NotificationEvent(GAME_CONFIGURATION_EVENT));
+        client->send(GameConfigurationEvent(player_id, map.getMatrix()));
+        player_id++;
     }
 }
 
@@ -44,7 +36,7 @@ void Game::start() {
     is_on = true;
     std::cout << "Running..." << std::endl;
 
-    sendMapConfigurationEvent();
+    sendGameConfigurationEvent();
     //sendIDsEvent();
 
     gameControler.initialize(clients.size());

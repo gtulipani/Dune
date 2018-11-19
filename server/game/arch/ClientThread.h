@@ -2,7 +2,7 @@
 #define __CLIENT_THREAD_H__
 
 #include <events/ClientEvent.h>
-#include <events/MapConfigurationEvent.h>
+#include <events/GameConfigurationEvent.h>
 #include <events/GameStatusEvent.h>
 #include <events/NotificationEvent.h>
 #include "shaque.h"
@@ -25,9 +25,7 @@ class ClientThread : public Thread {
 
     void send(const std::string& msg) const;
 
-    void send(const ClientEvent& event) const;
-
-    void send(const MapConfigurationEvent& event) const;
+    void send(const GameConfigurationEvent& event) const;
 
     void send(const GameStatusEvent& event) const;
 

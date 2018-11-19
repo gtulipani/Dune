@@ -36,7 +36,7 @@ public:
 
     ClientEvent() = default;
 
-    ClientEvent(int id, string type, Point dst);
+    ClientEvent(unsigned int player_id, string type, Point dst);
 
     ClientEvent(const ClientEvent &other);
 
