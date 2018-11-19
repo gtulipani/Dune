@@ -10,25 +10,27 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-#define TERRAIN_WIDTH 880
-#define TERRAIN_HEIGHT 720
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
-#define PANEL_WIDTH 400
-#define PANEL_HEIGHT 720
+#define SCREEN_TERRAIN_RATE 0.75
+#define SCREEN_BUTTONS_RATE 0.25
 
-#define TERRAIN_CONTROLLER_RATE 0.8
-#define BUTTONS_CONTROLLER_RATE 0.2
+#define SCREEN_TERRAIN_WIDTH int(SCREEN_WIDTH * SCREEN_TERRAIN_RATE)
+#define SCREEN_PANEL_WIDTH int(SCREEN_WIDTH * SCREEN_BUTTONS_RATE)
+
+
 
 WindowController::WindowController() :
-    window(WINDOW_WIDTH, WINDOW_HEIGHT, MAIN_WINDOW_RESOLUTION_WIDTH, MAIN_WINDOW_RESOLUTION_HEIGHT),
-    terrain_controller(&this->window, TERRAIN_CONTROLLER_RATE),
+    window(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
+    terrain_controller(&this->window),
     buttons_controller(&this->window) {}
 
 void WindowController::configure(Matrix matrix) {
     this->window.fill();
 
-    this->terrain_controller.configure(std::move(matrix));
-    this->buttons_controller.configure(PANEL_WIDTH, PANEL_HEIGHT, TERRAIN_WIDTH, TERRAIN_HEIGHT);
+    this->terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT);
+    this->buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_HEIGHT, SCREEN_TERRAIN_WIDTH);
 }
 
 void WindowController::fill() {
@@ -36,13 +38,17 @@ void WindowController::fill() {
     this->buttons_controller.fill();
 }
 
+void WindowController::refreshMap() {
+    this->terrain_controller.render();
+}
+
 void WindowController::render() {
-    //this->terrain_controller.render();
+    this->terrain_controller.render();
     this->buttons_controller.render();
 }
 
-void WindowController::move(enum Movement movement) {
-    this->terrain_controller.move(movement);
+bool WindowController::move(enum Movement movement) {
+    return this->terrain_controller.move(movement);
 }
 
 void WindowController::parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function) {

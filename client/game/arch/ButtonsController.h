@@ -17,10 +17,10 @@ private:
 
     std::vector<PanelButton> buttons{};
 
-    int width{};
-    int height{};
-    int width_offset{};
-    int height_offset{};
+    int screen_width{};
+    int screen_height{};
+
+    int screen_width_offset{};
 
     void buildButtons();
 public:
@@ -28,7 +28,7 @@ public:
 
     void fill();
 
-    void configure(int width, int height, int width_offset, int height_offset);
+    void configure(int screen_width, int screen_height, int screen_width_offset);
 
     void render();
 

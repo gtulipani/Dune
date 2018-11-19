@@ -7,9 +7,6 @@
 #include "../sdl/SdlTexture.h"
 #include "SdlPicturable.h"
 
-#define MAIN_WINDOW_RESOLUTION_WIDTH 800
-#define MAIN_WINDOW_RESOLUTION_HEIGHT 600
-
 typedef enum Movement {
     UP,
     DOWN,
@@ -20,12 +17,17 @@ typedef enum Movement {
 class TerrainController {
 private:
     SdlWindow* window;
-    float screen_rate;
 
-    int width{};
-    int height{};
-    int rows_quantity{};
-    int columns_quantity{};
+    int screen_width{};
+    int screen_height{};
+
+    int terrain_width_tiles{};
+    int terrain_height_tiles{};
+
+
+    int terrain_width{};
+    int terrain_height{};
+
     Matrix matrix{};
 
     SdlTexture terrain_texture{};
@@ -41,9 +43,9 @@ private:
     void buildUnits();
     void buildTerrains();
 public:
-    TerrainController(SdlWindow *window, float screen_rate);
+    explicit TerrainController(SdlWindow *window);
 
-    void configure(Matrix matrix);
+    void configure(Matrix matrix, int window_width, int window_height);
 
     void fill();
 
@@ -53,7 +55,7 @@ public:
 
     Point getRelativePoint(int row, int column);
 
-    void move(enum Movement movement);
+    bool move(enum Movement movement);
 };
 
 

@@ -37,9 +37,11 @@ public:
 
     void fill();
 
+    void refreshMap();
+
     void render();
 
-    void move(enum Movement movement);
+    bool move(enum Movement movement);
 
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
 

@@ -1,8 +1,9 @@
 #include <algorithm>
 #include "ButtonsController.h"
 
-#define BUTTON_WIDTH 80
-#define BUTTON_HEIGHT 80
+#define BUTTON_WIDTH 40
+#define BUTTON_HEIGHT 40
+
 #define BUTTONS_RESOURCES_PATH std::string("resources/images/game/panel")
 
 typedef enum PannelButton {
@@ -29,38 +30,35 @@ void ButtonsController::fill() {
     this->window->fill();
 }
 
-void ButtonsController::configure(int width, int height, int width_offset, int height_offset) {
-    this->width = width;
-    this->height = height;
-    this->width_offset = width_offset;
-    this->height_offset = height_offset;
+void ButtonsController::configure(int screen_width, int screen_height, int screen_width_offset) {
+    this->screen_width = screen_width;
+    this->screen_height = screen_height;
+
+    this->screen_width_offset = screen_width_offset;
 
     buildButtons();
 
-    /*this->panel_texture = SdlTexture(width, height, this->window->getRenderer());
+    this->panel_texture = SdlTexture(screen_width, screen_height, this->window->getRenderer());
     this->panel_texture.setAsTarget();
 
     loadButtonsPanel();
 
     this->window->render();
-    this->window->setAsTarget();*/
+    this->window->setAsTarget();
 }
 
 void ButtonsController::render() {
     // Render the buttons
-    std::for_each(buttons.begin(), buttons.end(), [&](PanelButton &button) {
-        button.render(0, 0);
-    });
-    this->window->render();
+    Area srcArea(0, 0, this->screen_width, this->screen_height);
+    Area destArea(screen_width_offset, 0, this->screen_width, this->screen_height);
+    this->panel_texture.render(srcArea, destArea);
 
-    /*Area srcArea(0, 0, this->width, this->height);
-    Area destArea(0, 0, this->width, this->height);
-    this->panel_texture.render(srcArea, destArea);*/
+    this->window->render();
 }
 
 void ButtonsController::loadButtonsPanel() {
     // Render the buttons
     std::for_each(buttons.begin(), buttons.end(), [&](PanelButton &button) {
-        button.render(0, 50);
+        button.render(0, 200);
     });
 }
