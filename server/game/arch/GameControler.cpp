@@ -70,6 +70,12 @@ void GameControler::createCosechadora(unsigned int player_id, const Point& point
     gameObjects.push_back(unit);
 }
 
+void GameControler::createBuilding(unsigned int player_id, const Point& point) {
+    GameObject* building = new Building(players.at(player_id), next_id++, Point(TILE_PIXEL_RATE * 3, TILE_PIXEL_RATE * 3), point);
+    gameObjects.push_back(building);
+    map.update(EDIFICIOS, Point(3, 3), point);
+}
+
 std::vector<Picturable> GameControler::getStates() {
     std::vector<Picturable> states;
     for (GameObject* gameObject : gameObjects) {

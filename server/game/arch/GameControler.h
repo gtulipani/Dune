@@ -36,6 +36,8 @@ class GameControler {
 
     void createCosechadora(unsigned int player_id, const Point& point);
 
+    void createBuilding(unsigned int player_id, const Point& point);
+
     void updateGameObjects();
 };
 
