@@ -23,6 +23,14 @@ private:
     int screen_width_offset{};
 
     void buildButtons();
+
+    // This method is used to calculate the position for each one of the main buttons, which are one next to each other
+    Point buildMainButtonRelativePosition(int order);
+
+    // This method is used to calculate the position for each one of the building icons, which are one above each other
+    Point buildBuildingButtonRelativePosition(int order);
+
+    Point buildGlobalPosition(int order);
 public:
     explicit ButtonsController(SdlWindow *window);
 

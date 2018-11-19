@@ -1,8 +1,14 @@
 #include <algorithm>
 #include "ButtonsController.h"
 
-#define BUTTON_WIDTH 40
-#define BUTTON_HEIGHT 40
+#define MAIN_BUTTONS_Y_OFFSET 200
+#define MAIN_BUTTON_WIDTH 40
+#define MAIN_BUTTON_HEIGHT 40
+
+#define BUILDING_ICON_Y_OFFSET (MAIN_BUTTONS_Y_OFFSET + MAIN_BUTTON_HEIGHT)
+#define BUILDING_ICON_X_OFFSET 10
+#define BUILDING_ICON_WIDTH 90
+#define BUILDING_ICON_HEIGHT 90
 
 #define BUTTONS_RESOURCES_PATH std::string("resources/images/game/panel")
 
@@ -17,13 +23,29 @@ typedef enum PannelButton {
 ButtonsController::ButtonsController(SdlWindow *window) :
         window(window) {}
 
+Point ButtonsController::buildGlobalPosition(int order) {
+    return { this->screen_width_offset + (order * MAIN_BUTTON_WIDTH), MAIN_BUTTONS_Y_OFFSET };
+}
+
+Point ButtonsController::buildMainButtonRelativePosition(int order) {
+    return { MAIN_BUTTONS_Y_OFFSET, order * MAIN_BUTTON_WIDTH };
+}
+
+Point ButtonsController::buildBuildingButtonRelativePosition(int order) {
+    return { BUILDING_ICON_Y_OFFSET + (order * BUILDING_ICON_HEIGHT), 0 };
+}
+
 void ButtonsController::buildButtons() {
-    // Store units textures
-    buttons.emplace_back(REPAIR_BUTTON, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTONS_RESOURCES_PATH + "/repair_button.png", window);
-    buttons.emplace_back(SELL_BUTTON, BUTTON_WIDTH, BUTTON_HEIGHT, SdlTexture(BUTTONS_RESOURCES_PATH + "/sell_button.png", window));
-    buttons.emplace_back(STATUS_BUTTON, BUTTON_WIDTH, BUTTON_HEIGHT, SdlTexture(BUTTONS_RESOURCES_PATH + "/status_button.png", window));
-    buttons.emplace_back(GUARD_BUTTON, BUTTON_WIDTH, BUTTON_HEIGHT, SdlTexture(BUTTONS_RESOURCES_PATH + "/guard_button.png", window));
-    buttons.emplace_back(RETREAT_BUTTON, BUTTON_WIDTH, BUTTON_HEIGHT, SdlTexture(BUTTONS_RESOURCES_PATH + "/retreat_button.png", window));
+    // Store main buttons textures
+    buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(REPAIR_BUTTON) , BUTTONS_RESOURCES_PATH + "/repair_button.png", window);
+    buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(SELL_BUTTON), BUTTONS_RESOURCES_PATH + "/sell_button.png", window);
+    buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(STATUS_BUTTON), BUTTONS_RESOURCES_PATH + "/status_button.png", window);
+    buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(GUARD_BUTTON), BUTTONS_RESOURCES_PATH + "/guard_button.png", window);
+    buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(RETREAT_BUTTON), BUTTONS_RESOURCES_PATH + "/retreat_button.png", window);
+
+    // Initial light_factory and wind_trap buildings
+    buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, buildBuildingButtonRelativePosition(0), BUTTONS_RESOURCES_PATH + "/light_factory_icon.png", window);
+    buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, buildBuildingButtonRelativePosition(1), BUTTONS_RESOURCES_PATH + "/wind_trap_icon.png", window);
 }
 
 void ButtonsController::fill() {
@@ -59,6 +81,6 @@ void ButtonsController::render() {
 void ButtonsController::loadButtonsPanel() {
     // Render the buttons
     std::for_each(buttons.begin(), buttons.end(), [&](PanelButton &button) {
-        button.render(0, 200);
+        button.render(0, 0);
     });
 }
