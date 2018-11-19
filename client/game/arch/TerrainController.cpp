@@ -9,8 +9,9 @@
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
 
-TerrainController::TerrainController(SdlWindow *window) :
-    window(window) {}
+TerrainController::TerrainController(SdlWindow *window, float screen_rate) :
+    window(window),
+    screen_rate(screen_rate) {}
 
 void TerrainController::buildUnits() {
     // Store units textures

@@ -19,13 +19,14 @@ typedef enum Movement {
 
 class TerrainController {
 private:
+    SdlWindow* window;
+    float screen_rate;
+
     int width{};
     int height{};
     int rows_quantity{};
     int columns_quantity{};
-    SdlWindow* window;
     Matrix matrix{};
-
 
     SdlTexture terrain_texture{};
 
@@ -40,7 +41,7 @@ private:
     void buildUnits();
     void buildTerrains();
 public:
-    explicit TerrainController(SdlWindow *window);
+    TerrainController(SdlWindow *window, float screen_rate);
 
     void configure(Matrix matrix);
 

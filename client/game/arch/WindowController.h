@@ -1,5 +1,8 @@
-#ifndef __MAIN_WINDOW_H__
-#define __MAIN_WINDOW_H__
+#ifndef __WINDOW_CONTROLLER_H__
+#define __WINDOW_CONTROLLER_H__
+
+// STL Libraries
+#include <functional>
 
 // Commons Libraries
 #include <Matrix.h>
@@ -10,6 +13,9 @@
 #include "SdlPicturable.h"
 #include "TerrainController.h"
 #include "ButtonsController.h"
+
+class SDL_MouseButtonEvent;
+class EventsLooperThread;
 
 class WindowController {
 private:
@@ -35,10 +41,12 @@ public:
 
     void move(enum Movement movement);
 
+    void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
+
     void processPicturables(std::vector<Picturable> picturables);
 
     Point getRelativePoint(int row, int column);
 };
 
 
-#endif //__MAIN_WINDOW_H__
+#endif //__WINDOW_CONTROLLER_H__

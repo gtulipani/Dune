@@ -4,6 +4,7 @@
 #include <chrono>
 #include <iostream>
 #include <utility>
+#include <functional>
 
 // Commons Libraries
 #include <events/EventHandler.h>
@@ -31,17 +32,7 @@ void EventsLooperThread::processServerEvents() {
 
 void EventsLooperThread::processMouseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
-    switch (mouse_event.button) {
-        case SDL_BUTTON_LEFT: {
-            pushEvent(LEFT_CLICK_TYPE, window_controller.getRelativePoint(mouse_event.y, mouse_event.x));
-            break;
-        }
-        case SDL_BUTTON_RIGHT: {
-            pushEvent(RIGHT_CLICK_TYPE, window_controller.getRelativePoint(mouse_event.y, mouse_event.x));
-        }
-        default:
-            break;
-    }
+    window_controller.parseClick(mouse_event, this, &EventsLooperThread::pushEvent);
 }
 
 void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {

@@ -12,6 +12,7 @@ add_executable(client
         game/arch/EventsLooperThread.cpp
         game/arch/EventsReceptorThread.cpp
         game/arch/EventsSenderThread.cpp
+        game/arch/PanelButton.cpp
         game/arch/SdlPicturable.cpp
         game/arch/TerrainController.cpp
         game/arch/WindowController.cpp
