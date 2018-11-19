@@ -7,14 +7,15 @@
 // Client Libraries
 #include "../sdl/SdlTexture.h"
 
-#define SIZE 10
-
 class SdlPicturable {
 private:
     Picturable picturable;
     SdlTexture &sdlTexture;
+    int width;
+    int height;
+
 public:
-    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture);
+    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture, int width, int height);
 
     SdlPicturable(const SdlPicturable &other) = delete;
 

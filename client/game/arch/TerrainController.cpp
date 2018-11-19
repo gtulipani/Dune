@@ -2,29 +2,47 @@
 #include "SdlPicturable.h"
 
 // Commons Libraries
-#include <PicturableType.h>
 #include <TerrainType.h>
 #include <TileUtils.h>
+#include <Sprites.h>
+#include <events/ClientEvent.h>
+
+// SDL Libraries
+#include <SDL_events.h>
 
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
+
+#define DEFAULT_SIZE (3 * TILE_PIXEL_RATE)
 
 TerrainController::TerrainController(SdlWindow *window) :
     window(window) {}
 
 void TerrainController::buildUnits() {
-    // Store units textures
-    units.emplace(LIGHT_INFANTRY, SdlTexture(UNITS_RESOURCES_PATH + "/light_infantry.png", window));
+    // Store buildings textures
+    picturables_textures_map.emplace(CONSTRUCTION_CENTER, SdlTexture(UNITS_RESOURCES_PATH + "/construction_center.png", window));
+    picturables_textures_map.emplace(WIND_TRAPS, SdlTexture(UNITS_RESOURCES_PATH + "/wind_traps.png", window));
+    picturables_textures_map.emplace(REFINERY, SdlTexture(UNITS_RESOURCES_PATH + "/refinery.png", window));
+    //picturables_textures_map.emplace(ATREIDES_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/wind_traps.png", window));
+    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/harkunnan_barracks.png", window));
+    picturables_textures_map.emplace(ORDOS_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/ordos_barracks.png", window));
+    picturables_textures_map.emplace(LIGHT_FACTORY, SdlTexture(UNITS_RESOURCES_PATH + "/light_factory.png", window));
+    picturables_textures_map.emplace(HEAVY_FACTORY, SdlTexture(UNITS_RESOURCES_PATH + "/heavy_factory.png", window));
+    picturables_textures_map.emplace(SILO, SdlTexture(UNITS_RESOURCES_PATH + "/silo.png", window));
+    //picturables_textures_map.emplace(PALACE, SdlTexture(UNITS_RESOURCES_PATH + "/palace.png", window));
+
+    // Store units
+    picturables_textures_map.emplace(LIGHT_INFANTRY, SdlTexture(UNITS_RESOURCES_PATH + "/light_infantry.png", window));
 }
 
 void TerrainController::buildTerrains() {
     // Store terrain textures
-    terrains.emplace(ARENA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Arena.png", window));
-    terrains.emplace(CIMAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Cimas.png", window));
-    terrains.emplace(DUNAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Dunas.png", window));
-    terrains.emplace(ESPECIA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Especia.png", window));
-    terrains.emplace(PRECIPICIOS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Precipicio.png", window));
-    terrains.emplace(ROCA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Roca.png", window));
+    terrains_textures_map.emplace(ARENA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Arena.png", window));
+    terrains_textures_map.emplace(CIMAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Cimas.png", window));
+    terrains_textures_map.emplace(DUNAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Dunas.png", window));
+    terrains_textures_map.emplace(ESPECIA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Especia.png", window));
+    terrains_textures_map.emplace(PRECIPICIOS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Precipicio.png", window));
+    terrains_textures_map.emplace(ROCA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Roca.png", window));
 }
 
 void TerrainController::configure(Matrix matrix, int screen_width, int screen_height) {
@@ -71,15 +89,15 @@ void TerrainController::render() {
 
 void TerrainController::processPicturables(std::vector<Picturable> picturables) {
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
-        auto unit_it = units.find(picturable.type);
-        if (unit_it != units.end()) {
+        auto unit_it = picturables_textures_map.find(picturable.sprite);
+        if (unit_it != picturables_textures_map.end()) {
             auto picturable_it = std::find(this->picturables.begin(), this->picturables.end(), picturable);
             if (picturable_it != this->picturables.end()) {
                 // Replace existing one with the new one received from the GameStatusEvent
-                *picturable_it = SdlPicturable(picturable, unit_it->second);
+                *picturable_it = SdlPicturable(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
             } else {
                 // Create a new SdlPicturable
-                this->picturables.emplace_back(picturable, unit_it->second);
+                this->picturables.emplace_back(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
             }
         }
     });
@@ -87,6 +105,23 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
 
 Point TerrainController::getRelativePoint(int row, int column) {
     return {row - this->offset_y, column - this->offset_x};
+}
+
+void TerrainController::parseClick(SDL_MouseButtonEvent& mouse_event,
+                                   EventsLooperThread* processer,
+                                   std::function<void(EventsLooperThread*, std::string, Point)> push_function) {
+    switch (mouse_event.button) {
+        case SDL_BUTTON_LEFT: {
+            push_function(processer, LEFT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
+            break;
+        }
+        case SDL_BUTTON_RIGHT: {
+            push_function(processer, RIGHT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 bool TerrainController::move(enum Movement movement) {
@@ -129,8 +164,8 @@ void TerrainController::preloadTerrainMatrix() {
     for (int col = 0; col < this->terrain_width_tiles; col++) {
         for (int row = 0; row < this->terrain_height_tiles; row++) {
             Area destArea((TILE_PIXEL_RATE * col), (TILE_PIXEL_RATE * row), TILE_PIXEL_RATE, TILE_PIXEL_RATE);
-            auto it = terrains.find(matrix.at(row, col));
-            if (it != terrains.end()) {
+            auto it = terrains_textures_map.find(matrix.at(row, col));
+            if (it != terrains_textures_map.end()) {
                 it->second.render(srcArea, destArea);
             }
         }

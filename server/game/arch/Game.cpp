@@ -10,7 +10,6 @@
 #include <events/MapConfigurationEvent.h>
 #include <events/GameStatusEvent.h>
 #include <Picturable.h>
-#include <PicturableType.h>
 
 // Server Libraries
 #include "../json/JSONConversion.h"

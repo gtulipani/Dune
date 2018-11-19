@@ -11,9 +11,9 @@ add_library(commons
         Lock.cpp
         Matrix.cpp
         Picturable.cpp
-        PicturableType.h
         Point.cpp
         shaque.h
+        Sprites.h
         Socket.cpp
         SOException.cpp
         TerrainType.h

@@ -9421,7 +9421,7 @@ inline void grisu2_digit_gen(char* buffer, int& length, int& decimal_exponent,
 
     // 1 ulp in the decimal representation is now 10^-m.
     // Since delta and dist are now scaled by 10^m, we need to do the
-    // same with ulp in order to keep the units in sync.
+    // same with ulp in order to keep the picturables_textures_map in sync.
     //
     //      10^m * 10^-m = 1 = 2^-e * 2^e = ten_m * 2^e
     //

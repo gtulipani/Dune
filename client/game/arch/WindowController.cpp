@@ -1,11 +1,13 @@
+#include <utility>
+
 #include "WindowController.h"
 
 // Commons Libraries
 #include <TileUtils.h>
 #include <TerrainType.h>
-#include <PicturableType.h>
+
+// SDL Libraries
 #include <SDL_events.h>
-#include <events/ClientEvent.h>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
@@ -18,8 +20,6 @@
 
 #define SCREEN_TERRAIN_WIDTH int(SCREEN_WIDTH * SCREEN_TERRAIN_RATE)
 #define SCREEN_PANEL_WIDTH int(SCREEN_WIDTH * SCREEN_BUTTONS_RATE)
-
-
 
 WindowController::WindowController() :
     window(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
@@ -52,17 +52,10 @@ bool WindowController::move(enum Movement movement) {
 }
 
 void WindowController::parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function) {
-    switch (mouse_event.button) {
-        case SDL_BUTTON_LEFT: {
-            push_function(processer, LEFT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
-            break;
-        }
-        case SDL_BUTTON_RIGHT: {
-            push_function(processer, RIGHT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
-            break;
-        }
-        default:
-            break;
+    if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
+        terrain_controller.parseClick(mouse_event, processer, std::move(push_function));
+    } else {
+        buttons_controller.parseClick(mouse_event, processer, std::move(push_function));
     }
 }
 

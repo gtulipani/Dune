@@ -7,6 +7,9 @@
 #include "../sdl/SdlTexture.h"
 #include "SdlPicturable.h"
 
+class SDL_MouseButtonEvent;
+class EventsLooperThread;
+
 typedef enum Movement {
     UP,
     DOWN,
@@ -32,8 +35,8 @@ private:
 
     SdlTexture terrain_texture{};
 
-    std::map<char, SdlTexture> terrains{};
-    std::map<char, SdlTexture> units{};
+    std::map<char, SdlTexture> terrains_textures_map{};
+    std::map<char, SdlTexture> picturables_textures_map{};
 
     int offset_x{};
     int offset_y{};
@@ -54,6 +57,8 @@ public:
     void processPicturables(std::vector<Picturable> picturables);
 
     Point getRelativePoint(int row, int column);
+
+    void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
 
     bool move(enum Movement movement);
 };

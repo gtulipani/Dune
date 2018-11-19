@@ -1,7 +1,5 @@
 #include "GameObject.h"
 
-#include <PicturableType.h>
-
 GameObject::GameObject(Player& _player, int _id, const Point& _size, const Point& initialPosition) :
 player(_player), id(_id) {
     size = _size;

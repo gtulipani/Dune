@@ -69,7 +69,7 @@ SDL_Texture* SdlTexture::loadTexture(const std::string &filename) {
 }
 
 SDL_Texture* SdlTexture::createTexture(int width, int height) {
-    SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, width, height);
+    SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
     if (!texture) {
         throw SdlException("Error al crear la textura", SDL_GetError());
     }

@@ -39,7 +39,7 @@ class WalkingUnit : public GameObject {
 
     virtual void handleRightClick(Player& player, const Point& _pixelGoal) override;
 
-    static unsigned int maxspeed() { // Returns maxspeed for walking units.
+    static unsigned int maxspeed() { // Returns maxspeed for walking picturables_textures_map.
         return TICKS_PER_SECOND;
     }
 };
