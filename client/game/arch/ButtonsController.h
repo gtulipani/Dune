@@ -18,7 +18,12 @@ private:
 
     SdlTexture panel_texture{};
 
+    std::map<char, SdlTexture> buttons_textures_map{};
+
     std::vector<PanelButton> mandatory_buttons{};
+    std::vector<PanelButton> available_buttons{};
+
+
     std::vector<PanelButton> optional_buttons{};
 
     int screen_width{};
@@ -26,7 +31,9 @@ private:
 
     int screen_width_offset{};
 
-    void buildButtons();
+    void buildButtonsTextures();
+
+    void preloadButtons();
 
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
@@ -36,6 +43,13 @@ private:
 
     // This method is used to calculate the position for each one of the building icons, which are one above each other
     Point buildOptionalButtonRelativePosition(int order);
+
+    // Load the initial main buttons
+    void loadMainButtons();
+    // Load the initial buttons from the pannel
+    void loadButtonsPanel();
+    // Render only once the pannel with the main background images and the main buttons
+    void renderPanelTexture();
 public:
     explicit ButtonsController(SdlWindow *window);
 
@@ -44,8 +58,6 @@ public:
     void configure(int screen_width, int screen_height, int screen_width_offset);
 
     void render();
-
-    void loadButtonsPanel();
 
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
 };

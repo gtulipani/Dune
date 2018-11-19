@@ -13,7 +13,8 @@
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
 
-#define DEFAULT_SIZE (3 * TILE_PIXEL_RATE)
+#define DISPLAY_RATE (5 * TILE_PIXEL_RATE)
+#define DEFAULT_SIZE (3 * DISPLAY_RATE)
 
 TerrainController::TerrainController(SdlWindow *window) :
     window(window) {}
