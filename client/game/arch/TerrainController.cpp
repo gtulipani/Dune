@@ -11,29 +11,36 @@
 #include <SDL_events.h>
 
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
-#define UNITS_RESOURCES_PATH std::string("resources/images/game/units")
+#define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings")
+#define TRIKE_UNIT_SPRITES_RESOURCES_PATH std::string("resources/images/game/units/trike")
 
-#define DISPLAY_RATE (5 * TILE_PIXEL_RATE)
-#define DEFAULT_SIZE (3 * DISPLAY_RATE)
+#define DEFAULT_SIZE (3 * TILE_PIXEL_RATE)
 
 TerrainController::TerrainController(SdlWindow *window) :
     window(window) {}
 
 void TerrainController::buildUnits() {
     // Store buildings textures
-    picturables_textures_map.emplace(CONSTRUCTION_CENTER, SdlTexture(UNITS_RESOURCES_PATH + "/construction_center.png", window));
-    picturables_textures_map.emplace(WIND_TRAPS, SdlTexture(UNITS_RESOURCES_PATH + "/wind_traps.png", window));
-    picturables_textures_map.emplace(REFINERY, SdlTexture(UNITS_RESOURCES_PATH + "/refinery.png", window));
+    picturables_textures_map.emplace(CONSTRUCTION_CENTER, SdlTexture(BUILDINGS_RESOURCES_PATH + "/construction_center.png", window));
+    picturables_textures_map.emplace(WIND_TRAPS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/wind_traps.png", window));
+    picturables_textures_map.emplace(REFINERY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/refinery.png", window));
     //picturables_textures_map.emplace(ATREIDES_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/wind_traps.png", window));
-    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/harkunnan_barracks.png", window));
-    picturables_textures_map.emplace(ORDOS_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/ordos_barracks.png", window));
-    picturables_textures_map.emplace(LIGHT_FACTORY, SdlTexture(UNITS_RESOURCES_PATH + "/light_factory.png", window));
-    picturables_textures_map.emplace(HEAVY_FACTORY, SdlTexture(UNITS_RESOURCES_PATH + "/heavy_factory.png", window));
-    picturables_textures_map.emplace(SILO, SdlTexture(UNITS_RESOURCES_PATH + "/silo.png", window));
+    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/harkunnan_barracks.png", window));
+    picturables_textures_map.emplace(ORDOS_BARRACKS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/ordos_barracks.png", window));
+    picturables_textures_map.emplace(LIGHT_FACTORY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/light_factory.png", window));
+    picturables_textures_map.emplace(HEAVY_FACTORY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/heavy_factory.png", window));
+    picturables_textures_map.emplace(SILO, SdlTexture(BUILDINGS_RESOURCES_PATH + "/silo.png", window));
     //picturables_textures_map.emplace(PALACE, SdlTexture(UNITS_RESOURCES_PATH + "/palace.png", window));
 
-    // Store units
-    picturables_textures_map.emplace(LIGHT_INFANTRY, SdlTexture(UNITS_RESOURCES_PATH + "/light_infantry.png", window));
+    // Store Trike unit sprites
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_00.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_01.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_02.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_03.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_04.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_05.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_06.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_07.png", window));
 }
 
 void TerrainController::buildTerrains() {

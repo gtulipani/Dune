@@ -14,8 +14,18 @@ typedef enum Sprites {
     SILO = 8,
     PALACE = 9,
 
-    // Units sprites
-    LIGHT_INFANTRY = 10
+    // Trike unit sprites
+    TRIKE_SPRITE_UP = 10,
+    TRIKE_SPRITE_UP_RIGHT = 11,
+    TRIKE_SPRITE_RIGHT = 12,
+    TRIKE_SPRITE_RIGHT_DOWN = 13,
+    TRIKE_SPRITE_DOWN = 14,
+    TRIKE_SPRITE_DOWN_LEFT = 15,
+    TRIKE_SPRITE_LEFT = 16,
+    TRIKE_SPRITE_LEFT_UP = 17,
+
+    // Light infantry sprites (TBD)
+    LIGHT_INFANTRY_UP = 18
 } Sprites;
 
 #endif //__SPRITES_H__
