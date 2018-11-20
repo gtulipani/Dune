@@ -35,8 +35,8 @@ private:
 
     SdlTexture terrain_texture{};
 
-    std::map<char, SdlTexture> terrains_textures_map{};
-    std::map<char, SdlTexture> picturables_textures_map{};
+    std::map<int, SdlTexture> terrains_textures_map{};
+    std::map<int, SdlTexture> picturables_textures_map{};
 
     int offset_x{};
     int offset_y{};

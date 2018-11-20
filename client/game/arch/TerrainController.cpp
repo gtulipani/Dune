@@ -9,6 +9,7 @@
 
 // SDL Libraries
 #include <SDL_events.h>
+#include <iostream>
 
 #define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
 #define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings")
@@ -102,7 +103,8 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
             auto picturable_it = std::find(this->picturables.begin(), this->picturables.end(), picturable);
             if (picturable_it != this->picturables.end()) {
                 // Replace existing one with the new one received from the GameStatusEvent
-                *picturable_it = SdlPicturable(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
+                this->picturables.erase(picturable_it);
+                this->picturables.emplace_back(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
             } else {
                 // Create a new SdlPicturable
                 this->picturables.emplace_back(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
