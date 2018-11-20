@@ -29,9 +29,27 @@ bool SdlPicturable::operator==(const Picturable& other) const {
     return other.id == this->picturable.id;
 }
 
-void SdlPicturable::render(int offset_x, int offset_y) {
-    // Still missing some work. Probably should migrate the movement to a different class called Camera or something similar
-    Area srcArea(0, 0, PICTURABLE_WIDTH, PICTURABLE_HEIGHT);
-    Area destArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, this->picturable.size.col, this->picturable.size.row);
+void SdlPicturable::render(int offset_x, int offset_y, int limit_column, int limit_row) {
+    int originWidth = PICTURABLE_WIDTH;
+    int originHeight = PICTURABLE_HEIGHT;
+    int destinyWidth = this->picturable.size.col;
+    int destinyHeight = this->picturable.size.row;
+
+    if ((offset_x + picturable.position.col) >= limit_column) {
+        // Outside the limits, don't render anything
+        return;
+    } else if ((offset_x + picturable.position.col + this->picturable.size.col) >= limit_column) {
+        // A portion of the image is displayed and the other part isn't
+        destinyWidth = (limit_column - offset_x - picturable.position.col);
+
+        // We calculate how much of the image will be displayed
+        float displayRate = (static_cast<float>(destinyWidth)/this->picturable.size.col);
+
+        // We identify how much of the original image we must render
+        originWidth = static_cast<int>(displayRate * picturable.size.col);
+    }
+
+    Area srcArea(0, 0, originWidth, originHeight);
+    Area destArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
     sdlTexture.render(srcArea, destArea);
 }

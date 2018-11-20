@@ -88,7 +88,7 @@ void TerrainController::render() {
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable &sdlPicturable) {
-        sdlPicturable.render(this->offset_x, this->offset_y);
+        sdlPicturable.render(this->offset_x, this->offset_y, this->screen_width, this->screen_height);
     });
 
     this->window->render();
