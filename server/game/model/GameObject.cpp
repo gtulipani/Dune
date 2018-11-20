@@ -8,7 +8,7 @@ player(_player), id(_id) {
 
 Picturable GameObject::getState() {
     haveIChanged = false;
-    return {id, sprite, selected, pixelPosition, health};
+    return {id, sprite, selected, pixelPosition, size, health};
 }
 
 bool GameObject::tryToSelect(const Point& clickPosition) {

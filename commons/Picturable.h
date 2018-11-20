@@ -10,11 +10,12 @@ public:
     int sprite{};
     bool selected{};
     Point position;
+    Point size;
     int health{};
 
     Picturable() = default;
 
-    Picturable(int id, int sprite, bool selected, Point position, int health);
+    Picturable(int id, int sprite, bool selected, Point position, Point size, int health);
 
     Picturable(const Picturable &other);
 

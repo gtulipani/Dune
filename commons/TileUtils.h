@@ -3,7 +3,7 @@
 
 #include "Point.h"
 
-#define TILE_PIXEL_RATE 10
+#define TILE_PIXEL_RATE 32
 
 namespace tile_utils {
     Point getTileFromPixel(const Point& pixel);
