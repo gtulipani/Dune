@@ -3,7 +3,7 @@
 Building::Building(Player& player, int _id, const Point& _size) :
 GameObject(player, _id, _size, Point(0, 0)) {
     this->health = 0;
-    this->type = 1;
+    this->sprite = CONSTRUCTION_CENTER;
 }
 
 void Building::tick() {

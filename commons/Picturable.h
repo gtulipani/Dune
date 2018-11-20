@@ -7,7 +7,6 @@
 struct Picturable {
 public:
     int id{};
-    int type{};
     int sprite{};
     bool selected{};
     Point position;
@@ -15,7 +14,7 @@ public:
 
     Picturable() = default;
 
-    Picturable(int id, int type, int sprite, bool selected, Point position, int health);
+    Picturable(int id, int sprite, bool selected, Point position, int health);
 
     Picturable(const Picturable &other);
 

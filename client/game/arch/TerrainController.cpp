@@ -164,6 +164,7 @@ bool TerrainController::move(enum Movement movement) {
         }
 
     }
+    return false; // For g++ warning
 }
 
 void TerrainController::preloadTerrainMatrix() {

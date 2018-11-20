@@ -3,6 +3,7 @@
 
 #include <string>
 #include <Picturable.h>
+#include <Sprites.h>
 
 class Player;
 
@@ -12,8 +13,7 @@ class GameObject {
     const int id;
     Point size;
     Point pixelPosition;
-    int type = 0;
-    int motion = 0;
+    Sprites sprite = CONSTRUCTION_CENTER;
     bool haveIChanged = true;
     int health = 500;
     bool selected = false;

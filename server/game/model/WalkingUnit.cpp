@@ -9,6 +9,7 @@ WalkingUnit::WalkingUnit(Player& player, int id, const Point& size, const Point&
 Map& _map, unsigned int movespeed) :
 GameObject(player, id, size, initialPosition), map(_map) {
     ticksPerStep = TO_TICKS(movespeed);
+    sprite = TRIKE_SPRITE_RIGHT;
     counter = 0;
     tilePosition = tile_utils::getTileFromPixel(initialPosition);
 }
@@ -17,14 +18,35 @@ void WalkingUnit::tick() {
     checkMovespeed();
 }
 
-#define MAX_MOTION 5
-
 void WalkingUnit::checkMovespeed() {
     if (GameObject::checkCounter(counter, ticksPerStep)) {
         Point prev_pos = this->pixelPosition;
         step();
         if (prev_pos != this->pixelPosition) {
-            motion = motion >= MAX_MOTION ? 0 : motion + 1;
+            if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col > prev_pos.col) {
+                sprite = TRIKE_SPRITE_RIGHT_DOWN;
+            }
+            if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col == prev_pos.col) {
+                sprite = TRIKE_SPRITE_DOWN;
+            }
+            if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col < prev_pos.col) {
+                sprite = TRIKE_SPRITE_DOWN_LEFT;
+            }
+            if (this->pixelPosition.row == prev_pos.row && this->pixelPosition.col < prev_pos.col) {
+                sprite = TRIKE_SPRITE_LEFT;
+            }
+            if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col < prev_pos.col) {
+                sprite = TRIKE_SPRITE_LEFT_UP;
+            }
+            if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col == prev_pos.col) {
+                sprite = TRIKE_SPRITE_UP;
+            }
+            if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col > prev_pos.col) {
+                sprite = TRIKE_SPRITE_UP_RIGHT;
+            }
+            if (this->pixelPosition.row == prev_pos.row && this->pixelPosition.col > prev_pos.col) {
+                sprite = TRIKE_SPRITE_RIGHT;
+            }
             haveIChanged = true;
         }
     }
