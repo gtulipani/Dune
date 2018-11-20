@@ -15,8 +15,6 @@
 #define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings")
 #define TRIKE_UNIT_SPRITES_RESOURCES_PATH std::string("resources/images/game/units/trike")
 
-#define DEFAULT_SIZE (3 * TILE_PIXEL_RATE)
-
 TerrainController::TerrainController(SdlWindow *window) :
     window(window) {}
 
@@ -104,10 +102,10 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
             if (picturable_it != this->picturables.end()) {
                 // Replace existing one with the new one received from the GameStatusEvent
                 this->picturables.erase(picturable_it);
-                this->picturables.emplace_back(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
+                this->picturables.emplace_back(picturable, unit_it->second);
             } else {
                 // Create a new SdlPicturable
-                this->picturables.emplace_back(picturable, unit_it->second, DEFAULT_SIZE, DEFAULT_SIZE);
+                this->picturables.emplace_back(picturable, unit_it->second);
             }
         }
     });

@@ -11,11 +11,9 @@ class SdlPicturable {
 private:
     Picturable picturable;
     SdlTexture &sdlTexture;
-    int width;
-    int height;
 
 public:
-    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture, int width, int height);
+    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture);
 
     SdlPicturable(const SdlPicturable &other) = delete;
 
