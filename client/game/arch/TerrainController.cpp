@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "TerrainController.h"
 #include "SdlPicturable.h"
 
@@ -11,45 +13,63 @@
 #include <SDL_events.h>
 #include <iostream>
 
-#define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain")
-#define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings")
-#define TRIKE_UNIT_SPRITES_RESOURCES_PATH std::string("resources/images/game/units/trike")
+#define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings/")
+#define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain/")
+#define UNITS_RESOURCES_PATH std::string("resources/images/game/units/")
+
+#define TRIKE_RESOURCES_SUBPATH std::string("trike/")
 
 TerrainController::TerrainController(SdlWindow *window) :
     window(window) {}
 
+SdlTexture *TerrainController::createBuildingTexture(std::string file_path) {
+    return new SdlTexture(BUILDINGS_RESOURCES_PATH + file_path, this->window);
+}
+
+SdlTexture *TerrainController::createTerrainTexture(std::string file_path) {
+    return new SdlTexture(TERRAIN_RESOURCES_PATH + file_path, this->window);
+}
+
+SdlTexture *TerrainController::createUnitTexture(std::string unit_type_subpath, std::string file_path) {
+    return new SdlTexture(UNITS_RESOURCES_PATH + unit_type_subpath + file_path, this->window);
+}
+
+SdlTexture *TerrainController::createTrikeUnitTexture(std::string file_path) {
+    return this->createUnitTexture(TRIKE_RESOURCES_SUBPATH, std::move(file_path));
+}
+
 void TerrainController::buildUnits() {
     // Store buildings textures
-    picturables_textures_map.emplace(CONSTRUCTION_CENTER, SdlTexture(BUILDINGS_RESOURCES_PATH + "/construction_center.png", window));
-    picturables_textures_map.emplace(WIND_TRAPS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/wind_traps.png", window));
-    picturables_textures_map.emplace(REFINERY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/refinery.png", window));
-    //picturables_textures_map.emplace(ATREIDES_BARRACKS, SdlTexture(UNITS_RESOURCES_PATH + "/wind_traps.png", window));
-    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/harkunnan_barracks.png", window));
-    picturables_textures_map.emplace(ORDOS_BARRACKS, SdlTexture(BUILDINGS_RESOURCES_PATH + "/ordos_barracks.png", window));
-    picturables_textures_map.emplace(LIGHT_FACTORY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/light_factory.png", window));
-    picturables_textures_map.emplace(HEAVY_FACTORY, SdlTexture(BUILDINGS_RESOURCES_PATH + "/heavy_factory.png", window));
-    picturables_textures_map.emplace(SILO, SdlTexture(BUILDINGS_RESOURCES_PATH + "/silo.png", window));
-    //picturables_textures_map.emplace(PALACE, SdlTexture(UNITS_RESOURCES_PATH + "/palace.png", window));
+    picturables_textures_map.emplace(CONSTRUCTION_CENTER, createBuildingTexture("construction_center.png"));
+    picturables_textures_map.emplace(WIND_TRAPS, createBuildingTexture("wind_traps.png"));
+    picturables_textures_map.emplace(REFINERY, createBuildingTexture("refinery.png"));
+    //picturables_textures_map.emplace(ATREIDES_BARRACKS, createBuildingTexture("wind_traps.png"));
+    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, createBuildingTexture("harkunnan_barracks.png"));
+    picturables_textures_map.emplace(ORDOS_BARRACKS, createBuildingTexture("ordos_barracks.png"));
+    picturables_textures_map.emplace(LIGHT_FACTORY, createBuildingTexture("light_factory.png"));
+    picturables_textures_map.emplace(HEAVY_FACTORY, createBuildingTexture("heavy_factory.png"));
+    picturables_textures_map.emplace(SILO, createBuildingTexture("silo.png"));
+    //picturables_textures_map.emplace(PALACE, createBuildingTexture("/palace.png"));
 
     // Store Trike unit sprites
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_00.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_01.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_02.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_03.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_04.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_05.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_06.png", window));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, SdlTexture(TRIKE_UNIT_SPRITES_RESOURCES_PATH + "/sprite_07.png", window));
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP, createTrikeUnitTexture("sprite_00.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, createTrikeUnitTexture("sprite_01.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, createTrikeUnitTexture("sprite_02.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, createTrikeUnitTexture("sprite_03.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, createTrikeUnitTexture("sprite_04.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, createTrikeUnitTexture("sprite_05.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, createTrikeUnitTexture("sprite_06.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, createTrikeUnitTexture("sprite_07.png"));
 }
 
 void TerrainController::buildTerrains() {
     // Store terrain textures
-    terrains_textures_map.emplace(ARENA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Arena.png", window));
-    terrains_textures_map.emplace(CIMAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Cimas.png", window));
-    terrains_textures_map.emplace(DUNAS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Dunas.png", window));
-    terrains_textures_map.emplace(ESPECIA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Especia.png", window));
-    terrains_textures_map.emplace(PRECIPICIOS, SdlTexture(TERRAIN_RESOURCES_PATH + "/Precipicio.png", window));
-    terrains_textures_map.emplace(ROCA, SdlTexture(TERRAIN_RESOURCES_PATH + "/Roca.png", window));
+    terrains_textures_map.emplace(ARENA, createTerrainTexture("Arena.png"));
+    terrains_textures_map.emplace(CIMAS, createTerrainTexture("Cimas.png"));
+    terrains_textures_map.emplace(DUNAS, createTerrainTexture("Dunas.png"));
+    terrains_textures_map.emplace(ESPECIA, createTerrainTexture("Especia.png"));
+    terrains_textures_map.emplace(PRECIPICIOS, createTerrainTexture("Precipicio.png"));
+    terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
 }
 
 void TerrainController::configure(Matrix matrix, int screen_width, int screen_height) {
@@ -67,8 +87,8 @@ void TerrainController::configure(Matrix matrix, int screen_width, int screen_he
     buildTerrains();
     buildUnits();
 
-    this->terrain_texture = SdlTexture(this->terrain_width, this->terrain_height, this->window->getRenderer());
-    this->terrain_texture.setAsTarget();
+    this->terrain_texture = new SdlTexture(this->terrain_width, this->terrain_height, this->window->getRenderer());
+    this->terrain_texture->setAsTarget();
 
     preloadTerrainMatrix();
 
@@ -84,11 +104,11 @@ void TerrainController::render() {
     Area srcArea(0 - offset_x, 0 - offset_y, this->screen_width, this->screen_height);
     Area destArea(0, 0, this->screen_width, this->screen_height);
 
-    this->terrain_texture.render(srcArea, destArea);
+    this->terrain_texture->render(srcArea, destArea);
 
     // Render the SdlPicturables
-    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable &sdlPicturable) {
-        sdlPicturable.render(this->offset_x, this->offset_y, this->screen_width, this->screen_height);
+    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
+        sdlPicturable->render(this->offset_x, this->offset_y, this->screen_width, this->screen_height);
     });
 
     this->window->render();
@@ -98,14 +118,15 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
         auto unit_it = picturables_textures_map.find(picturable.sprite);
         if (unit_it != picturables_textures_map.end()) {
-            auto picturable_it = std::find(this->picturables.begin(), this->picturables.end(), picturable);
+            auto picturable_it = std::find_if(this->picturables.begin(), this->picturables.end(), [&](SdlPicturable *sdlPicturable){
+                return ((*sdlPicturable) == picturable);
+            });
             if (picturable_it != this->picturables.end()) {
                 // Replace existing one with the new one received from the GameStatusEvent
-                this->picturables.erase(picturable_it);
-                this->picturables.emplace_back(picturable, unit_it->second);
+                (*picturable_it)->update(picturable, unit_it->second);
             } else {
                 // Create a new SdlPicturable
-                this->picturables.emplace_back(picturable, unit_it->second);
+                this->picturables.push_back(new SdlPicturable(picturable, unit_it->second));
             }
         }
     });
@@ -162,9 +183,11 @@ bool TerrainController::move(enum Movement movement) {
             }
             return false;
         }
+        default: {
+            return false;
+        }
 
     }
-    return false; // For g++ warning
 }
 
 void TerrainController::preloadTerrainMatrix() {
@@ -175,7 +198,7 @@ void TerrainController::preloadTerrainMatrix() {
             Area destArea((TILE_PIXEL_RATE * col), (TILE_PIXEL_RATE * row), TILE_PIXEL_RATE, TILE_PIXEL_RATE);
             auto it = terrains_textures_map.find(matrix.at(row, col));
             if (it != terrains_textures_map.end()) {
-                it->second.render(srcArea, destArea);
+                it->second->render(srcArea, destArea);
             }
         }
     }

@@ -33,14 +33,20 @@ private:
 
     Matrix matrix{};
 
-    SdlTexture terrain_texture{};
+    SdlTexture *terrain_texture;
 
-    std::map<int, SdlTexture> terrains_textures_map{};
-    std::map<int, SdlTexture> picturables_textures_map{};
+    std::map<int, SdlTexture*> terrains_textures_map;
+    std::map<int, SdlTexture*> picturables_textures_map;
 
     int offset_x{};
     int offset_y{};
-    std::vector<SdlPicturable> picturables{};
+    std::vector<SdlPicturable*> picturables;
+
+    SdlTexture *createBuildingTexture(std::string file_path);
+    SdlTexture *createTerrainTexture(std::string file_path);
+    SdlTexture *createUnitTexture(std::string unit_type_subpath, std::string file_path);
+
+    SdlTexture *createTrikeUnitTexture(std::string file_path);
 
     void preloadTerrainMatrix();
     void buildUnits();
@@ -61,6 +67,8 @@ public:
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
 
     bool move(enum Movement movement);
+
+    ~TerrainController() {}
 };
 
 

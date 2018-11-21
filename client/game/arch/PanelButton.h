@@ -13,10 +13,10 @@ private:
     int height;
     Point screen_position;
     std::string action;
-    SdlTexture texture;
+    SdlTexture *texture;
 
 public:
-    PanelButton(int width, int height, Point screen_position, std::string action, SdlTexture texture);
+    PanelButton(int width, int height, Point screen_position, std::string action, SdlTexture *texture);
 
     PanelButton(int width, int height, Point screen_position, std::string action, std::string image_path, SdlWindow* window);
 

@@ -10,10 +10,10 @@
 class SdlPicturable {
 private:
     Picturable picturable;
-    SdlTexture &sdlTexture;
+    SdlTexture *sdlTexture;
 
 public:
-    SdlPicturable(Picturable picturable, SdlTexture &sdlTexture);
+    SdlPicturable(Picturable picturable, SdlTexture *sdlTexture);
 
     SdlPicturable(const SdlPicturable &other) = delete;
 
@@ -29,6 +29,8 @@ public:
 
     // Renders itself if it's under the limits
     void render(int offset_x, int offset_y, int width_limit, int height_limit);
+
+    void update(Picturable picturable, SdlTexture *sdlTexture);
 };
 
 

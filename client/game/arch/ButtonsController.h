@@ -16,9 +16,9 @@ class ButtonsController {
 private:
     SdlWindow *window;
 
-    SdlTexture panel_texture{};
+    SdlTexture *panel_texture{};
 
-    std::map<char, SdlTexture> buttons_textures_map{};
+    std::map<char, SdlTexture*> buttons_textures_map{};
 
     std::vector<PanelButton> mandatory_buttons{};
     std::vector<PanelButton> available_buttons{};
@@ -31,9 +31,9 @@ private:
 
     int screen_width_offset{};
 
-    void buildButtonsTextures();
+    SdlTexture *createButtonTexture(std::string file_path);
 
-    void preloadButtons();
+    void buildButtons();
 
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "SdlPicturable.h"
 
 #include "Area.h"
@@ -5,7 +6,7 @@
 #define PICTURABLE_WIDTH 80
 #define PICTURABLE_HEIGHT 80
 
-SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture &sdlTexture) :
+SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture *sdlTexture) :
     picturable(std::move(picturable)),
     sdlTexture(sdlTexture) {}
 
@@ -21,6 +22,8 @@ SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
     // Copy values
     this->picturable = std::move(other.picturable);
     this->sdlTexture = other.sdlTexture;
+
+    other.sdlTexture = nullptr;
 
     return *this;
 }
@@ -51,5 +54,10 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column, int lim
 
     Area srcArea(0, 0, originWidth, originHeight);
     Area destArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
-    sdlTexture.render(srcArea, destArea);
+    sdlTexture->render(srcArea, destArea);
+}
+
+void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
+    this->picturable = std::move(picturable);
+    this->sdlTexture = sdlTexture;
 }

@@ -21,13 +21,16 @@
 #define SCREEN_TERRAIN_WIDTH int(SCREEN_WIDTH * SCREEN_TERRAIN_RATE)
 #define SCREEN_PANEL_WIDTH int(SCREEN_WIDTH * SCREEN_BUTTONS_RATE)
 
-WindowController::WindowController() :
-    window(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
-    terrain_controller(&this->window),
-    buttons_controller(&this->window) {}
+WindowController::WindowController(SdlWindow* window) :
+    window(window),
+    terrain_controller(window),
+    buttons_controller(window) {}
+
+WindowController::WindowController() : WindowController(
+        new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
 
 void WindowController::configure(Matrix matrix) {
-    this->window.fill();
+    this->window->fill();
 
     this->terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT);
     this->buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_HEIGHT, SCREEN_TERRAIN_WIDTH);

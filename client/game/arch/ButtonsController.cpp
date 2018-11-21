@@ -22,7 +22,7 @@
 
 #define BUILDING_ICONS_QUANTITY 4
 
-#define BUTTONS_RESOURCES_PATH std::string("resources/images/game/panel")
+#define BUTTONS_RESOURCES_PATH std::string("resources/images/game/panel/")
 
 typedef enum PannelButtons {
     REPAIR_BUTTON_ICON = 0,
@@ -69,35 +69,39 @@ Point ButtonsController::buildOptionalButtonRelativePosition(int order) {
     return { BUILDING_ICON_Y_OFFSET + (order * BUILDING_ICON_HEIGHT), BUILDING_ICON_X_OFFSET };
 }
 
-void ButtonsController::buildButtonsTextures() {
+SdlTexture *ButtonsController::createButtonTexture(std::string file_path) {
+    return new SdlTexture(BUTTONS_RESOURCES_PATH + file_path, this->window);
+}
+
+void ButtonsController::buildButtons() {
     // Store main buttons icons textures
-    buttons_textures_map.emplace(REPAIR_BUTTON_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/repair_button.png", window));
-    buttons_textures_map.emplace(SELL_BUTTON_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/sell_button.png", window));
-    buttons_textures_map.emplace(STATUS_BUTTON_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/status_button.png", window));
-    buttons_textures_map.emplace(GUARD_BUTTON_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/guard_button.png", window));
-    buttons_textures_map.emplace(RETREAT_BUTTON_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/retreat_button.png", window));
+    buttons_textures_map.emplace(REPAIR_BUTTON_ICON, createButtonTexture("repair_button.png"));
+    buttons_textures_map.emplace(SELL_BUTTON_ICON, createButtonTexture("sell_button.png"));
+    buttons_textures_map.emplace(STATUS_BUTTON_ICON, createButtonTexture("status_button.png"));
+    buttons_textures_map.emplace(GUARD_BUTTON_ICON, createButtonTexture("guard_button.png"));
+    buttons_textures_map.emplace(RETREAT_BUTTON_ICON, createButtonTexture("retreat_button.png"));
 
     // Store buildings icons textures
-    //buttons_textures_map.emplace(CONSTRUCTION_CENTER_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/construction_center_icon.png", window));
-    buttons_textures_map.emplace(WIND_TRAPS_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/wind_trap_icon.png", window));
-    buttons_textures_map.emplace(REFINERY_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/refinery_icon.png", window));
-    buttons_textures_map.emplace(ATREIDES_BARRACKS_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/atreides_barracks_icon.png", window));
-    buttons_textures_map.emplace(HARKONNEN_BARRACKS_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/harkonnen_barracks_icon.png", window));
-    buttons_textures_map.emplace(ORDOS_BARRACKS_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/ordos_barracks_icon.png", window));
-    buttons_textures_map.emplace(LIGHT_FACTORY_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/light_factory_icon.png", window));
-    buttons_textures_map.emplace(HEAVY_FACTORY_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/heavy_factory_icon.png", window));
-    buttons_textures_map.emplace(SILO_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/silo_icon.png", window));
-    buttons_textures_map.emplace(PALACE_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/palace_icon.png", window));
+    //buttons_textures_map.emplace(CONSTRUCTION_CENTER_ICON, createButtonTexture("construction_center_icon.png"));
+    buttons_textures_map.emplace(WIND_TRAPS_ICON, createButtonTexture("wind_trap_icon.png"));
+    buttons_textures_map.emplace(REFINERY_ICON, createButtonTexture("refinery_icon.png"));
+    buttons_textures_map.emplace(ATREIDES_BARRACKS_ICON, createButtonTexture("atreides_barracks_icon.png"));
+    buttons_textures_map.emplace(HARKONNEN_BARRACKS_ICON, createButtonTexture("harkonnen_barracks_icon.png"));
+    buttons_textures_map.emplace(ORDOS_BARRACKS_ICON, createButtonTexture("ordos_barracks_icon.png"));
+    buttons_textures_map.emplace(LIGHT_FACTORY_ICON, createButtonTexture("light_factory_icon.png"));
+    buttons_textures_map.emplace(HEAVY_FACTORY_ICON, createButtonTexture("heavy_factory_icon.png"));
+    buttons_textures_map.emplace(SILO_ICON, createButtonTexture("silo_icon.png"));
+    buttons_textures_map.emplace(PALACE_ICON, createButtonTexture("palace_icon.png"));
 
     // Store units icons textures
-    buttons_textures_map.emplace(LIGHT_INFANTRY_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/light_infantry_icon.png", window));
-    buttons_textures_map.emplace(HEAVY_INFANTRY_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/heavy_infantry_icon.png", window));
-    buttons_textures_map.emplace(TRIKE_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/trike_icon.png", window));
-    buttons_textures_map.emplace(RAIDER_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/raider_icon.png", window));
-    buttons_textures_map.emplace(ATREIDES_TANK_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/atreides_tank_icon.png", window));
-    buttons_textures_map.emplace(HARKONNEN_TANK_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/harkonnen_tank_icon.png", window));
-    buttons_textures_map.emplace(ORDOS_TANK_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/ordos_tank_icon.png", window));
-    buttons_textures_map.emplace(HARVESTER_ICON, SdlTexture(BUTTONS_RESOURCES_PATH + "/harvester_icon.png", window));
+    buttons_textures_map.emplace(LIGHT_INFANTRY_ICON, createButtonTexture("light_infantry_icon.png"));
+    buttons_textures_map.emplace(HEAVY_INFANTRY_ICON, createButtonTexture("heavy_infantry_icon.png"));
+    buttons_textures_map.emplace(TRIKE_ICON, createButtonTexture("trike_icon.png"));
+    buttons_textures_map.emplace(RAIDER_ICON, createButtonTexture("raider_icon.png"));
+    buttons_textures_map.emplace(ATREIDES_TANK_ICON, createButtonTexture("atreides_tank_icon.png"));
+    buttons_textures_map.emplace(HARKONNEN_TANK_ICON, createButtonTexture("harkonnen_tank_icon.png"));
+    buttons_textures_map.emplace(ORDOS_TANK_ICON, createButtonTexture("ordos_tank_icon.png"));
+    buttons_textures_map.emplace(HARVESTER_ICON, createButtonTexture("harvester_icon.png"));
 }
 
 void ButtonsController::loadMainButtons() {
@@ -145,10 +149,10 @@ void ButtonsController::configure(int screen_width, int screen_height, int scree
 
     this->screen_width_offset = screen_width_offset;
 
-    buildButtonsTextures();
+    buildButtons();
 
-    this->panel_texture = SdlTexture(screen_width, screen_height, this->window->getRenderer());
-    this->panel_texture.setAsTarget();
+    this->panel_texture = new SdlTexture(screen_width, screen_height, this->window->getRenderer());
+    this->panel_texture->setAsTarget();
 
     loadMainButtons();
     loadButtonsPanel();
@@ -162,7 +166,7 @@ void ButtonsController::render() {
     // Render the main texture containing the background image and the main buttons
     Area srcArea(0, 0, this->screen_width, this->screen_height);
     Area destArea(screen_width_offset, 0, this->screen_width, this->screen_height);
-    this->panel_texture.render(srcArea, destArea);
+    this->panel_texture->render(srcArea, destArea);
 
     // Render each one of the available buttons
     std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton &button) {

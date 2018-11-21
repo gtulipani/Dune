@@ -19,13 +19,15 @@ class EventsLooperThread;
 
 class WindowController {
 private:
-    SdlWindow window{};
+    SdlWindow* window;
     TerrainController terrain_controller;
     ButtonsController buttons_controller;
 
     // Shouldn't be used. It's moved to the terrain_controller
     Matrix matrix;
 public:
+    WindowController(SdlWindow* window);
+
     WindowController();
 
     WindowController(const WindowController &other) = delete;
@@ -48,6 +50,8 @@ public:
     void processPicturables(std::vector<Picturable> picturables);
 
     Point getRelativePoint(int row, int column);
+
+    ~WindowController() {}
 };
 
 
