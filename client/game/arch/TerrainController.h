@@ -20,6 +20,7 @@ typedef enum Movement {
 class TerrainController {
 private:
     SdlWindow* window;
+    ClientSpritesSupplier &client_sprites_supplier;
 
     int screen_width{};
     int screen_height{};
@@ -42,17 +43,15 @@ private:
     int offset_y{};
     std::vector<SdlPicturable*> picturables;
 
-    SdlTexture *createBuildingTexture(std::string file_path);
-    SdlTexture *createTerrainTexture(std::string file_path);
-    SdlTexture *createUnitTexture(std::string unit_type_subpath, std::string file_path);
-
-    SdlTexture *createTrikeUnitTexture(std::string file_path);
+    SdlTexture *createTexture(const std::string& subpath, const std::string& file_path);
+    SdlTexture *createPicturableTexture(const std::string& file_path);
+    SdlTexture *createTerrainTexture(const std::string& file_path);
 
     void preloadTerrainMatrix();
     void buildUnits();
     void buildTerrains();
 public:
-    explicit TerrainController(SdlWindow *window);
+    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
 
     void configure(Matrix matrix, int window_width, int window_height);
 

@@ -13,53 +13,49 @@
 #include <SDL_events.h>
 #include <iostream>
 
-#define BUILDINGS_RESOURCES_PATH std::string("resources/images/game/units/buildings/")
-#define TERRAIN_RESOURCES_PATH std::string("resources/images/game/terrain/")
-#define UNITS_RESOURCES_PATH std::string("resources/images/game/units/")
+#define COMMONS_RESOURCES_PATH std::string("resources/images/game/commons/")
 
-#define TRIKE_RESOURCES_SUBPATH std::string("trike/")
+#define PICTURABLES_RESOURCES_SUBPATH std::string("picturables/")
+#define TERRAIN_RESOURCES_SUBPATH std::string("terrain/")
 
-TerrainController::TerrainController(SdlWindow *window) :
-    window(window) {}
+TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier) :
+    window(window),
+    client_sprites_supplier(client_sprites_supplier) {}
 
-SdlTexture *TerrainController::createBuildingTexture(std::string file_path) {
-    return new SdlTexture(BUILDINGS_RESOURCES_PATH + file_path, this->window);
+SdlTexture *TerrainController::createTexture(const std::string& subpath, const std::string& file_path) {
+    return new SdlTexture(COMMONS_RESOURCES_PATH + subpath + file_path, this->window);
 }
 
-SdlTexture *TerrainController::createTerrainTexture(std::string file_path) {
-    return new SdlTexture(TERRAIN_RESOURCES_PATH + file_path, this->window);
+SdlTexture *TerrainController::createPicturableTexture(const std::string& file_path) {
+    return createTexture(PICTURABLES_RESOURCES_SUBPATH, file_path);
 }
 
-SdlTexture *TerrainController::createUnitTexture(std::string unit_type_subpath, std::string file_path) {
-    return new SdlTexture(UNITS_RESOURCES_PATH + unit_type_subpath + file_path, this->window);
-}
-
-SdlTexture *TerrainController::createTrikeUnitTexture(std::string file_path) {
-    return this->createUnitTexture(TRIKE_RESOURCES_SUBPATH, std::move(file_path));
+SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path) {
+    return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path);
 }
 
 void TerrainController::buildUnits() {
     // Store buildings textures
-    picturables_textures_map.emplace(CONSTRUCTION_CENTER, createBuildingTexture("construction_center.png"));
-    picturables_textures_map.emplace(WIND_TRAPS, createBuildingTexture("wind_traps.png"));
-    picturables_textures_map.emplace(REFINERY, createBuildingTexture("refinery.png"));
-    //picturables_textures_map.emplace(ATREIDES_BARRACKS, createBuildingTexture("wind_traps.png"));
-    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, createBuildingTexture("harkunnan_barracks.png"));
-    picturables_textures_map.emplace(ORDOS_BARRACKS, createBuildingTexture("ordos_barracks.png"));
-    picturables_textures_map.emplace(LIGHT_FACTORY, createBuildingTexture("light_factory.png"));
-    picturables_textures_map.emplace(HEAVY_FACTORY, createBuildingTexture("heavy_factory.png"));
-    picturables_textures_map.emplace(SILO, createBuildingTexture("silo.png"));
-    //picturables_textures_map.emplace(PALACE, createBuildingTexture("/palace.png"));
+    picturables_textures_map.emplace(CONSTRUCTION_CENTER, createPicturableTexture("construction_center.png"));
+    picturables_textures_map.emplace(WIND_TRAPS, createPicturableTexture("wind_traps.png"));
+    picturables_textures_map.emplace(REFINERY, createPicturableTexture("refinery.png"));
+    //picturables_textures_map.emplace(ATREIDES_BARRACKS, createPicturableTexture("wind_traps.png"));
+    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, createPicturableTexture("harkunnan_barracks.png"));
+    picturables_textures_map.emplace(ORDOS_BARRACKS, createPicturableTexture("ordos_barracks.png"));
+    picturables_textures_map.emplace(LIGHT_FACTORY, createPicturableTexture("light_factory.png"));
+    picturables_textures_map.emplace(HEAVY_FACTORY, createPicturableTexture("heavy_factory.png"));
+    picturables_textures_map.emplace(SILO, createPicturableTexture("silo.png"));
+    //picturables_textures_map.emplace(PALACE, createPicturableTexture("/palace.png"));
 
     // Store Trike unit sprites
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP, createTrikeUnitTexture("sprite_00.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, createTrikeUnitTexture("sprite_01.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, createTrikeUnitTexture("sprite_02.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, createTrikeUnitTexture("sprite_03.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, createTrikeUnitTexture("sprite_04.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, createTrikeUnitTexture("sprite_05.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, createTrikeUnitTexture("sprite_06.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, createTrikeUnitTexture("sprite_07.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP, createPicturableTexture("sprite_00.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, createPicturableTexture("sprite_01.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, createPicturableTexture("sprite_02.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, createPicturableTexture("sprite_03.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, createPicturableTexture("sprite_04.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, createPicturableTexture("sprite_05.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, createPicturableTexture("sprite_06.png"));
+    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, createPicturableTexture("sprite_07.png"));
 }
 
 void TerrainController::buildTerrains() {
@@ -108,7 +104,7 @@ void TerrainController::render() {
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
-        sdlPicturable->render(this->offset_x, this->offset_y, this->screen_width, this->screen_height);
+        sdlPicturable->render(this->offset_x, this->offset_y, this->screen_width);
     });
 
     this->window->render();
@@ -126,7 +122,7 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
                 (*picturable_it)->update(picturable, unit_it->second);
             } else {
                 // Create a new SdlPicturable
-                this->picturables.push_back(new SdlPicturable(picturable, unit_it->second));
+                this->picturables.push_back(new SdlPicturable(picturable, unit_it->second, this->client_sprites_supplier));
             }
         }
     });

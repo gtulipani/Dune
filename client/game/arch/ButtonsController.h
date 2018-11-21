@@ -8,6 +8,7 @@
 #include "../sdl/SdlWindow.h"
 #include "../sdl/SdlTexture.h"
 #include "PanelButton.h"
+#include "ClientSpritesSupplier.h"
 
 class SDL_MouseButtonEvent;
 class EventsLooperThread;
@@ -15,25 +16,17 @@ class EventsLooperThread;
 class ButtonsController {
 private:
     SdlWindow *window;
+    ClientSpritesSupplier &client_sprites_supplier;
 
     SdlTexture *panel_texture{};
 
-    std::map<char, SdlTexture*> buttons_textures_map{};
-
     std::vector<PanelButton> mandatory_buttons{};
     std::vector<PanelButton> available_buttons{};
-
-
-    std::vector<PanelButton> optional_buttons{};
 
     int screen_width{};
     int screen_height{};
 
     int screen_width_offset{};
-
-    SdlTexture *createButtonTexture(std::string file_path);
-
-    void buildButtons();
 
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
@@ -51,7 +44,7 @@ private:
     // Render only once the pannel with the main background images and the main buttons
     void renderPanelTexture();
 public:
-    explicit ButtonsController(SdlWindow *window);
+    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
 
     void fill();
 

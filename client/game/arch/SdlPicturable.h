@@ -6,14 +6,18 @@
 
 // Client Libraries
 #include "../sdl/SdlTexture.h"
+#include "ClientSpritesSupplier.h"
 
 class SdlPicturable {
 private:
     Picturable picturable;
-    SdlTexture *sdlTexture;
+    SdlTexture *main_texture;
+    ClientSpritesSupplier &sprites_supplier;
 
+    // Recalculates the width to render from the image, based on a rate between the original width and the destiny
+    int recalculateWidth(int destinyWidth, int originalWidth);
 public:
-    SdlPicturable(Picturable picturable, SdlTexture *sdlTexture);
+    SdlPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier);
 
     SdlPicturable(const SdlPicturable &other) = delete;
 
@@ -28,7 +32,7 @@ public:
     bool operator==(const Picturable& other) const;
 
     // Renders itself if it's under the limits
-    void render(int offset_x, int offset_y, int width_limit, int height_limit);
+    void render(int offset_x, int offset_y, int width_limit);
 
     void update(Picturable picturable, SdlTexture *sdlTexture);
 };

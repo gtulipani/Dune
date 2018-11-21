@@ -14,6 +14,7 @@ add_executable(client
         game/arch/EventsSenderThread.cpp
         game/arch/PanelButton.cpp
         game/arch/SdlPicturable.cpp
+        game/arch/ClientSpritesSupplier.cpp
         game/arch/TerrainController.cpp
         game/arch/WindowController.cpp
         game/sdl/SdlException.cpp

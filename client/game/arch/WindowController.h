@@ -20,6 +20,7 @@ class EventsLooperThread;
 class WindowController {
 private:
     SdlWindow* window;
+    ClientSpritesSupplier client_sprites_supplier;
     TerrainController terrain_controller;
     ButtonsController buttons_controller;
 

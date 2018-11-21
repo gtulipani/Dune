@@ -23,8 +23,9 @@
 
 WindowController::WindowController(SdlWindow* window) :
     window(window),
-    terrain_controller(window),
-    buttons_controller(window) {}
+    client_sprites_supplier(window),
+    terrain_controller(window, client_sprites_supplier),
+    buttons_controller(window, client_sprites_supplier) {}
 
 WindowController::WindowController() : WindowController(
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
