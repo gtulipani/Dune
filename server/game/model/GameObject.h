@@ -4,6 +4,7 @@
 #include <string>
 #include <Picturable.h>
 #include <Sprites.h>
+#include <Point.h>
 
 class Player;
 
@@ -11,13 +12,10 @@ class GameObject {
     protected:
     Player& player;
     const int id;
-    Point size;
-    Point pixelPosition;
-    Sprites sprite = CONSTRUCTION_CENTER;
+    Sprites sprite;
     bool haveIChanged = true;
-    int health = 500;
-    bool selected = false;
 
+    public:
     static bool checkCounter(unsigned int& counter, unsigned int max) {
         if (counter == 0) {
             return true;
@@ -26,22 +24,15 @@ class GameObject {
         return false;
     }
 
-    public:
-    GameObject(Player& _player, int _id, const Point& _size, const Point& initialPosition);
+    GameObject(Player& player, int id, Sprites sprite);
 
     virtual void tick() = 0;
 
-    virtual void handleRightClick(Player& player, const Point& pos) = 0;
-
-    bool tryToSelect(const Point& clickPosition);
-
-    void unselect();
-
     bool haveYouChanged() const;
 
-    virtual Picturable getState();
+    virtual Picturable getState() const;
 
-    bool isDead() const;
+    void reset();
 
     virtual ~GameObject() = default;
 };

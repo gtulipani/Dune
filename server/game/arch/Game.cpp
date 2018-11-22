@@ -37,18 +37,16 @@ void Game::start() {
     std::cout << "Running..." << std::endl;
 
     sendGameConfigurationEvent();
-    //sendIDsEvent();
 
     gameControler.initialize(clients.size());
     updateClients();
-
-    //test_events();
 
     while (is_on) {
         collectEvents();
         updateModel();
         gameControler.tick();
         updateClients();
+        gameControler.updateGameObjects();
         std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
     }
 }
@@ -63,14 +61,14 @@ void Game::updateModel() {
             gameControler.leftClick(event.player_id, event.release_position);
         } else if (event.type == RIGHT_CLICK_TYPE) {
             gameControler.rightClick(event.player_id, event.release_position);
-        } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            gameControler.createWalkingUnit(event.player_id, event.click_position);
-        } else if (event.type == CREATE_COSECHADORA_TYPE) {
-            gameControler.createCosechadora(event.player_id, event.click_position);
-        } else if (event.type == CREATE_BUILDING_TYPE) {
-            gameControler.createBuilding(event.player_id);
+        } else if (event.type == CREATE_TRIKE_TYPE) {
+            gameControler.createTrike(event.player_id);
+        } else if (event.type == CREATE_BUILDING_LIGHT_FACTORY) {
+            gameControler.createBuilding(event.player_id, LIGHT_FACTORY);
+        } else if (event.type == CREATE_BUILDING_WIND_TRAPS) {
+            gameControler.createBuilding(event.player_id, WIND_TRAPS);
         } else if (event.type == LOCATE_BUILDING_TYPE) {
-            gameControler.putBuildingAt(event.player_id, event.click_position);
+            gameControler.locateBuildingAt(event.player_id, event.release_position);
         }
     }
 }
@@ -90,8 +88,4 @@ void Game::updateClients() {
 
 void Game::stop() {
     is_on = false;
-}
-
-void Game::test_events() {
-    
 }

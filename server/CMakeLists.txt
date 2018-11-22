@@ -14,10 +14,14 @@ add_executable(server
         game/arch/ServerThread.cpp
         game/arch/GameControler.cpp
         game/model/GameObject.cpp
+        game/model/AliveGameObject.cpp
+        game/model/SelectableGameObject.cpp
+        game/model/InProgressGameObject.cpp
         game/model/WalkingUnit.cpp
         game/model/Building.cpp
         game/model/Cosechadora.cpp
         game/model/Especia.cpp
+        game/model/Player.cpp
         game/model/Map.cpp)
 
 target_link_libraries(server commons)

@@ -1,30 +1,39 @@
 #include "Especia.h"
 
-#include "TileUtils.h"
+#include <TileUtils.h>
 
-Especia::Especia(Player& player, int id, const Point& initialPosition) :
-GameObject(player, id, Point(TILE_PIXEL_RATE, TILE_PIXEL_RATE), initialPosition) {
-    health = INITIAL_ESPECIA;
-}
+#include "GameObject.h"
+
+#define ESPECIA_INITIAL_HEALTH 1000
+
+Especia::Especia(int id, const Point& tilePosition) :
+Picturable(-1, id, 0, false, tile_utils::getTileTopLeft(tilePosition),
+            {TILE_PIXEL_RATE, TILE_PIXEL_RATE}, ESPECIA_INITIAL_HEALTH,
+            ESPECIA_INITIAL_HEALTH, 100) {}
 
 Point Especia::getPosition() const {
     using namespace tile_utils;
-    return getTileCenter(getTileFromPixel(pixelPosition));
+    return getTileTopLeft(getTileFromPixel(position));
 }
 
-void Especia::tick() {}
-
-void Especia::handleRightClick(Player& player, const Point& p) {}
-
-bool Especia::hasEspeciaLeft() const {
-    return !isDead();
+bool Especia::haveYouChanged() const {
+    return haveIChanged;
 }
 
-const unsigned int TICKS_PER_UNIT_COLLECTED = 20;
+bool Especia::runOut() const {
+    return health <= 0;
+}
 
-void Especia::tryToGetSome(unsigned int& cosechadoraEspecia) {
-    if (GameObject::checkCounter(counter, TICKS_PER_UNIT_COLLECTED) && health != 0) {
-        cosechadoraEspecia++;
+#define TICKS_PER_ESPECIA 20
+
+void Especia::tryToGetSome(unsigned int& especia) {
+    if (GameObject::checkCounter(counter, TICKS_PER_ESPECIA)) {
+        especia++;
+        haveIChanged = true;
         health--;
     }
+}
+
+void Especia::reset() {
+    haveIChanged = false;
 }

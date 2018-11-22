@@ -77,3 +77,16 @@ Point::operator std::string() const {
     stream << row << ROW_COL_SEPARATOR << col;
     return stream.str();
 }
+
+Point Point::getDirection() const {
+    Point direction;
+    if (row > 0) direction.row = 1;
+    if (row == 0) direction.row = 0;
+    if (row < 0) direction.row = -1;
+
+    if (col > 0) direction.col = 1;
+    if (col == 0) direction.col = 0;
+    if (col < 0) direction.col = -1;
+    
+    return direction;
+}

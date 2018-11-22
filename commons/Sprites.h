@@ -25,7 +25,9 @@ typedef enum Sprites {
     TRIKE_SPRITE_LEFT_UP = 17,
 
     // Light infantry sprites (TBD)
-    LIGHT_INFANTRY_UP = 18
+    LIGHT_INFANTRY_UP = 18,
+
+    COSECHADORA_UP = 25
 } Sprites;
 
 #endif //__SPRITES_H__

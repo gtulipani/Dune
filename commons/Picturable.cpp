@@ -1,32 +1,44 @@
 #include "Picturable.h"
 
-Picturable::Picturable(int id, int sprite, bool selected, Point position, Point size, int health) :
+Picturable::Picturable(int player_id, int id, int sprite, bool selected, Point position, Point size, int health, int max_health, int porcentage) :
+    player_id(player_id),
     id(id),
     sprite(sprite),
     selected(selected),
     position(std::move(position)),
     size(std::move(size)),
-    health(health) {}
+    health(health),
+    max_health(max_health),
+    porcentage(porcentage) {}
 
 Picturable::Picturable(const Picturable &other) : Picturable(
+        other.player_id,
         other.id,
         other.sprite,
         other.selected,
         other.position,
         other.size,
-        other.health) {}
+        other.health,
+        other.max_health,
+        other.porcentage) {}
 
 Picturable::Picturable(Picturable &&other) noexcept : Picturable(
+        other.player_id,
         other.id,
         other.sprite,
         other.selected,
         std::move(other.position),
         std::move(other.size),
-        other.health) {
+        other.health,
+        other.max_health,
+        other.porcentage) {
+    other.player_id = 0;
     other.id = 0;
     other.sprite = 0;
     other.selected = false;
     other.health = 0;
+    other.max_health = 0;
+    other.porcentage = 0;
 }
 
 Picturable &Picturable::operator=(const Picturable &other) {
@@ -35,12 +47,15 @@ Picturable &Picturable::operator=(const Picturable &other) {
     }
 
     // Copy values
+    this->player_id = other.player_id;
     this->id = other.id;
     this->sprite = other.sprite;
     this->selected = other.selected;
     this->position = other.position;
     this->size = other.size;
     this->health = other.health;
+    this->max_health = other.max_health;
+    this->porcentage = other.porcentage;
     return *this;
 }
 
@@ -50,17 +65,23 @@ Picturable &Picturable::operator=(Picturable &&other) noexcept {
     }
 
     // Copy values
+    this->player_id = other.player_id;
     this->id = other.id;
     this->sprite = other.sprite;
     this->selected = other.selected;
     this->position = other.position;
     this->size = other.size;
     this->health = other.health;
+    this->max_health = other.max_health;
+    this->porcentage = other.porcentage;
 
+    other.player_id = 0;
     other.id = 0;
     other.sprite = 0;
     other.selected = false;
     other.health = 0;
+    other.max_health = 0;
+    other.porcentage = 0;
 
     return *this;
 }

@@ -27,7 +27,7 @@ class Cosechadora : public WalkingUnit {
 
     virtual void tick() override;
 
-    virtual void handleRightClick(Player& player, const Point& pos) override;
+    virtual void handleRightClick(const Point& pos) override;
 };
 
 #endif

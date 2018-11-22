@@ -1,45 +1,17 @@
 #ifndef __BUILDING_H__
 #define __BUILDING_H__
 
-#include <json/json.hpp>
-#include <string>
+#include "SelectableGameObject.h"
 
-#include "GameObject.h"
-
-using namespace std;
-using json = nlohmann::json;
-
-class Player;
-
-#define BUILDING_HEALTH 1000
-
-class Building : public GameObject {
-private:
-	unsigned int counter = 0;
-/*
-	string name;
-	int energy{};
-	int cost{};
-	string size;
-	int structure_points{};
-	int capacity{};
-	*/
-public:
+class Building : public SelectableGameObject {
 	public:
-    Building(Player& player, int _id, const Point& _size);
+    Building(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition);
 
     virtual void tick() override;
 
-    virtual void handleRightClick(Player& player, const Point& pos) override;
+    void locateAt(const Point& pos);
 
-	void finishConstruction();
-
-	void locateAt(const Point& _pixelPosition);
-
-	// Functions that are used to be parsed by json
-	//friend void to_json(json &j, const Building &b);
-
-	//friend void from_json(const json &j, Building &b);
+    virtual void handleRightClick(const Point& pos) override;
 };
 
 

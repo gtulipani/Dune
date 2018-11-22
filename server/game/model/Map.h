@@ -12,10 +12,9 @@ class Especia;
 
 class Map {
 public:
-    Player gaia;
     Matrix mat;
-    std::unordered_map<Point, Especia*> especias;
-    std::vector<Point> constructionCenterPositions;
+    std::unordered_map<Point, Especia*> especias{};
+    std::vector<Point> constructionCenterPositions{};
 
     Map() = default;
 
@@ -31,7 +30,7 @@ public:
 
     Matrix& getMatrix();
 
-    std::vector<Especia*> generateEspeciaFromId(int id);
+    std::map<unsigned int, Especia*> generateEspeciaFromId(unsigned int& id);
 
     bool especiaAt(const Point& pos) const;
 

@@ -5,14 +5,11 @@
 #include <TileUtils.h>
 #include "Map.h"
 
-WalkingUnit::WalkingUnit(Player& player, int id, const Point& size, const Point& initialPosition,
-Map& _map, unsigned int movespeed) :
-GameObject(player, id, size, initialPosition), map(_map) {
-    ticksPerStep = TO_TICKS(movespeed);
-    sprite = TRIKE_SPRITE_RIGHT;
-    counter = 0;
-    tilePosition = tile_utils::getTileFromPixel(initialPosition);
-}
+WalkingUnit::WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition, Map& _map, unsigned int movespeed) :
+SelectableGameObject(player, id, sprite, health, size, initialPixelPosition),
+ticksPerStep(TO_TICKS(movespeed)),
+tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)),
+map(_map) {}
 
 void WalkingUnit::tick() {
     checkMovespeed();
@@ -105,12 +102,10 @@ void WalkingUnit::stepTo(const Point &pixel) {
     pixelPosition.col += col_dir;
 }
 
-void WalkingUnit::handleRightClick(Player& _player, const Point &_pixelGoal) {
-    if (&player == &_player) {
-        pixelGoal = _pixelGoal;
-        Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
-        findPath(goalTile);
-    }
+void WalkingUnit::handleRightClick(const Point& pos) {
+    pixelGoal = pos;
+    Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
+    findPath(goalTile);
 }
 
 void WalkingUnit::findPath(const Point &goal) {

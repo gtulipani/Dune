@@ -4,21 +4,27 @@
 #include <vector>
 #include <map>
 
-#include "../model/Map.h"
+#include <Sprites.h>
 
-class GameObject;
+class SelectableGameObject;
+class InProgressGameObject;
 class Map;
 class Point;
 class Picturable;
 class Player;
+class Especia;
 
 class GameControler {
     private:
     unsigned int next_id = 0;
-    std::map<unsigned int, GameObject*> gameObjects;
     Map& map;
-    std::vector<Player> players;
-    std::vector<GameObject*> selectedObjects;
+    std::map<unsigned int, Especia*> especias;
+    std::map<unsigned int, SelectableGameObject*> gameObjects;
+    std::map<unsigned int, Player*> players;
+    std::map<unsigned int, InProgressGameObject*> inProgressUnits;
+    std::map<unsigned int, InProgressGameObject*> inProgressBuildings;
+
+    void initializePlayers(unsigned int number_of_player);
 
     public:
     explicit GameControler(Map& map);
@@ -33,15 +39,17 @@ class GameControler {
 
     void rightClick(unsigned int player_id, const Point& point);
 
-    void createWalkingUnit(unsigned int player_id, const Point& point);
+    void createTrike(unsigned int player_id);
 
-    void createCosechadora(unsigned int player_id, const Point& point);
+    void createBuilding(unsigned int player_id, const Sprites& sprite);
 
-    void createBuilding(unsigned int player_id);
+    void locateBuildingAt(unsigned int id, const Point& pos);
 
-    void putBuildingAt(unsigned int building_id, const Point& position);
+    void createCosechadora(unsigned int player_id);
 
     void updateGameObjects();
+
+    ~GameControler();
 };
 
 #endif // __GAME_CONTROLER__

@@ -76,12 +76,12 @@ bool Map::especiaAt(const Point& pos) const {
     return mat.at(tile) == ESPECIA;
 }
 
-std::vector<Especia*> Map::generateEspeciaFromId(int id) {
+std::map<unsigned int, Especia*> Map::generateEspeciaFromId(unsigned int& id) {
     std::vector<Point> points = mat.getPointsWith(ESPECIA);
-    std::vector<Especia*> _especias;
+    std::map<unsigned int, Especia*> _especias;
     for (Point p : points) {
-        especias[p] = new Especia(gaia, id, p);
-        _especias.push_back(especias.at(p));
+        especias[p] = new Especia(id, p);
+        _especias[id] = especias.at(p);
         id++;
     }
     return _especias;

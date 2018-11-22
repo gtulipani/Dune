@@ -19,24 +19,30 @@ void from_json(const json &j, Matrix &m) {
 // Picturable Transformation
 void to_json(json &j, const Picturable &p) {
     j = json{
-            {"id",       p.id},
-            {"sprite",   p.sprite},
-            {"selected", p.selected},
-            {"position", p.position},
-            {"size",     p.size},
-            {"health",   p.health},
+            {"player_id",   p.player_id},
+            {"id",          p.id},
+            {"sprite",      p.sprite},
+            {"selected",    p.selected},
+            {"position",    p.position},
+            {"size",        p.size},
+            {"health",      p.health},
+            {"max_health",  p.max_health},
+            {"porcentage",  p.porcentage}
     };
     std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Picturable &p) {
     std::cout << j << std::endl;
+    j.at("player_id").get_to(p.player_id);
     j.at("id").get_to(p.id);
     j.at("sprite").get_to(p.sprite);
     j.at("selected").get_to(p.selected);
     j.at("position").get_to(p.position);
     j.at("size").get_to(p.size);
     j.at("health").get_to(p.health);
+    j.at("max_health").get_to(p.max_health);
+    j.at("porcentage").get_to(p.porcentage);
 }
 
 // Point Transformation

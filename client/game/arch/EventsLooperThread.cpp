@@ -71,9 +71,6 @@ void EventsLooperThread::run() {
     try {
         window_controller.fill();
 
-        // Create initial unit in position 0,0
-        pushEvent(CREATE_WALKING_UNIT_TYPE, Point(0, 0), Point(0, 0));
-
         // Process events received from the socket
         processServerEvents();
 

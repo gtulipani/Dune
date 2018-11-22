@@ -35,6 +35,8 @@ struct Point {
     // Overloading the std::string casting to transform the point to string
     explicit operator std::string() const;
 
+    Point getDirection() const;
+
     // Friend methods for JSON
     friend void to_json(json &j, const Point &p);
     friend void from_json(const json &j, Point &p);

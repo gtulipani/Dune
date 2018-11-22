@@ -6,16 +6,19 @@
 
 struct Picturable {
 public:
+    int player_id{};
     int id{};
     int sprite{};
     bool selected{};
     Point position;
     Point size;
     int health{};
+    int max_health{};
+    int porcentage{};
 
     Picturable() = default;
 
-    Picturable(int id, int sprite, bool selected, Point position, Point size, int health);
+    Picturable(int player_id, int id, int sprite, bool selected, Point position, Point size, int health, int max_health, int porcentage);
 
     Picturable(const Picturable &other);
 
