@@ -70,9 +70,12 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
         // A portion of the image is displayed and the other part isn't
         destinyWidth = (limit_column - offset_x - picturable.position.col);
 
-        originPicturableWidth = recalculateWidth(destinyWidth, this->picturable.size.col);
-        originSelectionSquareWidth = recalculateWidth(destinyWidth, SELECTION_SQUARE_WIDTH);
-        originHealthBarWidth = recalculateWidth(destinyWidth, HEALTH_BAR_WIDTH);
+        // Display rate from the image
+        float displayRate = (static_cast<float>(destinyWidth)/this->picturable.size.col);
+
+        originPicturableWidth = static_cast<int>(displayRate * this->picturable.size.col);
+        originSelectionSquareWidth = static_cast<int>(displayRate * SELECTION_SQUARE_WIDTH);
+        originHealthBarWidth = static_cast<int>(displayRate * HEALTH_BAR_WIDTH);
     }
 
     Area picturableSrcArea(0, 0, originPicturableWidth, originPicturableHeight);
@@ -88,7 +91,7 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
         // We must render the health_bar
         // We'll eventually use the percentage of age, hardcoding 100% as for now
         Area healthBarSrcArea(0, 0, originHealthBarWidth, originHealthBarHeight);
-        Area healthBarDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y - (TILE_PIXEL_RATE / 5), destinyWidth, (TILE_PIXEL_RATE / 6));
+        Area healthBarDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y - (TILE_PIXEL_RATE / 4), destinyWidth, (TILE_PIXEL_RATE / 6));
         sprites_supplier[HEALTH_100]->render(healthBarSrcArea, healthBarDestArea);
     }
 }
