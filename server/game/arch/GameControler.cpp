@@ -40,27 +40,31 @@ void GameControler::tick() {
 }
 
 void GameControler::leftClick(unsigned int player_id, const Point& point) {
-    std::vector<SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
+    std::map<unsigned int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
     if (!selectedObjects.empty()) {
-        for (SelectableGameObject* selectedObject : selectedObjects) {
-            selectedObject->unselect();
+        for (auto selectedObject : selectedObjects) {
+            selectedObject.second->unselect();
         }
+        players.at(player_id)->changedSelection = true;
         selectedObjects.clear();
     }
 
     for (auto gameObject : gameObjects) {
         bool success = gameObject.second->tryToSelect(point);
         if (success) {
-            selectedObjects.push_back(gameObject.second);
+            selectedObjects[gameObject.first] = gameObject.second;
             break;
         }
+    }
+    if (!players.at(player_id)->changedSelection && !selectedObjects.empty()) {
+        players.at(player_id)->changedSelection = true;
     }
 }
 
 void GameControler::rightClick(unsigned int player_id, const Point& point) {
-    std::vector<SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
-    for (SelectableGameObject* selectedObject : selectedObjects) {
-        selectedObject->handleRightClick(point);
+    std::map<unsigned int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
+    for (auto selectedObject : selectedObjects) {
+        selectedObject.second->handleRightClick(point);
     }
 }
 
@@ -95,34 +99,40 @@ void GameControler::createCosechadora(unsigned int player_id) {
     next_id++;
 }
 
-std::vector<Picturable> GameControler::getStates() {
-    std::vector<Picturable> states;
+std::vector<Picturable> GameControler::getStateFor(unsigned int player_id) {
+    Player& player = *players.at(player_id);
+    std::vector<Picturable> state;
+
     for (auto gameObject : gameObjects) {
-        if (gameObject.second->haveYouChanged()) {
-            states.push_back(gameObject.second->getState());
-            gameObject.second->reset();
+        bool playerChangedSelection = player.changedSelection;
+        bool currentIsOnSelection = false;
+        try {
+            player.selectedObjects.at(gameObject.first);
+            currentIsOnSelection = true;
+        } catch (const std::out_of_range& e) {}
+        if (gameObject.second->haveYouChanged() || (playerChangedSelection && currentIsOnSelection)) {
+            Picturable currentState = gameObject.second->getState();
+            currentState.selected = currentIsOnSelection;
+            state.push_back(currentState);
         }
     }
     for (auto gameObject : inProgressUnits) {
         if (gameObject.second->haveYouChanged()) {
-            states.push_back(gameObject.second->getState());
-            gameObject.second->reset();
+            state.push_back(gameObject.second->getState());
         }
     }
     for (auto gameObject : inProgressBuildings) {
         if (gameObject.second->haveYouChanged()) {
-            states.push_back(gameObject.second->getState());
-            gameObject.second->reset();
+            state.push_back(gameObject.second->getState());
         }
     }
     for (auto especia : especias) {
         if (especia.second->haveYouChanged()) {
-            states.push_back(*especia.second);
-            especia.second->reset();
+            state.push_back(*especia.second);
         }
     }
 
-    return states;
+    return state;
 }
 
 void GameControler::updateGameObjects() {
@@ -155,6 +165,23 @@ void GameControler::updateGameObjects() {
     }
     for (unsigned int id : objectsToErase) {
         especias.erase(id);
+    }
+
+    for (auto gameObject : gameObjects) {
+        gameObject.second->reset();
+    }
+    for (auto gameObject : inProgressUnits) {
+        gameObject.second->reset();
+    }
+    for (auto gameObject : inProgressBuildings) {
+        gameObject.second->reset();
+    }
+    for (auto especia : especias) {
+        especia.second->reset();
+    }
+
+    for (auto player : players) {
+        player.second->changedSelection = false;
     }
 }
 

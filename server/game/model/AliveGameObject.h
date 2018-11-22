@@ -11,9 +11,9 @@ class AliveGameObject : public GameObject {
     public:
     explicit AliveGameObject(Player& player, int id, Sprites sprite, int health);
 
-    virtual Picturable getState() const override;
-
     bool isDead() const;
+
+    void kill();
 
     virtual ~AliveGameObject() = default;
 };

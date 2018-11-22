@@ -30,7 +30,7 @@ class GameObject {
 
     bool haveYouChanged() const;
 
-    virtual Picturable getState() const;
+    virtual Picturable getState() const = 0;
 
     void reset();
 

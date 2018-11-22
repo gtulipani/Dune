@@ -3,6 +3,7 @@
 // STL Libraries
 #include <iostream>
 #include <stdexcept>
+#include <chrono>
 
 // Commons Libraries
 #include <json/json.hpp>
@@ -39,15 +40,19 @@ void Game::start() {
     sendGameConfigurationEvent();
 
     gameControler.initialize(clients.size());
-    updateClients();
 
     while (is_on) {
+        auto start = std::chrono::steady_clock::now();
         collectEvents();
         updateModel();
         gameControler.tick();
         updateClients();
         gameControler.updateGameObjects();
-        std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MILLISECONDS));
+        auto end = std::chrono::steady_clock::now();
+        auto execution_difference = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        if (execution_difference < TICK_RATE_MILLISECONDS) {
+            std::this_thread::sleep_for(TICK_RATE_MILLISECONDS - execution_difference);
+        }
     }
 }
 
@@ -74,14 +79,12 @@ void Game::updateModel() {
 }
 
 void Game::updateClients() {
-    // get all the objects whos status has changed
-    std::vector<Picturable> states = gameControler.getStates();
-
-    if (!states.empty()) {
-        // send the status of all objects that changed
-        for (ClientThread* client : clients) {
-            client->send(NotificationEvent(GAME_STATUS_EVENT));
-            client->send(GameStatusEvent(states));
+    std::vector<Picturable> state;
+    for (unsigned int i = 0; i < clients.size(); i++) {
+        state = gameControler.getStateFor(i);
+        if (!state.empty()) {
+            clients.at(i)->send(NotificationEvent(GAME_STATUS_EVENT));
+            clients.at(i)->send(GameStatusEvent(state));
         }
     }
 }

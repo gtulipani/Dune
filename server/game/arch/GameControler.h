@@ -33,7 +33,7 @@ class GameControler {
 
     void tick();
 
-    std::vector<Picturable> getStates();
+    std::vector<Picturable> getStateFor(unsigned int player_id);
 
     void leftClick(unsigned int player_id, const Point& point);
 
