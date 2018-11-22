@@ -22,10 +22,12 @@ private:
     BlockingQueue<ClientEvent> &output_messages;
     WindowController window_controller;
 
-    void pushEvent(std::string message, Point position);
+    void pushEvent(std::string message, Point click_position, Point release_position);
     bool processServerEvents();
 
-    void processMouseEvent(SDL_Event& event);
+    void processMouseClickEvent(SDL_Event &event);
+    void processMouseReleaseEvent(SDL_Event &event);
+
     bool processKeyDownEvent(SDL_Event& event);
 
     void run() override;

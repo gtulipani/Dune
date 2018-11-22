@@ -32,11 +32,12 @@ struct ClientEvent {
 public:
     unsigned int player_id{};
     string type;
-    Point position;
+    Point click_position{};
+    Point release_position{};
 
     ClientEvent() = default;
 
-    ClientEvent(unsigned int player_id, string type, Point dst);
+    ClientEvent(unsigned int player_id, string type, Point click_position, Point release_position);
 
     ClientEvent(const ClientEvent &other);
 

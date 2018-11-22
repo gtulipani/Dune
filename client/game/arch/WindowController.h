@@ -14,6 +14,12 @@
 #include "TerrainController.h"
 #include "ButtonsController.h"
 
+typedef enum Controller {
+    TERRAIN,
+    BUTTONS,
+    NONE
+} Controller;
+
 class SDL_MouseButtonEvent;
 class EventsLooperThread;
 
@@ -26,6 +32,8 @@ private:
 
     // Shouldn't be used. It's moved to the terrain_controller
     Matrix matrix;
+
+    enum Controller last_click_event_occurrence = NONE;
 public:
     WindowController(SdlWindow* window);
 
@@ -46,7 +54,8 @@ public:
 
     bool move(enum Movement movement);
 
-    void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
+    void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+    void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
 
     void processPicturables(std::vector<Picturable> picturables);
 

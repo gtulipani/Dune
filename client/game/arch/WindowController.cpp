@@ -55,12 +55,35 @@ bool WindowController::move(enum Movement movement) {
     return this->terrain_controller.move(movement);
 }
 
-void WindowController::parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function) {
+void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
-        terrain_controller.parseClick(mouse_event, processer, std::move(push_function));
+        terrain_controller.parseMouseClickButton(mouse_event);
+        // Store where does the Mouse Click take place
+        last_click_event_occurrence = TERRAIN;
     } else {
         buttons_controller.parseClick(mouse_event, processer, std::move(push_function));
+        // Store where does the Mouse Click take place
+        last_click_event_occurrence = BUTTONS;
     }
+}
+
+void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
+    if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
+        if (last_click_event_occurrence == BUTTONS) {
+            // We clicked on the Panel Section and we released the mouse on the terrain section. Don't do anything
+            return;
+        } else {
+            terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+        }
+    } else {
+        if (last_click_event_occurrence == TERRAIN) {
+            // We clicked on the Terrain Section and we released the mouse on the buttons section. Don't do anything
+            return;
+        } else {
+            buttons_controller.parseClick(mouse_event, processer, std::move(push_function));
+        }
+    }
+    last_click_event_occurrence = NONE;
 }
 
 void WindowController::processPicturables(std::vector<Picturable> picturables) {

@@ -132,16 +132,21 @@ Point TerrainController::getRelativePoint(int row, int column) {
     return {row - this->offset_y, column - this->offset_x};
 }
 
-void TerrainController::parseClick(SDL_MouseButtonEvent& mouse_event,
-                                   EventsLooperThread* processer,
-                                   std::function<void(EventsLooperThread*, std::string, Point)> push_function) {
+void TerrainController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event) {
+    this->temporary_position = getRelativePoint(mouse_event.y, mouse_event.x);
+}
+
+void TerrainController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
+                                                EventsLooperThread *processer,
+                                                std::function<void(EventsLooperThread *, std::string,
+                                                                   Point, Point)> push_function) {
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
-            push_function(processer, LEFT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
+            push_function(processer, LEFT_CLICK_TYPE, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         case SDL_BUTTON_RIGHT: {
-            push_function(processer, RIGHT_CLICK_TYPE, getRelativePoint(mouse_event.y, mouse_event.x));
+            push_function(processer, RIGHT_CLICK_TYPE, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         default:

@@ -43,6 +43,8 @@ private:
     int offset_y{};
     std::vector<SdlPicturable*> picturables;
 
+    Point temporary_position{};
+
     SdlTexture *createTexture(const std::string& subpath, const std::string& file_path);
     SdlTexture *createPicturableTexture(const std::string& file_path);
     SdlTexture *createTerrainTexture(const std::string& file_path);
@@ -63,7 +65,10 @@ public:
 
     Point getRelativePoint(int row, int column);
 
-    void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point)> push_function);
+    void parseMouseClickButton(SDL_MouseButtonEvent &mouse_event);
+
+    void parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
+                                 std::function<void(EventsLooperThread *, std::string, Point, Point)> push_function);
 
     bool move(enum Movement movement);
 

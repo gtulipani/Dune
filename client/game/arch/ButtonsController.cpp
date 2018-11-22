@@ -112,7 +112,7 @@ void ButtonsController::render() {
 
 void ButtonsController::parseClick(SDL_MouseButtonEvent& mouse_event,
                                    EventsLooperThread* processer,
-                                   std::function<void(EventsLooperThread*, std::string, Point)> push_function) {
+                                   std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
     Point position(mouse_event.y, mouse_event.x);
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
@@ -120,7 +120,8 @@ void ButtonsController::parseClick(SDL_MouseButtonEvent& mouse_event,
             // Most likely a click on a building icon
             for (const PanelButton& button : available_buttons) {
                 if (button.includesPosition(position) && button.includesExternalAction()) {
-                    push_function(processer, button.getAction(), position);
+                    // We are sending an action, so we are not going to use the positions for now
+                    push_function(processer, button.getAction(), position, position);
                     found = true;
                 }
             }

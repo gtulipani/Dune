@@ -29,5 +29,5 @@ void EventsSenderThread::run() {
 
 // Interrupts the execution by inserting an event inside the BlockingQueue
 void EventsSenderThread::terminate() {
-    output_messages.push(ClientEvent(0, CONNECTION_LOST_EVENT, Point(0,0)));
+    output_messages.push(ClientEvent(0, CONNECTION_LOST_EVENT, Point(0,0), Point(0,0)));
 }

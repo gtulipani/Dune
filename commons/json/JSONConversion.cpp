@@ -68,7 +68,8 @@ void to_json(json &j, const ClientEvent &e) {
     j = json{
             {"player_id",   e.player_id},
             {"type", e.type},
-            {"position",  e.position}
+            {"click_position",  e.click_position},
+            {"release_position",  e.release_position}
     };
     std::cout << j << std::endl;
 }
@@ -77,7 +78,8 @@ void from_json(const json &j, ClientEvent &e) {
     std::cout << j << std::endl;
     j.at("player_id").get_to(e.player_id);
     j.at("type").get_to(e.type);
-    j.at("position").get_to(e.position);
+    j.at("click_position").get_to(e.click_position);
+    j.at("release_position").get_to(e.release_position);
 }
 
 // GameStatusEvent Transformation

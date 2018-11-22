@@ -60,17 +60,17 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         if (event.type == LEFT_CLICK_TYPE) {
-            gameControler.leftClick(event.player_id, event.position);
+            gameControler.leftClick(event.player_id, event.release_position);
         } else if (event.type == RIGHT_CLICK_TYPE) {
-            gameControler.rightClick(event.player_id, event.position);
+            gameControler.rightClick(event.player_id, event.release_position);
         } else if (event.type == CREATE_WALKING_UNIT_TYPE) {
-            gameControler.createWalkingUnit(event.player_id, event.position);
+            gameControler.createWalkingUnit(event.player_id, event.click_position);
         } else if (event.type == CREATE_COSECHADORA_TYPE) {
-            gameControler.createCosechadora(event.player_id, event.position);
+            gameControler.createCosechadora(event.player_id, event.click_position);
         } else if (event.type == CREATE_BUILDING_TYPE) {
             gameControler.createBuilding(event.player_id);
         } else if (event.type == LOCATE_BUILDING_TYPE) {
-            gameControler.putBuildingAt(event.player_id, event.position);
+            gameControler.putBuildingAt(event.player_id, event.click_position);
         }
     }
 }
