@@ -92,6 +92,7 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
         // We'll eventually use the percentage of age, hardcoding 100% as for now
         Area healthBarSrcArea(0, 0, originHealthBarWidth, originHealthBarHeight);
         Area healthBarDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y - (TILE_PIXEL_RATE / 4), destinyWidth, (TILE_PIXEL_RATE / 6));
+        calculateTexture()->render(healthBarSrcArea, healthBarDestArea);
         sprites_supplier[HEALTH_100]->render(healthBarSrcArea, healthBarDestArea);
     }
 }
@@ -99,4 +100,36 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
 void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
     this->picturable = std::move(picturable);
     this->main_texture = sdlTexture;
+}
+
+SdlTexture *SdlPicturable::calculateTexture() {
+    float health_rate = (static_cast<float>(this->picturable.health) / static_cast<float>(this->picturable.max_health));
+    if (health_rate > 0.9) {
+        return sprites_supplier[HEALTH_100];
+    }
+    if (health_rate > 0.8) {
+        return sprites_supplier[HEALTH_90];
+    }
+    if (health_rate > 0.7) {
+        return sprites_supplier[HEALTH_80];
+    }
+    if (health_rate > 0.6) {
+        return sprites_supplier[HEALTH_70];
+    }
+    if (health_rate > 0.5) {
+        return sprites_supplier[HEALTH_60];
+    }
+    if (health_rate > 0.4) {
+        return sprites_supplier[HEALTH_50];
+    }
+    if (health_rate > 0.3) {
+        return sprites_supplier[HEALTH_40];
+    }
+    if (health_rate > 0.2) {
+        return sprites_supplier[HEALTH_30];
+    }
+    if (health_rate > 0.1) {
+        return sprites_supplier[HEALTH_20];
+    }
+    return sprites_supplier[HEALTH_10];
 }

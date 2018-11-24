@@ -204,3 +204,25 @@ void TerrainController::preloadTerrainMatrix() {
         }
     }
 }
+
+TerrainController::~TerrainController() {
+    // Delete the terrain texture
+    if (!this->terrain_texture) {
+        delete this->terrain_texture;
+    }
+
+    // Delete all the picturables
+    for (auto& picturable : this->picturables) {
+        delete picturable;
+    }
+
+    // Delete all the terrain textures
+    for (auto& terrain_texture : this->terrains_textures_map) {
+        delete terrain_texture.second;
+    }
+
+    // Delete all the picturable textures
+    for (auto& picturable_texture : this->picturables_textures_map) {
+        delete picturable_texture.second;
+    }
+}

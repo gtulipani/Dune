@@ -79,3 +79,9 @@ ClientSpritesSupplier &ClientSpritesSupplier::operator=(ClientSpritesSupplier &&
 SdlTexture* ClientSpritesSupplier::operator[](enum ClientSprites sprite) const {
     return sprites.at(sprite);
 }
+
+ClientSpritesSupplier::~ClientSpritesSupplier() {
+    for (auto& sprite: this->sprites) {
+        delete sprite.second;
+    }
+}

@@ -8,8 +8,11 @@
 #include "../sdl/SdlTexture.h"
 #include "ClientSpritesSupplier.h"
 
+#define BUTTON_ORIGINAL_WIDTH 80
+#define BUTTON_ORIGINAL_HEIGHT 80
+
 class PanelButton {
-private:
+protected:
     int width;
     int height;
     Point screen_position;
@@ -22,15 +25,15 @@ public:
 
     PanelButton(int width, int height, Point screen_position, std::string action, std::string image_path, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
 
-    void render(int offset_x, int offset_y);
-
-    void renderPercentage(int offset_x, int offset_y);
+    virtual void render(int offset_x, int offset_y) = 0;
 
     bool includesPosition(Point point) const;
 
     bool includesExternalAction() const;
 
     std::string getAction() const;
+
+    virtual ~PanelButton();
 };
 
 

@@ -44,7 +44,14 @@ typedef enum ClientSprites {
     HEALTH_90 = 33,
     HEALTH_100 = 34,
     SELECTION_SQUARE = 35,
-    CONSTRUCTION_PERCENTAGE_100 = 36
+    CONSTRUCTION_PERCENTAGE_12 = 36,
+    CONSTRUCTION_PERCENTAGE_25 = 37,
+    CONSTRUCTION_PERCENTAGE_37 = 38,
+    CONSTRUCTION_PERCENTAGE_50 = 39,
+    CONSTRUCTION_PERCENTAGE_62 = 40,
+    CONSTRUCTION_PERCENTAGE_75 = 41,
+    CONSTRUCTION_PERCENTAGE_87 = 42,
+    CONSTRUCTION_PERCENTAGE_100 = 43
 } ClientSprites;
 
 class ClientSpritesSupplier {
@@ -66,6 +73,8 @@ public:
     ClientSpritesSupplier &operator=(ClientSpritesSupplier &&other) noexcept;
 
     SdlTexture* operator[](enum ClientSprites sprite) const;
+
+    ~ClientSpritesSupplier();
 };
 
 

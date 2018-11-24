@@ -59,8 +59,6 @@ public:
 
     void processPicturables(std::vector<Picturable> picturables);
 
-    Point getRelativePoint(int row, int column);
-
     ~WindowController() {}
 };
 

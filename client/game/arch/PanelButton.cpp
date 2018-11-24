@@ -1,9 +1,6 @@
 #include "PanelButton.h"
 #include "Area.h"
 
-#define BUTTON_ORIGINAL_WIDTH 80
-#define BUTTON_ORIGINAL_HEIGHT 80
-
 PanelButton::PanelButton(int width,
                          int height,
                          Point screen_position,
@@ -32,21 +29,6 @@ PanelButton::PanelButton(int width,
         new SdlTexture(image_path, window),
         sprites_supplier) {}
 
-void PanelButton::render(int offset_x, int offset_y) {
-    Area srcArea(0, 0, BUTTON_ORIGINAL_WIDTH, BUTTON_ORIGINAL_HEIGHT);
-    Area destArea(offset_x + this->screen_position.col, offset_y + this->screen_position.row, this->width,
-                  this->height);
-    this->texture->render(srcArea, destArea);
-}
-
-void PanelButton::renderPercentage(int offset_x, int offset_y) {
-    Area srcArea(0, 0, BUTTON_ORIGINAL_WIDTH, BUTTON_ORIGINAL_HEIGHT);
-    Area destArea(offset_x + this->screen_position.col, offset_y + this->screen_position.row, this->width,
-                  this->height);
-    this->texture->render(srcArea, destArea);
-    sprites_supplier[CONSTRUCTION_PERCENTAGE_100]->render(srcArea, destArea);
-}
-
 bool PanelButton::includesPosition(Point point) const {
     // Returns true if the point received as parameter is contained inside the limit determined by the
     // screen_position, the width and the height
@@ -64,3 +46,5 @@ bool PanelButton::includesExternalAction() const {
 std::string PanelButton::getAction() const {
     return this->action;
 }
+
+PanelButton::~PanelButton() = default;

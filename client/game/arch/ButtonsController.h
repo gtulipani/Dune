@@ -20,8 +20,8 @@ private:
 
     SdlTexture *panel_texture{};
 
-    std::vector<PanelButton> mandatory_buttons{};
-    std::vector<PanelButton> available_buttons{};
+    std::vector<PanelButton*> mandatory_buttons{};
+    std::vector<PanelButton*> available_buttons{};
 
     int screen_width{};
     int screen_height{};
@@ -53,6 +53,8 @@ public:
     void render();
 
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+
+    ~ButtonsController();
 };
 
 

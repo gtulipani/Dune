@@ -9,12 +9,14 @@ add_executable(client
         game/arch/BlockingQueue.hpp
         game/arch/ButtonsController.cpp
         game/arch/Client.cpp
+        game/arch/ClientSpritesSupplier.cpp
         game/arch/EventsLooperThread.cpp
         game/arch/EventsReceptorThread.cpp
         game/arch/EventsSenderThread.cpp
+        game/arch/MainButton.cpp
         game/arch/PanelButton.cpp
+        game/arch/PicturableButton.cpp
         game/arch/SdlPicturable.cpp
-        game/arch/ClientSpritesSupplier.cpp
         game/arch/TerrainController.cpp
         game/arch/WindowController.cpp
         game/sdl/SdlException.cpp

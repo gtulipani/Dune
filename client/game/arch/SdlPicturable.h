@@ -35,6 +35,8 @@ public:
     void render(int offset_x, int offset_y, int width_limit);
 
     void update(Picturable picturable, SdlTexture *sdlTexture);
+
+    SdlTexture* calculateTexture();
 };
 
 

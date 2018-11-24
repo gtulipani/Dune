@@ -72,7 +72,7 @@ public:
 
     bool move(enum Movement movement);
 
-    ~TerrainController() {}
+    ~TerrainController();
 };
 
 

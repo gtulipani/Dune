@@ -89,7 +89,3 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
 void WindowController::processPicturables(std::vector<Picturable> picturables) {
     this->terrain_controller.processPicturables(std::move(picturables));
 }
-
-Point WindowController::getRelativePoint(int row, int column) {
-    return this->terrain_controller.getRelativePoint(row, column);
-}
