@@ -45,17 +45,17 @@ Point ButtonsController::buildOptionalButtonRelativePosition(int order) {
 void ButtonsController::loadMainButtons() {
     // The main buttons will be rendered only once directly in the texture
     // Load main buttons textures
-    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(0), "", client_sprites_supplier[REPAIR_BUTTON_ICON]);
-    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(1), "", client_sprites_supplier[SELL_BUTTON_ICON]);
-    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(2), "", client_sprites_supplier[STATUS_BUTTON_ICON]);
-    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(3), "", client_sprites_supplier[GUARD_BUTTON_ICON]);
-    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(4), "", client_sprites_supplier[RETREAT_BUTTON_ICON]);
+    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(0), "", client_sprites_supplier[REPAIR_BUTTON_ICON], client_sprites_supplier);
+    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(1), "", client_sprites_supplier[SELL_BUTTON_ICON], client_sprites_supplier);
+    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(2), "", client_sprites_supplier[STATUS_BUTTON_ICON], client_sprites_supplier);
+    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(3), "", client_sprites_supplier[GUARD_BUTTON_ICON], client_sprites_supplier);
+    mandatory_buttons.emplace_back(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(4), "", client_sprites_supplier[RETREAT_BUTTON_ICON], client_sprites_supplier);
 }
 
 void ButtonsController::loadButtonsPanel() {
     // Initial light_factory and wind_trap buildings
-    available_buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, getGlobalPosition(buildOptionalButtonRelativePosition(0)), CREATE_BUILDING_LIGHT_FACTORY, client_sprites_supplier[LIGHT_FACTORY_ICON]);
-    available_buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, getGlobalPosition(buildOptionalButtonRelativePosition(1)), CREATE_BUILDING_WIND_TRAPS, client_sprites_supplier[WIND_TRAPS_ICON]);
+    available_buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, getGlobalPosition(buildOptionalButtonRelativePosition(0)), CREATE_BUILDING_LIGHT_FACTORY, client_sprites_supplier[LIGHT_FACTORY_ICON], client_sprites_supplier);
+    available_buttons.emplace_back(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT, getGlobalPosition(buildOptionalButtonRelativePosition(1)), CREATE_BUILDING_WIND_TRAPS, client_sprites_supplier[WIND_TRAPS_ICON], client_sprites_supplier);
 }
 
 void ButtonsController::renderPanelTexture() {
@@ -104,7 +104,7 @@ void ButtonsController::render() {
 
     // Render each one of the available buttons
     std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton &button) {
-        button.render(0, 0);
+        button.renderPercentage(0, 0);
     });
 
     this->window->render();

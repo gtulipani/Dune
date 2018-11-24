@@ -43,7 +43,8 @@ typedef enum ClientSprites {
     HEALTH_80 = 32,
     HEALTH_90 = 33,
     HEALTH_100 = 34,
-    SELECTION_SQUARE = 35
+    SELECTION_SQUARE = 35,
+    CONSTRUCTION_PERCENTAGE_100 = 36
 } ClientSprites;
 
 class ClientSpritesSupplier {

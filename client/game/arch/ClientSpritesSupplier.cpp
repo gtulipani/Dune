@@ -49,6 +49,7 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     // Store background images textures
     sprites.emplace(BACKGROUND, createPanelTexture("background.png", window));
     sprites.emplace(BUTTONS_BACKGROUND, createPanelTexture("optional_buttons_background.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_100, createPanelTexture("progress_100.png", window));
 
     // Store various textures
     sprites.emplace(HEALTH_10, createTerrainTexture("health_10.png", window));
