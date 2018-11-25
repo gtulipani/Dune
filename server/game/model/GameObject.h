@@ -17,11 +17,12 @@ class GameObject {
 
     public:
     static bool checkCounter(unsigned int& counter, unsigned int max) {
+        bool ready = false;
         if (counter == 0) {
-            return true;
+            ready = true;
         }
         counter = counter >= max ? 0 : counter + 1;
-        return false;
+        return ready;
     }
 
     GameObject(Player& player, int id, Sprites sprite);
