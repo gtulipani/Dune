@@ -34,7 +34,7 @@ class PriorityQueue {
         return vec.size();
     }
 
-    void push(T& element, int priority) {
+    void push(const T& element, int priority) {
         vec.emplace_back(element, priority);
         top_pos = -1;
     }

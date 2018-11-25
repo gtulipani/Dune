@@ -20,6 +20,77 @@ std::stack<Point> pathing::findPath(const Map& map,
     return {};
 }
 
+static std::vector<Point> getPointsInLine(const Point& a, const Point& b) {
+    std::vector<Point> pointsInLine;
+    Point d = {b.row - a.row, b.col - b.row};
+    Point d1 = {::abs(d.row), ::abs(d.col)};
+    Point p = {2 * d1.col - d1.row, 2 * d1.row - d1.col};
+    Point x, e;
+    if (d1.col <= d1.row) {
+        if (d.row >= 0) {
+            x.row = a.row;
+            x.col = a.col;
+            e.row = b.row;
+        } else {
+            x.row = b.row;
+            x.col = b.col;
+            e.row = a.row;
+        }
+        pointsInLine.push_back(x);
+        for (int i = 0; x.row < e.row; i++) {
+            x.row = x.row + 1;
+            if (p.row < 0) {
+                p.row = p.row + 2 * d1.col;
+            } else {
+                if ((d.row < 0 && d.col < 0) || (d.row > 0 && d.col > 0)) {
+                    x.col = x.col + 1;
+                } else {
+                    x.col = x.col - 1;
+                }
+                p.row = p.row + 2 * (d1.col - d1.row);
+            }
+            pointsInLine.push_back(x);
+        }
+    } else {
+        if (d.col >= 0) {
+            x.row = a.row;
+            x.col = a.col;
+            e.col = b.col;
+        } else {
+            x.row = b.row;
+            x.col = b.col;
+            e.col = a.col;
+        }
+        pointsInLine.push_back(x);
+        for (int i = 0; x.col < e.col; i++) {
+            x.col = x.col + 1;
+            if (p.col <= 0) {
+                p.col = p.col + 2 * d1.row;
+            } else {
+                if ((d.row < 0 && d.col < 0) || (d.row > 0 && d.col > 0)) {
+                    x.row = x.row + 1;
+                } else {
+                    x.row = x.row - 1;
+                }
+                p.col = p.col + 2 * (d1.row - d1.col);
+            }
+            pointsInLine.push_back(x);
+        }
+    }
+}
+
+#include <iostream>
+
+int main() {
+    Point a = {2, 3};
+    Point b = {8, 16};
+
+    std::vector<Point> line = getPointsInLine(a, b);
+    for (const Point& p : line) {
+        std::cout << "(" << p.row << ", " << p.col << "), ";
+    }
+}
+
 /* Finds tile pathing */
 static std::vector<Point> a_star(const Map& map,
                                 const WalkingUnit& unit,
@@ -75,7 +146,7 @@ static std::vector<Point> a_star(const Map& map,
     return tiles;
 }
 
-std::vector<Point> fromTilesToPixels(const std::vector<Point>& tiles) {
+static std::vector<Point> fromTilesToPixels(const std::vector<Point>& tiles) {
     std::vector<Point> pixels;
     for (const Point& tile : tiles) {
         pixels.push_back(tile_utils::getTileCenter(tile));
@@ -83,7 +154,7 @@ std::vector<Point> fromTilesToPixels(const std::vector<Point>& tiles) {
     return pixels;
 }
 
-void removeReundantPoints(std::vector<Point>& pixelPath) {
+static void removeReundantPoints(std::vector<Point>& pixelPath) {
     std::vector<Point> newPixelPath;
 
     Point current_point = pixelPath.at(0);

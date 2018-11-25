@@ -18,6 +18,7 @@ add_executable(server
         game/model/SelectableGameObject.cpp
         game/model/InProgressGameObject.cpp
         game/model/WalkingUnit.cpp
+        game/model/AttackingUnit.cpp
         game/model/Building.cpp
         game/model/Cosechadora.cpp
         game/model/Especia.cpp

@@ -3,6 +3,8 @@
 
 #include "AliveGameObject.h"
 
+class AttackingUnit;
+
 class SelectableGameObject : public AliveGameObject {
     private:
     bool selected = false;
@@ -16,9 +18,13 @@ class SelectableGameObject : public AliveGameObject {
 
     virtual void handleRightClick(const Point& pos) = 0;
 
+    Point getPixelPosition() const;
+
     bool tryToSelect(const Point& clickPosition);
 
     void unselect();
+
+    virtual void recieveAttack(AttackingUnit* enemy, unsigned int attackPoints);
 
     virtual Picturable getState() const override;
 

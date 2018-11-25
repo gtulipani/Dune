@@ -16,9 +16,17 @@ bool SelectableGameObject::tryToSelect(const Point& clickPosition) {
     return false;
 }
 
+Point SelectableGameObject::getPixelPosition() const {
+    return pixelPosition;
+}
+
 void SelectableGameObject::unselect() {
     selected = false;
     haveIChanged = true;
+}
+
+void SelectableGameObject::recieveAttack(AttackingUnit* enemy, unsigned int attackPoints) {
+    health -= attackPoints;
 }
 
 Picturable SelectableGameObject::getState() const {
