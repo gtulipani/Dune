@@ -13,7 +13,12 @@
 #include "MainButton.h"
 #include "PicturableButton.h"
 
-#define MAIN_BUTTONS_Y_OFFSET 260
+#define EAGLE_EYE_Y_OFFSET 20
+#define EAGLE_EYE_X_OFFSET 10
+#define EAGLE_EYE_WIDTH 180
+#define EAGLE_EYE_HEIGHT 220
+
+#define MAIN_BUTTONS_Y_OFFSET (EAGLE_EYE_Y_OFFSET + EAGLE_EYE_HEIGHT + EAGLE_EYE_Y_OFFSET)
 #define MAIN_BUTTON_WIDTH 40
 #define MAIN_BUTTON_HEIGHT 40
 
@@ -100,11 +105,15 @@ void ButtonsController::configure(int screen_width, int screen_height, int scree
     this->window->setAsTarget();
 }
 
-void ButtonsController::render() {
+void ButtonsController::render(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer) {
     // Render the main texture containing the background image and the main buttons
     Area srcArea(0, 0, this->screen_width, this->screen_height);
     Area destArea(screen_width_offset, 0, this->screen_width, this->screen_height);
     this->panel_texture->render(srcArea, destArea);
+
+    // Render the eagle eye map
+    destArea = Area(screen_width_offset + EAGLE_EYE_X_OFFSET, EAGLE_EYE_Y_OFFSET, EAGLE_EYE_WIDTH, EAGLE_EYE_HEIGHT);
+    map_renderer(terrain_controller, destArea);
 
     // Render each one of the available buttons
     std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton *button) {

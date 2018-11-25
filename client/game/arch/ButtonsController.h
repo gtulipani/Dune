@@ -12,6 +12,7 @@
 
 class SDL_MouseButtonEvent;
 class EventsLooperThread;
+class TerrainController;
 
 class ButtonsController {
 private:
@@ -50,7 +51,8 @@ public:
 
     void configure(int screen_width, int screen_height, int screen_width_offset);
 
-    void render();
+    // map_renderer is a function that knows how to render the map on a given area
+    void render(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
 
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
 

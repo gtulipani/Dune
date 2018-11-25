@@ -110,6 +110,12 @@ void TerrainController::render() {
     this->window->render();
 }
 
+void TerrainController::renderEntireTerrain(Area destArea) {
+    Area srcArea(0, 0, this->terrain_width, this->terrain_height);
+
+    this->terrain_texture->render(srcArea, destArea);
+}
+
 void TerrainController::processPicturables(std::vector<Picturable> picturables) {
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
         auto unit_it = picturables_textures_map.find(picturable.sprite);

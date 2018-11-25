@@ -28,7 +28,6 @@ private:
     int terrain_width_tiles{};
     int terrain_height_tiles{};
 
-
     int terrain_width{};
     int terrain_height{};
 
@@ -60,6 +59,8 @@ public:
     void fill();
 
     void render();
+
+    void renderEntireTerrain(Area destiny);
 
     void processPicturables(std::vector<Picturable> picturables);
 

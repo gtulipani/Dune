@@ -48,7 +48,7 @@ void WindowController::refreshMap() {
 
 void WindowController::render() {
     this->terrain_controller.render();
-    this->buttons_controller.render();
+    this->buttons_controller.render(&this->terrain_controller, &TerrainController::renderEntireTerrain);
 }
 
 bool WindowController::move(enum Movement movement) {
