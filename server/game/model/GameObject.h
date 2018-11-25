@@ -30,6 +30,8 @@ class GameObject {
 
     bool haveYouChanged() const;
 
+    bool isEnemy(const GameObject* other) const;
+
     virtual Picturable getState() const = 0;
 
     void reset();

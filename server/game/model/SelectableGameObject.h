@@ -20,6 +20,8 @@ class SelectableGameObject : public AliveGameObject {
 
     Point getPixelPosition() const;
 
+    bool isThere(const Point& pos) const;
+
     bool tryToSelect(const Point& clickPosition);
 
     void unselect();

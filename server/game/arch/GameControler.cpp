@@ -6,6 +6,7 @@
 #include "../model/Map.h"
 #include "../model/GameObject.h"
 #include "../model/WalkingUnit.h"
+#include "../model/AttackingUnit.h"
 #include "../model/Cosechadora.h"
 #include "../model/Especia.h"
 #include "../model/Building.h"
@@ -37,6 +38,12 @@ void GameControler::tick() {
         // We let know all the objects that time has passed
         gameObject.second->tick();
     }
+    for (auto inProgressUnit : inProgressUnits) {
+        inProgressUnit.second->tick();
+    }
+    for (auto inProgressBuilding : inProgressBuildings) {
+        inProgressBuilding.second->tick();
+    }
 }
 
 void GameControler::leftClick(unsigned int player_id, const Point& point) {
@@ -62,9 +69,21 @@ void GameControler::leftClick(unsigned int player_id, const Point& point) {
 }
 
 void GameControler::rightClick(unsigned int player_id, const Point& point) {
+    SelectableGameObject* unit_at_pos = nullptr;
+    for (auto gameObject : gameObjects) {
+        if (gameObject.second->isThere(point)) {
+            unit_at_pos = gameObject.second;
+            break;
+        }
+    }
+    
     std::map<unsigned int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
     for (auto selectedObject : selectedObjects) {
-        selectedObject.second->handleRightClick(point);
+        if (unit_at_pos != nullptr && unit_at_pos->isEnemy(selectedObject.second)) {
+            ((AttackingUnit*)(selectedObject.second))->attack(unit_at_pos);
+        } else {
+            selectedObject.second->handleRightClick(point);
+        }
     }
 }
 
