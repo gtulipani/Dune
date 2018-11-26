@@ -25,6 +25,19 @@ void GameControler::initializePlayers(unsigned int number_of_players) {
         map.update(EDIFICIOS, Point(3, 3), tile_utils::getTileFromPixel(constructionCenterPosition));
         gameObjects[next_id] = constructionCenter;
         next_id++;
+        std::vector<Point> initPoss = map.getAvailableTilesNear(tile_utils::getTileFromPixel(constructionCenterPosition), 5);
+        for (int j = 0; j < 2; j++) {
+            Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
+            auto * cosechadora = new Cosechadora(*players.at(i), next_id, pos, map);
+            gameObjects[next_id] = cosechadora;
+            next_id++;
+        }
+        for (int j = 2; j < 5; j++) {
+            Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
+            auto * trike = new AttackingUnit(*players.at(i), next_id, TRIKE_SPRITE_DOWN, 1000, {32, 32}, pos, map, 10, 5, 5, 10);
+            gameObjects[next_id] = trike;
+            next_id++;
+        }
     }
 }
 

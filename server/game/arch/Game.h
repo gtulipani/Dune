@@ -26,7 +26,7 @@ class Game {
     std::list<ClientEvent> events;
 
     Map map;
-    GameControler gameControler;
+    GameControler* gameControler;
 
     void sendGameConfigurationEvent();
 

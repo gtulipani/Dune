@@ -9,7 +9,8 @@ WalkingUnit::WalkingUnit(Player& player, int id, Sprites sprite, int health, con
 SelectableGameObject(player, id, sprite, health, size, initialPixelPosition),
 ticksPerStep(TO_TICKS(movespeed)),
 tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)),
-map(_map) {}
+map(_map),
+pixelGoal(initialPixelPosition) {}
 
 void WalkingUnit::tick() {
     checkMovespeed();

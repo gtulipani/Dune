@@ -35,6 +35,8 @@ public:
     bool especiaAt(const Point& pos) const;
 
     Especia* getEspeciaAt(const Point& pos);
+
+    std::vector<Point> getAvailableTilesNear(const Point& pos, unsigned int n);
 };
 
 #endif

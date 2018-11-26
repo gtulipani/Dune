@@ -1,5 +1,7 @@
 #include "Map.h"
 
+#include <queue>
+#include <unordered_set>
 #include <TileUtils.h>
 #include <TerrainType.h>
 #include "Especia.h"
@@ -94,4 +96,30 @@ Point Map::findClosestRefineria(const Point& p) const {
 
 Especia* Map::getEspeciaAt(const Point& pos) {
     return especias.at(pos);
+}
+
+std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int n) {
+    /*  ______________________  */
+    /* |         BFS          | */
+    /* | Breadth First Search | */
+    std::vector<Point> positions;
+    std::queue<Point> queue;
+    std::unordered_set<Point> set;
+
+    set.insert(tilePos);
+    queue.push(tilePos);
+    Point current;
+    while (!queue.empty()) {
+        current = queue.front();
+        queue.pop();
+
+        for (Point ady : getAdyacents(current)) {
+            if (set.find(ady) != set.end()) continue;
+            set.insert(ady);
+            queue.push(ady);
+            positions.push_back(ady);
+            if (positions.size() >= n) return positions;
+        }
+    }
+    return positions;
 }

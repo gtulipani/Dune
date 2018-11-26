@@ -15,7 +15,7 @@ class AttackingUnit : public WalkingUnit {
 
     public:
     AttackingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& _map, unsigned int movespeed, unsigned int attackspeed,
+                Map& map, unsigned int movespeed, unsigned int attackspeed,
                 unsigned int range, unsigned int attackPoints);
 
     void attack(SelectableGameObject* enemy);

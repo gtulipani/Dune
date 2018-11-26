@@ -4,7 +4,7 @@
 
 AttackingUnit::AttackingUnit(Player& player, int id, Sprites sprite, int health,
                             const Point& size, const Point& initialPixelPosition,
-                            Map& _map, unsigned int movespeed, unsigned int attackspeed,
+                            Map& map, unsigned int movespeed, unsigned int attackspeed,
                             unsigned int range, unsigned int attackPoints) :
 WalkingUnit(player, id, sprite, health, size, initialPixelPosition, map, movespeed) ,
 ticks_per_attack(TO_TICKS(attackspeed)), range(range), attackPoints(attackPoints) {}
@@ -19,7 +19,7 @@ void AttackingUnit::attack(SelectableGameObject* enemy) {
 
 void AttackingUnit::tick() {
     if (target == nullptr) {
-        WalkingUnit::tick();
+        this->WalkingUnit::tick();
         return;
     }
 
@@ -28,7 +28,7 @@ void AttackingUnit::tick() {
     if (inRange(enemyPos) && GameObject::checkCounter(counter, ticks_per_attack)) {
         target->recieveAttack(this, attackPoints);
     } else {
-        WalkingUnit::handleRightClick(enemyPos);
+        this->WalkingUnit::handleRightClick(enemyPos);
     }
 }
 

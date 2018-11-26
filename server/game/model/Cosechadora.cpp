@@ -11,7 +11,7 @@ WalkingUnit(player, id, COSECHADORA_UP, 1000, COSECHADORA_SIZE, initialPosition,
 void Cosechadora::tick() {
     switch (state) {
         case going:
-            WalkingUnit::tick();
+            this->WalkingUnit::tick();
             if (pixelPosition == pixelGoal) {
                 state = collecting;
             }
@@ -21,39 +21,39 @@ void Cosechadora::tick() {
                 target->tryToGetSome(especia);
                 if (especia >= ESPECIA_MAX) {
                     Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                    WalkingUnit::handleRightClick(pos);
+                    this->WalkingUnit::handleRightClick(pos);
                     state = returning;
                 }
             } else {
                 Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                WalkingUnit::handleRightClick(pos);
+                this->WalkingUnit::handleRightClick(pos);
                 state = returning;
             }
             break;
         case returning:
-            WalkingUnit::tick();
+            this->WalkingUnit::tick();
             if (pixelPosition == pixelGoal) {
                 player.addEspecia(ESPECIA_MAX);
                 especia = 0;
                 if (!target->runOut()) {
                     state = waiting;
                 } else {
-                    WalkingUnit::handleRightClick(target->getPosition());
+                    this->WalkingUnit::handleRightClick(target->getPosition());
                     state = going;
                 }
             }
             break;
         case waiting:
-            WalkingUnit::tick();
+            this->WalkingUnit::tick();
     }
 }
 
 void Cosechadora::handleRightClick(const Point& pos) {
     if (map.especiaAt(pos)) {
         target = map.getEspeciaAt(pos);
-        WalkingUnit::handleRightClick(target->getPosition());
+        this->WalkingUnit::handleRightClick(target->getPosition());
         state = going;
     } else {
-        WalkingUnit::handleRightClick(pos);
+        this->WalkingUnit::handleRightClick(pos);
     }
 }
