@@ -9,8 +9,10 @@
 class Player;
 
 class GameObject {
-    protected:
+    public:
     Player& player;
+
+    protected:
     const int id;
     Sprites sprite;
     bool haveIChanged = true;

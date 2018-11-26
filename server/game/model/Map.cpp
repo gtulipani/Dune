@@ -117,8 +117,10 @@ std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int
             if (set.find(ady) != set.end()) continue;
             set.insert(ady);
             queue.push(ady);
-            positions.push_back(ady);
-            if (positions.size() >= n) return positions;
+            if (mat.at(ady) == ARENA) {
+                positions.push_back(ady);
+                if (positions.size() >= n) return positions;
+            }
         }
     }
     return positions;

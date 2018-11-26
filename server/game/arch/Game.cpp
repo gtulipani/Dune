@@ -96,3 +96,7 @@ void Game::updateClients() {
 void Game::stop() {
     is_on = false;
 }
+
+Game::~Game() {
+    delete gameControler;
+}

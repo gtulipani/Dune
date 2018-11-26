@@ -31,6 +31,7 @@ void SelectableGameObject::unselect() {
 
 void SelectableGameObject::recieveAttack(AttackingUnit* enemy, unsigned int attackPoints) {
     health -= attackPoints;
+    haveIChanged = true;
 }
 
 Picturable SelectableGameObject::getState() const {

@@ -13,6 +13,7 @@ class WalkingUnit : public SelectableGameObject {
     private:
     unsigned int ticksPerStep;
     unsigned int counter = 0;
+    protected:
     std::stack<Point> path{};
     Point tilePosition;
 

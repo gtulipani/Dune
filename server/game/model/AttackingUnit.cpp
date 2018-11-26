@@ -25,10 +25,16 @@ void AttackingUnit::tick() {
 
     Point enemyPos = target->getPixelPosition();
 
-    if (inRange(enemyPos) && GameObject::checkCounter(counter, ticks_per_attack)) {
-        target->recieveAttack(this, attackPoints);
+    if (inRange(enemyPos)) {
+        path = {};
+        pixelGoal = pixelPosition;
+        if (GameObject::checkCounter(counter, ticks_per_attack)) {
+            target->recieveAttack(this, attackPoints);
+            if (target->isDead()) target = nullptr;
+        }
     } else {
         this->WalkingUnit::handleRightClick(enemyPos);
+        this->WalkingUnit::tick();
     }
 }
 
@@ -36,5 +42,5 @@ void AttackingUnit::recieveAttack(AttackingUnit* enemy, unsigned int attackPoint
     if (target == nullptr) {
         target = enemy;
     }
-    health -= attackPoints;
+    this->SelectableGameObject::recieveAttack(enemy, attackPoints);
 }

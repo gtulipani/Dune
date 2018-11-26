@@ -34,7 +34,7 @@ void GameControler::initializePlayers(unsigned int number_of_players) {
         }
         for (int j = 2; j < 5; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
-            auto * trike = new AttackingUnit(*players.at(i), next_id, TRIKE_SPRITE_DOWN, 1000, {32, 32}, pos, map, 10, 5, 5, 10);
+            auto * trike = new AttackingUnit(*players.at(i), next_id, TRIKE_SPRITE_DOWN, 1000, {32, 32}, pos, map, 30, 5, 100, 10);
             gameObjects[next_id] = trike;
             next_id++;
         }
@@ -95,7 +95,9 @@ void GameControler::rightClick(unsigned int player_id, const Point& point) {
         if (unit_at_pos != nullptr && unit_at_pos->isEnemy(selectedObject.second)) {
             ((AttackingUnit*)(selectedObject.second))->attack(unit_at_pos);
         } else {
-            selectedObject.second->handleRightClick(point);
+            if (selectedObject.second->player == *players.at(player_id)) {
+                selectedObject.second->handleRightClick(point);
+            }
         }
     }
 }
@@ -168,35 +170,32 @@ std::vector<Picturable> GameControler::getStateFor(unsigned int player_id) {
 }
 
 void GameControler::updateGameObjects() {
-    unsigned int n = gameObjects.size();
-    for (unsigned int i = 0; i < n; i++) {
-        if (gameObjects.at(i)->isDead()) {
-            delete gameObjects.at(i);
-            gameObjects.erase(i);
+    for (auto it = gameObjects.begin(); it != gameObjects.end();) {
+        if (it->second->isDead()) {
+            delete it->second;
+            it = gameObjects.erase(it);
+        } else {
+            ++it;
         }
     }
 
-    std::vector<unsigned int> objectsToErase;
-    for (auto inProgressUnit : inProgressUnits) {
-        if (inProgressUnit.second->completed()) {
-            gameObjects[inProgressUnit.first] = inProgressUnit.second->getObject();
-            delete inProgressUnit.second;
-            objectsToErase.push_back(inProgressUnit.first);
+    for (auto it = inProgressUnits.begin(); it != inProgressUnits.end();) {
+        if (it->second->completed()) {
+            gameObjects[it->first] = it->second->getObject();
+            delete it->second;
+            it = inProgressUnits.erase(it);
+        } else {
+            ++it;
         }
-    }
-    for (unsigned int id : objectsToErase) {
-        inProgressUnits.erase(id);
     }
 
-    objectsToErase.clear();
-    for (auto especia : especias) {
-        if (especia.second->runOut()) {
-            delete especia.second;
-            objectsToErase.push_back(especia.first);
+    for (auto it = especias.begin(); it != especias.end();) {
+        if (it->second->runOut()) {
+            delete it->second;
+            it = especias.erase(it);
+        } else {
+            ++it;
         }
-    }
-    for (unsigned int id : objectsToErase) {
-        especias.erase(id);
     }
 
     for (auto gameObject : gameObjects) {
@@ -211,7 +210,6 @@ void GameControler::updateGameObjects() {
     for (auto especia : especias) {
         especia.second->reset();
     }
-
     for (auto player : players) {
         player.second->changedSelection = false;
     }
