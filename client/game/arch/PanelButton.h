@@ -21,6 +21,7 @@ protected:
     std::string action;
     SdlTexture *texture;
     ClientSpritesSupplier &sprites_supplier;
+    bool have_I_changed;
 
 public:
     PanelButton(int width, int height, Point screen_position, std::string action, SdlTexture *texture, ClientSpritesSupplier &sprites_supplier);
@@ -38,6 +39,8 @@ public:
     virtual void disable() = 0;
 
     std::string getAction() const;
+
+    bool hasChanged() const;
 
     virtual ~PanelButton();
 };

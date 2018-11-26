@@ -23,16 +23,11 @@ void EventsLooperThread::pushEvent(std::string message, Point click_position, Po
     output_messages.push(ClientEvent(this->player_id, std::move(message), std::move(click_position), std::move(release_position)));
 }
 
-bool EventsLooperThread::processServerEvents() {
-    bool something_changed = false;
+void EventsLooperThread::processServerEvents() {
     std::list<GameStatusEvent> events = game_status_events.popAll();
-    if (!events.empty()) {
-        something_changed = true;
-    }
     std::for_each(events.begin(), events.end(), [this](GameStatusEvent &event){
         window_controller.processPicturables(event.picturables);
     });
-    return something_changed;
 }
 
 void EventsLooperThread::processMouseClickEvent(SDL_Event &event) {
@@ -45,20 +40,27 @@ void EventsLooperThread::processMouseReleaseEvent(SDL_Event &event) {
     window_controller.parseMouseRelease(mouse_event, this, &EventsLooperThread::pushEvent);
 }
 
-bool EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
+void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     auto &key_event = (SDL_KeyboardEvent &) event;
     switch (key_event.keysym.sym) {
-        case SDLK_LEFT:
-            return window_controller.move(LEFT);
-        case SDLK_RIGHT:
-            return window_controller.move(RIGHT);
+        case SDLK_LEFT: {
+            window_controller.move(LEFT);
             break;
-        case SDLK_UP:
-            return window_controller.move(UP);
-        case SDLK_DOWN:
-            return window_controller.move(DOWN);
+        }
+        case SDLK_RIGHT: {
+            window_controller.move(RIGHT);
+            break;
+        }
+        case SDLK_UP: {
+            window_controller.move(UP);
+            break;
+        }
+        case SDLK_DOWN: {
+            window_controller.move(DOWN);
+            break;
+        }
         default:
-            return false;
+            break;
     }
 }
 
@@ -78,13 +80,12 @@ void EventsLooperThread::run() {
 
         while (this->isRunning()) {
             auto start = std::chrono::steady_clock::now();
-            bool something_changed = false;
 
             SDL_Event event;
             SDL_PollEvent(&event);
             switch (event.type) {
                 case SDL_KEYDOWN: {
-                    something_changed = processKeyDownEvent(event);
+                    processKeyDownEvent(event);
                     break;
                 }
                 case SDL_MOUSEBUTTONDOWN: {
@@ -102,13 +103,9 @@ void EventsLooperThread::run() {
                     break;
             }
 
-            // If nothing changed then we don't need to re-render
-            something_changed = (something_changed || processServerEvents());
+            processServerEvents();
 
-            if (something_changed) {
-                //window_controller.fill();
-                window_controller.refreshMap();
-            }
+            window_controller.refresh();
 
             auto end = std::chrono::steady_clock::now();
             auto execution_difference = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

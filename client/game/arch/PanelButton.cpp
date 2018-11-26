@@ -12,7 +12,8 @@ PanelButton::PanelButton(int width,
         screen_position(std::move(screen_position)),
         action(std::move(action)),
         texture(texture),
-        sprites_supplier(sprites_supplier) {}
+        sprites_supplier(sprites_supplier),
+        have_I_changed(false) {}
 
 PanelButton::PanelButton(int width,
                          int height,
@@ -40,11 +41,15 @@ bool PanelButton::includesPosition(Point point) const {
 }
 
 bool PanelButton::includesExternalAction() const {
-    return !this->action.empty();
+    return !action.empty();
 }
 
 std::string PanelButton::getAction() const {
-    return this->action;
+    return action;
+}
+
+bool PanelButton::hasChanged() const {
+    return have_I_changed;
 }
 
 PanelButton::~PanelButton() = default;

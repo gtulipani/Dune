@@ -15,7 +15,7 @@ PicturableButton::PicturableButton(int width,
         std::move(action),
         texture,
         sprites_supplier),
-        done(true),
+        can_be_clicked(true),
         progress(100) {}
 
 PicturableButton::PicturableButton(int width,
@@ -37,12 +37,11 @@ void PicturableButton::render(int offset_x, int offset_y) {
     Area destArea(offset_x + this->screen_position.col, offset_y + this->screen_position.row, this->width,
                   this->height);
     this->texture->render(srcArea, destArea);
-    if (!this->done) {
-        // Requires a progress texture
+    if (!this->can_be_clicked) {
+        // If can't be clicked it means there is something going on. Requires a progress texture
         this->getProgressTexture()->render(srcArea, destArea);
     }
-
-    sprites_supplier[CONSTRUCTION_PERCENTAGE_100]->render(srcArea, destArea);
+    have_I_changed = false;
 }
 
 SdlTexture* PicturableButton::getProgressTexture() {
@@ -74,11 +73,15 @@ SdlTexture* PicturableButton::getProgressTexture() {
 }
 
 void PicturableButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
-    // Push the proper event
-    push_function(processer, this->action, this->screen_position, this->screen_position);
-    this->disable();
+    if (can_be_clicked) {
+        // Push the proper event
+        push_function(processer, this->action, this->screen_position, this->screen_position);
+        disable();
+    }
 }
 
 void PicturableButton::disable() {
-    this->progress = 0;
+    can_be_clicked = false;
+    progress = 0;
+    have_I_changed = true;
 }

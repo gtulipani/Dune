@@ -23,12 +23,12 @@ private:
     WindowController window_controller;
 
     void pushEvent(std::string message, Point click_position, Point release_position);
-    bool processServerEvents();
+    void processServerEvents();
 
     void processMouseClickEvent(SDL_Event &event);
     void processMouseReleaseEvent(SDL_Event &event);
 
-    bool processKeyDownEvent(SDL_Event& event);
+    void processKeyDownEvent(SDL_Event& event);
 
     void run() override;
 public:

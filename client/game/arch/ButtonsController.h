@@ -18,6 +18,8 @@ class ButtonsController {
 private:
     SdlWindow *window;
     ClientSpritesSupplier &client_sprites_supplier;
+    TerrainController* terrain_controller;
+    std::function<void(TerrainController*, Area)> map_renderer;
 
     SdlTexture *panel_texture{};
 
@@ -28,6 +30,8 @@ private:
     int screen_height{};
 
     int screen_width_offset{};
+
+    bool pending_changes{};
 
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
@@ -45,20 +49,23 @@ private:
     // Render only once the pannel with the main background images and the main buttons
     void renderPanelTexture();
     // Render the eagle eye map in the panel
-    void renderEagleEye(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
+    void renderEagleEye();
 public:
-    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
+    // map_renderer is a function that knows how to render the map on a given area
+    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TerrainController* terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
 
     void fill();
 
     void configure(int screen_width, int screen_height, int screen_width_offset);
 
-    // map_renderer is a function that knows how to render the map on a given area
-    void render(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
+    void render();
 
-    void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+    void refresh();
 
-    void move(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
+    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+
+    void move();
 
     ~ButtonsController();
 };

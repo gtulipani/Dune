@@ -25,7 +25,7 @@ WindowController::WindowController(SdlWindow* window) :
     window(window),
     client_sprites_supplier(window),
     terrain_controller(window, client_sprites_supplier),
-    buttons_controller(window, client_sprites_supplier) {}
+    buttons_controller(window, client_sprites_supplier, &terrain_controller, &TerrainController::renderEagleEye) {}
 
 WindowController::WindowController() : WindowController(
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
@@ -42,33 +42,31 @@ void WindowController::fill() {
     this->buttons_controller.fill();
 }
 
-void WindowController::refreshMap() {
-    this->terrain_controller.render();
+void WindowController::refresh() {
+    this->terrain_controller.refresh();
+    this->buttons_controller.refresh();
 }
 
 void WindowController::render() {
     this->terrain_controller.render();
-    this->buttons_controller.render(&this->terrain_controller, &TerrainController::renderEagleEye);
+    this->buttons_controller.render();
 }
 
-bool WindowController::move(enum Movement movement) {
-    bool result;
-    result = this->terrain_controller.move(movement);
-    if (result) {
-        this->buttons_controller.move(&this->terrain_controller, &TerrainController::renderEagleEye);
+void WindowController::move(enum Movement movement) {
+    if (this->terrain_controller.move(movement)) {
+        this->buttons_controller.move();
     }
-    return result;
 }
 
 void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
-        terrain_controller.parseMouseClickButton(mouse_event);
         // Store where does the Mouse Click take place
         last_click_event_occurrence = TERRAIN;
+        terrain_controller.parseMouseClickButton(mouse_event);
     } else {
-        buttons_controller.parseClick(mouse_event, processer, std::move(push_function));
         // Store where does the Mouse Click take place
         last_click_event_occurrence = BUTTONS;
+        buttons_controller.parseMouseClickButton(mouse_event, processer, std::move(push_function));
     }
 }
 
@@ -76,19 +74,18 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
         if (last_click_event_occurrence == BUTTONS) {
             // We clicked on the Panel Section and we released the mouse on the terrain section. Don't do anything
-            return;
         } else {
+            last_click_event_occurrence = NONE;
             terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
         }
     } else {
         if (last_click_event_occurrence == TERRAIN) {
             // We clicked on the Terrain Section and we released the mouse on the buttons section. Don't do anything
-            return;
         } else {
-            buttons_controller.parseClick(mouse_event, processer, std::move(push_function));
+            last_click_event_occurrence = NONE;
+            buttons_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
         }
     }
-    last_click_event_occurrence = NONE;
 }
 
 void WindowController::processPicturables(std::vector<Picturable> picturables) {

@@ -102,17 +102,24 @@ void TerrainController::fill() {
 }
 
 void TerrainController::render() {
-    Area srcArea(0 - offset_x, 0 - offset_y, this->screen_width, this->screen_height);
-    Area destArea(0, 0, this->screen_width, this->screen_height);
+    Area srcArea(0 - offset_x, 0 - offset_y, screen_width, screen_height);
+    Area destArea(0, 0, screen_width, screen_height);
 
-    this->terrain_texture->render(srcArea, destArea);
+    terrain_texture->render(srcArea, destArea);
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
-        sdlPicturable->render(this->offset_x, this->offset_y, this->screen_width);
+        sdlPicturable->render(offset_x, offset_y, screen_width);
     });
 
-    this->window->render();
+    window->render();
+    pending_changes = false;
+}
+
+void TerrainController::refresh() {
+    if (pending_changes) {
+        render();
+    }
 }
 
 void TerrainController::renderEagleEye(Area destArea) {
@@ -145,6 +152,9 @@ void TerrainController::renderEagleEye(Area destArea) {
 }
 
 void TerrainController::processPicturables(std::vector<Picturable> picturables) {
+    if (!picturables.empty()) {
+        this->pending_changes = true;
+    }
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
         auto unit_it = picturables_textures_map.find(picturable.sprite);
         if (unit_it != picturables_textures_map.end()) {
@@ -193,6 +203,7 @@ bool TerrainController::move(enum Movement movement) {
         case UP: {
             if (offset_y < 0) {
                 offset_y += TILE_PIXEL_RATE;
+                this->pending_changes = true;
                 return true;
             }
             return false;
@@ -200,6 +211,7 @@ bool TerrainController::move(enum Movement movement) {
         case DOWN: {
             if ((offset_y + this->terrain_height - this->screen_height) > 0) {
                 offset_y -= TILE_PIXEL_RATE;
+                this->pending_changes = true;
                 return true;
             }
             return false;
@@ -207,6 +219,7 @@ bool TerrainController::move(enum Movement movement) {
         case LEFT: {
             if (offset_x < 0) {
                 offset_x += TILE_PIXEL_RATE;
+                this->pending_changes = true;
                 return true;
             }
             return false;
@@ -214,6 +227,7 @@ bool TerrainController::move(enum Movement movement) {
         case RIGHT: {
             if ((offset_x + this->terrain_width - this->screen_width) > 0) {
                 offset_x -= TILE_PIXEL_RATE;
+                this->pending_changes = true;
                 return true;
             }
             return false;

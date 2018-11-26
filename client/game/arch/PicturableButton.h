@@ -6,7 +6,7 @@
 
 class PicturableButton : public PanelButton {
 private:
-    bool done;
+    bool can_be_clicked;
     int progress;
 
     SdlTexture* getProgressTexture();

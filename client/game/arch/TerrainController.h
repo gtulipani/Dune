@@ -44,6 +44,8 @@ private:
 
     Point temporary_position{};
 
+    bool pending_changes{};
+
     SdlTexture *createTexture(const std::string& subpath, const std::string& file_path);
     SdlTexture *createPicturableTexture(const std::string& file_path);
     SdlTexture *createTerrainTexture(const std::string& file_path);
@@ -59,6 +61,8 @@ public:
     void fill();
 
     void render();
+
+    void refresh();
 
     void renderEagleEye(Area destiny);
 
