@@ -11,6 +11,8 @@
 #define BUTTON_ORIGINAL_WIDTH 80
 #define BUTTON_ORIGINAL_HEIGHT 80
 
+class EventsLooperThread;
+
 class PanelButton {
 protected:
     int width;
@@ -30,6 +32,10 @@ public:
     bool includesPosition(Point point) const;
 
     bool includesExternalAction() const;
+
+    virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) = 0;
+
+    virtual void disable() = 0;
 
     std::string getAction() const;
 

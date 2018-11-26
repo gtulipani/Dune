@@ -36,7 +36,7 @@ public:
 
     void update(Picturable picturable, SdlTexture *sdlTexture);
 
-    SdlTexture* calculateTexture();
+    SdlTexture* getHealthBarTexture();
 };
 
 

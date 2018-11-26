@@ -11,6 +11,10 @@ public:
 
     void render(int offset_x, int offset_y) override;
 
+    void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) override;
+
+    void disable() override;
+
     ~MainButton() override = default;
 };
 

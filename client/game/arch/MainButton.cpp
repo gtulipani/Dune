@@ -36,3 +36,7 @@ void MainButton::render(int offset_x, int offset_y) {
                   this->height);
     this->texture->render(srcArea, destArea);
 }
+
+void MainButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {}
+
+void MainButton::disable() {}

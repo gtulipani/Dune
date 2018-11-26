@@ -135,10 +135,10 @@ void ButtonsController::parseClick(SDL_MouseButtonEvent& mouse_event,
         case SDL_BUTTON_LEFT: {
             bool found = false;
             // Most likely a click on a building icon
-            for (const PanelButton* button : available_buttons) {
+            for (PanelButton* button : available_buttons) {
                 if (button->includesPosition(position) && button->includesExternalAction()) {
                     // We are sending an action, so we are not going to use the positions for now
-                    push_function(processer, button->getAction(), position, position);
+                    button->click(processer, push_function);
                     found = true;
                 }
             }
