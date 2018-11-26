@@ -60,7 +60,7 @@ public:
 
     void render();
 
-    void renderEntireTerrain(Area destiny);
+    void renderEagleEye(Area destiny);
 
     void processPicturables(std::vector<Picturable> picturables);
 

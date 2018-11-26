@@ -48,11 +48,16 @@ void WindowController::refreshMap() {
 
 void WindowController::render() {
     this->terrain_controller.render();
-    this->buttons_controller.render(&this->terrain_controller, &TerrainController::renderEntireTerrain);
+    this->buttons_controller.render(&this->terrain_controller, &TerrainController::renderEagleEye);
 }
 
 bool WindowController::move(enum Movement movement) {
-    return this->terrain_controller.move(movement);
+    bool result;
+    result = this->terrain_controller.move(movement);
+    if (result) {
+        this->buttons_controller.move(&this->terrain_controller, &TerrainController::renderEagleEye);
+    }
+    return result;
 }
 
 void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {

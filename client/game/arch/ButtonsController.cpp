@@ -85,6 +85,11 @@ void ButtonsController::renderPanelTexture() {
     });
 }
 
+void ButtonsController::renderEagleEye(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer) {
+    Area destArea(screen_width_offset + EAGLE_EYE_X_OFFSET, EAGLE_EYE_Y_OFFSET, EAGLE_EYE_WIDTH, EAGLE_EYE_HEIGHT);
+    map_renderer(terrain_controller, destArea);
+}
+
 void ButtonsController::fill() {
     this->window->fill();
 }
@@ -112,8 +117,7 @@ void ButtonsController::render(TerrainController *terrain_controller, std::funct
     this->panel_texture->render(srcArea, destArea);
 
     // Render the eagle eye map
-    destArea = Area(screen_width_offset + EAGLE_EYE_X_OFFSET, EAGLE_EYE_Y_OFFSET, EAGLE_EYE_WIDTH, EAGLE_EYE_HEIGHT);
-    map_renderer(terrain_controller, destArea);
+    this->renderEagleEye(terrain_controller, std::move(map_renderer));
 
     // Render each one of the available buttons
     std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton *button) {
@@ -153,6 +157,10 @@ void ButtonsController::parseClick(SDL_MouseButtonEvent& mouse_event,
         default:
             break;
     }
+}
+
+void ButtonsController::move(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer) {
+    this->renderEagleEye(terrain_controller, std::move(map_renderer));
 }
 
 ButtonsController::~ButtonsController() {

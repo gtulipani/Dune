@@ -18,6 +18,11 @@
 #define PICTURABLES_RESOURCES_SUBPATH std::string("picturables/")
 #define TERRAIN_RESOURCES_SUBPATH std::string("terrain/")
 
+#define EAGLE_EYE_SQUARE_ORIGIN_WIDTH 80
+#define EAGLE_EYE_SQUARE_ORIGIN_HEIGHT 80
+
+#define EAGLE_EYE_SQUARE_DESTINY_RATE 0.2
+
 TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier) :
     window(window),
     client_sprites_supplier(client_sprites_supplier) {}
@@ -110,10 +115,33 @@ void TerrainController::render() {
     this->window->render();
 }
 
-void TerrainController::renderEntireTerrain(Area destArea) {
-    Area srcArea(0, 0, this->terrain_width, this->terrain_height);
+void TerrainController::renderEagleEye(Area destArea) {
+    Area terrainSrcArea(0, 0, this->terrain_width, this->terrain_height);
+    this->terrain_texture->render(terrainSrcArea, destArea);
 
-    this->terrain_texture->render(srcArea, destArea);
+    Area eagleEyeSrcArea(0, 0, EAGLE_EYE_SQUARE_ORIGIN_WIDTH, EAGLE_EYE_SQUARE_ORIGIN_HEIGHT);
+    // How much of the terrain is being displayed in the screen
+    double view_width_rate = (static_cast<double>(destArea.getWidth()) / static_cast<double>(this->terrain_width));
+    double view_height_rate = (static_cast<double>(destArea.getHeight()) / static_cast<double>(this->terrain_height));
+
+    // Resized the offset for the eagle_eye map
+    double x_offset = static_cast<double>(offset_x) * view_width_rate;
+    double y_offset = static_cast<double>(offset_y) * view_height_rate;
+
+    // Calculate the coordinates from the square
+    double x_coordinate = static_cast<double>(destArea.getX()) - x_offset;
+    double y_coordinate = static_cast<double>(destArea.getY()) - y_offset;
+
+    // Recalculate the size
+    double width = static_cast<double>(this->screen_width) * view_width_rate;
+    double height = static_cast<double>(this->screen_height) * view_height_rate;
+
+    Area eagleDestArea(
+            static_cast<int>(x_coordinate),
+            static_cast<int>(y_coordinate),
+            static_cast<int>(width),
+            static_cast<int>(height));
+    client_sprites_supplier[EAGLE_EYE_SQUARE]->render(eagleEyeSrcArea, eagleDestArea);
 }
 
 void TerrainController::processPicturables(std::vector<Picturable> picturables) {

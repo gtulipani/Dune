@@ -44,6 +44,8 @@ private:
     void loadButtonsPanel();
     // Render only once the pannel with the main background images and the main buttons
     void renderPanelTexture();
+    // Render the eagle eye map in the panel
+    void renderEagleEye(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
 public:
     ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
 
@@ -55,6 +57,8 @@ public:
     void render(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
 
     void parseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+
+    void move(TerrainController *terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
 
     ~ButtonsController();
 };

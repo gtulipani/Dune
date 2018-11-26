@@ -49,7 +49,15 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     // Store background images textures
     sprites.emplace(BACKGROUND, createPanelTexture("background.png", window));
     sprites.emplace(BUTTONS_BACKGROUND, createPanelTexture("optional_buttons_background.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_12, createPanelTexture("progress_12.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_25, createPanelTexture("progress_25.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_37, createPanelTexture("progress_37.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_50, createPanelTexture("progress_50.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_62, createPanelTexture("progress_62.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_75, createPanelTexture("progress_75.png", window));
+    sprites.emplace(CONSTRUCTION_PERCENTAGE_87, createPanelTexture("progress_87.png", window));
     sprites.emplace(CONSTRUCTION_PERCENTAGE_100, createPanelTexture("progress_100.png", window));
+    sprites.emplace(EAGLE_EYE_SQUARE, createPanelTexture("eagle_eye_square.png", window));
 
     // Store various textures
     sprites.emplace(HEALTH_10, createTerrainTexture("health_10.png", window));
