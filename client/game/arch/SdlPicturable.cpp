@@ -93,7 +93,6 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
         Area healthBarSrcArea(0, 0, originHealthBarWidth, originHealthBarHeight);
         Area healthBarDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y - (TILE_PIXEL_RATE / 4), destinyWidth, (TILE_PIXEL_RATE / 6));
         getHealthBarTexture()->render(healthBarSrcArea, healthBarDestArea);
-        sprites_supplier[HEALTH_100]->render(healthBarSrcArea, healthBarDestArea);
     }
 }
 

@@ -163,7 +163,13 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
             });
             if (picturable_it != this->picturables.end()) {
                 // Replace existing one with the new one received from the GameStatusEvent
-                (*picturable_it)->update(picturable, unit_it->second);
+                if (picturable.health == 0) {
+                    // The picturable died/was destroyed
+                    delete (*picturable_it);
+                    this->picturables.erase(picturable_it);
+                } else {
+                    (*picturable_it)->update(picturable, unit_it->second);
+                }
             } else {
                 // Create a new SdlPicturable
                 this->picturables.push_back(new SdlPicturable(picturable, unit_it->second, this->client_sprites_supplier));

@@ -26,7 +26,8 @@ void AttackingUnit::tick() {
     Point enemyPos = target->getPixelPosition();
 
     if (inRange(enemyPos)) {
-        path = {};
+        std::stack<Point> empty_stack;
+        path = empty_stack;
         pixelGoal = pixelPosition;
         if (GameObject::checkCounter(counter, ticks_per_attack)) {
             target->recieveAttack(this, attackPoints);
