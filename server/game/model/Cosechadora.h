@@ -5,8 +5,6 @@
 
 class Especia;
 
-const unsigned int COSECHADORA_MOVESPEED = 10;
-const Point COSECHADORA_SIZE(32, 32);
 const unsigned int ESPECIA_MAX = 200;
 
 typedef enum {
@@ -23,11 +21,14 @@ class Cosechadora : public WalkingUnit {
     Especia* target;
 
     public:
-    Cosechadora(Player& player, int id, const Point& initialPosition, Map& map);
+    Cosechadora(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
+                Map& map, unsigned int movespeed);
 
     virtual void tick() override;
 
     virtual void handleRightClick(const Point& pos) override;
+
+    virtual void filterBadTiles(std::vector<Point> &tiles) const override;
 };
 
 #endif

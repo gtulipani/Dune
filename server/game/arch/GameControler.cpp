@@ -8,11 +8,14 @@
 #include "../model/WalkingUnit.h"
 #include "../model/AttackingUnit.h"
 #include "../model/Cosechadora.h"
+#include "../model/Vehiculo.h"
+#include "../model/Infanteria.h"
 #include "../model/Especia.h"
 #include "../model/Building.h"
 #include "../model/InProgressGameObject.h"
 
-GameControler::GameControler(Map& _map) :  map(_map) {}
+GameControler::GameControler(Map& map, const GameConfiguration& gameConfig) :
+ map(map), gameConfig(gameConfig) {}
 
 const unsigned int CONSTRUCTION_CENTER_HEALTH = 1000;
 const Point CONSTRUCTION_CENTER_SIZE = {3 * TILE_PIXEL_RATE, 3 * TILE_PIXEL_RATE};
@@ -28,13 +31,13 @@ void GameControler::initializePlayers(unsigned int number_of_players) {
         std::vector<Point> initPoss = map.getAvailableTilesNear(tile_utils::getTileFromPixel(constructionCenterPosition), 5);
         for (int j = 0; j < 2; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
-            auto * cosechadora = new Cosechadora(*players.at(i), next_id, pos, map);
+            auto * cosechadora = gameConfig.getCosechadora(*players.at(i), next_id, pos, map);
             gameObjects[next_id] = cosechadora;
             next_id++;
         }
         for (int j = 2; j < 5; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
-            auto * trike = new AttackingUnit(*players.at(i), next_id, TRIKE_SPRITE_DOWN, 1000, {32, 32}, pos, map, 30, 5, 100, 10);
+            auto * trike = gameConfig.getTrike(*players.at(i), next_id, pos, map);
             gameObjects[next_id] = trike;
             next_id++;
         }
@@ -103,15 +106,15 @@ void GameControler::rightClick(unsigned int player_id, const Point& point) {
 }
 
 void GameControler::createTrike(unsigned int player_id) {
-    auto * trike = new WalkingUnit(*players.at(player_id), next_id, TRIKE_SPRITE_DOWN, 1000, {32, 32}, {0, 0}, map, 10);
-    auto * trikeInProgress = new InProgressGameObject(trike);
+    auto * trike = gameConfig.getTrike(*players.at(player_id), next_id, {}, map);
+    auto * trikeInProgress = new InProgressGameObject(trike, gameConfig.getTiempoTrike());
     inProgressUnits[next_id] = trikeInProgress;
     next_id++;
 }
 
 void GameControler::createBuilding(unsigned int player_id, const Sprites& sprite) {
     auto * building = new Building(*players.at(player_id), next_id, sprite, 1000, {32, 32}, {0, 0});
-    auto * buildingInProgress = new InProgressGameObject(building);
+    auto * buildingInProgress = new InProgressGameObject(building, 5);
     inProgressBuildings[next_id] = buildingInProgress;
     next_id++;
 }
@@ -127,8 +130,8 @@ void GameControler::locateBuildingAt(unsigned int id, const Point& pos) {
 }
 
 void GameControler::createCosechadora(unsigned int player_id) {
-    auto * cosechadora = new Cosechadora(*players.at(player_id), next_id, {0, 0}, map);
-    auto * cosechadoraInProgress = new InProgressGameObject(cosechadora);
+    auto * cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
+    auto * cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoCosechadora());
     inProgressUnits[next_id] = cosechadoraInProgress;
     next_id++;
 }

@@ -1,8 +1,6 @@
 #ifndef __IN_PROGRESS_GAME_OBJECT_H__
 #define __IN_PROGRESS_GAME_OBJECT_H__
 
-#define TICKS_UNTIL_COMPLETED 2000U // 10s
-
 #include "GameObject.h"
 
 class SelectableGameObject;
@@ -12,9 +10,10 @@ class InProgressGameObject : public GameObject {
     int porcentage = 0;
     unsigned int counter = 0;
     SelectableGameObject* selectableGameObject;
+    const unsigned int ticksUntilCompleted;
 
     public:
-    explicit InProgressGameObject(SelectableGameObject* gameObject);
+    explicit InProgressGameObject(SelectableGameObject* gameObject, unsigned int time_minutes);
 
     virtual void tick() override;
 

@@ -5,8 +5,9 @@
 
 #include "Especia.h"
 
-Cosechadora::Cosechadora(Player& player, int id, const Point& initialPosition, Map& map) :
-WalkingUnit(player, id, COSECHADORA_UP, 1000, COSECHADORA_SIZE, initialPosition, map, COSECHADORA_MOVESPEED) {}
+Cosechadora::Cosechadora(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
+                Map& map, unsigned int movespeed) :
+WalkingUnit(player, id, sprite, health, size, initialPixelPosition, map, movespeed) {}
 
 void Cosechadora::tick() {
     switch (state) {
@@ -55,5 +56,15 @@ void Cosechadora::handleRightClick(const Point& pos) {
         state = going;
     } else {
         this->WalkingUnit::handleRightClick(pos);
+    }
+}
+
+void Cosechadora::filterBadTiles(std::vector<Point> &tiles) const {
+    for (auto it = tiles.begin(); it != tiles.end();) {
+        if (map.mat.at(*it) == CIMAS || map.mat.at(*it) == PRECIPICIOS || map.mat.at(*it) == EDIFICIOS) {
+            it = tiles.erase(it);
+        } else {
+            ++it;
+        }
     }
 }

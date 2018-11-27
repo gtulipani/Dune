@@ -6,6 +6,8 @@
 
 #include <Sprites.h>
 
+#include "GameConfiguration.h"
+
 class SelectableGameObject;
 class InProgressGameObject;
 class Map;
@@ -18,6 +20,7 @@ class GameControler {
     private:
     unsigned int next_id = 0;
     Map& map;
+    const GameConfiguration& gameConfig;
     std::map<unsigned int, Especia*> especias;
     std::map<unsigned int, SelectableGameObject*> gameObjects;
     std::map<unsigned int, Player*> players;
@@ -27,7 +30,7 @@ class GameControler {
     void initializePlayers(unsigned int number_of_player);
 
     public:
-    explicit GameControler(Map& map);
+    explicit GameControler(Map& map, const GameConfiguration& gameConfig);
 
     void initialize(unsigned int number_of_players);
 

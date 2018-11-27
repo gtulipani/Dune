@@ -21,6 +21,9 @@ add_executable(server
         game/model/AttackingUnit.cpp
         game/model/Building.cpp
         game/model/Cosechadora.cpp
+        game/model/Vehiculo.cpp
+        game/model/Infanteria.cpp
+        game/model/Weapon.cpp
         game/model/Especia.cpp
         game/model/Player.cpp
         game/model/Map.cpp)

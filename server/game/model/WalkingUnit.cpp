@@ -5,11 +5,11 @@
 #include <TileUtils.h>
 #include "Map.h"
 
-WalkingUnit::WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition, Map& _map, unsigned int movespeed) :
+WalkingUnit::WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition, Map& map, unsigned int movespeed) :
 SelectableGameObject(player, id, sprite, health, size, initialPixelPosition),
 ticksPerStep(TO_TICKS(movespeed)),
 tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)),
-map(_map),
+map(map),
 pixelGoal(initialPixelPosition) {}
 
 void WalkingUnit::tick() {
@@ -157,5 +157,3 @@ void WalkingUnit::findPath(const Point &goal) {
         current = came_from[current];
     }
 }
-
-void WalkingUnit::filterBadTiles(std::vector<Point> &tiles) const {}

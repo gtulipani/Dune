@@ -32,7 +32,7 @@ class WalkingUnit : public SelectableGameObject {
     public:
     // Movespeed on pixels per second.
     WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& _map, unsigned int movespeed);
+                Map& map, unsigned int movespeed);
 
     virtual void tick() override;
 
@@ -42,7 +42,7 @@ class WalkingUnit : public SelectableGameObject {
         return TICKS_PER_SECOND;
     }
 
-    void filterBadTiles(std::vector<Point> &tiles) const;
+    virtual void filterBadTiles(std::vector<Point> &tiles) const = 0;
 };
 
 #endif

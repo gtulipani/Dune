@@ -65,7 +65,7 @@ gameConfig(configMap.at(UNITS_PROPERTIES_PATH_KEY)),
 mapsList(getFilesFromPath(configMap.at(MAPS_PATH_KEY))),
 accepter(configMap.at(PORT_KEY), PLAYERS_PER_GAME, clients),
 sharedQueue(m),
-game(sharedQueue, clients) {}
+game(sharedQueue, clients, gameConfig) {}
 
 void ServerThread::run() {
 	accepter.start(sharedQueue);

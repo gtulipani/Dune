@@ -20,10 +20,11 @@
 
 using json = nlohmann::json;
 
-Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients) :
+Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients,
+const GameConfiguration& gameConfig) :
 events_queue(events_queue), clients(_clients) {
     map = json_utils::parseAsJson("resources/maps/basic_map.json");
-    gameControler = new GameControler(map);
+    gameControler = new GameControler(map, gameConfig);
 }
 
 void Game::sendGameConfigurationEvent() {

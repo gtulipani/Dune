@@ -1,15 +1,14 @@
 #include "InProgressGameObject.h"
 
 #include "Player.h"
+#include <Tick.h>
 
-InProgressGameObject::InProgressGameObject(SelectableGameObject* selectableGameObject)
-: GameObject(*(GameObject*)selectableGameObject), selectableGameObject(selectableGameObject) {}
-
-#define TICKS_PER_PORCENTAGE_RAISE (TICKS_UNTIL_COMPLETED / 100)
+InProgressGameObject::InProgressGameObject(SelectableGameObject* selectableGameObject, unsigned int time_minutes)
+: GameObject(*(GameObject*)selectableGameObject), selectableGameObject(selectableGameObject), ticksUntilCompleted(TO_TICKS(time_minutes*60)) {}
 
 void InProgressGameObject::tick() {
     if (porcentage >= 100) return;
-    if (GameObject::checkCounter(counter, TICKS_PER_PORCENTAGE_RAISE)) {
+    if (GameObject::checkCounter(counter, ticksUntilCompleted / 100)) {
         haveIChanged = true;
         porcentage++;
     }

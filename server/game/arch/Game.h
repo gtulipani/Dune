@@ -12,6 +12,7 @@
 
 // Model Libraries
 #include "GameControler.h"
+#include "GameConfiguration.h"
 #include "../model/Map.h"
 
 class ClientThread;
@@ -37,7 +38,7 @@ class Game {
     void updateClients();
 
     public:
-    Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients);
+    Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients, const GameConfiguration& gameConfig);
 
     void start();
 
