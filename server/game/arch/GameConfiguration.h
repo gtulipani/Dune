@@ -1,35 +1,14 @@
 #ifndef __GAME_CONFIGURATION_H__
 #define __GAME_CONFIGURATION_H__
 
-#include <string>
-
-#include "json/json.hpp"
-#include "game/model/Building.h"
-#include "game/model/Vehicle.h"
-#include "game/model/Weapon.h"
-#include "game/model/Soldier.h"
+class AttackingUnit;
+class Cosechadora;
 
 class GameConfiguration {
-private:
-/*
-	vector<Building> buildings;
-	vector<Weapon> weapons;
-	vector<Soldier> soldiers;
-	vector<Vehicle> vehicles;
+    public:
+    AttackingUnit* getTrike() const;
 
-	vector<Building> parseBuildingsConfiguration(json &buildings_json);
-
-	vector<Weapon> parseWeaponsConfiguration(json &configuration_json);
-
-	vector<Soldier> parseSoldiersConfiguration(json &configuration_json);
-
-	vector<Vehicle> parseVehiclesConfiguration(json &configuration_json);
-
-	void parseGameConfiguration(json &configuration_json);
-*/
-public:
-	explicit GameConfiguration(const string &config_file_path);
+    Cosechadora* getCosechadora() const;
 };
 
-
-#endif //__GAME_CONFIGURATION_H__
+#endif
