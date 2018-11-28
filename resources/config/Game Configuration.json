@@ -4,14 +4,14 @@
       "energy": 0,
       "cost": 0,
       "size": {"row": 3, "column": 3},
-      "structure_points": 3000,
+      "health": 3000,
       "capacity": -1
     },
     "refineria": {
       "energy": 400,
       "cost": 500,
       "size": {"row": 3, "column": 3},
-      "structure_points": 0,
+      "health": 0,
       "capacity": 1000
     }
   },
