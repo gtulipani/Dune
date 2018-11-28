@@ -2,44 +2,47 @@
 
 // Client Libraries
 #include "Area.h"
+#include "RequiresTerrainControllerActionException.h"
 
 PicturableButton::PicturableButton(int width,
                        int height,
                        Point screen_position,
-                       std::string action,
+                       std::vector<int> actions,
                        SdlTexture* texture,
-                       ClientSpritesSupplier &sprites_supplier) : PanelButton(
+                       ClientSpritesSupplier &sprites_supplier,
+                       bool requires_second_action) : PanelButton(
         width,
         height,
         std::move(screen_position),
-        std::move(action),
+        std::move(actions),
         texture,
         sprites_supplier),
-        can_be_clicked(true),
+        requires_second_action(requires_second_action),
+        is_being_created(false),
         progress(100) {}
 
 PicturableButton::PicturableButton(int width,
                        int height,
                        Point screen_position,
-                       std::string action,
+                       std::vector<int> actions,
                        std::string image_path,
                        SdlWindow *window,
-                       ClientSpritesSupplier &sprites_supplier) : PicturableButton(
+                       ClientSpritesSupplier &sprites_supplier,
+                       bool requires_second_action) : PicturableButton(
         width,
         height,
         std::move(screen_position),
-        std::move(action),
+        std::move(actions),
         new SdlTexture(image_path, window),
-        sprites_supplier) {}
+        sprites_supplier,
+        requires_second_action) {}
 
 void PicturableButton::render(int offset_x, int offset_y) {
     Area srcArea(0, 0, BUTTON_ORIGINAL_WIDTH, BUTTON_ORIGINAL_HEIGHT);
-    Area destArea(offset_x + this->screen_position.col, offset_y + this->screen_position.row, this->width,
-                  this->height);
-    this->texture->render(srcArea, destArea);
-    if (!this->can_be_clicked) {
-        // If can't be clicked it means there is something going on. Requires a progress texture
-        this->getProgressTexture()->render(srcArea, destArea);
+    Area destArea(offset_x + screen_position.col, offset_y + screen_position.row, width, height);
+    texture->render(srcArea, destArea);
+    if (is_being_created) {
+        getProgressTexture()->render(srcArea, destArea);
     }
     have_I_changed = false;
 }
@@ -72,16 +75,30 @@ SdlTexture* PicturableButton::getProgressTexture() {
     return sprites_supplier[CONSTRUCTION_PERCENTAGE_0];
 }
 
-void PicturableButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
-    if (can_be_clicked) {
-        // Push the proper event
-        push_function(processer, this->action, this->screen_position, this->screen_position);
-        disable();
+void PicturableButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) {
+    if (!is_being_created) {
+        // If it's not during creation, then it can be clicked
+        if (requires_second_action) {
+            // Action has already been applied therefore I need a second_action
+            throw RequiresTerrainControllerActionException();
+        } else {
+            // Pushes first action with the function received as parameter
+            push_function(processer, actions[0], {0}, screen_position, screen_position);
+            disable();
+        }
     }
 }
 
 void PicturableButton::disable() {
-    can_be_clicked = false;
+    is_being_created = true;
     progress = 0;
     have_I_changed = true;
+}
+
+void PicturableButton::resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, std::vector<int>, Point, Point)> push_function) {
+    push_function(processer, actions[1], {0}, std::move(position), Point(0,0));
+}
+
+bool PicturableButton::hasPendingAction() {
+    return requires_second_action;
 }

@@ -39,28 +39,82 @@ SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path
     return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path);
 }
 
+
 void TerrainController::buildUnits() {
     // Store buildings textures
-    picturables_textures_map.emplace(CONSTRUCTION_CENTER, createPicturableTexture("construction_center.png"));
-    picturables_textures_map.emplace(WIND_TRAPS, createPicturableTexture("wind_traps.png"));
-    picturables_textures_map.emplace(REFINERY, createPicturableTexture("refinery.png"));
-    //picturables_textures_map.emplace(ATREIDES_BARRACKS, createPicturableTexture("wind_traps.png"));
-    picturables_textures_map.emplace(HARKUNNAN_BARRACKS, createPicturableTexture("harkunnan_barracks.png"));
-    picturables_textures_map.emplace(ORDOS_BARRACKS, createPicturableTexture("ordos_barracks.png"));
-    picturables_textures_map.emplace(LIGHT_FACTORY, createPicturableTexture("light_factory.png"));
-    picturables_textures_map.emplace(HEAVY_FACTORY, createPicturableTexture("heavy_factory.png"));
-    picturables_textures_map.emplace(SILO, createPicturableTexture("silo.png"));
-    //picturables_textures_map.emplace(PALACE, createPicturableTexture("/palace.png"));
+    picturables_map[CONSTRUCTION_CENTER][SPRITE_DOWN][0] = createPicturableTexture("construction_center.png");
+    picturables_map[WIND_TRAPS][SPRITE_DOWN][0] = createPicturableTexture("wind_traps.png");
+    picturables_map[REFINERY][SPRITE_DOWN][0] = createPicturableTexture("refinery.png");
+    //picturables_map[ATREIDES_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("atreides_barracks.png");
+    picturables_map[HARKUNNAN_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("harkunnan_barracks.png");
+    picturables_map[ORDOS_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("ordos_barracks.png");
+    picturables_map[LIGHT_FACTORY][SPRITE_DOWN][0] = createPicturableTexture("light_factory.png");
+    picturables_map[HEAVY_FACTORY][SPRITE_DOWN][0] = createPicturableTexture("heavy_factory.png");
+    picturables_map[SILO][SPRITE_DOWN][0] = createPicturableTexture("silo.png");
+    //picturables_map[PALACE][SPRITE_DOWN][0] = createPicturableTexture("palace.png");
 
-    // Store Trike unit sprites
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP, createPicturableTexture("sprite_00.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_UP_RIGHT, createPicturableTexture("sprite_01.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT, createPicturableTexture("sprite_02.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_RIGHT_DOWN, createPicturableTexture("sprite_03.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN, createPicturableTexture("sprite_04.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_DOWN_LEFT, createPicturableTexture("sprite_05.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT, createPicturableTexture("sprite_06.png"));
-    picturables_textures_map.emplace(TRIKE_SPRITE_LEFT_UP, createPicturableTexture("sprite_07.png"));
+    // Store trike sprites
+    picturables_map[TRIKE][SPRITE_UP][0] = createPicturableTexture("trike_up.png");
+    picturables_map[TRIKE][SPRITE_UP_RIGHT][0] = createPicturableTexture("trike_up_right.png");
+    picturables_map[TRIKE][SPRITE_RIGHT][0] = createPicturableTexture("trike_right.png");
+    picturables_map[TRIKE][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("trike_down_right.png");
+    picturables_map[TRIKE][SPRITE_DOWN][0] = createPicturableTexture("trike_down.png");
+    picturables_map[TRIKE][SPRITE_DOWN_LEFT][0] = createPicturableTexture("trike_down_left.png");
+    picturables_map[TRIKE][SPRITE_LEFT][0] = createPicturableTexture("trike_left.png");
+    picturables_map[TRIKE][SPRITE_UP_LEFT][0] = createPicturableTexture("trike_left_up.png");
+
+    // Store harvester sprites
+    picturables_map[HARVESTER][SPRITE_UP][0] = createPicturableTexture("harvester_up.png");
+    picturables_map[HARVESTER][SPRITE_UP_RIGHT][0] = createPicturableTexture("harvester_up_right.png");
+    picturables_map[HARVESTER][SPRITE_RIGHT][0] = createPicturableTexture("harvester_right.png");
+    picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("harvester_down_right.png");
+    picturables_map[HARVESTER][SPRITE_DOWN][0] = createPicturableTexture("harvester_down.png");
+    picturables_map[HARVESTER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("harvester_down_left.png");
+    picturables_map[HARVESTER][SPRITE_LEFT][0] = createPicturableTexture("harvester_left.png");
+    picturables_map[HARVESTER][SPRITE_UP_LEFT][0] = createPicturableTexture("harvester_left_up.png");
+
+    // Store raider sprites
+    picturables_map[RAIDER][SPRITE_UP][0] = createPicturableTexture("raider_up.png");
+    picturables_map[RAIDER][SPRITE_UP_RIGHT][0] = createPicturableTexture("raider_up_right.png");
+    picturables_map[RAIDER][SPRITE_RIGHT][0] = createPicturableTexture("raider_right.png");
+    picturables_map[RAIDER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("raider_down_right.png");
+    picturables_map[RAIDER][SPRITE_DOWN][0] = createPicturableTexture("raider_down.png");
+    picturables_map[RAIDER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("raider_down_left.png");
+    picturables_map[RAIDER][SPRITE_LEFT][0] = createPicturableTexture("raider_left.png");
+    picturables_map[RAIDER][SPRITE_UP_LEFT][0] = createPicturableTexture("raider_left_up.png");
+
+    // Store tank sprites
+    /*picturables_map[TANK][SPRITE_UP][0] = createPicturableTexture("tank_up.png");
+    picturables_map[TANK][SPRITE_UP_RIGHT][0] = createPicturableTexture("tank_up_right.png");
+    picturables_map[TANK][SPRITE_RIGHT][0] = createPicturableTexture("tank_right.png");
+    picturables_map[TANK][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("tank_down_right.png");
+    picturables_map[TANK][SPRITE_DOWN][0] = createPicturableTexture("tank_down.png");
+    picturables_map[TANK][SPRITE_DOWN_LEFT][0] = createPicturableTexture("tank_down_left.png");
+    picturables_map[TANK][SPRITE_LEFT][0] = createPicturableTexture("tank_left.png");
+    picturables_map[TANK][SPRITE_UP_LEFT][0] = createPicturableTexture("tank_left_up.png");
+
+    // Store light infantry sprites
+    picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+    picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
+
+    // Store heavy infantry sprites
+    picturables_map[HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+    picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
+
+    // Store especia sprites
+    picturables_map[ESPECIA][SPRITE_DOWN][0] = createPicturableTexture("especia.png");
 }
 
 void TerrainController::buildTerrains() {
@@ -68,7 +122,6 @@ void TerrainController::buildTerrains() {
     terrains_textures_map.emplace(ARENA, createTerrainTexture("Arena.png"));
     terrains_textures_map.emplace(CIMAS, createTerrainTexture("Cimas.png"));
     terrains_textures_map.emplace(DUNAS, createTerrainTexture("Dunas.png"));
-    terrains_textures_map.emplace(ESPECIA, createTerrainTexture("Especia.png"));
     terrains_textures_map.emplace(PRECIPICIOS, createTerrainTexture("Precipicio.png"));
     terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
 }
@@ -156,24 +209,23 @@ void TerrainController::processPicturables(std::vector<Picturable> picturables) 
         this->pending_changes = true;
     }
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
-        auto unit_it = picturables_textures_map.find(picturable.sprite);
-        if (unit_it != picturables_textures_map.end()) {
-            auto picturable_it = std::find_if(this->picturables.begin(), this->picturables.end(), [&](SdlPicturable *sdlPicturable){
-                return ((*sdlPicturable) == picturable);
-            });
-            if (picturable_it != this->picturables.end()) {
-                // Replace existing one with the new one received from the GameStatusEvent
-                if (picturable.health == 0) {
-                    // The picturable died/was destroyed
-                    delete (*picturable_it);
-                    this->picturables.erase(picturable_it);
-                } else {
-                    (*picturable_it)->update(picturable, unit_it->second);
-                }
+        // Localize texture to be rendered
+        SdlTexture* texture = picturables_map[picturable.type][picturable.sprite_direction][picturable.sprite_motion];
+        auto picturable_it = std::find_if(this->picturables.begin(), this->picturables.end(), [&](SdlPicturable *sdlPicturable){
+            return ((*sdlPicturable) == picturable);
+        });
+        if (picturable_it != this->picturables.end()) {
+            // Replace existing one with the new one received from the GameStatusEvent
+            if (picturable.health == 0) {
+                // The picturable died/was destroyed
+                delete (*picturable_it);
+                this->picturables.erase(picturable_it);
             } else {
-                // Create a new SdlPicturable
-                this->picturables.push_back(new SdlPicturable(picturable, unit_it->second, this->client_sprites_supplier));
+                (*picturable_it)->update(picturable, texture);
             }
+        } else {
+            // Create a new SdlPicturable
+            this->picturables.push_back(new SdlPicturable(picturable, texture, this->client_sprites_supplier));
         }
     });
 }
@@ -188,15 +240,15 @@ void TerrainController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event)
 
 void TerrainController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
                                                 EventsLooperThread *processer,
-                                                std::function<void(EventsLooperThread *, std::string,
-                                                                   Point, Point)> push_function) {
+                                                std::function<void(EventsLooperThread *, int,
+                                                                   std::vector<int>, Point, Point)> push_function) {
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
-            push_function(processer, LEFT_CLICK_TYPE, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
+            push_function(processer, LEFT_CLICK_EVENT_TYPE, {0}, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         case SDL_BUTTON_RIGHT: {
-            push_function(processer, RIGHT_CLICK_TYPE, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
+            push_function(processer, RIGHT_CLICK_EVENT_TYPE, {0}, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
             break;
         }
         default:
@@ -276,7 +328,11 @@ TerrainController::~TerrainController() {
     }
 
     // Delete all the picturable textures
-    for (auto& picturable_texture : this->picturables_textures_map) {
-        delete picturable_texture.second;
+    for (auto& unit_textures : this->picturables_map) {
+        for (auto& unit_direction : unit_textures.second) {
+            for (auto& unit_motion : unit_direction.second) {
+                delete unit_motion.second;
+            }
+        }
     }
 }

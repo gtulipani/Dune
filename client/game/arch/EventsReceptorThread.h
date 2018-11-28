@@ -25,12 +25,13 @@ class EventsReceptorThread : public Thread {
 private:
     Socket &socket;
     shaque<GameStatusEvent> &game_status_events;
+    bool &game_ended;
 
     void run() override;
 
     void terminate() override;
 public:
-    EventsReceptorThread(Socket &socket, shaque<GameStatusEvent> &game_status_events);
+    EventsReceptorThread(Socket &socket, shaque<GameStatusEvent> &game_status_events, bool &game_ended);
 };
 
 

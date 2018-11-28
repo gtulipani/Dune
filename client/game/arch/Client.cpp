@@ -6,7 +6,7 @@
 // Commons Libraries
 #include <events/EventHandler.h>
 
-void Client::waitForEvent(std::string message) {
+void Client::waitForEvent(int message) {
     bool received = false;
     while (!received) {
         NotificationEvent event = EventHandler::receiveNotificationEvent(socket);
@@ -21,10 +21,11 @@ GameConfigurationEvent Client::receiveGameConfiguration() {
 Client::Client(string host, string port) :
         host(move(host)),
         port(move(port)),
+        game_ended(false),
         game_status_events(game_status_mutex),
         output_messages(output_messages_mutex),
-        events_looper_thread(game_status_events, output_messages),
-        events_receptor_thread(socket, game_status_events),
+        events_looper_thread(game_status_events, output_messages, game_ended),
+        events_receptor_thread(socket, game_status_events, game_ended),
         events_sender_thread(socket, output_messages) {}
 
 void Client::start() {

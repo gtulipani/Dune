@@ -62,8 +62,12 @@ public:
 
     void refresh();
 
-    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
-    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+    bool resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
+                        std::function<void(EventsLooperThread *, int, std::vector<int>, Point,
+                                           Point)> push_function);
+
+    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
+    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
 
     void move();
 

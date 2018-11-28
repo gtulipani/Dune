@@ -14,20 +14,23 @@ typedef enum Type {
     SILO = 8,
     PALACE = 9,
 
-    // Trike unit sprites
+    // Vehicles
     TRIKE = 10,
+    HARVESTER = 11,
+    RAIDER = 12,
+    TANK = 13,
 
-    // Harvester unit sprites
-    HARVESTER = 18,
+    // Units
+    LIGHT_INFANTRY = 14,
+    HEAVY_INFANTRY = 15,
 
-    // Light infantry sprites (TBD)
-    LIGHT_INFANTRY = 18,
-    ESPECIA = 19
+    // Others
+    ESPECIA = 16
 } Sprites;
 
 #define MAX_MOTION 4
 
-typedef enum {
+typedef enum Direction {
     SPRITE_UP = 0,
     SPRITE_UP_RIGHT = 1,
     SPRITE_RIGHT = 2,
@@ -37,5 +40,8 @@ typedef enum {
     SPRITE_LEFT = 6,
     SPRITE_UP_LEFT = 7
 } Direction;
+
+#define DEFAULT_SPRITE_DIRECTION SPRITE_DOWN
+#define DEFAULT_SPRITE_MOTION 0
 
 #endif //__SPRITES_H__

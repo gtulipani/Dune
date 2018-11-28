@@ -36,7 +36,7 @@ private:
     SdlTexture *terrain_texture;
 
     std::map<int, SdlTexture*> terrains_textures_map;
-    std::map<int, SdlTexture*> picturables_textures_map;
+    std::map<int, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
 
     int offset_x{};
     int offset_y{};
@@ -73,7 +73,7 @@ public:
     void parseMouseClickButton(SDL_MouseButtonEvent &mouse_event);
 
     void parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                                 std::function<void(EventsLooperThread *, std::string, Point, Point)> push_function);
+                                 std::function<void(EventsLooperThread *, int, std::vector<int>, Point, Point)> push_function);
 
     bool move(enum Movement movement);
 

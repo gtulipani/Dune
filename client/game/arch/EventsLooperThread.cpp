@@ -15,12 +15,13 @@
 
 #define MAXIMUM_SLEEP_TIME std::chrono::milliseconds(30)
 
-EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages) :
+EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages, bool &game_ended) :
         game_status_events(game_status_events),
-        output_messages(output_messages) {}
+        output_messages(output_messages),
+        game_ended(game_ended) {}
 
-void EventsLooperThread::pushEvent(std::string message, Point click_position, Point release_position) {
-    output_messages.push(ClientEvent(this->player_id, std::move(message), std::move(click_position), std::move(release_position)));
+void EventsLooperThread::pushEvent(int client_event_type, std::vector<int> picturable_ids, Point click_position, Point release_position) {
+    output_messages.push(ClientEvent(this->player_id, client_event_type, std::move(picturable_ids), std::move(click_position), std::move(release_position)));
 }
 
 void EventsLooperThread::processServerEvents() {
@@ -113,6 +114,10 @@ void EventsLooperThread::run() {
                     execution_difference > MAXIMUM_SLEEP_TIME
                     ? MAXIMUM_SLEEP_TIME
                     : MAXIMUM_SLEEP_TIME - execution_difference));
+
+            if (game_ended) {
+                this->stop();
+            }
         }
     } catch (std::exception& e) {
         std::cout << "Exception in EventsLooperThread: " << e.what() << std::endl;

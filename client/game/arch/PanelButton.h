@@ -18,15 +18,15 @@ protected:
     int width;
     int height;
     Point screen_position;
-    std::string action;
+    std::vector<int> actions;
     SdlTexture *texture;
     ClientSpritesSupplier &sprites_supplier;
     bool have_I_changed;
 
 public:
-    PanelButton(int width, int height, Point screen_position, std::string action, SdlTexture *texture, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, std::vector<int> actions, SdlTexture *texture, ClientSpritesSupplier &sprites_supplier);
 
-    PanelButton(int width, int height, Point screen_position, std::string action, std::string image_path, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, std::vector<int> actions, std::string image_path, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
 
     virtual void render(int offset_x, int offset_y) = 0;
 
@@ -34,11 +34,13 @@ public:
 
     bool includesExternalAction() const;
 
-    virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) = 0;
+    virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) = 0;
 
     virtual void disable() = 0;
 
-    std::string getAction() const;
+    virtual void resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, std::vector<int>, Point, Point)> push_function) = 0;
+
+    virtual bool hasPendingAction() = 0;
 
     bool hasChanged() const;
 

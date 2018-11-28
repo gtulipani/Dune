@@ -1,26 +1,25 @@
 #ifndef __NOTIFICATION_EVENT_H__
 #define __NOTIFICATION_EVENT_H__
 
+// STL Libraries
 #include <string>
 
-#ifndef __EVENT_TYPES__
-#define __EVENT_TYPES__
-
-// Define the types of events
-#define CONNECTION_SUCCESS_EVENT "CONNECTION_SUCCESS"
-#define GAME_STARTED_EVENT "GAME_STARTED"
-#define GAME_CONFIGURATION_EVENT "GAME_CONFIGURATION"
-#define GAME_STATUS_EVENT "GAME_STATUS"
-
-#endif
+typedef enum NotificationEventType {
+    CONNECTION_SUCCESS_EVENT = 0,
+    GAME_STARTED_EVENT = 1,
+    GAME_CONFIGURATION_EVENT = 2,
+    GAME_STATUS_EVENT = 3,
+    GAME_LOST = 4,
+    GAME_WON = 5
+} NotificationEventType;
 
 struct NotificationEvent {
 public:
-    std::string message;
+    int message;
 
     NotificationEvent() = default;
 
-    explicit NotificationEvent(std::string message);
+    explicit NotificationEvent(int message);
 
     NotificationEvent(const NotificationEvent &other);
 

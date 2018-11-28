@@ -14,6 +14,7 @@
 // Client Libraries
 #include "MainButton.h"
 #include "PicturableButton.h"
+#include "RequiresTerrainControllerActionException.h"
 
 #define EAGLE_EYE_Y_OFFSET 20
 #define EAGLE_EYE_X_OFFSET 10
@@ -59,19 +60,19 @@ void ButtonsController::loadMainButtons() {
     // The main buttons will be rendered only once directly in the texture
     // Load main buttons textures
     mandatory_buttons.push_back(
-            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(0), "",
+            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(0), {},
                            client_sprites_supplier[REPAIR_BUTTON_ICON], client_sprites_supplier));
     mandatory_buttons.push_back(
-            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(1), "",
+            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(1), {},
                            client_sprites_supplier[SELL_BUTTON_ICON], client_sprites_supplier));
     mandatory_buttons.push_back(
-            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(2), "",
+            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(2), {},
                            client_sprites_supplier[STATUS_BUTTON_ICON], client_sprites_supplier));
     mandatory_buttons.push_back(
-            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(3), "",
+            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(3), {},
                            client_sprites_supplier[GUARD_BUTTON_ICON], client_sprites_supplier));
     mandatory_buttons.push_back(
-            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(4), "",
+            new MainButton(MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT, buildMainButtonRelativePosition(4), {},
                            client_sprites_supplier[RETREAT_BUTTON_ICON], client_sprites_supplier));
 }
 
@@ -79,14 +80,14 @@ void ButtonsController::loadButtonsPanel() {
     // Initial light_factory and wind_trap buildings
     available_buttons.push_back(new PicturableButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
                                                      getGlobalPosition(buildOptionalButtonRelativePosition(0)),
-                                                     CREATE_BUILDING_LIGHT_FACTORY,
+                                                     {CREATE_LIGHT_FACTORY_TYPE, LOCATE_BUILDING_TYPE},
                                                      client_sprites_supplier[LIGHT_FACTORY_ICON],
-                                                     client_sprites_supplier));
+                                                     client_sprites_supplier, true));
     available_buttons.push_back(new PicturableButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
                                                      getGlobalPosition(buildOptionalButtonRelativePosition(1)),
-                                                     CREATE_BUILDING_WIND_TRAPS,
+                                                     {CREATE_WIND_TRAPS_TYPE, LOCATE_BUILDING_TYPE},
                                                      client_sprites_supplier[WIND_TRAPS_ICON],
-                                                     client_sprites_supplier));
+                                                     client_sprites_supplier, true));
 }
 
 void ButtonsController::renderPanelTexture() {
@@ -157,13 +158,40 @@ void ButtonsController::refresh() {
     }
 }
 
+bool ButtonsController::resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
+                    std::function<void(EventsLooperThread *, int, std::vector<int>, Point,
+                                       Point)> push_function) {
+    Point position(mouse_event.y, mouse_event.x);
+    switch (mouse_event.button) {
+        case SDL_BUTTON_LEFT: {
+            bool resolved = false;
+            for (PanelButton *button : available_buttons) {
+                if (button->hasPendingAction()) {
+                    // Pass the new event info to the button and mark it as resolved
+                    button->resolve(position, processer, push_function);
+                    if (button->hasChanged()) {
+                        this->pending_changes = true;
+                    }
+                    resolved = true;
+                }
+            }
+            return resolved;
+        }
+        case SDL_BUTTON_RIGHT: {
+            return false;
+        }
+        default:
+            return false;
+    }
+}
+
 void ButtonsController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                                              std::function<void(EventsLooperThread *, std::string, Point,
+                                              std::function<void(EventsLooperThread *, int, std::vector<int>, Point,
                                                                  Point)> push_function) {}
 
 void ButtonsController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
                                                 EventsLooperThread *processer,
-                                                std::function<void(EventsLooperThread *, std::string, Point,
+                                                std::function<void(EventsLooperThread *, int, std::vector<int>, Point,
                                                                    Point)> push_function) {
     Point position(mouse_event.y, mouse_event.x);
     switch (mouse_event.button) {

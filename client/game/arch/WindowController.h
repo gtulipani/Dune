@@ -29,6 +29,7 @@ private:
     ClientSpritesSupplier client_sprites_supplier;
     TerrainController terrain_controller;
     ButtonsController buttons_controller;
+    bool pending_action;
 
     // Shouldn't be used. It's moved to the terrain_controller
     Matrix matrix;
@@ -54,8 +55,8 @@ public:
 
     void move(enum Movement movement);
 
-    void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
-    void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function);
+    void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
+    void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
 
     void processPicturables(std::vector<Picturable> picturables);
 

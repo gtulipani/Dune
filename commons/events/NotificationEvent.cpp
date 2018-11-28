@@ -1,13 +1,15 @@
 #include "NotificationEvent.h"
 
-NotificationEvent::NotificationEvent(std::string message) :
-        message(std::move(message)) {}
+NotificationEvent::NotificationEvent(int message) :
+        message(message) {}
 
 NotificationEvent::NotificationEvent(const NotificationEvent &other) : NotificationEvent(
         other.message) {}
 
 NotificationEvent::NotificationEvent(NotificationEvent &&other) noexcept : NotificationEvent(
-        std::move(other.message)) {}
+        other.message) {
+    other.message = -1;
+}
 
 NotificationEvent &NotificationEvent::operator=(const NotificationEvent &other) {
     if (this == &other) {
@@ -26,7 +28,9 @@ NotificationEvent &NotificationEvent::operator=(NotificationEvent &&other) noexc
     }
 
     // Copy values
-    this->message = std::move(other.message);
+    this->message = other.message;
+
+    other.message = -1;
 
     return *this;
 }

@@ -13,7 +13,7 @@ class SelectableGameObject : public AliveGameObject {
     Point size;
     Point pixelPosition;
     int sprite_motion = 0;
-    Direction sprite_direction = SPRITE_DOWN;
+    Direction sprite_direction = DEFAULT_SPRITE_DIRECTION;
 
     public:
     SelectableGameObject(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition);

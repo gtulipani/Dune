@@ -1,41 +1,49 @@
 #ifndef __CLIENT_EVENT_H__
 #define __CLIENT_EVENT_H__
 
+// STL Libraries
 #include <string>
+
+// Commons Libraries
 #include "../Point.h"
 #include "../json/json.hpp"
-
-#define RIGHT_CLICK_TYPE "RIGHT_CLICK"
-#define LEFT_CLICK_TYPE "LEFT_CLICK"
-
-#define CREATE_TRIKE_TYPE "CREATE_TRIKE"
-
-#define CREATE_BUILDING_WIND_TRAPS "CREATE_BUILDING_WIND_TRAPS"
-#define CREATE_BUILDING_REFINERY "CREATE_BUILDING_REFINERY"
-#define CREATE_BUILDING_ATREIDES_BARRACKS "CREATE_BUILDING_ATREIDES_BARRACKS"
-#define CREATE_BUILDING_HARKUNNAN_BARRACKS "CREATE_BUILDING_HARKUNNAN_BARRACKS"
-#define CREATE_BUILDING_ORDOS_BARRACKS "CREATE_BUILDING_ORDOS_BARRACKS"
-#define CREATE_BUILDING_LIGHT_FACTORY "CREATE_BUILDING_LIGHT_FACTORY"
-#define CREATE_BUILDING_HEAVY_FACTORY "CREATE_BUILDING_HEAVY_FACTORY"
-#define CREATE_BUILDING_SILO "CREATE_BUILDING_SILO"
-#define CREATE_BUILDING_PALACE "CREATE_BUILDING_PALACE"
-
-#define CREATE_COSECHADORA_TYPE "CREATE_COSECHADORA"
-#define LOCATE_BUILDING_TYPE "LOCATE_BUILDING"
 
 using namespace std;
 using json = nlohmann::json;
 
+typedef enum ClientEventType {
+    RIGHT_CLICK_EVENT_TYPE = 0,
+    LEFT_CLICK_EVENT_TYPE = 1,
+    CREATE_WIND_TRAPS_TYPE = 2,
+    CREATE_REFINERY_TYPE = 3,
+    CREATE_ATREIDES_BARRACKS_TYPEv = 4,
+    CREATE_HARKUNNAN_BARRACKS_TYPE = 5,
+    CREATE_ORDOS_BARRACKS_TYPE = 6,
+    CREATE_LIGHT_FACTORY_TYPE = 7,
+    CREATE_HEAVY_FACTORY_TYPE = 8,
+    CREATE_SILO_TYPE = 9,
+    CREATE_PALACE_TYPE = 10,
+    CREATE_TRIKE_TYPE = 11,
+    CREATE_HARVESTER_TYPE = 12,
+    CREATE_RAIDER_TYPE = 13,
+    CREATE_TANK_TYPE = 14,
+    CREATE_LIGHT_INFANTRY_TYPE = 15,
+    CREATE_HEAVY_INFANTRY_TYPE = 16,
+    LOCATE_BUILDING_TYPE = 17,
+    SELL_TYPE = 18
+} ClientEventType;
+
 struct ClientEvent {
 public:
     unsigned int player_id{};
-    string type;
+    int type{};
+    vector<int> picturable_ids{};
     Point click_position{};
     Point release_position{};
 
     ClientEvent() = default;
 
-    ClientEvent(unsigned int player_id, string type, Point click_position, Point release_position);
+    ClientEvent(unsigned int player_id, int client_type, vector<int> picturable_ids, Point click_position, Point release_position);
 
     ClientEvent(const ClientEvent &other);
 

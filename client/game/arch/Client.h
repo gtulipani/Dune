@@ -16,6 +16,7 @@ class Client {
 private:
     string host;
     string port;
+    bool game_ended;
     std::mutex game_status_mutex;
     std::mutex output_messages_mutex;
     shaque<GameStatusEvent> game_status_events;
@@ -26,7 +27,7 @@ private:
 
     Socket socket;
 
-    void waitForEvent(string message);
+    void waitForEvent(int message);
     GameConfigurationEvent receiveGameConfiguration();
 
 public:

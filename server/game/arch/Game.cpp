@@ -65,18 +65,32 @@ void Game::collectEvents() {
 
 void Game::updateModel() {
     for (ClientEvent event : events) {
-        if (event.type == LEFT_CLICK_TYPE) {
-            gameControler->leftClick(event.player_id, event.release_position);
-        } else if (event.type == RIGHT_CLICK_TYPE) {
-            gameControler->rightClick(event.player_id, event.release_position);
-        } else if (event.type == CREATE_TRIKE_TYPE) {
-            gameControler->createTrike(event.player_id);
-        } else if (event.type == CREATE_BUILDING_LIGHT_FACTORY) {
-            gameControler->createBuilding(event.player_id, LIGHT_FACTORY);
-        } else if (event.type == CREATE_BUILDING_WIND_TRAPS) {
-            gameControler->createBuilding(event.player_id, WIND_TRAPS);
-        } else if (event.type == LOCATE_BUILDING_TYPE) {
-            gameControler->locateBuildingAt(event.player_id, event.release_position);
+        switch (event.type) {
+            case LEFT_CLICK_EVENT_TYPE: {
+                gameControler->leftClick(event.player_id, event.release_position);
+                break;
+            }
+            case RIGHT_CLICK_EVENT_TYPE: {
+                gameControler->rightClick(event.player_id, event.release_position);
+                break;
+            }
+            case CREATE_TRIKE_TYPE: {
+                gameControler->createTrike(event.player_id);
+                break;
+            }
+            case CREATE_LIGHT_FACTORY_TYPE: {
+                gameControler->createBuilding(event.player_id, LIGHT_FACTORY);
+                break;
+            }
+            case CREATE_WIND_TRAPS_TYPE: {
+                gameControler->createBuilding(event.player_id, WIND_TRAPS);
+                break;
+            }
+            case LOCATE_BUILDING_TYPE: {
+                gameControler->locateBuildingAt(event.player_id, event.release_position);
+            }
+            default:
+                break;
         }
     }
 }

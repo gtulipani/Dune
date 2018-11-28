@@ -16,6 +16,7 @@ add_executable(client
         game/arch/MainButton.cpp
         game/arch/PanelButton.cpp
         game/arch/PicturableButton.cpp
+        game/arch/RequiresTerrainControllerActionException.cpp
         game/arch/SdlPicturable.cpp
         game/arch/TerrainController.cpp
         game/arch/WindowController.cpp

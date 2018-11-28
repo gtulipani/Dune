@@ -6,6 +6,9 @@
 #include <TileUtils.h>
 #include <TerrainType.h>
 
+// Client Libraries
+#include "RequiresTerrainControllerActionException.h"
+
 // SDL Libraries
 #include <SDL_events.h>
 
@@ -25,7 +28,8 @@ WindowController::WindowController(SdlWindow* window) :
     window(window),
     client_sprites_supplier(window),
     terrain_controller(window, client_sprites_supplier),
-    buttons_controller(window, client_sprites_supplier, &terrain_controller, &TerrainController::renderEagleEye) {}
+    buttons_controller(window, client_sprites_supplier, &terrain_controller, &TerrainController::renderEagleEye),
+    pending_action(false) {}
 
 WindowController::WindowController() : WindowController(
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
@@ -58,7 +62,7 @@ void WindowController::move(enum Movement movement) {
     }
 }
 
-void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
+void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
         // Store where does the Mouse Click take place
         last_click_event_occurrence = TERRAIN;
@@ -70,20 +74,34 @@ void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, Events
     }
 }
 
-void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, std::string, Point, Point)> push_function) {
+void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
         if (last_click_event_occurrence == BUTTONS) {
             // We clicked on the Panel Section and we released the mouse on the terrain section. Don't do anything
         } else {
             last_click_event_occurrence = NONE;
-            terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+            if (pending_action) {
+                // Resolve pending action
+                if (buttons_controller.resolvePendingAction(mouse_event, processer, std::move(push_function))) {
+                    pending_action = false;
+                }
+            } else {
+                // Parse terrain event
+                terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+            }
         }
     } else {
         if (last_click_event_occurrence == TERRAIN) {
             // We clicked on the Terrain Section and we released the mouse on the buttons section. Don't do anything
         } else {
             last_click_event_occurrence = NONE;
-            buttons_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+            try {
+                buttons_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+            } catch (RequiresTerrainControllerActionException& e) {
+                // Action in the TerrainController is required for the action to be completed
+                pending_action = true;
+            }
+
         }
     }
 }

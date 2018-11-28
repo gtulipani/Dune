@@ -4,13 +4,13 @@
 PanelButton::PanelButton(int width,
                          int height,
                          Point screen_position,
-                         std::string action,
+                         std::vector<int> actions,
                          SdlTexture* texture,
                          ClientSpritesSupplier &sprites_supplier) :
         width(width),
         height(height),
         screen_position(std::move(screen_position)),
-        action(std::move(action)),
+        actions(std::move(actions)),
         texture(texture),
         sprites_supplier(sprites_supplier),
         have_I_changed(false) {}
@@ -18,7 +18,7 @@ PanelButton::PanelButton(int width,
 PanelButton::PanelButton(int width,
                          int height,
                          Point screen_position,
-                         std::string action,
+                         std::vector<int> actions,
                          std::string image_path,
                          SdlWindow *window,
                          ClientSpritesSupplier &sprites_supplier)
@@ -26,7 +26,7 @@ PanelButton::PanelButton(int width,
         width,
         height,
         std::move(screen_position),
-        std::move(action),
+        std::move(actions),
         new SdlTexture(image_path, window),
         sprites_supplier) {}
 
@@ -41,11 +41,7 @@ bool PanelButton::includesPosition(Point point) const {
 }
 
 bool PanelButton::includesExternalAction() const {
-    return !action.empty();
-}
-
-std::string PanelButton::getAction() const {
-    return action;
+    return !actions.empty();
 }
 
 bool PanelButton::hasChanged() const {
