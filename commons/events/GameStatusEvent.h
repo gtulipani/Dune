@@ -7,6 +7,9 @@
 struct GameStatusEvent {
 public:
     std::vector<Picturable> picturables;
+    int especia;
+    std::vector<int> selectedObjects;
+    std::vector<std::string> availableObjects;
 
     GameStatusEvent() = default;
 

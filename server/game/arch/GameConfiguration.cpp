@@ -6,6 +6,9 @@
 #include "../model/Infanteria.h"
 #include "../model/Vehiculo.h"
 #include "../model/Cosechadora.h"
+#include "../model/Building.h"
+
+#include "TileUtils.h"
 
 #include "Sprites.h"
 
@@ -21,9 +24,10 @@ void GameConfiguration::parseWeapons(json& weapons_json) {
     }
 }
 
-void GameConfiguration::parseAttackingUnitsConfig(json& attacking_unit_json) {
-    for (json::iterator it = attacking_unit_json.begin(); it != attacking_unit_json.end(); ++it) {
+void GameConfiguration::parseAttackingUnitsConfig(json& attacking_units_json) {
+    for (json::iterator it = attacking_units_json.begin(); it != attacking_units_json.end(); ++it) {
         AttackingUnitConfig* attackingUnitConfig = new AttackingUnitConfig();
+        attackingUnitConfig->name = it.key();
         attackingUnitConfig->range = it.value().at("range");
         attackingUnitConfig->speed = it.value().at("speed");
         attackingUnitConfig->training_time = it.value().at("training_time");
@@ -43,6 +47,19 @@ void GameConfiguration::parseCosechadoraConfig(json& cosechadora_json) {
     attackingUnitsConfig["cosechadora"] = cosechadoraConfig;
 }
 
+void GameConfiguration::parseBuildingsConfig(json& buildings_json) {
+    for (json::iterator it = buildings_json.begin(); it != buildings_json.end(); ++it) {
+        BuildingConfig* buildingConfig = new BuildingConfig();
+        buildingConfig->name = it.key();
+        buildingConfig->energy = it.value().at("energy");
+        buildingConfig->cost = it.value().at("cost");
+        buildingConfig->tileSize = it.value().at("size");
+        buildingConfig->health = it.value().at("health");
+        buildingConfig->capacity = it.value().at("capacity");
+        buildingsConfig[it.key()] = buildingConfig;
+    }
+}
+
 void GameConfiguration::parseGameConfiguration(json &configuration_json) {
 	for (json::iterator it = configuration_json.begin(); it != configuration_json.end(); ++it) {
 		if (it.key() == CONFIGURATION_WEAPONS_KEY) {
@@ -51,6 +68,8 @@ void GameConfiguration::parseGameConfiguration(json &configuration_json) {
             parseAttackingUnitsConfig(it.value());
         } else if (it.key() == CONFIGURATION_COSECHADORA_KEY) {
             parseCosechadoraConfig(it.value());
+        } else if (it.key() == CONFIGURATION_BUILDINGS_KEY) {
+            parseBuildingsConfig(it.value());
         }
 	}
 }
@@ -74,7 +93,7 @@ Infanteria* GameConfiguration::getInfanteriaLigera(Player& player, int id, const
 }
 
 int GameConfiguration::getTiempoInfanteriaLigera() const {
-    return attackingUnitsConfig.at("infanteria_ligera")->cost;
+    return attackingUnitsConfig.at("infanteria_ligera")->training_time;
 }
 
 Infanteria* GameConfiguration::getInfanteriaPesada(Player& player, int id, const Point& initialPos, Map& map) const {
@@ -83,7 +102,7 @@ Infanteria* GameConfiguration::getInfanteriaPesada(Player& player, int id, const
 }
 
 int GameConfiguration::getTiempoInfanteriaPesada() const {
-    return attackingUnitsConfig.at("infanteria_pesada")->cost;
+    return attackingUnitsConfig.at("infanteria_pesada")->training_time;
 }
 
 Vehiculo* GameConfiguration::getTrike(Player& player, int id, const Point& initialPos, Map& map) const {
@@ -92,7 +111,7 @@ Vehiculo* GameConfiguration::getTrike(Player& player, int id, const Point& initi
 }
 
 int GameConfiguration::getTiempoTrike() const {
-    return attackingUnitsConfig.at("trike")->cost;
+    return attackingUnitsConfig.at("trike")->training_time;
 }
 
 Vehiculo* GameConfiguration::getRaider(Player& player, int id, const Point& initialPos, Map& map) const {
@@ -101,7 +120,7 @@ Vehiculo* GameConfiguration::getRaider(Player& player, int id, const Point& init
 }
 
 int GameConfiguration::getTiempoRaider() const {
-    return attackingUnitsConfig.at("raider")->cost;
+    return attackingUnitsConfig.at("raider")->training_time;
 }
 
 Vehiculo* GameConfiguration::getTanque(Player& player, int id, const Point& initialPos, Map& map) const {
@@ -110,7 +129,7 @@ Vehiculo* GameConfiguration::getTanque(Player& player, int id, const Point& init
 }
 
 int GameConfiguration::getTiempoTanque() const {
-    return attackingUnitsConfig.at("tanque")->cost;
+    return attackingUnitsConfig.at("tanque")->training_time;
 }
 
 Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
@@ -119,7 +138,53 @@ Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Poi
 }
 
 int GameConfiguration::getTiempoCosechadora() const {
-    return attackingUnitsConfig.at("cosechadora")->cost;
+    return attackingUnitsConfig.at("cosechadora")->training_time;
+}
+
+#define TIEMPO_CONSTRUCCION_EDIFICIOS 5
+
+int GameConfiguration::getTiempoEdificio() const {
+    return TIEMPO_CONSTRUCCION_EDIFICIOS;
+}
+
+Building* GameConfiguration::getCentroConstruccion(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("centro_construccion");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getFabricaLigera(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("fabrica_ligera");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getTrampasAire(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("trampas_aire");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getFabricaPesada(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("fabrica_pesada");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getRefineria(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("refineria");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getSilo(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("silo");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getCuartel(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("cuartel");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+}
+
+Building* GameConfiguration::getPalacio(Player& player, int id, const Point& initialPos, Map& map) const {
+    const BuildingConfig* config = buildingsConfig.at("palacio");
+    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
 }
 
 GameConfiguration::~GameConfiguration() {

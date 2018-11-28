@@ -5,6 +5,7 @@
 #include <string>
 #include "../model/Weapon.h"
 #include "Sprites.h"
+#include <Point.h>
 
 using json = nlohmann::json;
 
@@ -14,8 +15,10 @@ class Cosechadora;
 class Point;
 class Map;
 class Player;
+class Building;
 
 struct AttackingUnitConfig {
+    std::string name;
     int range;
     int speed;
     int training_time;
@@ -24,16 +27,28 @@ struct AttackingUnitConfig {
     std::string weapon;
 };
 
+struct BuildingConfig {
+    std::string name;
+    int energy;
+    int cost;
+    Point tileSize;
+    int health;
+    int capacity;
+};
+
 class GameConfiguration {
     private:
     std::map<std::string, AttackingUnitConfig*> attackingUnitsConfig;
     std::map<std::string, Weapon*> weapons;
+    std::map<std::string, BuildingConfig*> buildingsConfig;
 
     void parseWeapons(json& weapons_json);
 
-    void parseAttackingUnitsConfig(json& attacking_unit_json);
+    void parseAttackingUnitsConfig(json& attacking_units_json);
 
     void parseCosechadoraConfig(json& cosechadora_json);
+
+    void parseBuildingsConfig(json& buildings_json);
 
     void parseGameConfiguration(json& game_items_configuration);
 
@@ -67,6 +82,24 @@ class GameConfiguration {
     Cosechadora* getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const;
 
     int getTiempoCosechadora() const;
+
+    int getTiempoEdificio() const;
+
+    Building* getCentroConstruccion(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getFabricaLigera(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getTrampasAire(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getFabricaPesada(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getRefineria(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getSilo(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getCuartel(Player& player, int id, const Point& initialPos, Map& map) const;
+
+    Building* getPalacio(Player& player, int id, const Point& initialPos, Map& map) const;
 
     ~GameConfiguration();
 };

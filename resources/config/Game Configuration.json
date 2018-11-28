@@ -1,16 +1,16 @@
 {
   "buildings": {
-    "construction_center": {
+    "centro_construccion": {
       "energy": 0,
       "cost": 0,
-      "size": "3x3",
+      "size": {"row": 3, "column": 3},
       "structure_points": 3000,
       "capacity": -1
     },
-    "refinery": {
+    "refineria": {
       "energy": 400,
       "cost": 500,
-      "size": "3x3",
+      "size": {"row": 3, "column": 3},
       "structure_points": 0,
       "capacity": 1000
     }
