@@ -1,7 +1,7 @@
 #ifndef __SPRITES_H__
 #define __SPRITES_H__
 
-typedef enum Sprites {
+typedef enum Type {
     // Buildings sprites
     CONSTRUCTION_CENTER = 0,
     WIND_TRAPS = 1,
@@ -15,29 +15,27 @@ typedef enum Sprites {
     PALACE = 9,
 
     // Trike unit sprites
-    TRIKE_SPRITE_UP = 10,
-    TRIKE_SPRITE_UP_RIGHT = 11,
-    TRIKE_SPRITE_RIGHT = 12,
-    TRIKE_SPRITE_RIGHT_DOWN = 13,
-    TRIKE_SPRITE_DOWN = 14,
-    TRIKE_SPRITE_DOWN_LEFT = 15,
-    TRIKE_SPRITE_LEFT = 16,
-    TRIKE_SPRITE_LEFT_UP = 17,
+    TRIKE = 10,
 
     // Harvester unit sprites
-    HARVESTER_SPRITE_UP = 18,
-    HARVESTER_SPRITE_UP_RIGHT = 19,
-    HARVESTER_SPRITE_RIGHT = 20,
-    HARVESTER_SPRITE_RIGHT_DOWN = 21,
-    HARVESTER_SPRITE_DOWN = 22,
-    HARVESTER_SPRITE_DOWN_LEFT = 23,
-    HARVESTER_SPRITE_LEFT = 24,
-    HARVESTER_SPRITE_LEFT_UP = 25,
+    HARVESTER = 18,
 
     // Light infantry sprites (TBD)
-    LIGHT_INFANTRY_UP = 18,
-
-    COSECHADORA_UP = 25
+    LIGHT_INFANTRY = 18,
+    ESPECIA = 19
 } Sprites;
+
+#define MAX_MOTION 4
+
+typedef enum {
+    SPRITE_UP = 0,
+    SPRITE_UP_RIGHT = 1,
+    SPRITE_RIGHT = 2,
+    SPRITE_DOWN_RIGHT = 3,
+    SPRITE_DOWN = 4,
+    SPRITE_DOWN_LEFT = 5,
+    SPRITE_LEFT = 6,
+    SPRITE_UP_LEFT = 7
+} Direction;
 
 #endif //__SPRITES_H__

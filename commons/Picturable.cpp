@@ -1,9 +1,11 @@
 #include "Picturable.h"
 
-Picturable::Picturable(int player_id, int id, int sprite, bool selected, Point position, Point size, int health, int max_health, int porcentage) :
+Picturable::Picturable(int player_id, int id, int type, int sprite_direction, int sprite_motion, bool selected, Point position, Point size, int health, int max_health, int porcentage) :
     player_id(player_id),
     id(id),
-    sprite(sprite),
+    type(type),
+    sprite_direction(sprite_direction),
+    sprite_motion(sprite_motion),
     selected(selected),
     position(std::move(position)),
     size(std::move(size)),
@@ -14,7 +16,9 @@ Picturable::Picturable(int player_id, int id, int sprite, bool selected, Point p
 Picturable::Picturable(const Picturable &other) : Picturable(
         other.player_id,
         other.id,
-        other.sprite,
+        other.type,
+        other.sprite_direction,
+        other.sprite_motion,
         other.selected,
         other.position,
         other.size,
@@ -25,7 +29,9 @@ Picturable::Picturable(const Picturable &other) : Picturable(
 Picturable::Picturable(Picturable &&other) noexcept : Picturable(
         other.player_id,
         other.id,
-        other.sprite,
+        other.type,
+        other.sprite_direction,
+        other.sprite_motion,
         other.selected,
         std::move(other.position),
         std::move(other.size),
@@ -34,7 +40,9 @@ Picturable::Picturable(Picturable &&other) noexcept : Picturable(
         other.porcentage) {
     other.player_id = 0;
     other.id = 0;
-    other.sprite = 0;
+    other.type = 0;
+    other.sprite_direction = 0;
+    other.sprite_motion = 0;
     other.selected = false;
     other.health = 0;
     other.max_health = 0;
@@ -49,7 +57,9 @@ Picturable &Picturable::operator=(const Picturable &other) {
     // Copy values
     this->player_id = other.player_id;
     this->id = other.id;
-    this->sprite = other.sprite;
+    this->type = other.type;
+    this->sprite_direction = other.sprite_direction;
+    this->sprite_motion = other.sprite_motion;
     this->selected = other.selected;
     this->position = other.position;
     this->size = other.size;
@@ -67,7 +77,9 @@ Picturable &Picturable::operator=(Picturable &&other) noexcept {
     // Copy values
     this->player_id = other.player_id;
     this->id = other.id;
-    this->sprite = other.sprite;
+    this->type = other.type;
+    this->sprite_direction = other.sprite_direction;
+    this->sprite_motion = other.sprite_motion;
     this->selected = other.selected;
     this->position = other.position;
     this->size = other.size;
@@ -77,7 +89,9 @@ Picturable &Picturable::operator=(Picturable &&other) noexcept {
 
     other.player_id = 0;
     other.id = 0;
-    other.sprite = 0;
+    other.type = 0;
+    other.sprite_direction = 0;
+    other.sprite_motion = 0;
     other.selected = false;
     other.health = 0;
     other.max_health = 0;

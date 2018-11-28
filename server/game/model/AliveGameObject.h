@@ -9,7 +9,7 @@ class AliveGameObject : public GameObject {
     int max_health;
 
     public:
-    explicit AliveGameObject(Player& player, int id, Sprites sprite, int health);
+    explicit AliveGameObject(Player& player, int id, int type, int health);
 
     bool isDead() const;
 

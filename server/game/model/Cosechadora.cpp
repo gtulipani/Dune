@@ -6,7 +6,7 @@
 #include "Especia.h"
 
 Cosechadora::Cosechadora(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& map, unsigned int movespeed) :
+                Map& map, int movespeed) :
 WalkingUnit(player, id, sprite, health, size, initialPixelPosition, map, movespeed) {}
 
 void Cosechadora::tick() {
@@ -68,3 +68,5 @@ void Cosechadora::filterBadTiles(std::vector<Point> &tiles) const {
         }
     }
 }
+
+void Cosechadora::nextMotion() {}

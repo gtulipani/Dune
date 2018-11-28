@@ -14,11 +14,11 @@ class GameObject {
 
     protected:
     const int id;
-    Sprites sprite;
+    int type;
     bool haveIChanged = true;
 
     public:
-    static bool checkCounter(unsigned int& counter, unsigned int max) {
+    static bool checkCounter(int& counter, int max) {
         bool ready = false;
         if (counter == 0) {
             ready = true;
@@ -27,7 +27,7 @@ class GameObject {
         return ready;
     }
 
-    GameObject(Player& player, int id, Sprites sprite);
+    GameObject(Player& player, int id, int type);
 
     virtual void tick() = 0;
 

@@ -5,7 +5,7 @@
 
 class Especia;
 
-const unsigned int ESPECIA_MAX = 200;
+const int ESPECIA_MAX = 200;
 
 typedef enum {
     going,
@@ -15,20 +15,22 @@ typedef enum {
 } state_t;
 
 class Cosechadora : public WalkingUnit {
-    unsigned int counter = 0;
-    unsigned int especia = 0;
+    int counter = 0;
+    int especia = 0;
     state_t state = waiting;
     Especia* target;
 
     public:
     Cosechadora(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& map, unsigned int movespeed);
+                Map& map, int movespeed);
 
     virtual void tick() override;
 
     virtual void handleRightClick(const Point& pos) override;
 
     virtual void filterBadTiles(std::vector<Point> &tiles) const override;
+
+    virtual void nextMotion() override;
 };
 
 #endif

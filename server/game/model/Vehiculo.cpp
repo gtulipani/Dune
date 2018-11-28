@@ -4,8 +4,8 @@
 #include "Map.h"
 
 Vehiculo::Vehiculo(Player& player, int id, Sprites sprite, int health, const Point& size,
-const Point& initialPixelPosition, Map& map, unsigned int movespeed, const Weapon& weapon,
-unsigned int range) :
+const Point& initialPixelPosition, Map& map, int movespeed, const Weapon& weapon,
+int range) :
 AttackingUnit(player, id, sprite, health, size, initialPixelPosition, map, movespeed, weapon, range) {}
 
 void Vehiculo::filterBadTiles(std::vector<Point> &tiles) const {
@@ -17,3 +17,5 @@ void Vehiculo::filterBadTiles(std::vector<Point> &tiles) const {
         }
     }
 }
+
+void Vehiculo::nextMotion() {}

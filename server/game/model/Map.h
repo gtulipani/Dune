@@ -13,6 +13,7 @@ class Especia;
 class Map {
 public:
     Matrix mat;
+    std::vector<Point> especia_positions{};
     std::unordered_map<Point, Especia*> especias{};
     std::vector<Point> constructionCenterPositions{};
 
@@ -30,7 +31,7 @@ public:
 
     Matrix& getMatrix();
 
-    std::map<unsigned int, Especia*> generateEspeciaFromId(unsigned int& id);
+    std::map<int, Especia*> generateEspeciaFromId(int& id);
 
     bool especiaAt(const Point& pos) const;
 

@@ -5,8 +5,8 @@
 #include <TileUtils.h>
 #include "Map.h"
 
-WalkingUnit::WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition, Map& map, unsigned int movespeed) :
-SelectableGameObject(player, id, sprite, health, size, initialPixelPosition),
+WalkingUnit::WalkingUnit(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition, Map& map, int movespeed) :
+SelectableGameObject(player, id, type, health, size, initialPixelPosition),
 ticksPerStep(TO_TICKS(movespeed)),
 tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)),
 map(map),
@@ -22,30 +22,31 @@ void WalkingUnit::checkMovespeed() {
         step();
         if (prev_pos != this->pixelPosition) {
             if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col > prev_pos.col) {
-                sprite = TRIKE_SPRITE_RIGHT_DOWN;
+                sprite_direction = SPRITE_DOWN_RIGHT;
             }
             if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col == prev_pos.col) {
-                sprite = TRIKE_SPRITE_DOWN;
+                sprite_direction = SPRITE_DOWN;
             }
             if (this->pixelPosition.row > prev_pos.row && this->pixelPosition.col < prev_pos.col) {
-                sprite = TRIKE_SPRITE_DOWN_LEFT;
+                sprite_direction = SPRITE_DOWN_LEFT;
             }
             if (this->pixelPosition.row == prev_pos.row && this->pixelPosition.col < prev_pos.col) {
-                sprite = TRIKE_SPRITE_LEFT;
+                sprite_direction = SPRITE_LEFT;
             }
             if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col < prev_pos.col) {
-                sprite = TRIKE_SPRITE_LEFT_UP;
+                sprite_direction = SPRITE_UP_LEFT;
             }
             if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col == prev_pos.col) {
-                sprite = TRIKE_SPRITE_UP;
+                sprite_direction = SPRITE_UP;
             }
             if (this->pixelPosition.row < prev_pos.row && this->pixelPosition.col > prev_pos.col) {
-                sprite = TRIKE_SPRITE_UP_RIGHT;
+                sprite_direction = SPRITE_UP_RIGHT;
             }
             if (this->pixelPosition.row == prev_pos.row && this->pixelPosition.col > prev_pos.col) {
-                sprite = TRIKE_SPRITE_RIGHT;
+                sprite_direction = SPRITE_RIGHT;
             }
             haveIChanged = true;
+            nextMotion();
         }
     }
 }

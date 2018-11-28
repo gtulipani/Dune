@@ -28,7 +28,7 @@ events_queue(events_queue), clients(_clients) {
 }
 
 void Game::sendGameConfigurationEvent() {
-    unsigned int player_id = 0;
+    int player_id = 0;
     for (ClientThread* client : clients) {
         client->send(NotificationEvent(GAME_CONFIGURATION_EVENT));
         client->send(GameConfigurationEvent(player_id, map.getMatrix()));

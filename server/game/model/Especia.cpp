@@ -7,7 +7,7 @@
 #define ESPECIA_INITIAL_HEALTH 1000
 
 Especia::Especia(int id, const Point& tilePosition) :
-Picturable(-1, id, 0, false, tile_utils::getTileTopLeft(tilePosition),
+Picturable(-1, id, ESPECIA, 0, 0, false, tile_utils::getTileTopLeft(tilePosition),
             {TILE_PIXEL_RATE, TILE_PIXEL_RATE}, ESPECIA_INITIAL_HEALTH,
             ESPECIA_INITIAL_HEALTH, 100) {}
 
@@ -26,7 +26,7 @@ bool Especia::runOut() const {
 
 #define TICKS_PER_ESPECIA 20
 
-void Especia::tryToGetSome(unsigned int& especia) {
+void Especia::tryToGetSome(int& especia) {
     if (GameObject::checkCounter(counter, TICKS_PER_ESPECIA)) {
         especia++;
         haveIChanged = true;

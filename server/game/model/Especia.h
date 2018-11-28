@@ -7,7 +7,7 @@ struct Point;
 
 class Especia : public Picturable {
     private:
-    unsigned int counter = 0;
+    int counter = 0;
     bool haveIChanged = true;
 
     public:
@@ -19,7 +19,7 @@ class Especia : public Picturable {
 
     bool runOut() const;
 
-    void tryToGetSome(unsigned int& especia);
+    void tryToGetSome(int& especia);
 
     void reset();
 };

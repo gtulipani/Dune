@@ -19,15 +19,17 @@ void from_json(const json &j, Matrix &m) {
 // Picturable Transformation
 void to_json(json &j, const Picturable &p) {
     j = json{
-            {"player_id",   p.player_id},
-            {"id",          p.id},
-            {"sprite",      p.sprite},
-            {"selected",    p.selected},
-            {"position",    p.position},
-            {"size",        p.size},
-            {"health",      p.health},
-            {"max_health",  p.max_health},
-            {"porcentage",  p.porcentage}
+            {"player_id",           p.player_id},
+            {"id",                  p.id},
+            {"type",                p.type},
+            {"sprite_direction",    p.sprite_direction},
+            {"sprite_motion",       p.sprite_motion},
+            {"selected",            p.selected},
+            {"position",            p.position},
+            {"size",                p.size},
+            {"health",              p.health},
+            {"max_health",          p.max_health},
+            {"porcentage",          p.porcentage}
     };
     std::cout << j << std::endl;
 }
@@ -36,7 +38,9 @@ void from_json(const json &j, Picturable &p) {
     std::cout << j << std::endl;
     j.at("player_id").get_to(p.player_id);
     j.at("id").get_to(p.id);
-    j.at("sprite").get_to(p.sprite);
+    j.at("type").get_to(p.type);
+    j.at("sprite_direction").get_to(p.sprite_direction);
+    j.at("sprite_motion").get_to(p.sprite_motion);
     j.at("selected").get_to(p.selected);
     j.at("position").get_to(p.position);
     j.at("size").get_to(p.size);

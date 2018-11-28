@@ -75,22 +75,19 @@ Matrix& Map::getMatrix() {
 
 bool Map::especiaAt(const Point& pos) const {
     Point tile = tile_utils::getTileFromPixel(pos);
-    return mat.at(tile) == ESPECIA;
+    return especias.find(tile) != especias.end();
 }
 
-std::map<unsigned int, Especia*> Map::generateEspeciaFromId(unsigned int& id) {
-    std::vector<Point> points = mat.getPointsWith(ESPECIA);
-    std::map<unsigned int, Especia*> _especias;
-    for (Point p : points) {
-        especias[p] = new Especia(id, p);
-        _especias[id] = especias.at(p);
+std::map<int, Especia*> Map::generateEspeciaFromId(int& id) {
+    std::map<int, Especia*> id_especias_map;
+    for (Point p : especia_positions) {
+        especias[p] = id_especias_map[id] = new Especia(id, p);
         id++;
     }
-    return _especias;
+    return id_especias_map;
 }
 
 Point Map::findClosestRefineria(const Point& p) const {
-    // Perform a BFS
     return {0, 0};
 }
 

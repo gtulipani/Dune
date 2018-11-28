@@ -6,13 +6,15 @@
 #include <stack>
 #include "Point.h"
 #include <Tick.h>
+#include <Sprites.h>
 
 class Map;
 
 class WalkingUnit : public SelectableGameObject {
     private:
-    unsigned int ticksPerStep;
-    unsigned int counter = 0;
+    int ticksPerStep;
+    int counter = 0;
+
     protected:
     std::stack<Point> path{};
     Point tilePosition;
@@ -31,18 +33,16 @@ class WalkingUnit : public SelectableGameObject {
 
     public:
     // Movespeed on pixels per second.
-    WalkingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& map, unsigned int movespeed);
+    WalkingUnit(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition,
+                Map& map, int movespeed);
 
     virtual void tick() override;
 
     virtual void handleRightClick(const Point& pos) override;
 
-    static unsigned int maxspeed() { // Returns maxspeed for walking picturables_textures_map.
-        return TICKS_PER_SECOND;
-    }
-
     virtual void filterBadTiles(std::vector<Point> &tiles) const = 0;
+
+    virtual void nextMotion() = 0;
 };
 
 #endif

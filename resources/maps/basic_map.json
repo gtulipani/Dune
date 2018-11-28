@@ -1,7 +1,12 @@
 {
 	"construction_center_positions": [
-		{"column": 20, "row": 20},
-		{"column": 10, "row": 10}
+		{"column": 10, "row": 10},
+		{"column": 20, "row": 20}
+	],
+	"especia_positions": [
+		{"column": 5, "row": 5},
+		{"column": 6, "row": 5},
+		{"column": 7, "row": 5}
 	],
 	"matrix": {
 		"columns_quantity": 200,

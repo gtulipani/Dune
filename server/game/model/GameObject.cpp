@@ -2,8 +2,8 @@
 
 #include "Player.h"
 
-GameObject::GameObject(Player& player, int id, Sprites sprite) :
-player(player), id(id), sprite(sprite) {}
+GameObject::GameObject(Player& player, int id, int type) :
+player(player), id(id), type(type) {}
 
 bool GameObject::isEnemy(const GameObject* other) const {
     return !(other->player == player);

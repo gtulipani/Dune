@@ -1,77 +1,71 @@
 {
-  "buildings": [
-      {
-        "construction_center": {
-          "energy": 0,
-          "cost": 0,
-          "size": "3x3",
-          "structure_points": 3000,
-          "capacity": -1
-        },
-        "refinery": {
-          "energy": 400,
-          "cost": 500,
-          "size": "3x3",
-          "structure_points": 0,
-          "capacity": 1000
-        }
-      }
-  ],
-  "weapons": [
-      {
-        "rifle_de_asalto": {
-          "damage": 2,
-          "shot_frequency": 6,
-          "bonus": 1
-        },
-        "lanza_misiles": {
-          "damage": 8,
-          "shot_frequency": 1,
-          "bonus": 0
-        },
-        "cañon_22_mm": {
-          "damage": 6,
-          "shot_frequency": 6,
-          "bonus": 2
-        }
-      }
-  ],
-  "attacking_units": [
-      {
-        "infanteria_ligera": {
-          "range": 3,
-          "speed": 16,
-          "training_time": 1,
-          "cost": 50,
-          "health": 50,
-          "armamento": "rifle_de_asalto"
-        },
-        "infanteria_pesada": {
-          "range": 3,
-          "speed": 12,
-          "training_time": 1.3,
-          "cost": 70,
-          "health": 80,
-          "armamento": "lanza_misiles"
-        },
-        "trike": {
-          "range": 4,
-          "speed": 64,
-          "training_time": 2,
-          "cost": 100,
-          "health": 80,
-          "armamento": "rifle_de_asalto"
-        },
-        "raider": {
-          "range": 4,
-          "speed": 84,
-          "training_time": 2,
-          "cost": 100,
-          "health": 80,
-          "armamento": "cañon_22_mm"
-        }
-      }
-  ],
+  "buildings": {
+    "construction_center": {
+      "energy": 0,
+      "cost": 0,
+      "size": "3x3",
+      "structure_points": 3000,
+      "capacity": -1
+    },
+    "refinery": {
+      "energy": 400,
+      "cost": 500,
+      "size": "3x3",
+      "structure_points": 0,
+      "capacity": 1000
+    }
+  },
+  "weapons": {
+    "rifle_de_asalto": {
+      "damage": 2,
+      "shot_frequency": 6,
+      "bonus": 1
+    },
+    "lanza_misiles": {
+      "damage": 8,
+      "shot_frequency": 1,
+      "bonus": 0
+    },
+    "cañon_22_mm": {
+      "damage": 6,
+      "shot_frequency": 6,
+      "bonus": 2
+    }
+  },
+  "attacking_units": {
+    "infanteria_ligera": {
+      "range": 3,
+      "speed": 16,
+      "training_time": 1,
+      "cost": 50,
+      "health": 50,
+      "armamento": "rifle_de_asalto"
+    },
+    "infanteria_pesada": {
+      "range": 3,
+      "speed": 12,
+      "training_time": 1.3,
+      "cost": 70,
+      "health": 80,
+      "armamento": "lanza_misiles"
+    },
+    "trike": {
+      "range": 4,
+      "speed": 64,
+      "training_time": 2,
+      "cost": 100,
+      "health": 80,
+      "armamento": "rifle_de_asalto"
+    },
+    "raider": {
+      "range": 4,
+      "speed": 84,
+      "training_time": 2,
+      "cost": 100,
+      "health": 80,
+      "armamento": "cañon_22_mm"
+    }
+  },
   "cosechadora": {
     "speed": 12,
     "training_time": 3,

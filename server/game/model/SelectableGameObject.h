@@ -12,9 +12,11 @@ class SelectableGameObject : public AliveGameObject {
     protected:
     Point size;
     Point pixelPosition;
+    int sprite_motion = 0;
+    Direction sprite_direction = SPRITE_DOWN;
 
     public:
-    SelectableGameObject(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition);
+    SelectableGameObject(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition);
 
     virtual void handleRightClick(const Point& pos) = 0;
 
@@ -26,7 +28,7 @@ class SelectableGameObject : public AliveGameObject {
 
     void unselect();
 
-    virtual void recieveAttack(AttackingUnit* enemy, unsigned int attackPoints);
+    virtual void recieveAttack(AttackingUnit* enemy, int attackPoints);
 
     virtual Picturable getState() const override;
 

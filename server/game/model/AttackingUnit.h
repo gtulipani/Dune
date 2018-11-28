@@ -7,20 +7,20 @@ class Weapon;
 
 class AttackingUnit : public WalkingUnit {
     private:
-    unsigned int counter = 0;
+    int counter = 0;
     SelectableGameObject* target = nullptr;
     const Weapon& weapon;
-    const unsigned int range;
+    const int range;
 
     bool inRange(const Point& pos) const;
 
     public:
     AttackingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
-                Map& map, unsigned int movespeed, const Weapon& weapon, unsigned int range);
+                Map& map, int movespeed, const Weapon& weapon, int range);
 
     void attack(SelectableGameObject* enemy);
 
-    virtual void recieveAttack(AttackingUnit* enemy, unsigned int attackPoints) override;
+    virtual void recieveAttack(AttackingUnit* enemy, int attackPoints) override;
 
     virtual void tick() override;
 };

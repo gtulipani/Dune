@@ -8,12 +8,12 @@ class SelectableGameObject;
 class InProgressGameObject : public GameObject {
     private:
     int porcentage = 0;
-    unsigned int counter = 0;
+    int counter = 0;
     SelectableGameObject* selectableGameObject;
-    const unsigned int ticksUntilCompleted;
+    const int ticksUntilCompleted;
 
     public:
-    explicit InProgressGameObject(SelectableGameObject* gameObject, unsigned int time_minutes);
+    explicit InProgressGameObject(SelectableGameObject* gameObject, int time_minutes);
 
     virtual void tick() override;
 
@@ -21,7 +21,7 @@ class InProgressGameObject : public GameObject {
 
     bool completed() const;
 
-    unsigned int getId() const;
+    int getId() const;
 
     SelectableGameObject* getObject() const;
 

@@ -8,13 +8,13 @@ class SelectableGameObject;
 
 struct Player {
     const int id;
-    std::map<unsigned int, SelectableGameObject*> selectedObjects = {};
-    unsigned int especia = 1000;
+    std::map<int, SelectableGameObject*> selectedObjects = {};
+    int especia = 1000;
     bool changedSelection = false;
     
-    Player(unsigned int id);
+    Player(int id);
 
-    void addEspecia(unsigned int newEspecia);
+    void addEspecia(int newEspecia);
 
     bool operator==(const Player& other) const;
 };

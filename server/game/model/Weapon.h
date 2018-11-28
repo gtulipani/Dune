@@ -6,10 +6,10 @@
 
 struct Weapon {
 	const std::string name;
-	const unsigned int damage;
-	const unsigned int shot_frequency;
+	const int damage;
+	const int shot_frequency;
 
-	Weapon(const std::string& name, unsigned int damage, unsigned int shot_frequency);
+	Weapon(const std::string& name, int damage, int shot_frequency);
 };
 
 

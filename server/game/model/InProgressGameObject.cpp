@@ -3,7 +3,7 @@
 #include "Player.h"
 #include <Tick.h>
 
-InProgressGameObject::InProgressGameObject(SelectableGameObject* selectableGameObject, unsigned int time_minutes)
+InProgressGameObject::InProgressGameObject(SelectableGameObject* selectableGameObject, int time_minutes)
 : GameObject(*(GameObject*)selectableGameObject), selectableGameObject(selectableGameObject), ticksUntilCompleted(TO_TICKS(time_minutes*60)) {}
 
 void InProgressGameObject::tick() {
@@ -15,7 +15,7 @@ void InProgressGameObject::tick() {
 }
 
 Picturable InProgressGameObject::getState() const {
-    return {player.id, id, sprite, false, {0, 0}, {0, 0}, 0, 0, porcentage};
+    return {player.id, id, type, 0, 0, false, {0, 0}, {0, 0}, 0, 0, porcentage};
 }
 
 bool InProgressGameObject::completed() const {
@@ -26,6 +26,6 @@ SelectableGameObject* InProgressGameObject::getObject() const {
     return selectableGameObject;
 }
 
-unsigned int InProgressGameObject::getId() const {
+int InProgressGameObject::getId() const {
     return id;
 }

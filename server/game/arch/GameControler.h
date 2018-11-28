@@ -18,37 +18,37 @@ class Especia;
 
 class GameControler {
     private:
-    unsigned int next_id = 0;
+    int next_id = 0;
     Map& map;
     const GameConfiguration& gameConfig;
-    std::map<unsigned int, Especia*> especias;
-    std::map<unsigned int, SelectableGameObject*> gameObjects;
-    std::map<unsigned int, Player*> players;
-    std::map<unsigned int, InProgressGameObject*> inProgressUnits;
-    std::map<unsigned int, InProgressGameObject*> inProgressBuildings;
+    std::map<int, Especia*> especias;
+    std::map<int, SelectableGameObject*> gameObjects;
+    std::map<int, Player*> players;
+    std::map<int, InProgressGameObject*> inProgressUnits;
+    std::map<int, InProgressGameObject*> inProgressBuildings;
 
-    void initializePlayers(unsigned int number_of_player);
+    void initializePlayers(int number_of_player);
 
     public:
     explicit GameControler(Map& map, const GameConfiguration& gameConfig);
 
-    void initialize(unsigned int number_of_players);
+    void initialize(int number_of_players);
 
     void tick();
 
-    std::vector<Picturable> getStateFor(unsigned int player_id);
+    std::vector<Picturable> getStateFor(int player_id);
 
-    void leftClick(unsigned int player_id, const Point& point);
+    void leftClick(int player_id, const Point& point);
 
-    void rightClick(unsigned int player_id, const Point& point);
+    void rightClick(int player_id, const Point& point);
 
-    void createTrike(unsigned int player_id);
+    void createTrike(int player_id);
 
-    void createBuilding(unsigned int player_id, const Sprites& sprite);
+    void createBuilding(int player_id, const Sprites& sprite);
 
-    void locateBuildingAt(unsigned int id, const Point& pos);
+    void locateBuildingAt(int id, const Point& pos);
 
-    void createCosechadora(unsigned int player_id);
+    void createCosechadora(int player_id);
 
     void updateGameObjects();
 

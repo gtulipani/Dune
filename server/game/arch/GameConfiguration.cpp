@@ -15,27 +15,23 @@
 #define CONFIGURATION_COSECHADORA_KEY "cosechadora"
 
 void GameConfiguration::parseWeapons(json& weapons_json) {
-	for (map<string, json> weapon_fields : weapons_json) {
-		for (auto &kv : weapon_fields) {
-            Weapon* weapon = new Weapon(kv.first, kv.second.at("damage"), kv.second.at("shot_frequency"));
-			weapons[kv.first] = weapon;
-		}
-	}
+    for (json::iterator it = weapons_json.begin(); it != weapons_json.end(); ++it) {
+        Weapon* weapon = new Weapon(it.key(), it.value().at("damage"), it.value().at("shot_frequency"));
+        weapons[it.key()] = weapon;
+    }
 }
 
 void GameConfiguration::parseAttackingUnitsConfig(json& attacking_unit_json) {
-    for (map<string, json> attacking_unit_fields : attacking_unit_json) {
-		for (auto &kv : attacking_unit_fields) {
-            AttackingUnitConfig* attackingUnitConfig = new AttackingUnitConfig();
-            attackingUnitConfig->range = kv.second.at("range");
-            attackingUnitConfig->speed = kv.second.at("speed");
-            attackingUnitConfig->training_time = kv.second.at("training_time");
-            attackingUnitConfig->cost = kv.second.at("cost");
-            attackingUnitConfig->health = kv.second.at("health");
-            attackingUnitConfig->weapon = kv.second.at("armamento");
-			attackingUnitsConfig[kv.first] = attackingUnitConfig;
-		}
-	}
+    for (json::iterator it = attacking_unit_json.begin(); it != attacking_unit_json.end(); ++it) {
+        AttackingUnitConfig* attackingUnitConfig = new AttackingUnitConfig();
+        attackingUnitConfig->range = it.value().at("range");
+        attackingUnitConfig->speed = it.value().at("speed");
+        attackingUnitConfig->training_time = it.value().at("training_time");
+        attackingUnitConfig->cost = it.value().at("cost");
+        attackingUnitConfig->health = it.value().at("health");
+        attackingUnitConfig->weapon = it.value().at("armamento");
+        attackingUnitsConfig[it.key()] = attackingUnitConfig;
+    }
 }
 
 void GameConfiguration::parseCosechadoraConfig(json& cosechadora_json) {
@@ -64,110 +60,65 @@ GameConfiguration::GameConfiguration(const std::string& config_file_path) {
 	parseGameConfiguration(game_items_configuration);
 }
 
-Infanteria* GameConfiguration::infanteria(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Sprites sprite, const Point& size) const {
-    return new Infanteria(player, id, sprite, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
+Infanteria* GameConfiguration::infanteria(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Type type, const Point& size) const {
+    return new Infanteria(player, id, type, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
-Vehiculo* GameConfiguration::vehiculo(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Sprites sprite, const Point& size) const {
-    return new Vehiculo(player, id, sprite, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
+Vehiculo* GameConfiguration::vehiculo(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Type type, const Point& size) const {
+    return new Vehiculo(player, id, type, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
 Infanteria* GameConfiguration::getInfanteriaLigera(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("infanteria_ligera");
-    return infanteria(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
+    return infanteria(player, id, initialPos, map, config, TRIKE, {32, 32});
 }
 
-unsigned int GameConfiguration::getTiempoInfanteriaLigera() const {
+int GameConfiguration::getTiempoInfanteriaLigera() const {
     return attackingUnitsConfig.at("infanteria_ligera")->cost;
-}
-
-Infanteria* GameConfiguration::getFremen(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("fremen");
-    return infanteria(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
-}
-
-unsigned int GameConfiguration::getTiempoFremen() const {
-    return attackingUnitsConfig.at("fremen")->cost;
 }
 
 Infanteria* GameConfiguration::getInfanteriaPesada(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("infanteria_pesada");
-    return infanteria(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
+    return infanteria(player, id, initialPos, map, config, TRIKE, {32, 32});
 }
 
-unsigned int GameConfiguration::getTiempoInfanteriaPesada() const {
+int GameConfiguration::getTiempoInfanteriaPesada() const {
     return attackingUnitsConfig.at("infanteria_pesada")->cost;
-}
-
-Infanteria* GameConfiguration::getSardaukar(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("sardukar");
-    return infanteria(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
-}
-
-unsigned int GameConfiguration::getTiempoSardukar() const {
-    return attackingUnitsConfig.at("sardukar")->cost;
 }
 
 Vehiculo* GameConfiguration::getTrike(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("trike");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
+    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
 }
 
-unsigned int GameConfiguration::getTiempoTrike() const {
+int GameConfiguration::getTiempoTrike() const {
     return attackingUnitsConfig.at("trike")->cost;
-}
-
-Vehiculo* GameConfiguration::getTanqueSonico(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("tanque_sonico");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
-}
-
-unsigned int GameConfiguration::getTiempoTanqueSonico() const {
-    return attackingUnitsConfig.at("tanque_sonico")->cost;
 }
 
 Vehiculo* GameConfiguration::getRaider(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("raider");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
+    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
 }
 
-unsigned int GameConfiguration::getTiempoRaider() const {
+int GameConfiguration::getTiempoRaider() const {
     return attackingUnitsConfig.at("raider")->cost;
-}
-
-Vehiculo* GameConfiguration::getDesviador(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("desviador");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
-}
-
-unsigned int GameConfiguration::getTiempoDesviador() const {
-    return attackingUnitsConfig.at("desviador")->cost;
 }
 
 Vehiculo* GameConfiguration::getTanque(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("tanque");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
+    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
 }
 
-unsigned int GameConfiguration::getTiempoTanque() const {
+int GameConfiguration::getTiempoTanque() const {
     return attackingUnitsConfig.at("tanque")->cost;
-}
-
-Vehiculo* GameConfiguration::getDevastador(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("devastador");
-    return vehiculo(player, id, initialPos, map, config, TRIKE_SPRITE_DOWN, {32, 32});
-}
-
-unsigned int GameConfiguration::getTiempoDevastador() const {
-    return attackingUnitsConfig.at("devastador")->cost;
 }
 
 Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
     const AttackingUnitConfig* config = attackingUnitsConfig.at("cosechadora");
-    return new Cosechadora(player, id, TRIKE_SPRITE_DOWN, config->health, {32, 32}, initialPos, map, config->speed);
+    return new Cosechadora(player, id, HARVESTER, config->health, {32, 32}, initialPos, map, config->speed);
 }
 
-unsigned int GameConfiguration::getTiempoCosechadora() const {
+int GameConfiguration::getTiempoCosechadora() const {
     return attackingUnitsConfig.at("cosechadora")->cost;
 }
 

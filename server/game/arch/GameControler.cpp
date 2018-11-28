@@ -17,11 +17,11 @@
 GameControler::GameControler(Map& map, const GameConfiguration& gameConfig) :
  map(map), gameConfig(gameConfig) {}
 
-const unsigned int CONSTRUCTION_CENTER_HEALTH = 1000;
+const int CONSTRUCTION_CENTER_HEALTH = 1000;
 const Point CONSTRUCTION_CENTER_SIZE = {3 * TILE_PIXEL_RATE, 3 * TILE_PIXEL_RATE};
 
-void GameControler::initializePlayers(unsigned int number_of_players) {
-    for (unsigned int i = 0; i < number_of_players; i++) {
+void GameControler::initializePlayers(int number_of_players) {
+    for (int i = 0; i < number_of_players; i++) {
         Point constructionCenterPosition = tile_utils::getTileTopLeft(map.constructionCenterPositions.at(i));
         players[i] = new Player(i);
         SelectableGameObject* constructionCenter = new Building(*players.at(i), next_id, CONSTRUCTION_CENTER, CONSTRUCTION_CENTER_HEALTH, CONSTRUCTION_CENTER_SIZE, constructionCenterPosition);
@@ -44,35 +44,35 @@ void GameControler::initializePlayers(unsigned int number_of_players) {
     }
 }
 
-void GameControler::initialize(unsigned int number_of_players) {
+void GameControler::initialize(int number_of_players) {
     initializePlayers(number_of_players);
     especias = map.generateEspeciaFromId(next_id);
 }
 
 void GameControler::tick() {
-    for (auto gameObject : gameObjects) {
+    for (auto& gameObject : gameObjects) {
         // We let know all the objects that time has passed
         gameObject.second->tick();
     }
-    for (auto inProgressUnit : inProgressUnits) {
+    for (auto& inProgressUnit : inProgressUnits) {
         inProgressUnit.second->tick();
     }
-    for (auto inProgressBuilding : inProgressBuildings) {
+    for (auto& inProgressBuilding : inProgressBuildings) {
         inProgressBuilding.second->tick();
     }
 }
 
-void GameControler::leftClick(unsigned int player_id, const Point& point) {
-    std::map<unsigned int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
+void GameControler::leftClick(int player_id, const Point& point) {
+    std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
     if (!selectedObjects.empty()) {
-        for (auto selectedObject : selectedObjects) {
+        for (auto& selectedObject : selectedObjects) {
             selectedObject.second->unselect();
         }
         players.at(player_id)->changedSelection = true;
         selectedObjects.clear();
     }
 
-    for (auto gameObject : gameObjects) {
+    for (auto& gameObject : gameObjects) {
         bool success = gameObject.second->tryToSelect(point);
         if (success) {
             selectedObjects[gameObject.first] = gameObject.second;
@@ -84,17 +84,17 @@ void GameControler::leftClick(unsigned int player_id, const Point& point) {
     }
 }
 
-void GameControler::rightClick(unsigned int player_id, const Point& point) {
+void GameControler::rightClick(int player_id, const Point& point) {
     SelectableGameObject* unit_at_pos = nullptr;
-    for (auto gameObject : gameObjects) {
+    for (auto& gameObject : gameObjects) {
         if (gameObject.second->isThere(point)) {
             unit_at_pos = gameObject.second;
             break;
         }
     }
     
-    std::map<unsigned int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
-    for (auto selectedObject : selectedObjects) {
+    std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
+    for (auto& selectedObject : selectedObjects) {
         if (unit_at_pos != nullptr && unit_at_pos->isEnemy(selectedObject.second)) {
             ((AttackingUnit*)(selectedObject.second))->attack(unit_at_pos);
         } else {
@@ -105,21 +105,21 @@ void GameControler::rightClick(unsigned int player_id, const Point& point) {
     }
 }
 
-void GameControler::createTrike(unsigned int player_id) {
+void GameControler::createTrike(int player_id) {
     auto * trike = gameConfig.getTrike(*players.at(player_id), next_id, {}, map);
     auto * trikeInProgress = new InProgressGameObject(trike, gameConfig.getTiempoTrike());
     inProgressUnits[next_id] = trikeInProgress;
     next_id++;
 }
 
-void GameControler::createBuilding(unsigned int player_id, const Sprites& sprite) {
+void GameControler::createBuilding(int player_id, const Sprites& sprite) {
     auto * building = new Building(*players.at(player_id), next_id, sprite, 1000, {32, 32}, {0, 0});
     auto * buildingInProgress = new InProgressGameObject(building, 5);
     inProgressBuildings[next_id] = buildingInProgress;
     next_id++;
 }
 
-void GameControler::locateBuildingAt(unsigned int id, const Point& pos) {
+void GameControler::locateBuildingAt(int id, const Point& pos) {
     if (inProgressBuildings.at(id)->completed()) {
         Building* building = (Building*)inProgressBuildings.at(id)->getObject();
         delete inProgressBuildings.at(id);
@@ -129,18 +129,18 @@ void GameControler::locateBuildingAt(unsigned int id, const Point& pos) {
     }
 }
 
-void GameControler::createCosechadora(unsigned int player_id) {
+void GameControler::createCosechadora(int player_id) {
     auto * cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
     auto * cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoCosechadora());
     inProgressUnits[next_id] = cosechadoraInProgress;
     next_id++;
 }
 
-std::vector<Picturable> GameControler::getStateFor(unsigned int player_id) {
+std::vector<Picturable> GameControler::getStateFor(int player_id) {
     Player& player = *players.at(player_id);
     std::vector<Picturable> state;
 
-    for (auto gameObject : gameObjects) {
+    for (const auto& gameObject : gameObjects) {
         bool playerChangedSelection = player.changedSelection;
         bool currentIsOnSelection = false;
         try {
@@ -153,17 +153,17 @@ std::vector<Picturable> GameControler::getStateFor(unsigned int player_id) {
             state.push_back(currentState);
         }
     }
-    for (auto gameObject : inProgressUnits) {
+    for (const auto& gameObject : inProgressUnits) {
         if (gameObject.second->haveYouChanged()) {
             state.push_back(gameObject.second->getState());
         }
     }
-    for (auto gameObject : inProgressBuildings) {
+    for (const auto& gameObject : inProgressBuildings) {
         if (gameObject.second->haveYouChanged()) {
             state.push_back(gameObject.second->getState());
         }
     }
-    for (auto especia : especias) {
+    for (const auto& especia : especias) {
         if (especia.second->haveYouChanged()) {
             state.push_back(*especia.second);
         }
@@ -201,28 +201,28 @@ void GameControler::updateGameObjects() {
         }
     }
 
-    for (auto gameObject : gameObjects) {
+    for (const auto& gameObject : gameObjects) {
         gameObject.second->reset();
     }
-    for (auto gameObject : inProgressUnits) {
+    for (const auto& gameObject : inProgressUnits) {
         gameObject.second->reset();
     }
-    for (auto gameObject : inProgressBuildings) {
+    for (const auto& gameObject : inProgressBuildings) {
         gameObject.second->reset();
     }
-    for (auto especia : especias) {
+    for (const auto& especia : especias) {
         especia.second->reset();
     }
-    for (auto player : players) {
+    for (const auto& player : players) {
         player.second->changedSelection = false;
     }
 }
 
 GameControler::~GameControler() {
-    for (auto gameObject : gameObjects) {
+    for (const auto& gameObject : gameObjects) {
         delete gameObject.second;
     }
-    for (auto player : players) {
+    for (const auto& player : players) {
         delete player.second;
     }
 }
