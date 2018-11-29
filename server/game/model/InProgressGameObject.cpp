@@ -15,7 +15,7 @@ void InProgressGameObject::tick() {
 }
 
 Picturable InProgressGameObject::getState() const {
-    return {player.id, id, type, 0, 0, false, {0, 0}, {0, 0}, 0, 0, porcentage};
+    return {player.id, id, type, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, false, {0, 0}, {0, 0}, 0, 0, porcentage};
 }
 
 bool InProgressGameObject::completed() const {

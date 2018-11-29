@@ -13,9 +13,9 @@ add_executable(client
         game/arch/EventsLooperThread.cpp
         game/arch/EventsReceptorThread.cpp
         game/arch/EventsSenderThread.cpp
-        game/arch/MainButton.cpp
+        game/arch/UnitButton.cpp
         game/arch/PanelButton.cpp
-        game/arch/PicturableButton.cpp
+        game/arch/BuildingButton.cpp
         game/arch/RequiresTerrainControllerActionException.cpp
         game/arch/SdlPicturable.cpp
         game/arch/TerrainController.cpp

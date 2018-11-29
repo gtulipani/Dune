@@ -1,6 +1,7 @@
 #include "SdlTexture.h"
 #include <SDL_image.h>
 #include <string>
+#include <iostream>
 #include "SdlWindow.h"
 #include "SdlException.h"
 

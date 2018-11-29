@@ -58,7 +58,7 @@ typedef enum ClientSprites {
 
 class ClientSpritesSupplier {
 private:
-    std::map<enum ClientSprites, SdlTexture*> sprites;
+    std::map<int, SdlTexture*> sprites;
 
     SdlTexture *createTexture(const std::string& subpath, const std::string& file_path, SdlWindow *window);
 
@@ -75,6 +75,7 @@ public:
     ClientSpritesSupplier &operator=(ClientSpritesSupplier &&other) noexcept;
 
     SdlTexture* operator[](enum ClientSprites sprite) const;
+    SdlTexture* operator[](int sprite) const;
 
     ~ClientSpritesSupplier();
 };

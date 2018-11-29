@@ -22,18 +22,30 @@ int SdlPicturable::recalculateWidth(int destinyWidth, int originalWidth) {
 }
 
 SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier) :
-    picturable(std::move(picturable)),
-    main_texture(sdlTexture),
-    sprites_supplier(sprites_supplier) {}
+        picturable(std::move(picturable)),
+        main_texture(sdlTexture),
+        sprites_supplier(sprites_supplier) {
+    if (sdlTexture == nullptr) {
+        std::cout << "Constructing SdlPicturable with texture null!" << std::endl;
+    }
+}
 
 SdlPicturable::SdlPicturable(SdlPicturable &&other) noexcept : SdlPicturable(
         std::move(other.picturable),
         other.main_texture,
-        other.sprites_supplier) {}
+        other.sprites_supplier) {
+    if (other.main_texture == nullptr) {
+        std::cout << "Copy from null texture!" << std::endl;
+    }
+}
 
 SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
     if (this == &other) {
         return *this; // other is myself!
+    }
+
+    if (other.main_texture == nullptr) {
+        std::cout << "Movement from null texture!" << std::endl;
     }
 
     // Copy values
@@ -80,7 +92,11 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
 
     Area picturableSrcArea(0, 0, originPicturableWidth, originPicturableHeight);
     Area picturableDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
-    main_texture->render(picturableSrcArea, picturableDestArea);
+    if (main_texture == nullptr) {
+        std::cout << "Trying to render texture null!" << std::endl;
+    } else {
+        main_texture->render(picturableSrcArea, picturableDestArea);
+    }
 
     if (this->picturable.selected) {
         // We must render the selection_square
@@ -97,6 +113,9 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
 }
 
 void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
+    if (sdlTexture == nullptr) {
+        std::cout << "Updating texture to null!" << std::endl;
+    }
     this->picturable = std::move(picturable);
     this->main_texture = sdlTexture;
 }

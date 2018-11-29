@@ -4,6 +4,9 @@
 // STL Libraries
 #include <vector>
 
+// Commons Libraries
+#include <Picturable.h>
+
 // Client Libraries
 #include "../sdl/SdlWindow.h"
 #include "../sdl/SdlTexture.h"
@@ -23,7 +26,6 @@ private:
 
     SdlTexture *panel_texture{};
 
-    std::vector<PanelButton*> mandatory_buttons{};
     std::vector<PanelButton*> available_buttons{};
 
     int screen_width{};
@@ -36,14 +38,9 @@ private:
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
 
-    // This method is used to calculate the position for each one of the main buttons, which are one next to each other
-    Point buildMainButtonRelativePosition(int order);
-
     // This method is used to calculate the position for each one of the building icons, which are one above each other
     Point buildOptionalButtonRelativePosition(int order);
 
-    // Load the initial main buttons
-    void loadMainButtons();
     // Load the initial buttons from the pannel
     void loadButtonsPanel();
     // Render only once the pannel with the main background images and the main buttons
@@ -62,12 +59,14 @@ public:
 
     void refresh();
 
+    void processPicturables(std::vector<Picturable>& picturables);
+
     bool resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                        std::function<void(EventsLooperThread *, int, std::vector<int>, Point,
+                        std::function<void(EventsLooperThread *, int, int, Point,
                                            Point)> push_function);
 
-    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
-    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function);
+    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
+    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
 
     void move();
 
