@@ -5,8 +5,11 @@
 
 #include <UnitsAndBuildings.h>
 
+#include <events/GameStatusEvent.h>
+
 #include "../model/Map.h"
 #include "../model/GameObject.h"
+#include "../model/SelectableGameObject.h"
 #include "../model/WalkingUnit.h"
 #include "../model/AttackingUnit.h"
 #include "../model/Cosechadora.h"
@@ -26,21 +29,22 @@ void GameControler::initializePlayers(int number_of_players) {
     for (int i = 0; i < number_of_players; i++) {
         Point constructionCenterPosition = tile_utils::getTileTopLeft(map.constructionCenterPositions.at(i));
         players[i] = new Player(i);
-        Building* constructionCenter = gameConfig.getBuilding(*players.at(i), next_id, {}, CONSTRUCTION_CENTER);
+        Building* constructionCenter = gameConfig.getBuilding(*players.at(i), next_id, CONSTRUCTION_CENTER);
         constructionCenter->locateAt(constructionCenterPosition, map);
-        gameObjects[next_id] = constructionCenter;
+        players.at(i)->buildings[next_id] = constructionCenter;
         next_id++;
+
         std::vector<Point> initPoss = map.getAvailableTilesNear(tile_utils::getTileFromPixel(constructionCenterPosition), 5);
         for (int j = 0; j < 2; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
             auto * cosechadora = gameConfig.getCosechadora(*players.at(i), next_id, pos, map);
-            gameObjects[next_id] = cosechadora;
+            players.at(i)->units[next_id] = cosechadora;
             next_id++;
         }
         for (int j = 2; j < 5; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
             auto * trike = gameConfig.getVehiculo(*players.at(i), next_id, pos, map, TRIKE);
-            gameObjects[next_id] = trike;
+            players.at(i)->units[next_id] = trike;
             next_id++;
         }
     }
@@ -52,57 +56,113 @@ void GameControler::initialize(int number_of_players) {
 }
 
 void GameControler::tick() {
-    for (auto& gameObject : gameObjects) {
-        // We let know all the objects that time has passed
-        gameObject.second->tick();
-    }
-    for (auto& inProgressUnit : inProgressUnits) {
-        inProgressUnit.second->tick();
-    }
-    for (auto& inProgressBuilding : inProgressBuildings) {
-        inProgressBuilding.second->tick();
+    for (auto& player : players) {
+        for (auto& unit : player.second->units) {
+            unit.second->tick();
+        }
+        for (auto& building : player.second->buildings) {
+            building.second->tick();
+        }
+        for (auto& inProgressUnit : player.second->inProgressUnits) {
+            inProgressUnit.second->tick();
+        }
+        for (auto& inProgressBuilding : player.second->inProgressBuildings) {
+            inProgressBuilding.second->tick();
+        }
     }
 }
 
 void GameControler::leftClick(int player_id, const Point& point) {
+    // First clear current selection
     std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
     if (!selectedObjects.empty()) {
-        for (auto& selectedObject : selectedObjects) {
-            selectedObject.second->unselect();
-        }
         players.at(player_id)->changedSelection = true;
-        selectedObjects.clear();
     }
+    for (auto& selectedObject : selectedObjects) {
+        selectedObject.second->unselect();
+    }
+    selectedObjects.clear();
 
-    for (auto& gameObject : gameObjects) {
-        bool success = gameObject.second->tryToSelect(point);
-        if (success) {
-            selectedObjects[gameObject.first] = gameObject.second;
+    // Now we try to select every unit of the game.
+    // Priority is player units.
+    for (auto& unit : players.at(player_id)->units) {
+        if (unit.second->isThere(point)) {
+            unit.second->select();
+            selectedObjects[unit.first] = unit.second;
             break;
         }
     }
+    // Then his buildings
+    for (auto& building : players.at(player_id)->buildings) {
+        if (building.second->isThere(point)) {
+            building.second->select();
+            selectedObjects[building.first] = building.second;
+            break;
+        }
+    }
+    // Then the rest of the units
+    for (auto& player : players) {
+        if (player.second->id == player_id) continue;
+        for (auto& unit : players.at(player_id)->units) {
+            if (unit.second->isThere(point)) {
+                unit.second->select();
+                selectedObjects[unit.first] = unit.second;
+                break;
+            }
+        }
+    }
+    // Finally the rest of the buildings
+    for (auto& player : players) {
+        if (player.second->id == player_id) continue;
+        for (auto& building : players.at(player_id)->buildings) {
+            if (building.second->isThere(point)) {
+                building.second->select();
+                selectedObjects[building.first] = building.second;
+                break;
+            }
+        }
+    }
+
     if (!players.at(player_id)->changedSelection && !selectedObjects.empty()) {
         players.at(player_id)->changedSelection = true;
     }
 }
 
 void GameControler::rightClick(int player_id, const Point& point) {
-    SelectableGameObject* unit_at_pos = nullptr;
-    for (auto& gameObject : gameObjects) {
-        if (gameObject.second->isThere(point)) {
-            unit_at_pos = gameObject.second;
-            break;
+    SelectableGameObject* object_at_pos = nullptr;
+    
+    // Priority is enemy units
+    for (auto& player : players) {
+        if (player.second->id == player_id) continue;
+        for (auto& unit : players.at(player_id)->units) {
+            if (unit.second->isThere(point)) {
+                object_at_pos = unit.second;
+                break;
+            }
         }
     }
-    
-    std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
-    for (auto& selectedObject : selectedObjects) {
-        if (unit_at_pos != nullptr && unit_at_pos->isEnemy(selectedObject.second)) {
-            ((AttackingUnit*)(selectedObject.second))->attack(unit_at_pos);
-        } else {
-            if (selectedObject.second->player == *players.at(player_id)) {
-                selectedObject.second->handleRightClick(point);
+    // Then enemy buildings
+    for (auto& player : players) {
+        if (player.second->id == player_id) continue;
+        for (auto& building : players.at(player_id)->buildings) {
+            if (building.second->isThere(point)) {
+                object_at_pos = building.second;
+                break;
             }
+        }
+    }
+
+    std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
+    
+    // If none was there, we tell selected object of player to walk there
+    if (object_at_pos == nullptr) {
+        for (auto& selectedObject : selectedObjects) {
+            selectedObject.second->handleRightClick(point);
+        }
+    // Else, we tell all selected objects of player to attack it
+    } else {
+        for (auto& selectedObject : selectedObjects) {
+            selectedObject.second->attack(object_at_pos);
         }
     }
 }
@@ -110,94 +170,124 @@ void GameControler::rightClick(int player_id, const Point& point) {
 void GameControler::createVehiculo(int player_id, const std::string& unitName) {
     auto* unit = gameConfig.getVehiculo(*players.at(player_id), next_id, {}, map, unitName);
     auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
-    inProgressUnits[next_id] = unitInProgress;
+    players.at(player_id)->inProgressUnits[next_id] = unitInProgress;
     next_id++;
 }
 
 void GameControler::createInfanteria(int player_id, const std::string& unitName) {
     auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, {}, map, unitName);
     auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
-    inProgressUnits[next_id] = unitInProgress;
+    players.at(player_id)->inProgressUnits[next_id] = unitInProgress;
     next_id++;
 }
 
 void GameControler::createBuilding(int player_id, const std::string& buildingName) {
-    auto* building = gameConfig.getBuilding(*players.at(player_id), next_id, {}, buildingName);
+    auto* building = gameConfig.getBuilding(*players.at(player_id), next_id, buildingName);
     auto* buildingInProgress = new InProgressGameObject(building, gameConfig.getTiempoBuilding(buildingName));
-    inProgressBuildings[next_id] = buildingInProgress;
+    players.at(player_id)->inProgressBuildings[next_id] = buildingInProgress;
     next_id++;
 }
 
-void GameControler::locateBuildingAt(int id, const Point& pos) {
-    if (inProgressBuildings.at(id)->completed()) {
-        Building* building = (Building*)inProgressBuildings.at(id)->getObject();
-        delete inProgressBuildings.at(id);
-        inProgressBuildings.erase(id);
+void GameControler::locateBuildingAt(int player_id, int building_id, const Point& pos) {
+    if (players.at(player_id)->inProgressBuildings.at(building_id)->completed()) {
+        Building* building = (Building*)players.at(player_id)->inProgressBuildings.at(building_id)->getObject();
+        delete players.at(player_id)->inProgressBuildings.at(building_id);
+        players.at(player_id)->inProgressBuildings.erase(building_id);
         building->locateAt(pos, map);
-        gameObjects[id] = building;
+        players.at(player_id)->buildings[building_id] = building;
+        players.at(player_id)->buildingsOwnedNames.insert(building->getName());
     }
 }
 
 void GameControler::createCosechadora(int player_id) {
-    auto * cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
-    auto * cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoUnit(HARVESTER));
-    inProgressUnits[next_id] = cosechadoraInProgress;
+    auto* cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
+    auto* cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoUnit(HARVESTER));
+    players.at(player_id)->inProgressUnits[next_id] = cosechadoraInProgress;
     next_id++;
 }
 
-std::vector<Picturable> GameControler::getStateFor(int player_id) {
-    Player& player = *players.at(player_id);
-    std::vector<Picturable> state;
+GameStatusEvent GameControler::getStateFor(int player_id) const {
+    GameStatusEvent playerState;
 
-    for (const auto& gameObject : gameObjects) {
-        bool playerChangedSelection = player.changedSelection;
-        bool currentIsOnSelection = false;
-        try {
-            player.selectedObjects.at(gameObject.first);
-            currentIsOnSelection = true;
-        } catch (const std::out_of_range& e) {}
-        if (gameObject.second->haveYouChanged() || (playerChangedSelection && currentIsOnSelection)) {
-            Picturable currentState = gameObject.second->getState();
-            currentState.selected = currentIsOnSelection;
-            state.push_back(currentState);
+    if (players.at(player_id)->changedSelection) {
+        for (const auto& selectedObject : players.at(player_id)->selectedObjects) {
+            playerState.selectedObjects.push_back(selectedObject.second->getState());
         }
     }
-    for (const auto& gameObject : inProgressUnits) {
-        if (gameObject.second->haveYouChanged()) {
-            state.push_back(gameObject.second->getState());
+
+    for (const auto& player : players) {
+        for (const auto& unit : player.second->units) {
+            if (unit.second->haveYouChanged()) {
+                playerState.picturables.push_back(unit.second->getState());
+            }
         }
-    }
-    for (const auto& gameObject : inProgressBuildings) {
-        if (gameObject.second->haveYouChanged()) {
-            state.push_back(gameObject.second->getState());
+        for (const auto& building : player.second->units) {
+            if (building.second->haveYouChanged()) {
+                playerState.picturables.push_back(building.second->getState());
+            }
+        }
+        for (const auto& inProgressUnit : player.second->inProgressUnits) {
+            if (inProgressUnit.second->haveYouChanged()) {
+                playerState.picturables.push_back(inProgressUnit.second->getState());
+            }
+        }
+        for (const auto& inProgressBuilding : player.second->inProgressBuildings) {
+            if (inProgressBuilding.second->haveYouChanged()) {
+                playerState.picturables.push_back(inProgressBuilding.second->getState());
+            }
         }
     }
     for (const auto& especia : especias) {
         if (especia.second->haveYouChanged()) {
-            state.push_back(*especia.second);
+            playerState.picturables.push_back(*especia.second);
         }
     }
+    playerState.especia = players.at(player_id)->especia;
+    playerState.energia = players.at(player_id)->energia;
+    playerState.availableObjects = gameConfig.getAvailableObjectsFor(*players.at((player_id)));
 
-    return state;
+    return playerState;
 }
 
 void GameControler::updateGameObjects() {
-    for (auto it = gameObjects.begin(); it != gameObjects.end();) {
-        if (it->second->isDead()) {
-            delete it->second;
-            it = gameObjects.erase(it);
-        } else {
-            ++it;
+    for (const auto& player : players) {
+        for (auto it = player.second->units.begin(); it != player.second->units.end();) {
+            if (it->second->isDead()) {
+                delete it->second;
+                it = player.second->units.erase(it);
+            } else {
+                ++it;
+            }
+            it->second->reset();
         }
-    }
-
-    for (auto it = inProgressUnits.begin(); it != inProgressUnits.end();) {
-        if (it->second->completed()) {
-            gameObjects[it->first] = it->second->getObject();
-            delete it->second;
-            it = inProgressUnits.erase(it);
-        } else {
-            ++it;
+        for (auto it = player.second->buildings.begin(); it != player.second->buildings.end();) {
+            if (it->second->isDead()) {
+                delete it->second;
+                it = player.second->buildings.erase(it);
+            } else {
+                ++it;
+            }
+            it->second->reset();
+        }
+        for (auto it = player.second->inProgressUnits.begin(); it != player.second->inProgressUnits.end();) {
+            if (it->second->completed()) {
+                player.second->units[it->first] = (WalkingUnit*)it->second->getObject();
+                delete it->second;
+                it = player.second->inProgressUnits.erase(it);
+            } else {
+                ++it;
+            }
+            it->second->reset();
+        }
+        for (auto it = player.second->inProgressBuildings.begin(); it != player.second->inProgressBuildings.end();) {
+            if (it->second->completed()) {
+                player.second->buildings[it->first] = (Building*)it->second->getObject();
+                delete it->second;
+                it = player.second->inProgressBuildings.erase(it);
+            } else {
+                ++it;
+            }
+            it->second->reset();
         }
     }
 
@@ -208,30 +298,31 @@ void GameControler::updateGameObjects() {
         } else {
             ++it;
         }
+        it->second->reset();
     }
 
-    for (const auto& gameObject : gameObjects) {
-        gameObject.second->reset();
-    }
-    for (const auto& gameObject : inProgressUnits) {
-        gameObject.second->reset();
-    }
-    for (const auto& gameObject : inProgressBuildings) {
-        gameObject.second->reset();
-    }
-    for (const auto& especia : especias) {
-        especia.second->reset();
-    }
     for (const auto& player : players) {
         player.second->changedSelection = false;
     }
 }
 
 GameControler::~GameControler() {
-    for (const auto& gameObject : gameObjects) {
-        delete gameObject.second;
-    }
     for (const auto& player : players) {
+        for (auto& unit : player.second->units) {
+            delete unit.second;
+        }
+        for (auto& building : player.second->buildings) {
+            delete building.second;
+        }
+        for (auto& inProgressUnit : player.second->inProgressUnits) {
+            delete inProgressUnit.second;
+        }
+        for (auto& inProgressbuilding : player.second->inProgressBuildings) {
+            delete inProgressbuilding.second;
+        }
         delete player.second;
+    }
+    for (auto& especia : especias) {
+        delete especia.second;
     }
 }

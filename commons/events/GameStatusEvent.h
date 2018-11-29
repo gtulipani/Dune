@@ -6,14 +6,13 @@
 
 struct GameStatusEvent {
 public:
-    std::vector<Picturable> picturables;
     int especia;
-    std::vector<int> selectedObjects;
+    int energia;
+    std::vector<Picturable> picturables;
+    std::vector<Picturable> selectedObjects;
     std::vector<std::string> availableObjects;
 
     GameStatusEvent() = default;
-
-    explicit GameStatusEvent(std::vector<Picturable> _picturables);
 
     GameStatusEvent(const GameStatusEvent &other);
 

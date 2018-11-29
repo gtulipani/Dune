@@ -60,7 +60,7 @@ class GameConfiguration {
 
     int getTiempoBuilding(const std::string& buildingName) const;
 
-    Building* getBuilding(Player& player, int id, const Point& initialPos, const std::string& buildingName) const;
+    Building* getBuilding(Player& player, int id, const std::string& buildingName) const;
 
     int getTiempoUnit(const std::string& unitName) const;
 

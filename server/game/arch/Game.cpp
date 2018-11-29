@@ -88,7 +88,7 @@ void Game::updateModel() {
                 break;
             }
             case LOCATE_BUILDING_TYPE: {
-                gameControler->locateBuildingAt(event.picturable_id, event.release_position);
+                gameControler->locateBuildingAt(event.player_id, event.picturable_id, event.release_position);
             }
             default:
                 break;
@@ -98,14 +98,13 @@ void Game::updateModel() {
 
 void Game::updateClients() {
     std::vector<Picturable> state;
+    GameStatusEvent statusEvent;
     for (unsigned int i = 0; i < clients.size(); i++) {
-        state = gameControler->getStateFor(i);
-        if (!state.empty()) {
-            try {
-                clients.at(i)->send(NotificationEvent(GAME_STATUS_EVENT));
-                clients.at(i)->send(GameStatusEvent(state));
-            } catch (const SOException& e) {}
-        }
+        statusEvent = gameControler->getStateFor(i);
+        try {
+            clients.at(i)->send(NotificationEvent(GAME_STATUS_EVENT));
+            clients.at(i)->send(statusEvent);
+        } catch (const SOException& e) {}
     }
 }
 

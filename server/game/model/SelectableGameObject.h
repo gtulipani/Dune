@@ -24,9 +24,11 @@ class SelectableGameObject : public AliveGameObject {
 
     bool isThere(const Point& pos) const;
 
-    bool tryToSelect(const Point& clickPosition);
+    void select();
 
     void unselect();
+
+    virtual void attack(SelectableGameObject* target);
 
     virtual void recieveAttack(AttackingUnit* enemy, int attackPoints);
 

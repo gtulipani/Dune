@@ -97,12 +97,20 @@ void from_json(const json &j, ClientEvent &e) {
 // GameStatusEvent Transformation
 void to_json(json &j, const GameStatusEvent &e) {
     j = json{
-            {"picturables", e.picturables}
+            {"especia",             e.especia},
+            {"energia",             e.energia},
+            {"picturables",         e.picturables},
+            {"selected_objects",    e.selectedObjects},
+            {"available_objects",   e.availableObjects}
     };
 }
 
 void from_json(const json &j, GameStatusEvent &e) {
+    j.at("especia").get_to(e.especia);
+    j.at("energia").get_to(e.energia);
     j.at("picturables").get_to(e.picturables);
+    j.at("selected_objects").get_to(e.selectedObjects);
+    j.at("available_objects").get_to(e.availableObjects);
 }
 
 // GameConfigurationEvent Transformation

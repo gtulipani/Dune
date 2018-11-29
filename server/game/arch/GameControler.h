@@ -8,6 +8,7 @@
 
 #include "GameConfiguration.h"
 
+class GameStatusEvent;
 class SelectableGameObject;
 class InProgressGameObject;
 class Map;
@@ -22,10 +23,7 @@ class GameControler {
     Map& map;
     const GameConfiguration& gameConfig;
     std::map<int, Especia*> especias;
-    std::map<int, SelectableGameObject*> gameObjects;
     std::map<int, Player*> players;
-    std::map<int, InProgressGameObject*> inProgressUnits;
-    std::map<int, InProgressGameObject*> inProgressBuildings;
 
     void initializePlayers(int number_of_player);
 
@@ -36,7 +34,7 @@ class GameControler {
 
     void tick();
 
-    std::vector<Picturable> getStateFor(int player_id);
+    GameStatusEvent getStateFor(int player_id) const;
 
     void leftClick(int player_id, const Point& point);
 
@@ -48,7 +46,7 @@ class GameControler {
 
     void createBuilding(int player_id, const std::string& buildingName);
 
-    void locateBuildingAt(int id, const Point& pos);
+    void locateBuildingAt(int player_id, int building_id, const Point& pos);
 
     void createCosechadora(int player_id);
 

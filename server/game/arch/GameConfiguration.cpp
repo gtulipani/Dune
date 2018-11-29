@@ -92,15 +92,15 @@ std::vector<std::string> GameConfiguration::getAvailableObjectsFor(const Player&
         }
     }
     std::vector<std::string> availableUnits;
-    if (player.buildings.find(BARRACKS) != player.buildings.end()) {
+    if (player.buildingsOwnedNames.find(BARRACKS) != player.buildingsOwnedNames.end()) {
         availableUnits.push_back(LIGHT_INFANTRY);
         availableUnits.push_back(HEAVY_INFANTRY);
     }
-    if (player.buildings.find(LIGHT_FACTORY) != player.buildings.end()) {
+    if (player.buildingsOwnedNames.find(LIGHT_FACTORY) != player.buildingsOwnedNames.end()) {
         availableUnits.push_back(TRIKE);
         availableUnits.push_back(RAIDER);
     }
-    if (player.buildings.find(HEAVY_FACTORY) != player.buildings.end()) {
+    if (player.buildingsOwnedNames.find(HEAVY_FACTORY) != player.buildingsOwnedNames.end()) {
         availableUnits.push_back(TANK);
         availableUnits.push_back(HARVESTER);
     }
@@ -139,10 +139,10 @@ int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const 
     return TIEMPO_CONSTRUCCION_EDIFICIOS;
 }
 
-Building* GameConfiguration::getBuilding(Player& player, int id, const Point& initialPos, const std::string& buildingName) const {
+Building* GameConfiguration::getBuilding(Player& player, int id, const std::string& buildingName) const {
     const BuildingConfig* config = buildingsConfig.at(CONSTRUCTION_CENTER);
     Point pixelSize = {config->tileSize.row * TILE_PIXEL_RATE, config->tileSize.col * TILE_PIXEL_RATE};
-    return new Building(player, id, OBJECT_SPRITES_MAP.at(buildingName).at(0), config->health, pixelSize, initialPos);
+    return new Building(player, id, buildingName, OBJECT_SPRITES_MAP.at(buildingName).at(0), config->health, pixelSize);
 }
 
 int GameConfiguration::getTiempoUnit(const std::string& unitName) const {

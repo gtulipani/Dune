@@ -11,13 +11,9 @@ bool SelectableGameObject::isThere(const Point& pos) const {
     return diffRow >= 0 && diffCol >= 0 && diffRow <= size.row && diffCol <= size.col;
 }
 
-bool SelectableGameObject::tryToSelect(const Point& clickPosition) {
-    if (isThere(clickPosition)) {
-        selected = true;
-        haveIChanged = true;
-        return true;
-    }
-    return false;
+void SelectableGameObject::select() {
+    selected = true;
+    //haveIChanged = true;
 }
 
 Point SelectableGameObject::getPixelPosition() const {
@@ -26,8 +22,10 @@ Point SelectableGameObject::getPixelPosition() const {
 
 void SelectableGameObject::unselect() {
     selected = false;
-    haveIChanged = true;
+    //haveIChanged = true;
 }
+
+void SelectableGameObject::attack(SelectableGameObject* target) {}
 
 void SelectableGameObject::recieveAttack(AttackingUnit* enemy, int attackPoints) {
     health -= attackPoints;

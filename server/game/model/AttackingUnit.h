@@ -18,7 +18,7 @@ class AttackingUnit : public WalkingUnit {
     AttackingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
                 Map& map, int movespeed, const Weapon& weapon, int range);
 
-    void attack(SelectableGameObject* enemy);
+    virtual void attack(SelectableGameObject* enemy) override;
 
     virtual void recieveAttack(AttackingUnit* enemy, int attackPoints) override;
 
