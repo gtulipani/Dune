@@ -92,7 +92,8 @@ Point Map::findClosestRefineria(const Point& p) const {
 }
 
 Especia* Map::getEspeciaAt(const Point& pos) {
-    return especias.at(pos);
+    Point tile = tile_utils::getTileFromPixel(pos);
+    return especias.at(tile);
 }
 
 std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int n) {

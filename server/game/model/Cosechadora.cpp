@@ -36,7 +36,7 @@ void Cosechadora::tick() {
             if (pixelPosition == pixelGoal) {
                 player.addEspecia(ESPECIA_MAX);
                 especia = 0;
-                if (!target->runOut()) {
+                if (target->runOut()) {
                     state = waiting;
                 } else {
                     this->WalkingUnit::handleRightClick(target->getPosition());
