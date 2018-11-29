@@ -87,7 +87,7 @@ void Game::updateModel() {
                 break;
             }
             case LOCATE_BUILDING_TYPE: {
-                gameControler->locateBuildingAt(event.player_id, event.release_position);
+                gameControler->locateBuildingAt(event.picturable_id, event.release_position);
             }
             default:
                 break;

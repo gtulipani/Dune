@@ -20,8 +20,8 @@ EventsLooperThread::EventsLooperThread(shaque<GameStatusEvent> &game_status_even
         output_messages(output_messages),
         game_ended(game_ended) {}
 
-void EventsLooperThread::pushEvent(int client_event_type, std::vector<int> picturable_ids, Point click_position, Point release_position) {
-    output_messages.push(ClientEvent(this->player_id, client_event_type, std::move(picturable_ids), std::move(click_position), std::move(release_position)));
+void EventsLooperThread::pushEvent(int client_event_type, int picturable_id, Point click_position, Point release_position) {
+    output_messages.push(ClientEvent(this->player_id, client_event_type, picturable_id, std::move(click_position), std::move(release_position)));
 }
 
 void EventsLooperThread::processServerEvents() {

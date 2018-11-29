@@ -18,31 +18,42 @@ protected:
     int width;
     int height;
     Point screen_position;
-    std::vector<int> actions;
+    int type;
     SdlTexture *texture;
+    std::vector<int> actions;
     ClientSpritesSupplier &sprites_supplier;
     bool have_I_changed;
+    bool is_being_created;
+    bool finished_creating;
+    int progress;
 
+    int picturable_id{};
+
+    SdlTexture* getProgressTexture();
 public:
-    PanelButton(int width, int height, Point screen_position, std::vector<int> actions, SdlTexture *texture, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, int type, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
-    PanelButton(int width, int height, Point screen_position, std::vector<int> actions, std::string image_path, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, int type, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
 
-    virtual void render(int offset_x, int offset_y) = 0;
+    void render(int offset_x, int offset_y);
 
     bool includesPosition(Point point) const;
 
     bool includesExternalAction() const;
 
-    virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) = 0;
-
-    virtual void disable() = 0;
-
-    virtual void resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, std::vector<int>, Point, Point)> push_function) = 0;
-
-    virtual bool hasPendingAction() = 0;
-
     bool hasChanged() const;
+
+    bool hasType(int type) const;
+
+    void disable();
+
+    bool update(int picturable_id, int progress);
+
+    virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) = 0;
+
+    virtual void resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) = 0;
+
+    virtual bool isWaitingForAction() const = 0;
 
     virtual ~PanelButton();
 };

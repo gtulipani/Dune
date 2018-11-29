@@ -37,13 +37,13 @@ struct ClientEvent {
 public:
     unsigned int player_id{};
     int type{};
-    vector<int> picturable_ids{};
+    int picturable_id{};
     Point click_position{};
     Point release_position{};
 
     ClientEvent() = default;
 
-    ClientEvent(unsigned int player_id, int client_type, vector<int> picturable_ids, Point click_position, Point release_position);
+    ClientEvent(unsigned int player_id, int client_type, int picturable_id, Point click_position, Point release_position);
 
     ClientEvent(const ClientEvent &other);
 

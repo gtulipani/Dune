@@ -80,6 +80,8 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
 
     Area picturableSrcArea(0, 0, originPicturableWidth, originPicturableHeight);
     Area picturableDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
+    std::cout << "Going to render. Porcentage: " << picturable.porcentage << ", type: " << picturable.type << ", col: " << picturable.position.col
+    << ", row: " << picturable.position.row << ", and main_texture has address: " << main_texture << std::endl;
     main_texture->render(picturableSrcArea, picturableDestArea);
 
     if (this->picturable.selected) {

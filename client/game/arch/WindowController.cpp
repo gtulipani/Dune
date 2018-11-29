@@ -62,7 +62,7 @@ void WindowController::move(enum Movement movement) {
     }
 }
 
-void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) {
+void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
         // Store where does the Mouse Click take place
         last_click_event_occurrence = TERRAIN;
@@ -74,7 +74,7 @@ void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, Events
     }
 }
 
-void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, std::vector<int>, Point, Point)> push_function) {
+void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {
     if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
         if (last_click_event_occurrence == BUTTONS) {
             // We clicked on the Panel Section and we released the mouse on the terrain section. Don't do anything
@@ -88,6 +88,7 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
             } else {
                 // Parse terrain event
                 terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
+                pending_action = false;
             }
         }
     } else {
@@ -106,6 +107,7 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
     }
 }
 
-void WindowController::processPicturables(std::vector<Picturable> picturables) {
-    this->terrain_controller.processPicturables(std::move(picturables));
+void WindowController::processPicturables(std::vector<Picturable>& picturables) {
+    this->terrain_controller.processPicturables(picturables);
+    this->buttons_controller.processPicturables(picturables);
 }

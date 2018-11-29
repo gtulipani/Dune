@@ -204,10 +204,12 @@ void TerrainController::renderEagleEye(Area destArea) {
     client_sprites_supplier[EAGLE_EYE_SQUARE]->render(eagleEyeSrcArea, eagleDestArea);
 }
 
-void TerrainController::processPicturables(std::vector<Picturable> picturables) {
+void TerrainController::processPicturables(std::vector<Picturable>& picturables) {
     if (!picturables.empty()) {
         this->pending_changes = true;
     }
+
+    // Update/create/delete the picturables
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
         // Localize texture to be rendered
         SdlTexture* texture = picturables_map[picturable.type][picturable.sprite_direction][picturable.sprite_motion];
@@ -241,7 +243,7 @@ void TerrainController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event)
 void TerrainController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
                                                 EventsLooperThread *processer,
                                                 std::function<void(EventsLooperThread *, int,
-                                                                   std::vector<int>, Point, Point)> push_function) {
+                                                                   int, Point, Point)> push_function) {
     switch (mouse_event.button) {
         case SDL_BUTTON_LEFT: {
             push_function(processer, LEFT_CLICK_EVENT_TYPE, {0}, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));

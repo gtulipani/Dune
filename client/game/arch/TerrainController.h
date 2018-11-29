@@ -66,14 +66,14 @@ public:
 
     void renderEagleEye(Area destiny);
 
-    void processPicturables(std::vector<Picturable> picturables);
+    void processPicturables(std::vector<Picturable>& picturables);
 
     Point getRelativePoint(int row, int column);
 
     void parseMouseClickButton(SDL_MouseButtonEvent &mouse_event);
 
     void parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                                 std::function<void(EventsLooperThread *, int, std::vector<int>, Point, Point)> push_function);
+                                 std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function);
 
     bool move(enum Movement movement);
 
