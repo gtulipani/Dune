@@ -264,6 +264,9 @@ GameStatusEvent GameControler::getStateFor(int player_id) const {
     playerState.especia = players.at(player_id)->especia;
     playerState.energia = players.at(player_id)->energia;
     playerState.availableObjects = gameConfig.getAvailableObjectsFor(*players.at((player_id)));
+    for (auto& selectedObject : players.at(player_id)->selectedObjects) {
+        playerState.selectedObjects.push_back(selectedObject.second->getState());
+    }
 
     return playerState;
 }
