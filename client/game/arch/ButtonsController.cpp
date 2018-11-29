@@ -51,13 +51,13 @@ void ButtonsController::loadButtonsPanel() {
     // Initial light_factory and wind_trap buildings
     available_buttons.push_back(new BuildingButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
                                                      getGlobalPosition(buildOptionalButtonRelativePosition(0)),
-                                                     LIGHT_FACTORY,
+                                                     SPRITE_LIGHT_FACTORY,
                                                      LIGHT_FACTORY_ICON,
                                                      {CREATE_LIGHT_FACTORY_TYPE, LOCATE_BUILDING_TYPE},
                                                      client_sprites_supplier));
     available_buttons.push_back(new BuildingButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
                                                      getGlobalPosition(buildOptionalButtonRelativePosition(1)),
-                                                     WIND_TRAPS,
+                                                     SPRITE_WIND_TRAPS,
                                                      WIND_TRAPS_ICON,
                                                      {CREATE_WIND_TRAPS_TYPE, LOCATE_BUILDING_TYPE},
                                                      client_sprites_supplier));

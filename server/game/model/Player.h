@@ -9,7 +9,9 @@ class SelectableGameObject;
 struct Player {
     const int id;
     std::map<int, SelectableGameObject*> selectedObjects = {};
+    std::map<std::string, Building*> buildings {};
     int especia = 1000;
+    int energia = 0;
     bool changedSelection = false;
     
     Player(int id);

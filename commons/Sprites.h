@@ -1,31 +1,30 @@
 #ifndef __SPRITES_H__
 #define __SPRITES_H__
 
-typedef enum Type {
+typedef enum SpriteType {
     // Buildings sprites
-    CONSTRUCTION_CENTER = 0,
-    WIND_TRAPS = 1,
-    REFINERY = 2,
-    ATREIDES_BARRACKS = 3,
-    HARKUNNAN_BARRACKS = 4,
-    ORDOS_BARRACKS = 5,
-    LIGHT_FACTORY = 6,
-    HEAVY_FACTORY = 7,
-    SILO = 8,
-    PALACE = 9,
+    SPRITE_CONSTRUCTION_CENTER = 0,
+    SPRITE_WIND_TRAPS = 1,
+    SPRITE_REFINERY = 2,
+    SPRITE_ATREIDES_BARRACKS = 3,
+    SPRITE_HARKUNNAN_BARRACKS = 4,
+    SPRITE_ORDOS_BARRACKS = 5,
+    SPRITE_LIGHT_FACTORY = 6,
+    SPRITE_HEAVY_FACTORY = 7,
+    SPRITE_SILO = 8,
 
     // Vehicles
-    TRIKE = 10,
-    HARVESTER = 11,
-    RAIDER = 12,
-    TANK = 13,
+    SPRITE_TRIKE = 10,
+    SPRITE_HARVESTER = 11,
+    SPRITE_RAIDER = 12,
+    SPRITE_TANK = 13,
 
     // Units
-    LIGHT_INFANTRY = 14,
-    HEAVY_INFANTRY = 15,
+    SPRITE_LIGHT_INFANTRY = 14,
+    SPRITE_HEAVY_INFANTRY = 15,
 
     // Others
-    ESPECIA = 16
+    SPRITE_ESPECIA = 16
 } Sprites;
 
 #define MAX_MOTION 4

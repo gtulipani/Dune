@@ -1,53 +1,93 @@
 {
   "buildings": {
-    "centro_construccion": {
+    "construction_center": {
       "energy": 0,
       "cost": 0,
       "size": {"row": 3, "column": 3},
       "health": 3000,
-      "capacity": -1
+      "capacity": 0
     },
-    "refineria": {
+    "wind_traps": {
+      "energy": 0,
+      "cost": 800,
+      "size": {"row": 3, "column": 3},
+      "health": 500,
+      "capacity": 0
+    },
+    "refinery": {
       "energy": 400,
       "cost": 500,
+      "size": {"row": 2, "column": 2},
+      "health": 500,
+      "capacity": 5000
+    },
+    "barracks": {
+      "energy": 100,
+      "cost": 300,
+      "size": {"row": 3, "column": 2},
+      "health": 300,
+      "capacity": 0
+    },
+    "light_factory": {
+      "energy": 500,
+      "cost": 800,
       "size": {"row": 3, "column": 3},
-      "health": 0,
+      "health": 500,
+      "capacity": 0
+    },
+    "heavy_factory": {
+      "energy": 800,
+      "cost": 1500,
+      "size": {"row": 4, "column": 4},
+      "health": 1500,
+      "capacity": 0
+    },
+    "silo": {
+      "energy": 100,
+      "cost": 200,
+      "size": {"row": 1, "column": 1},
+      "health": 200,
       "capacity": 1000
     }
   },
   "weapons": {
-    "rifle_de_asalto": {
+    "asault_rifle": {
       "damage": 2,
       "shot_frequency": 6,
       "bonus": 1
     },
-    "lanza_misiles": {
+    "rocket_launcher": {
       "damage": 8,
       "shot_frequency": 1,
       "bonus": 0
     },
-    "cañon_22_mm": {
+    "22_mm_canon": {
       "damage": 6,
       "shot_frequency": 6,
       "bonus": 2
+    },
+    "canon": {
+      "damage": 7,
+      "shot_frequency": 1,
+      "bonus": 0
     }
   },
   "attacking_units": {
-    "infanteria_ligera": {
+    "light_infantry": {
       "range": 3,
       "speed": 16,
       "training_time": 1,
       "cost": 50,
       "health": 50,
-      "armamento": "rifle_de_asalto"
+      "weapon": "asault_rifle"
     },
-    "infanteria_pesada": {
+    "heavy_infantry": {
       "range": 3,
       "speed": 12,
       "training_time": 1.3,
       "cost": 70,
       "health": 80,
-      "armamento": "lanza_misiles"
+      "weapon": "rocket_launcher"
     },
     "trike": {
       "range": 4,
@@ -55,7 +95,7 @@
       "training_time": 2,
       "cost": 100,
       "health": 80,
-      "armamento": "rifle_de_asalto"
+      "weapon": "asault_rifle"
     },
     "raider": {
       "range": 4,
@@ -63,10 +103,18 @@
       "training_time": 2,
       "cost": 100,
       "health": 80,
-      "armamento": "cañon_22_mm"
+      "weapon": "22_mm_canon"
+    },
+    "tank": {
+      "range": 4,
+      "speed": 40,
+      "training_time": 4,
+      "cost": 300,
+      "health": 30,
+      "weapon": "canon"
     }
   },
-  "cosechadora": {
+  "harvester": {
     "speed": 12,
     "training_time": 3,
     "cost": 300,

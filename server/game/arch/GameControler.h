@@ -42,9 +42,11 @@ class GameControler {
 
     void rightClick(int player_id, const Point& point);
 
-    void createTrike(int player_id);
+    void createVehiculo(int player_id, const std::string& unitName);
 
-    void createBuilding(int player_id, const Sprites& sprite);
+    void createInfanteria(int player_id, const std::string& unitName);
+
+    void createBuilding(int player_id, const std::string& buildingName);
 
     void locateBuildingAt(int id, const Point& pos);
 

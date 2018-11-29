@@ -3,10 +3,13 @@
 #include <json/json.hpp>
 #include <json/JSONUtils.h>
 
+#include "../model/Player.h"
 #include "../model/Infanteria.h"
 #include "../model/Vehiculo.h"
 #include "../model/Cosechadora.h"
 #include "../model/Building.h"
+
+#include <UnitsAndBuildings.h>
 
 #include "TileUtils.h"
 
@@ -15,7 +18,7 @@
 #define CONFIGURATION_BUILDINGS_KEY "buildings"
 #define CONFIGURATION_WEAPONS_KEY "weapons"
 #define CONFIGURATION_SOLDIERS_KEY "attacking_units"
-#define CONFIGURATION_COSECHADORA_KEY "cosechadora"
+#define CONFIGURATION_HARVESTER_KEY "harvester"
 
 void GameConfiguration::parseWeapons(json& weapons_json) {
     for (json::iterator it = weapons_json.begin(); it != weapons_json.end(); ++it) {
@@ -26,25 +29,27 @@ void GameConfiguration::parseWeapons(json& weapons_json) {
 
 void GameConfiguration::parseAttackingUnitsConfig(json& attacking_units_json) {
     for (json::iterator it = attacking_units_json.begin(); it != attacking_units_json.end(); ++it) {
-        AttackingUnitConfig* attackingUnitConfig = new AttackingUnitConfig();
-        attackingUnitConfig->name = it.key();
-        attackingUnitConfig->range = it.value().at("range");
-        attackingUnitConfig->speed = it.value().at("speed");
-        attackingUnitConfig->training_time = it.value().at("training_time");
-        attackingUnitConfig->cost = it.value().at("cost");
-        attackingUnitConfig->health = it.value().at("health");
-        attackingUnitConfig->weapon = it.value().at("armamento");
-        attackingUnitsConfig[it.key()] = attackingUnitConfig;
+        UnitConfig* unitConfig = new UnitConfig();
+        unitConfig->name = it.key();
+        unitConfig->range = it.value().at("range");
+        unitConfig->speed = it.value().at("speed");
+        unitConfig->training_time = it.value().at("training_time");
+        unitConfig->cost = it.value().at("cost");
+        unitConfig->health = it.value().at("health");
+        unitConfig->weapon = it.value().at("weapon");
+        unitConfig->pixelSize = {32, 23};
+        unitsConfig[it.key()] = unitConfig;
     }
 }
 
 void GameConfiguration::parseCosechadoraConfig(json& cosechadora_json) {
-    AttackingUnitConfig* cosechadoraConfig = new AttackingUnitConfig();
+    UnitConfig* cosechadoraConfig = new UnitConfig();
     cosechadoraConfig->speed = cosechadora_json.at("speed");
     cosechadoraConfig->training_time = cosechadora_json.at("training_time");
     cosechadoraConfig->cost = cosechadora_json.at("cost");
     cosechadoraConfig->health = cosechadora_json.at("health");
-    attackingUnitsConfig["cosechadora"] = cosechadoraConfig;
+    cosechadoraConfig->pixelSize = {32, 32};
+    unitsConfig[HARVESTER] = cosechadoraConfig;
 }
 
 void GameConfiguration::parseBuildingsConfig(json& buildings_json) {
@@ -66,7 +71,7 @@ void GameConfiguration::parseGameConfiguration(json &configuration_json) {
 			parseWeapons(it.value());
 		} else if (it.key() == CONFIGURATION_SOLDIERS_KEY) {
             parseAttackingUnitsConfig(it.value());
-        } else if (it.key() == CONFIGURATION_COSECHADORA_KEY) {
+        } else if (it.key() == CONFIGURATION_HARVESTER_KEY) {
             parseCosechadoraConfig(it.value());
         } else if (it.key() == CONFIGURATION_BUILDINGS_KEY) {
             parseBuildingsConfig(it.value());
@@ -79,119 +84,94 @@ GameConfiguration::GameConfiguration(const std::string& config_file_path) {
 	parseGameConfiguration(game_items_configuration);
 }
 
-Infanteria* GameConfiguration::infanteria(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Type type, const Point& size) const {
-    return new Infanteria(player, id, type, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
+std::vector<std::string> GameConfiguration::getAvailableObjectsFor(const Player& player) const {
+    std::vector<std::string> availableObjects;
+    for (const auto& building : buildingsConfig) {
+        if (building.second->cost <= player.especia && building.second->energy <= player.energia) {
+            availableObjects.push_back(building.first);
+        }
+    }
+    std::vector<std::string> availableUnits;
+    if (player.buildings.find(BARRACKS) != player.buildings.end()) {
+        availableUnits.push_back(LIGHT_INFANTRY);
+        availableUnits.push_back(HEAVY_INFANTRY);
+    }
+    if (player.buildings.find(LIGHT_FACTORY) != player.buildings.end()) {
+        availableUnits.push_back(TRIKE);
+        availableUnits.push_back(RAIDER);
+    }
+    if (player.buildings.find(HEAVY_FACTORY) != player.buildings.end()) {
+        availableUnits.push_back(TANK);
+        availableUnits.push_back(HARVESTER);
+    }
+    for (const auto& unit_name : availableUnits) {
+        if (unitsConfig.at(unit_name)->cost <= player.especia) {
+            availableObjects.push_back(unit_name);
+        }
+    }
+    return availableObjects;
 }
 
-Vehiculo* GameConfiguration::vehiculo(Player& player, int id, const Point& initialPos, Map& map, const AttackingUnitConfig* config, Type type, const Point& size) const {
-    return new Vehiculo(player, id, type, config->health, size, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
-}
-
-Infanteria* GameConfiguration::getInfanteriaLigera(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("infanteria_ligera");
-    return infanteria(player, id, initialPos, map, config, TRIKE, {32, 32});
-}
-
-int GameConfiguration::getTiempoInfanteriaLigera() const {
-    return attackingUnitsConfig.at("infanteria_ligera")->training_time;
-}
-
-Infanteria* GameConfiguration::getInfanteriaPesada(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("infanteria_pesada");
-    return infanteria(player, id, initialPos, map, config, TRIKE, {32, 32});
-}
-
-int GameConfiguration::getTiempoInfanteriaPesada() const {
-    return attackingUnitsConfig.at("infanteria_pesada")->training_time;
-}
-
-Vehiculo* GameConfiguration::getTrike(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("trike");
-    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
-}
-
-int GameConfiguration::getTiempoTrike() const {
-    return attackingUnitsConfig.at("trike")->training_time;
-}
-
-Vehiculo* GameConfiguration::getRaider(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("raider");
-    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
-}
-
-int GameConfiguration::getTiempoRaider() const {
-    return attackingUnitsConfig.at("raider")->training_time;
-}
-
-Vehiculo* GameConfiguration::getTanque(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("tanque");
-    return vehiculo(player, id, initialPos, map, config, TRIKE, {32, 32});
-}
-
-int GameConfiguration::getTiempoTanque() const {
-    return attackingUnitsConfig.at("tanque")->training_time;
-}
-
-Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
-    const AttackingUnitConfig* config = attackingUnitsConfig.at("cosechadora");
-    return new Cosechadora(player, id, HARVESTER, config->health, {32, 32}, initialPos, map, config->speed);
-}
-
-int GameConfiguration::getTiempoCosechadora() const {
-    return attackingUnitsConfig.at("cosechadora")->training_time;
-}
+const std::map<std::string, std::vector<SpriteType>> OBJECT_SPRITES_MAP = {
+    {CONSTRUCTION_CENTER, {SPRITE_CONSTRUCTION_CENTER}},
+    {WIND_TRAPS, {SPRITE_WIND_TRAPS}},
+    {REFINERY, {SPRITE_REFINERY}},
+    {BARRACKS, {
+        SPRITE_ATREIDES_BARRACKS, 
+        SPRITE_HARKUNNAN_BARRACKS, 
+        SPRITE_ORDOS_BARRACKS
+        }
+    },
+    {LIGHT_FACTORY, {SPRITE_LIGHT_FACTORY}},
+    {HEAVY_FACTORY, {SPRITE_HEAVY_FACTORY}},
+    {SILO, {SPRITE_SILO}},
+    {TRIKE, {SPRITE_TRIKE}},
+    {RAIDER, {SPRITE_RAIDER}},
+    {TANK, {SPRITE_TANK}},
+    {HARVESTER, {SPRITE_HARVESTER}},
+    {LIGHT_INFANTRY, {SPRITE_LIGHT_INFANTRY}},
+    {HEAVY_INFANTRY, {SPRITE_HEAVY_INFANTRY}}
+};
 
 #define TIEMPO_CONSTRUCCION_EDIFICIOS 5
 
-int GameConfiguration::getTiempoEdificio() const {
+int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const {
     return TIEMPO_CONSTRUCCION_EDIFICIOS;
 }
 
-Building* GameConfiguration::getCentroConstruccion(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("centro_construccion");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+Building* GameConfiguration::getBuilding(Player& player, int id, const Point& initialPos, const std::string& buildingName) const {
+    const BuildingConfig* config = buildingsConfig.at(CONSTRUCTION_CENTER);
+    Point pixelSize = {config->tileSize.row * TILE_PIXEL_RATE, config->tileSize.col * TILE_PIXEL_RATE};
+    return new Building(player, id, OBJECT_SPRITES_MAP.at(buildingName).at(0), config->health, pixelSize, initialPos);
 }
 
-Building* GameConfiguration::getFabricaLigera(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("fabrica_ligera");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+int GameConfiguration::getTiempoUnit(const std::string& unitName) const {
+    return unitsConfig.at(unitName)->training_time;
 }
 
-Building* GameConfiguration::getTrampasAire(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("trampas_aire");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+Infanteria* GameConfiguration::getInfanteria(Player& player, int id, const Point& initialPos, Map& map, const std::string& unitName) const {
+    const UnitConfig* config = unitsConfig.at(unitName);
+    return new Infanteria(player, id, OBJECT_SPRITES_MAP.at(unitName).at(0), config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
-Building* GameConfiguration::getFabricaPesada(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("fabrica_pesada");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+Vehiculo* GameConfiguration::getVehiculo(Player& player, int id, const Point& initialPos, Map& map, const std::string& unitName) const {
+    const UnitConfig* config = unitsConfig.at(unitName);
+    return new Vehiculo(player, id, OBJECT_SPRITES_MAP.at(unitName).at(0), config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
-Building* GameConfiguration::getRefineria(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("refineria");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
-}
-
-Building* GameConfiguration::getSilo(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("silo");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
-}
-
-Building* GameConfiguration::getCuartel(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("cuartel");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
-}
-
-Building* GameConfiguration::getPalacio(Player& player, int id, const Point& initialPos, Map& map) const {
-    const BuildingConfig* config = buildingsConfig.at("palacio");
-    return new Building(player, id, CONSTRUCTION_CENTER, config->health, {config->tileSize.row * TILE_PIXEL_RATE, 96}, initialPos);
+Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
+    const UnitConfig* config = unitsConfig.at(HARVESTER);
+    return new Cosechadora(player, id, OBJECT_SPRITES_MAP.at(HARVESTER).at(0), config->health, config->pixelSize, initialPos, map, config->speed);
 }
 
 GameConfiguration::~GameConfiguration() {
-    for (auto weapon : weapons) {
+    for (auto& weapon : weapons) {
         delete weapon.second;
     }
-    for (auto attackingUnitConfig : attackingUnitsConfig) {
-        delete attackingUnitConfig.second;
+    for (auto& unitConfig : unitsConfig) {
+        delete unitConfig.second;
+    }
+    for (auto& buildingConfig : buildingsConfig) {
+        delete buildingConfig.second;
     }
 }

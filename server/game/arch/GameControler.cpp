@@ -3,6 +3,8 @@
 #include <TileUtils.h>
 #include <stdexcept>
 
+#include <UnitsAndBuildings.h>
+
 #include "../model/Map.h"
 #include "../model/GameObject.h"
 #include "../model/WalkingUnit.h"
@@ -24,8 +26,8 @@ void GameControler::initializePlayers(int number_of_players) {
     for (int i = 0; i < number_of_players; i++) {
         Point constructionCenterPosition = tile_utils::getTileTopLeft(map.constructionCenterPositions.at(i));
         players[i] = new Player(i);
-        SelectableGameObject* constructionCenter = new Building(*players.at(i), next_id, CONSTRUCTION_CENTER, CONSTRUCTION_CENTER_HEALTH, CONSTRUCTION_CENTER_SIZE, constructionCenterPosition);
-        map.update(EDIFICIOS, Point(3, 3), tile_utils::getTileFromPixel(constructionCenterPosition));
+        Building* constructionCenter = gameConfig.getBuilding(*players.at(i), next_id, {}, CONSTRUCTION_CENTER);
+        constructionCenter->locateAt(constructionCenterPosition, map);
         gameObjects[next_id] = constructionCenter;
         next_id++;
         std::vector<Point> initPoss = map.getAvailableTilesNear(tile_utils::getTileFromPixel(constructionCenterPosition), 5);
@@ -37,7 +39,7 @@ void GameControler::initializePlayers(int number_of_players) {
         }
         for (int j = 2; j < 5; j++) {
             Point pos = tile_utils::getTileTopLeft(initPoss.at(j));
-            auto * trike = gameConfig.getTrike(*players.at(i), next_id, pos, map);
+            auto * trike = gameConfig.getVehiculo(*players.at(i), next_id, pos, map, TRIKE);
             gameObjects[next_id] = trike;
             next_id++;
         }
@@ -105,16 +107,23 @@ void GameControler::rightClick(int player_id, const Point& point) {
     }
 }
 
-void GameControler::createTrike(int player_id) {
-    auto * trike = gameConfig.getTrike(*players.at(player_id), next_id, {}, map);
-    auto * trikeInProgress = new InProgressGameObject(trike, gameConfig.getTiempoTrike());
-    inProgressUnits[next_id] = trikeInProgress;
+void GameControler::createVehiculo(int player_id, const std::string& unitName) {
+    auto* unit = gameConfig.getVehiculo(*players.at(player_id), next_id, {}, map, unitName);
+    auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
+    inProgressUnits[next_id] = unitInProgress;
     next_id++;
 }
 
-void GameControler::createBuilding(int player_id, const Sprites& sprite) {
-    auto * building = new Building(*players.at(player_id), next_id, sprite, 1000, {32, 32}, {0, 0});
-    auto * buildingInProgress = new InProgressGameObject(building, 5);
+void GameControler::createInfanteria(int player_id, const std::string& unitName) {
+    auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, {}, map, unitName);
+    auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
+    inProgressUnits[next_id] = unitInProgress;
+    next_id++;
+}
+
+void GameControler::createBuilding(int player_id, const std::string& buildingName) {
+    auto* building = gameConfig.getBuilding(*players.at(player_id), next_id, {}, buildingName);
+    auto* buildingInProgress = new InProgressGameObject(building, gameConfig.getTiempoBuilding(buildingName));
     inProgressBuildings[next_id] = buildingInProgress;
     next_id++;
 }
@@ -124,14 +133,14 @@ void GameControler::locateBuildingAt(int id, const Point& pos) {
         Building* building = (Building*)inProgressBuildings.at(id)->getObject();
         delete inProgressBuildings.at(id);
         inProgressBuildings.erase(id);
-        building->locateAt(pos);
+        building->locateAt(pos, map);
         gameObjects[id] = building;
     }
 }
 
 void GameControler::createCosechadora(int player_id) {
     auto * cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
-    auto * cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoCosechadora());
+    auto * cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoUnit(HARVESTER));
     inProgressUnits[next_id] = cosechadoraInProgress;
     next_id++;
 }

@@ -7,7 +7,7 @@
 #define ESPECIA_INITIAL_HEALTH 1000
 
 Especia::Especia(int id, const Point& tilePosition) :
-Picturable(-1, id, ESPECIA, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, false, tile_utils::getTileTopLeft(tilePosition),
+Picturable(-1, id, SPRITE_ESPECIA, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, false, tile_utils::getTileTopLeft(tilePosition),
             {TILE_PIXEL_RATE, TILE_PIXEL_RATE}, ESPECIA_INITIAL_HEALTH,
             ESPECIA_INITIAL_HEALTH, 100) {}
 

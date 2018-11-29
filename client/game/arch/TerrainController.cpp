@@ -40,79 +40,79 @@ SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path
 
 void TerrainController::buildUnits() {
     // Store buildings textures
-    picturables_map[CONSTRUCTION_CENTER][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("construction_center.png");
-    picturables_map[WIND_TRAPS][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("wind_traps.png");
-    picturables_map[REFINERY][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("refinery.png");
-    //picturables_map[ATREIDES_BARRACKS][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("atreides_barracks.png");
-    picturables_map[HARKUNNAN_BARRACKS][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harkunnan_barracks.png");
-    picturables_map[ORDOS_BARRACKS][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("ordos_barracks.png");
-    picturables_map[LIGHT_FACTORY][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("light_factory.png");
-    picturables_map[HEAVY_FACTORY][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("heavy_factory.png");
-    picturables_map[SILO][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("silo.png");
-    //picturables_map[PALACE][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("palace.png");
+    picturables_map[SPRITE_CONSTRUCTION_CENTER][SPRITE_DOWN][0] = createPicturableTexture("construction_center.png");
+    picturables_map[SPRITE_WIND_TRAPS][SPRITE_DOWN][0] = createPicturableTexture("wind_traps.png");
+    picturables_map[SPRITE_REFINERY][SPRITE_DOWN][0] = createPicturableTexture("refinery.png");
+    //picturables_map[SPRITE_ATREIDES_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("atreides_barracks.png");
+    picturables_map[SPRITE_HARKUNNAN_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("harkunnan_barracks.png");
+    picturables_map[SPRITE_ORDOS_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("ordos_barracks.png");
+    picturables_map[SPRITE_LIGHT_FACTORY][SPRITE_DOWN][0] = createPicturableTexture("light_factory.png");
+    picturables_map[SPRITE_HEAVY_FACTORY][SPRITE_DOWN][0] = createPicturableTexture("heavy_factory.png");
+    picturables_map[SPRITE_SILO][SPRITE_DOWN][0] = createPicturableTexture("silo.png");
+    //picturables_map[SPRITE_PALACE][SPRITE_DOWN][0] = createPicturableTexture("palace.png");
 
     // Store trike sprites
-    picturables_map[TRIKE][SPRITE_UP][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_up.png");
-    picturables_map[TRIKE][SPRITE_UP_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_up_right.png");
-    picturables_map[TRIKE][SPRITE_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_right.png");
-    picturables_map[TRIKE][SPRITE_DOWN_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_down_right.png");
-    picturables_map[TRIKE][SPRITE_DOWN][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_down.png");
-    picturables_map[TRIKE][SPRITE_DOWN_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_down_left.png");
-    picturables_map[TRIKE][SPRITE_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_left.png");
-    picturables_map[TRIKE][SPRITE_UP_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("trike_left_up.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_UP][0] = createPicturableTexture("trike_up.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_UP_RIGHT][0] = createPicturableTexture("trike_up_right.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_RIGHT][0] = createPicturableTexture("trike_right.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("trike_down_right.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_DOWN][0] = createPicturableTexture("trike_down.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_DOWN_LEFT][0] = createPicturableTexture("trike_down_left.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_LEFT][0] = createPicturableTexture("trike_left.png");
+    picturables_map[SPRITE_TRIKE][SPRITE_UP_LEFT][0] = createPicturableTexture("trike_left_up.png");
 
     // Store harvester sprites
-    picturables_map[HARVESTER][SPRITE_UP][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_up.png");
-    picturables_map[HARVESTER][SPRITE_UP_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_up_right.png");
-    picturables_map[HARVESTER][SPRITE_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_right.png");
-    picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_down_right.png");
-    picturables_map[HARVESTER][SPRITE_DOWN][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_down.png");
-    picturables_map[HARVESTER][SPRITE_DOWN_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_down_left.png");
-    picturables_map[HARVESTER][SPRITE_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_left.png");
-    picturables_map[HARVESTER][SPRITE_UP_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("harvester_left_up.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_UP][0] = createPicturableTexture("harvester_up.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_UP_RIGHT][0] = createPicturableTexture("harvester_up_right.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_RIGHT][0] = createPicturableTexture("harvester_right.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("harvester_down_right.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_DOWN][0] = createPicturableTexture("harvester_down.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("harvester_down_left.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_LEFT][0] = createPicturableTexture("harvester_left.png");
+    picturables_map[SPRITE_HARVESTER][SPRITE_UP_LEFT][0] = createPicturableTexture("harvester_left_up.png");
 
     // Store raider sprites
-    picturables_map[RAIDER][SPRITE_UP][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_up.png");
-    picturables_map[RAIDER][SPRITE_UP_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_up_right.png");
-    picturables_map[RAIDER][SPRITE_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_right.png");
-    picturables_map[RAIDER][SPRITE_DOWN_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_down_right.png");
-    picturables_map[RAIDER][SPRITE_DOWN][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_down.png");
-    picturables_map[RAIDER][SPRITE_DOWN_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_down_left.png");
-    picturables_map[RAIDER][SPRITE_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_left.png");
-    picturables_map[RAIDER][SPRITE_UP_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("raider_left_up.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_UP][0] = createPicturableTexture("raider_up.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_UP_RIGHT][0] = createPicturableTexture("raider_up_right.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_RIGHT][0] = createPicturableTexture("raider_right.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("raider_down_right.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_DOWN][0] = createPicturableTexture("raider_down.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("raider_down_left.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_LEFT][0] = createPicturableTexture("raider_left.png");
+    picturables_map[SPRITE_RAIDER][SPRITE_UP_LEFT][0] = createPicturableTexture("raider_left_up.png");
 
     // Store tank sprites
-    /*picturables_map[TANK][SPRITE_UP][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_up.png");
-    picturables_map[TANK][SPRITE_UP_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_up_right.png");
-    picturables_map[TANK][SPRITE_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_right.png");
-    picturables_map[TANK][SPRITE_DOWN_RIGHT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_down_right.png");
-    picturables_map[TANK][SPRITE_DOWN][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_down.png");
-    picturables_map[TANK][SPRITE_DOWN_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_down_left.png");
-    picturables_map[TANK][SPRITE_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_left.png");
-    picturables_map[TANK][SPRITE_UP_LEFT][DEFAULT_SPRITE_MOTION] = createPicturableTexture("tank_left_up.png");
+    /*picturables_map[SPRITE_TANK][SPRITE_UP][0] = createPicturableTexture("tank_up.png");
+    picturables_map[SPRITE_TANK][SPRITE_UP_RIGHT][0] = createPicturableTexture("tank_up_right.png");
+    picturables_map[SPRITE_TANK][SPRITE_RIGHT][0] = createPicturableTexture("tank_right.png");
+    picturables_map[SPRITE_TANK][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("tank_down_right.png");
+    picturables_map[SPRITE_TANK][SPRITE_DOWN][0] = createPicturableTexture("tank_down.png");
+    picturables_map[SPRITE_TANK][SPRITE_DOWN_LEFT][0] = createPicturableTexture("tank_down_left.png");
+    picturables_map[SPRITE_TANK][SPRITE_LEFT][0] = createPicturableTexture("tank_left.png");
+    picturables_map[SPRITE_TANK][SPRITE_UP_LEFT][0] = createPicturableTexture("tank_left_up.png");
 
     // Store light infantry sprites
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+    picturables_map[SPRITE_LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
 
     // Store heavy infantry sprites
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+    picturables_map[SPRITE_HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
 
     // Store especia sprites
-    picturables_map[ESPECIA][DEFAULT_SPRITE_DIRECTION][DEFAULT_SPRITE_MOTION] = createPicturableTexture("especia.png");
+    picturables_map[SPRITE_ESPECIA][SPRITE_DOWN][0] = createPicturableTexture("especia.png");
 }
 
 void TerrainController::buildTerrains() {

@@ -12,6 +12,7 @@
 #include <events/GameStatusEvent.h>
 #include <Picturable.h>
 #include <SOException.h>
+#include <UnitsAndBuildings.h>
 
 // Server Libraries
 #include "../json/JSONConversion.h"
@@ -75,7 +76,7 @@ void Game::updateModel() {
                 break;
             }
             case CREATE_TRIKE_TYPE: {
-                gameControler->createTrike(event.player_id);
+                gameControler->createVehiculo(event.player_id, TRIKE);
                 break;
             }
             case CREATE_LIGHT_FACTORY_TYPE: {
