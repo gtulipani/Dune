@@ -21,6 +21,7 @@ struct Player {
     int especia = 1000;
     int energia = 0;
     bool changedSelection = false;
+    bool lost = false;
     
     Player(int id);
 

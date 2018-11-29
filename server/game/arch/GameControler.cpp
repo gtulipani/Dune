@@ -32,6 +32,7 @@ void GameControler::initializePlayers(int number_of_players) {
         Building* constructionCenter = gameConfig.getBuilding(*players.at(i), next_id, CONSTRUCTION_CENTER);
         constructionCenter->locateAt(constructionCenterPosition, map);
         players.at(i)->buildings[next_id] = constructionCenter;
+        players.at(i)->buildingsOwnedNames.insert(CONSTRUCTION_CENTER);
         next_id++;
 
         std::vector<Point> initPoss = map.getAvailableTilesNear(tile_utils::getTileFromPixel(constructionCenterPosition), 5);
@@ -83,42 +84,54 @@ void GameControler::leftClick(int player_id, const Point& point) {
     }
     selectedObjects.clear();
 
+    bool success = false;
+
     // Now we try to select every unit of the game.
     // Priority is player units.
     for (auto& unit : players.at(player_id)->units) {
         if (unit.second->isThere(point)) {
             unit.second->select();
             selectedObjects[unit.first] = unit.second;
+            success = true;
             break;
         }
     }
-    // Then his buildings
-    for (auto& building : players.at(player_id)->buildings) {
-        if (building.second->isThere(point)) {
-            building.second->select();
-            selectedObjects[building.first] = building.second;
-            break;
-        }
-    }
-    // Then the rest of the units
-    for (auto& player : players) {
-        if (player.second->id == player_id) continue;
-        for (auto& unit : players.at(player_id)->units) {
-            if (unit.second->isThere(point)) {
-                unit.second->select();
-                selectedObjects[unit.first] = unit.second;
-                break;
-            }
-        }
-    }
-    // Finally the rest of the buildings
-    for (auto& player : players) {
-        if (player.second->id == player_id) continue;
+    if (!success) {
+        // Then his buildings
         for (auto& building : players.at(player_id)->buildings) {
             if (building.second->isThere(point)) {
                 building.second->select();
                 selectedObjects[building.first] = building.second;
+                success = true;
                 break;
+            }
+        }
+        if (!success) {
+            // Then the rest of the units
+            for (auto& player : players) {
+                if (player.second->id == player_id) continue;
+                for (auto& unit : player.second->units) {
+                    if (unit.second->isThere(point)) {
+                        unit.second->select();
+                        selectedObjects[unit.first] = unit.second;
+                        success = true;
+                        break;
+                    }
+                }
+            }
+            if (!success) {
+                // Finally the rest of the buildings
+                for (auto& player : players) {
+                    if (player.second->id == player_id) continue;
+                    for (auto& building : player.second->buildings) {
+                        if (building.second->isThere(point)) {
+                            building.second->select();
+                            selectedObjects[building.first] = building.second;
+                            success = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -134,20 +147,22 @@ void GameControler::rightClick(int player_id, const Point& point) {
     // Priority is enemy units
     for (auto& player : players) {
         if (player.second->id == player_id) continue;
-        for (auto& unit : players.at(player_id)->units) {
+        for (auto& unit : player.second->units) {
             if (unit.second->isThere(point)) {
                 object_at_pos = unit.second;
                 break;
             }
         }
     }
-    // Then enemy buildings
-    for (auto& player : players) {
-        if (player.second->id == player_id) continue;
-        for (auto& building : players.at(player_id)->buildings) {
-            if (building.second->isThere(point)) {
-                object_at_pos = building.second;
-                break;
+    if (object_at_pos == nullptr) {
+        // Then enemy buildings
+        for (auto& player : players) {
+            if (player.second->id == player_id) continue;
+            for (auto& building : player.second->buildings) {
+                if (building.second->isThere(point)) {
+                    object_at_pos = building.second;
+                    break;
+                }
             }
         }
     }
@@ -157,11 +172,15 @@ void GameControler::rightClick(int player_id, const Point& point) {
     // If none was there, we tell selected object of player to walk there
     if (object_at_pos == nullptr) {
         for (auto& selectedObject : selectedObjects) {
-            selectedObject.second->handleRightClick(point);
+            // Only if the unit belongs to the player
+            if (selectedObject.second->player == *players.at(player_id)) {
+                selectedObject.second->handleRightClick(point);
+            }
         }
     // Else, we tell all selected objects of player to attack it
     } else {
         for (auto& selectedObject : selectedObjects) {
+            // Only if they are enemies
             selectedObject.second->attack(object_at_pos);
         }
     }
@@ -221,7 +240,7 @@ GameStatusEvent GameControler::getStateFor(int player_id) const {
                 playerState.picturables.push_back(unit.second->getState());
             }
         }
-        for (const auto& building : player.second->units) {
+        for (const auto& building : player.second->buildings) {
             if (building.second->haveYouChanged()) {
                 playerState.picturables.push_back(building.second->getState());
             }
@@ -256,18 +275,18 @@ void GameControler::updateGameObjects() {
                 delete it->second;
                 it = player.second->units.erase(it);
             } else {
+                it->second->reset();
                 ++it;
             }
-            it->second->reset();
         }
         for (auto it = player.second->buildings.begin(); it != player.second->buildings.end();) {
             if (it->second->isDead()) {
                 delete it->second;
                 it = player.second->buildings.erase(it);
             } else {
+                it->second->reset();
                 ++it;
             }
-            it->second->reset();
         }
         for (auto it = player.second->inProgressUnits.begin(); it != player.second->inProgressUnits.end();) {
             if (it->second->completed()) {
@@ -275,9 +294,9 @@ void GameControler::updateGameObjects() {
                 delete it->second;
                 it = player.second->inProgressUnits.erase(it);
             } else {
+                it->second->reset();
                 ++it;
             }
-            it->second->reset();
         }
         for (auto it = player.second->inProgressBuildings.begin(); it != player.second->inProgressBuildings.end();) {
             if (it->second->completed()) {
@@ -285,9 +304,9 @@ void GameControler::updateGameObjects() {
                 delete it->second;
                 it = player.second->inProgressBuildings.erase(it);
             } else {
+                it->second->reset();
                 ++it;
             }
-            it->second->reset();
         }
     }
 
@@ -296,9 +315,9 @@ void GameControler::updateGameObjects() {
             delete it->second;
             it = especias.erase(it);
         } else {
+            it->second->reset();
             ++it;
         }
-        it->second->reset();
     }
 
     for (const auto& player : players) {

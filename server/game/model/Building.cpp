@@ -15,6 +15,6 @@ const std::string& Building::getName() const {
 }
 
 void Building::locateAt(const Point& pos, Map& map) {
-    map.update(EDIFICIOS, tile_utils::getTileFromPixel(size), tile_utils::getTileFromPixel(pixelPosition));
     pixelPosition = pos;
+    map.update(EDIFICIOS, tile_utils::getTileFromPixel(size), tile_utils::getTileFromPixel(pixelPosition));
 }

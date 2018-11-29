@@ -37,7 +37,7 @@ void GameConfiguration::parseAttackingUnitsConfig(json& attacking_units_json) {
         unitConfig->cost = it.value().at("cost");
         unitConfig->health = it.value().at("health");
         unitConfig->weapon = it.value().at("weapon");
-        unitConfig->pixelSize = {32, 23};
+        unitConfig->pixelSize = {32, 32};
         unitsConfig[it.key()] = unitConfig;
     }
 }
