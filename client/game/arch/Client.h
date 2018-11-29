@@ -8,9 +8,9 @@
 #include <events/GameConfigurationEvent.h>
 
 // Client Libraries
-#include "EventsLooperThread.h"
-#include "EventsReceptorThread.h"
-#include "EventsSenderThread.h"
+#include "threads/EventsLooperThread.h"
+#include "threads/EventsReceptorThread.h"
+#include "threads/EventsSenderThread.h"
 
 class Client {
 private:

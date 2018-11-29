@@ -33,7 +33,7 @@ class WalkingUnit : public SelectableGameObject {
 
     public:
     // Movespeed on pixels per second.
-    WalkingUnit(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition,
+    WalkingUnit(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition,
                 Map& map, int movespeed);
 
     virtual void tick() override;

@@ -4,11 +4,11 @@
 #include <TileUtils.h>
 #include "Weapon.h"
 
-AttackingUnit::AttackingUnit(Player& player, int id, Sprites sprite, int health,
+AttackingUnit::AttackingUnit(Player& player, int id, const std::string& name, int health,
                             const Point& size, const Point& initialPixelPosition,
                             Map& map, int movespeed, const Weapon& weapon,
                             int range) :
-WalkingUnit(player, id, sprite, health, size, initialPixelPosition, map, movespeed) ,
+WalkingUnit(player, id, name, health, size, initialPixelPosition, map, movespeed) ,
 weapon(weapon), range(TILE_PIXEL_RATE * range) {}
 
 bool AttackingUnit::inRange(const Point& pos) const {

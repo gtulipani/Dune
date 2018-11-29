@@ -3,9 +3,9 @@
 
 // Commons Libraries
 #include <Matrix.h>
-#include "../sdl/SdlWindow.h"
-#include "../sdl/SdlTexture.h"
-#include "SdlPicturable.h"
+#include "../../sdl/SdlWindow.h"
+#include "../../sdl/SdlTexture.h"
+#include "../SdlPicturable.h"
 
 class SDL_MouseButtonEvent;
 class EventsLooperThread;
@@ -36,7 +36,7 @@ private:
     SdlTexture *terrain_texture;
 
     std::map<int, SdlTexture*> terrains_textures_map;
-    std::map<int, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
+    std::map<std::string, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
 
     int offset_x{};
     int offset_y{};

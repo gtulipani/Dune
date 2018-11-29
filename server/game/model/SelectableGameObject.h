@@ -16,7 +16,7 @@ class SelectableGameObject : public AliveGameObject {
     Direction sprite_direction = DEFAULT_SPRITE_DIRECTION;
 
     public:
-    SelectableGameObject(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition);
+    SelectableGameObject(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition);
 
     virtual void handleRightClick(const Point& pos) = 0;
 

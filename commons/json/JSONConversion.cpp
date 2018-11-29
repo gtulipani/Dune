@@ -21,7 +21,7 @@ void to_json(json &j, const Picturable &p) {
     j = json{
             {"player_id",           p.player_id},
             {"id",                  p.id},
-            {"type",                p.type},
+            {"name",                p.name},
             {"sprite_direction",    p.sprite_direction},
             {"sprite_motion",       p.sprite_motion},
             {"selected",            p.selected},
@@ -38,7 +38,7 @@ void from_json(const json &j, Picturable &p) {
     std::cout << j << std::endl;
     j.at("player_id").get_to(p.player_id);
     j.at("id").get_to(p.id);
-    j.at("type").get_to(p.type);
+    j.at("name").get_to(p.name);
     j.at("sprite_direction").get_to(p.sprite_direction);
     j.at("sprite_motion").get_to(p.sprite_motion);
     j.at("selected").get_to(p.selected);

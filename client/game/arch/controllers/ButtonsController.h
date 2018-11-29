@@ -8,10 +8,10 @@
 #include <Picturable.h>
 
 // Client Libraries
-#include "../sdl/SdlWindow.h"
-#include "../sdl/SdlTexture.h"
-#include "PanelButton.h"
-#include "ClientSpritesSupplier.h"
+#include "../../sdl/SdlWindow.h"
+#include "../../sdl/SdlTexture.h"
+#include "../buttons/PanelButton.h"
+#include "../ClientSpritesSupplier.h"
 
 class SDL_MouseButtonEvent;
 class EventsLooperThread;

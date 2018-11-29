@@ -10,8 +10,8 @@
 #include <events/GameStatusEvent.h>
 
 // Client libraries
-#include "WindowController.h"
-#include "BlockingQueue.hpp"
+#include "../controllers/WindowController.h"
+#include "../BlockingQueue.hpp"
 
 union SDL_Event;
 

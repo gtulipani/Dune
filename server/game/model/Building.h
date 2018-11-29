@@ -6,11 +6,8 @@
 class Map;
 
 class Building : public SelectableGameObject {
-    private:
-    const std::string name;
-
 	public:
-    Building(Player& player, int id, const std::string& name, Sprites sprite, int health, const Point& size);
+    Building(Player& player, int id, const std::string& name, int health, const Point& size);
 
     virtual void tick() override;
 

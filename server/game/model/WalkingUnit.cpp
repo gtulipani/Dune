@@ -5,8 +5,8 @@
 #include <TileUtils.h>
 #include "Map.h"
 
-WalkingUnit::WalkingUnit(Player& player, int id, int type, int health, const Point& size, const Point& initialPixelPosition, Map& map, int movespeed) :
-SelectableGameObject(player, id, type, health, size, initialPixelPosition),
+WalkingUnit::WalkingUnit(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition, Map& map, int movespeed) :
+SelectableGameObject(player, id, name, health, size, initialPixelPosition),
 ticksPerStep(TO_TICKS(movespeed)),
 tilePosition(tile_utils::getTileFromPixel(initialPixelPosition)),
 map(map),

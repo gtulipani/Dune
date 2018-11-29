@@ -8,9 +8,9 @@
 #include <Matrix.h>
 
 // Client Libraries
-#include "../sdl/SdlWindow.h"
-#include "../sdl/SdlTexture.h"
-#include "SdlPicturable.h"
+#include "../../sdl/SdlWindow.h"
+#include "../../sdl/SdlTexture.h"
+#include "../SdlPicturable.h"
 #include "TerrainController.h"
 #include "ButtonsController.h"
 

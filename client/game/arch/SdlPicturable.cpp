@@ -1,7 +1,13 @@
-#include <iostream>
-#include <TileUtils.h>
 #include "SdlPicturable.h"
 
+// STL Libraries
+#include <iostream>
+
+// Commons Libraries
+#include <TileUtils.h>
+#include <UnitsAndBuildings.h>
+
+// Client Libraries
 #include "Area.h"
 
 #define PICTURABLE_WIDTH 80
@@ -118,6 +124,10 @@ void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
     }
     this->picturable = std::move(picturable);
     this->main_texture = sdlTexture;
+}
+
+bool SdlPicturable::hasPriority() const {
+    return (picturable.name == ESPECIA);
 }
 
 SdlTexture *SdlPicturable::getHealthBarTexture() {

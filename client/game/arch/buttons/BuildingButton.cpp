@@ -1,20 +1,20 @@
 #include "BuildingButton.h"
 
 // Client Libraries
-#include "Area.h"
-#include "RequiresTerrainControllerActionException.h"
+#include "../Area.h"
+#include "../controllers/RequiresTerrainControllerActionException.h"
 
 BuildingButton::BuildingButton(int width,
                                int height,
                                Point screen_position,
-                               int type,
+                               std::string type,
                                SdlTexture *texture,
                                std::vector<int> actions,
                                ClientSpritesSupplier &sprites_supplier) : PanelButton(
         width,
         height,
         std::move(screen_position),
-        type,
+        std::move(type),
         texture,
         std::move(actions),
         sprites_supplier) {}
@@ -22,14 +22,14 @@ BuildingButton::BuildingButton(int width,
 BuildingButton::BuildingButton(int width,
                                int height,
                                Point screen_position,
-                               int type,
+                               std::string type,
                                int icon_type,
                                std::vector<int> actions,
                                ClientSpritesSupplier &sprites_supplier) : BuildingButton(
         width,
         height,
         std::move(screen_position),
-        type,
+        std::move(type),
         sprites_supplier[icon_type],
         std::move(actions),
         sprites_supplier) {}

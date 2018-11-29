@@ -7,14 +7,15 @@
 
 // Commons Libraries
 #include <events/ClientEvent.h>
+#include <UnitsAndBuildings.h>
 
 // SDL Libraries
 #include <SDL_events.h>
 #include <Sprites.h>
 
 // Client Libraries
-#include "UnitButton.h"
-#include "BuildingButton.h"
+#include "../buttons/UnitButton.h"
+#include "../buttons/BuildingButton.h"
 #include "RequiresTerrainControllerActionException.h"
 
 #define EAGLE_EYE_Y_OFFSET 20
@@ -49,18 +50,22 @@ Point ButtonsController::buildOptionalButtonRelativePosition(int order) {
 
 void ButtonsController::loadButtonsPanel() {
     // Initial light_factory and wind_trap buildings
-    available_buttons.push_back(new BuildingButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
-                                                     getGlobalPosition(buildOptionalButtonRelativePosition(0)),
-                                                     SPRITE_LIGHT_FACTORY,
-                                                     LIGHT_FACTORY_ICON,
-                                                     {CREATE_LIGHT_FACTORY_TYPE, LOCATE_BUILDING_TYPE},
-                                                     client_sprites_supplier));
-    available_buttons.push_back(new BuildingButton(BUILDING_ICON_WIDTH, BUILDING_ICON_HEIGHT,
-                                                     getGlobalPosition(buildOptionalButtonRelativePosition(1)),
-                                                     SPRITE_WIND_TRAPS,
-                                                     WIND_TRAPS_ICON,
-                                                     {CREATE_WIND_TRAPS_TYPE, LOCATE_BUILDING_TYPE},
-                                                     client_sprites_supplier));
+    available_buttons.push_back(new BuildingButton(
+            BUILDING_ICON_WIDTH,
+            BUILDING_ICON_HEIGHT,
+            getGlobalPosition(buildOptionalButtonRelativePosition(0)),
+            LIGHT_FACTORY,
+            LIGHT_FACTORY_ICON,
+            {CREATE_LIGHT_FACTORY_TYPE, LOCATE_BUILDING_TYPE},
+            client_sprites_supplier));
+    available_buttons.push_back(new BuildingButton(
+            BUILDING_ICON_WIDTH,
+            BUILDING_ICON_HEIGHT,
+            getGlobalPosition(buildOptionalButtonRelativePosition(1)),
+            WIND_TRAPS,
+            WIND_TRAPS_ICON,
+            {CREATE_WIND_TRAPS_TYPE, LOCATE_BUILDING_TYPE},
+            client_sprites_supplier));
 }
 
 void ButtonsController::renderPanelTexture() {
@@ -134,7 +139,7 @@ void ButtonsController::processPicturables(std::vector<Picturable>& picturables)
     // We iterate through the buttons and search for the first appearence for the type, which will be the one with less percentage
     std::for_each(available_buttons.begin(), available_buttons.end(), [this, picturables](PanelButton *button) {
         auto it = std::find_if(picturables.begin(), picturables.end(), [button](const Picturable &picturable) {
-            return button->hasType(picturable.type);
+            return button->hasName(picturable.name);
         });
         if (it != picturables.end()) {
             if (button->update(it->id, it->porcentage)) {

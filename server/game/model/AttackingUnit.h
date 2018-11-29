@@ -15,7 +15,7 @@ class AttackingUnit : public WalkingUnit {
     bool inRange(const Point& pos) const;
 
     public:
-    AttackingUnit(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
+    AttackingUnit(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition,
                 Map& map, int movespeed, const Weapon& weapon, int range);
 
     virtual void attack(SelectableGameObject* enemy) override;

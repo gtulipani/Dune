@@ -20,4 +20,7 @@
 #define LIGHT_INFANTRY "light_infantry"
 #define HEAVY_INFANTRY "heavy_infantry"
 
+// Others
+#define ESPECIA "especia"
+
 #endif

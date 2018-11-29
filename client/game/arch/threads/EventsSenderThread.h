@@ -9,7 +9,7 @@
 #include <events/ClientEvent.h>
 
 // Client Libraries
-#include "BlockingQueue.hpp"
+#include "../BlockingQueue.hpp"
 
 using namespace std;
 

@@ -142,7 +142,7 @@ int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const 
 Building* GameConfiguration::getBuilding(Player& player, int id, const std::string& buildingName) const {
     const BuildingConfig* config = buildingsConfig.at(CONSTRUCTION_CENTER);
     Point pixelSize = {config->tileSize.row * TILE_PIXEL_RATE, config->tileSize.col * TILE_PIXEL_RATE};
-    return new Building(player, id, buildingName, OBJECT_SPRITES_MAP.at(buildingName).at(0), config->health, pixelSize);
+    return new Building(player, id, buildingName, config->health, pixelSize);
 }
 
 int GameConfiguration::getTiempoUnit(const std::string& unitName) const {
@@ -151,17 +151,17 @@ int GameConfiguration::getTiempoUnit(const std::string& unitName) const {
 
 Infanteria* GameConfiguration::getInfanteria(Player& player, int id, const Point& initialPos, Map& map, const std::string& unitName) const {
     const UnitConfig* config = unitsConfig.at(unitName);
-    return new Infanteria(player, id, OBJECT_SPRITES_MAP.at(unitName).at(0), config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
+    return new Infanteria(player, id, unitName, config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
 Vehiculo* GameConfiguration::getVehiculo(Player& player, int id, const Point& initialPos, Map& map, const std::string& unitName) const {
     const UnitConfig* config = unitsConfig.at(unitName);
-    return new Vehiculo(player, id, OBJECT_SPRITES_MAP.at(unitName).at(0), config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
+    return new Vehiculo(player, id, unitName, config->health, config->pixelSize, initialPos, map, config->speed, *weapons.at(config->weapon), config->range);
 }
 
 Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
     const UnitConfig* config = unitsConfig.at(HARVESTER);
-    return new Cosechadora(player, id, OBJECT_SPRITES_MAP.at(HARVESTER).at(0), config->health, config->pixelSize, initialPos, map, config->speed);
+    return new Cosechadora(player, id, HARVESTER, config->health, config->pixelSize, initialPos, map, config->speed);
 }
 
 GameConfiguration::~GameConfiguration() {

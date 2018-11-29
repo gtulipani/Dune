@@ -1,6 +1,7 @@
 #include "Especia.h"
 
 #include <TileUtils.h>
+#include <UnitsAndBuildings.h>
 
 #include "GameObject.h"
 
@@ -8,7 +9,7 @@
 #define ESPECIA_SPRITES 5
 
 Especia::Especia(int id, const Point& tilePosition) :
-Picturable(-1, id, SPRITE_ESPECIA, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, false, tile_utils::getTileTopLeft(tilePosition),
+Picturable(-1, id, ESPECIA, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, false, tile_utils::getTileTopLeft(tilePosition),
             {TILE_PIXEL_RATE, TILE_PIXEL_RATE}, ESPECIA_INITIAL_HEALTH, ESPECIA_INITIAL_HEALTH, 100) {
     especia_per_sprite_change = ESPECIA_INITIAL_HEALTH / ESPECIA_SPRITES;
 }

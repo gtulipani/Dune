@@ -1,19 +1,19 @@
 #include "UnitButton.h"
 
 // Client Libraries
-#include "Area.h"
+#include "../Area.h"
 
 UnitButton::UnitButton(int width,
                        int height,
                        Point screen_position,
-                       int type,
+                       std::string type,
                        SdlTexture* texture,
                        std::vector<int> actions,
                        ClientSpritesSupplier &sprites_supplier) : PanelButton(
        width,
        height,
        std::move(screen_position),
-       type,
+       std::move(type),
        texture,
        std::move(actions),
        sprites_supplier) {}
@@ -21,7 +21,7 @@ UnitButton::UnitButton(int width,
 UnitButton::UnitButton(int width,
                        int height,
                        Point screen_position,
-                       int type,
+                       std::string type,
                        std::string image_path,
                        std::vector<int> actions,
                        SdlWindow *window,
@@ -29,7 +29,7 @@ UnitButton::UnitButton(int width,
         width,
         height,
         std::move(screen_position),
-        type,
+        std::move(type),
         new SdlTexture(image_path, window),
         std::move(actions),
         sprites_supplier) {}

@@ -5,8 +5,8 @@
 #include <Point.h>
 
 // Client Libraries
-#include "../sdl/SdlTexture.h"
-#include "ClientSpritesSupplier.h"
+#include "../../sdl/SdlTexture.h"
+#include "../ClientSpritesSupplier.h"
 
 #define BUTTON_ORIGINAL_WIDTH 80
 #define BUTTON_ORIGINAL_HEIGHT 80
@@ -18,7 +18,7 @@ protected:
     int width;
     int height;
     Point screen_position;
-    int type;
+    std::string name;
     SdlTexture *texture;
     std::vector<int> actions;
     ClientSpritesSupplier &sprites_supplier;
@@ -31,9 +31,9 @@ protected:
 
     SdlTexture* getProgressTexture();
 public:
-    PanelButton(int width, int height, Point screen_position, int type, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, std::string name, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
-    PanelButton(int width, int height, Point screen_position, int type, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, Point screen_position, std::string name, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
 
     void render(int offset_x, int offset_y);
 
@@ -43,7 +43,7 @@ public:
 
     bool hasChanged() const;
 
-    bool hasType(int type) const;
+    bool hasName(const std::string &type) const;
 
     void disable();
 

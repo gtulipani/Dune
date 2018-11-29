@@ -8,7 +8,7 @@ struct Picturable {
 public:
     int player_id{};
     int id{};
-    int type{};
+    std::string name{};
     int sprite_direction{};
     int sprite_motion{};
     bool selected{};
@@ -20,7 +20,7 @@ public:
 
     Picturable() = default;
 
-    Picturable(int player_id, int id, int type, int sprite_direction, int sprite_motion, bool selected, Point position, Point size, int health, int max_health, int porcentage);
+    Picturable(int player_id, int id, std::string name, int sprite_direction, int sprite_motion, bool selected, Point position, Point size, int health, int max_health, int porcentage);
 
     Picturable(const Picturable &other);
 

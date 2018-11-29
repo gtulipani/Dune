@@ -14,7 +14,7 @@ class GameObject {
 
     protected:
     const int id;
-    int type;
+    std::string name;
     bool haveIChanged = true;
 
     public:
@@ -27,7 +27,7 @@ class GameObject {
         return ready;
     }
 
-    GameObject(Player& player, int id, int type);
+    GameObject(Player& player, int id, const std::string& name);
 
     virtual void tick() = 0;
 

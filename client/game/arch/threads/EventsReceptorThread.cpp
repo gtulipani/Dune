@@ -13,8 +13,8 @@
 
 // Client Libraries
 #include "EventsReceptorThread.h"
-#include "../sdl/SdlTexture.h"
-#include "../sdl/SdlWindow.h"
+#include "../../sdl/SdlTexture.h"
+#include "../../sdl/SdlWindow.h"
 
 using nlohmann::json;
 

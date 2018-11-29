@@ -1,17 +1,17 @@
 #include "PanelButton.h"
-#include "Area.h"
+#include "../Area.h"
 
 PanelButton::PanelButton(int width,
                          int height,
                          Point screen_position,
-                         int type,
+                         std::string name,
                          SdlTexture* texture,
                          std::vector<int> actions,
                          ClientSpritesSupplier &sprites_supplier) :
         width(width),
         height(height),
         screen_position(std::move(screen_position)),
-        type(type),
+        name(std::move(name)),
         texture(texture),
         actions(std::move(actions)),
         sprites_supplier(sprites_supplier),
@@ -23,7 +23,7 @@ PanelButton::PanelButton(int width,
 PanelButton::PanelButton(int width,
                          int height,
                          Point screen_position,
-                         int type,
+                         std::string name,
                          std::string image_path,
                          std::vector<int> actions,
                          SdlWindow *window,
@@ -31,7 +31,7 @@ PanelButton::PanelButton(int width,
         width,
         height,
         std::move(screen_position),
-        type,
+        std::move(name),
         new SdlTexture(image_path, window),
         std::move(actions),
         sprites_supplier) {}
@@ -93,8 +93,8 @@ bool PanelButton::hasChanged() const {
     return have_I_changed;
 }
 
-bool PanelButton::hasType(int type) const {
-    return (this->type == type);
+bool PanelButton::hasName(const std::string &name) const {
+    return (this->name == name);
 }
 
 bool PanelButton::update(int picturable_id, int progress) {

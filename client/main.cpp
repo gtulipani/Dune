@@ -3,7 +3,7 @@
 
 // Client Libraries
 #include "game/arch/Client.h"
-#include "game/arch/EventsReceptorThread.h"
+#include "game/arch/threads/EventsReceptorThread.h"
 #include "game/sdl/SdlWindow.h"
 
 

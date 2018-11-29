@@ -21,7 +21,7 @@ class Cosechadora : public WalkingUnit {
     Especia* target;
 
     public:
-    Cosechadora(Player& player, int id, Sprites sprite, int health, const Point& size, const Point& initialPixelPosition,
+    Cosechadora(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition,
                 Map& map, int movespeed);
 
     virtual void tick() override;

@@ -6,9 +6,9 @@
 
 class BuildingButton : public PanelButton {
 public:
-    BuildingButton(int width, int height, Point screen_position, int type, SdlTexture* texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    BuildingButton(int width, int height, Point screen_position, std::string type, SdlTexture* texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
-    BuildingButton(int width, int height, Point screen_position, int type, int icon_type, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    BuildingButton(int width, int height, Point screen_position, std::string type, int icon_type, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
     void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) override;
 

@@ -36,6 +36,8 @@ public:
 
     void update(Picturable picturable, SdlTexture *sdlTexture);
 
+    bool hasPriority() const;
+
     SdlTexture* getHealthBarTexture();
 };
 
