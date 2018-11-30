@@ -23,6 +23,7 @@ typedef enum Controller {
 
 class SDL_MouseButtonEvent;
 class EventsLooperThread;
+class GameStatusEvent;
 
 class WindowController {
 private:
@@ -60,7 +61,9 @@ public:
     void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
     void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
 
-    void processAvailableObjects(std::vector<std::string>& available_objects);
+    void update(const GameStatusEvent &event);
+
+    void processAvailableObjects(const std::vector<std::string>& available_objects);
     void processPicturables(std::vector<Picturable>& picturables);
 
     ~WindowController() {}

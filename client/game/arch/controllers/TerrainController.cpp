@@ -111,7 +111,11 @@ void TerrainController::buildUnits() {
     picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
 
     // Store especia sprites
-    picturables_map[ESPECIA][SPRITE_DOWN][0] = createPicturableTexture("especia.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][0] = createPicturableTexture("especia_100.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][1] = createPicturableTexture("especia_80.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][2] = createPicturableTexture("especia_60.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][3] = createPicturableTexture("especia_40.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][4] = createPicturableTexture("especia_20.png");
 }
 
 void TerrainController::buildTerrains() {

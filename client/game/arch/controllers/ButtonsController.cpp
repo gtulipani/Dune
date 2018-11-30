@@ -44,13 +44,13 @@ void ButtonsController::renderPanelTexture() {
     // Load background image
     Area srcArea(0, 0, this->screen_width, this->screen_height);
     Area destArea(0, 0, this->screen_width, this->screen_height);
-    client_sprites_supplier[BACKGROUND]->render(srcArea, destArea);
+    client_sprites_supplier[PANEL_BACKGROUND]->render(srcArea, destArea);
 
     // Load background image for optional buttons
     srcArea = Area(0, 0, PANEL_BUTTON_ICON_WIDTH * 2, PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
     destArea = Area(PANEL_BUTTON_ICON_X_OFFSET, PANEL_BUTTON_ICON_Y_OFFSET, PANEL_BUTTON_ICON_WIDTH * 2,
                     PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
-    client_sprites_supplier[BUTTONS_BACKGROUND]->render(srcArea, destArea);
+    client_sprites_supplier[PANEL_BUTTONS_BACKGROUND]->render(srcArea, destArea);
 }
 
 void ButtonsController::renderEagleEye() {
@@ -114,7 +114,7 @@ void ButtonsController::locateButtons() {
     });
 }
 
-void ButtonsController::updateAvailableObjects(std::vector<std::string>& available_objects) {
+void ButtonsController::updateAvailableObjects(const std::vector<std::string>& available_objects) {
     // First we invalidate the current objects, we'll refresh them with the new ones
     std::for_each(available_buttons.begin(), available_buttons.end(), [](PanelButton *button) {
        button->setInvalid();

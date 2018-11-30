@@ -26,8 +26,8 @@ typedef enum ClientSprites {
     HARKONNEN_TANK_ICON = 20,
     ORDOS_TANK_ICON = 21,
     HARVESTER_ICON = 22,
-    BACKGROUND = 23,
-    BUTTONS_BACKGROUND = 24,
+    PANEL_BACKGROUND = 23,
+    PANEL_BUTTONS_BACKGROUND = 24,
     HEALTH_10 = 25,
     HEALTH_20 = 26,
     HEALTH_30 = 27,
@@ -48,7 +48,8 @@ typedef enum ClientSprites {
     CONSTRUCTION_PERCENTAGE_75 = 42,
     CONSTRUCTION_PERCENTAGE_87 = 43,
     CONSTRUCTION_PERCENTAGE_100 = 44,
-    EAGLE_EYE_SQUARE = 45
+    EAGLE_EYE_SQUARE = 45,
+    STATUS_BAR = 46
 } ClientSprites;
 
 class ClientSpritesSupplier {
@@ -59,6 +60,7 @@ private:
 
     SdlTexture *createPanelTexture(const std::string& file_path, SdlWindow *window);
     SdlTexture *createTerrainTexture(const std::string& file_path, SdlWindow *window);
+    SdlTexture *createStatusTexture(const std::string& file_path, SdlWindow *window);
 
 public:
     explicit ClientSpritesSupplier(SdlWindow *window);

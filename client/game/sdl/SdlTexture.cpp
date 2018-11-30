@@ -5,6 +5,10 @@
 #include "SdlWindow.h"
 #include "SdlException.h"
 
+SdlTexture::SdlTexture(SDL_Renderer *renderer, SDL_Texture *texture) :
+    renderer(renderer),
+    texture(texture) {}
+
 SdlTexture::SdlTexture(int width, int height, SDL_Renderer* renderer) : renderer(renderer) {
     this->texture = createTexture(width, height);
 }

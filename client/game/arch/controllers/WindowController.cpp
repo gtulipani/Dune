@@ -5,6 +5,7 @@
 // Commons Libraries
 #include <TileUtils.h>
 #include <TerrainType.h>
+#include <events/GameStatusEvent.h>
 
 // Client Libraries
 #include "RequiresTerrainControllerActionException.h"
@@ -28,25 +29,27 @@ WindowController::WindowController() : WindowController(
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
 
 void WindowController::configure(Matrix matrix) {
-    this->window->fill();
+    window->fill();
 
-    this->terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT, SCREEN_STATUS_HEIGHT);
-    this->buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH);
+    terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT, SCREEN_STATUS_HEIGHT);
+    buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH);
+    status_controller.configure(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT);
 }
 
 void WindowController::fill() {
-    this->terrain_controller.fill();
-    this->buttons_controller.fill();
+    terrain_controller.fill();
 }
 
 void WindowController::refresh() {
-    this->terrain_controller.refresh();
-    this->buttons_controller.refresh();
+    terrain_controller.refresh();
+    buttons_controller.refresh();
+    status_controller.refresh();
 }
 
 void WindowController::render() {
-    this->terrain_controller.render();
-    this->buttons_controller.render();
+    terrain_controller.render();
+    buttons_controller.render();
+    status_controller.render();
 }
 
 void WindowController::move(enum Movement movement) {
@@ -100,7 +103,22 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
     }
 }
 
-void WindowController::processAvailableObjects(std::vector<std::string> &available_objects) {
+void WindowController::update(const GameStatusEvent &event) {
+    processAvailableObjects(event.availableObjects);
+
+    // Append both picturables and selectables
+    std::vector<Picturable> picturables(event.picturables);
+    picturables.insert(
+            std::end(picturables),
+            std::begin(event.selectedObjects),
+            std::end(event.selectedObjects));
+
+    processPicturables(picturables);
+
+    status_controller.update(event);
+}
+
+void WindowController::processAvailableObjects(const std::vector<std::string> &available_objects) {
     this->buttons_controller.updateAvailableObjects(available_objects);
 }
 

@@ -1,5 +1,6 @@
 #ifndef __SDL_TEXTURE_H__
 #define __SDL_TEXTURE_H__
+
 #include <string>
 
 struct SDL_Texture;
@@ -10,6 +11,8 @@ class Area;
 class SdlTexture {
 public:
     SdlTexture() = default;
+
+    SdlTexture(SDL_Renderer *renderer, SDL_Texture *texture);
 
     SdlTexture(int width, int height, SDL_Renderer* renderer);
 

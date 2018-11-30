@@ -59,7 +59,7 @@ public:
 
     void locateButtons();
 
-    void updateAvailableObjects(std::vector<std::string>& available_objects);
+    void updateAvailableObjects(const std::vector<std::string>& available_objects);
     void processPicturables(std::vector<Picturable>& picturables);
 
     bool resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,

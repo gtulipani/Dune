@@ -263,7 +263,7 @@ std::pair<GameStatusEvent, bool> GameControler::getStateFor(int player_id) const
     }
 
     playerState.especia = players.at(player_id)->especia;
-    playerState.energia = players.at(player_id)->energia;
+    playerState.energy = players.at(player_id)->energia;
     playerState.availableObjects = gameConfig.getAvailableObjectsFor(*players.at((player_id)));
 
     return {playerState, players.at(player_id)->lost};

@@ -1,10 +1,12 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Dune_SOURCE_DIR}/client/cmake-sdl")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 add_executable(client
-    main.cpp
+        main.cpp
         game/arch/Area.cpp
         game/arch/BlockingQueue.hpp
         game/arch/Client.cpp
@@ -24,6 +26,7 @@ add_executable(client
         game/arch/threads/EventsReceptorThread.cpp
         game/arch/threads/EventsSenderThread.cpp
         game/sdl/SdlException.cpp
+        game/sdl/SdlText.cpp
         game/sdl/SdlTexture.cpp
         game/sdl/SdlWindow.cpp)
 
@@ -34,6 +37,6 @@ include_directories(
 # Include files from commons
 include_directories(${CMAKE_SOURCE_DIR}/commons)
 
-target_link_libraries(client commons ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(client commons ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} SDL2_ttf)
 
 install(TARGETS client RUNTIME DESTINATION bin)

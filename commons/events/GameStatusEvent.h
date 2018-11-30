@@ -7,7 +7,7 @@
 struct GameStatusEvent {
 public:
     int especia;
-    int energia;
+    int energy;
     std::vector<Picturable> picturables;
     std::vector<Picturable> selectedObjects;
     std::vector<std::string> availableObjects;

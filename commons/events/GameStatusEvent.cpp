@@ -2,19 +2,19 @@
 
 GameStatusEvent::GameStatusEvent(const GameStatusEvent &other) {
     this->especia = other.especia;
-    this->energia = other.energia;
+    this->energy = other.energy;
     this->picturables = other.picturables;
     this->availableObjects = other.availableObjects;
 }
 
 GameStatusEvent::GameStatusEvent(GameStatusEvent &&other) noexcept {
     this->especia = other.especia;
-    this->energia = other.energia;
+    this->energy = other.energy;
     this->picturables = std::move(other.picturables);
     this->availableObjects = std::move(other.availableObjects);
 
     other.especia = 0;
-    other.energia = 0;
+    other.energy = 0;
 }
 
 GameStatusEvent &GameStatusEvent::operator=(const GameStatusEvent &other) {
@@ -24,7 +24,7 @@ GameStatusEvent &GameStatusEvent::operator=(const GameStatusEvent &other) {
 
     // Copy values
     this->especia = other.especia;
-    this->energia = other.energia;
+    this->energy = other.energy;
     this->picturables = other.picturables;
     this->availableObjects = other.availableObjects;
 
@@ -38,12 +38,12 @@ GameStatusEvent &GameStatusEvent::operator=(GameStatusEvent &&other) noexcept {
 
     // Copy values
     this->especia = other.especia;
-    this->energia = other.energia;
+    this->energy = other.energy;
     this->picturables = std::move(other.picturables);
     this->availableObjects = std::move(other.availableObjects);
 
     other.especia = 0;
-    other.energia = 0;
+    other.energy = 0;
 
     return *this;
 }

@@ -3,6 +3,7 @@
 #define CLIENT_RESOURCES_PATH std::string("resources/images/game/client/")
 #define PANEL_RESOURCES_SUBPATH std::string("panel/")
 #define TERRAIN_RESOURCES_SUBPATH std::string("terrain/")
+#define STATUS_RESOURCES_SUBPATH std::string("status/")
 
 SdlTexture *ClientSpritesSupplier::createTexture(const std::string& subpath, const std::string& file_path, SdlWindow *window) {
     return new SdlTexture(CLIENT_RESOURCES_PATH + subpath + file_path, window);
@@ -14,6 +15,10 @@ SdlTexture *ClientSpritesSupplier::createPanelTexture(const std::string& file_pa
 
 SdlTexture *ClientSpritesSupplier::createTerrainTexture(const std::string& file_path, SdlWindow *window) {
     return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path, window);
+}
+
+SdlTexture *ClientSpritesSupplier::createStatusTexture(const std::string& file_path, SdlWindow *window) {
+    return createTexture(STATUS_RESOURCES_SUBPATH, file_path, window);
 }
 
 ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
@@ -39,9 +44,9 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     sprites.emplace(ORDOS_TANK_ICON, createPanelTexture("ordos_tank_icon.png", window));
     sprites.emplace(HARVESTER_ICON, createPanelTexture("harvester_icon.png", window));
 
-    // Store background images textures
-    sprites.emplace(BACKGROUND, createPanelTexture("background.png", window));
-    sprites.emplace(BUTTONS_BACKGROUND, createPanelTexture("optional_buttons_background.png", window));
+    // Store panel images textures
+    sprites.emplace(PANEL_BACKGROUND, createPanelTexture("background.png", window));
+    sprites.emplace(PANEL_BUTTONS_BACKGROUND, createPanelTexture("optional_buttons_background.png", window));
     sprites.emplace(CONSTRUCTION_PERCENTAGE_0, createPanelTexture("progress_0.png", window));
     sprites.emplace(CONSTRUCTION_PERCENTAGE_12, createPanelTexture("progress_12.png", window));
     sprites.emplace(CONSTRUCTION_PERCENTAGE_25, createPanelTexture("progress_25.png", window));
@@ -65,6 +70,9 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     sprites.emplace(HEALTH_90, createTerrainTexture("health_90.png", window));
     sprites.emplace(HEALTH_100, createTerrainTexture("health_100.png", window));
     sprites.emplace(SELECTION_SQUARE, createTerrainTexture("selection_square.png", window));
+
+    // Store status bar texture
+    sprites.emplace(STATUS_BAR, createStatusTexture("status_bar.jpg", window));
 }
 
 ClientSpritesSupplier &ClientSpritesSupplier::operator=(ClientSpritesSupplier &&other) noexcept {
