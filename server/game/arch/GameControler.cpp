@@ -305,15 +305,8 @@ void GameControler::updateGameObjects() {
                 ++it;
             }
         }
-        for (auto it = it_player->second->inProgressBuildings.begin(); it != it_player->second->inProgressBuildings.end();) {
-            if (it->second->completed()) {
-                it_player->second->buildings[it->first] = (Building*)it->second->getObject();
-                delete it->second;
-                it = it_player->second->inProgressBuildings.erase(it);
-            } else {
-                it->second->reset();
-                ++it;
-            }
+        for (auto& inProfressBuilding : it_player->second->inProgressBuildings) {
+            inProfressBuilding.second->reset();
         }
         if (it_player->second->lost && delete_lost_players) {
             it_player = players.erase(it_player);
