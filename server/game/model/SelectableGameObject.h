@@ -6,9 +6,6 @@
 class AttackingUnit;
 
 class SelectableGameObject : public AliveGameObject {
-    private:
-    bool selected = false;
-    
     protected:
     Point size;
     Point pixelPosition;
@@ -22,7 +19,7 @@ class SelectableGameObject : public AliveGameObject {
 
     Point getPixelPosition() const;
 
-    bool isThere(const Point& pos) const;
+    bool isThere(const Point& a, const Point& b) const;
 
     void select();
 

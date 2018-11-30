@@ -38,7 +38,7 @@ class GameControler {
 
     std::pair<GameStatusEvent, bool> getStateFor(int player_id) const;
 
-    void leftClick(int player_id, const Point& point);
+    void leftClick(int player_id, const Point& a, const Point& b);
 
     void rightClick(int player_id, const Point& point);
 

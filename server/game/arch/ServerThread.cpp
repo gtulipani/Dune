@@ -77,6 +77,7 @@ void ServerThread::run() {
 		client->join();
 		delete client;
 	}
+	this->stop();
 }
 
 void ServerThread::terminate() {

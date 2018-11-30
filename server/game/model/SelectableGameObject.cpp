@@ -5,14 +5,39 @@
 SelectableGameObject::SelectableGameObject(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition) :
 AliveGameObject(player, id, name, health), size(size), pixelPosition(initialPixelPosition) {}
 
-bool SelectableGameObject::isThere(const Point& pos) const {
-    int diffRow = pos.row - pixelPosition.row;
-    int diffCol = pos.col - pixelPosition.col;
-    return diffRow >= 0 && diffCol >= 0 && diffRow <= size.row && diffCol <= size.col;
-}
+bool SelectableGameObject::isThere(const Point& a, const Point& b) const {
+    Point picturableDownRight = {pixelPosition.row + size.row, pixelPosition.col + size.col};
 
+    Point areaTopLeft;
+    Point areaDownRight;
+    if (a.row < b.row) {
+        if (a.col < b.col) {
+            areaTopLeft = a;
+            areaDownRight = b;
+        } else {
+            areaTopLeft = {a.row, b.col};
+            areaDownRight = {b.row, a.col};
+        }
+    } else {
+        if (b.col < a.col) {
+            areaTopLeft = b;
+            areaDownRight = a;
+        } else {
+            areaTopLeft = {b.row, a.col};
+            areaDownRight = {a.row, b.col};
+        }
+    }
+
+    Point diff = {picturableDownRight.row - areaTopLeft.row, picturableDownRight.col - areaTopLeft.col};
+    if (diff.row < 0 || diff.col < 0) return false;
+    
+    diff = {areaDownRight.row - pixelPosition.row, areaDownRight.col - pixelPosition.col};
+    if (diff.row < 0 || diff.col < 0) return false;
+    
+    return true;
+}
+        
 void SelectableGameObject::select() {
-    selected = true;
     haveIChanged = true;
 }
 
@@ -21,7 +46,6 @@ Point SelectableGameObject::getPixelPosition() const {
 }
 
 void SelectableGameObject::unselect() {
-    selected = false;
     haveIChanged = true;
 }
 

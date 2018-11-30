@@ -73,7 +73,7 @@ void GameControler::tick() {
     }
 }
 
-void GameControler::leftClick(int player_id, const Point& point) {
+void GameControler::leftClick(int player_id, const Point& a, const Point& b) {
     // First clear current selection
     std::map<int, SelectableGameObject*>& selectedObjects = players.at(player_id)->selectedObjects;
     if (!selectedObjects.empty()) {
@@ -89,17 +89,16 @@ void GameControler::leftClick(int player_id, const Point& point) {
     // Now we try to select every unit of the game.
     // Priority is player units.
     for (auto& unit : players.at(player_id)->units) {
-        if (unit.second->isThere(point)) {
+        if (unit.second->isThere(a, b)) {
             unit.second->select();
             selectedObjects[unit.first] = unit.second;
             success = true;
-            break;
         }
     }
     if (!success) {
         // Then his buildings
         for (auto& building : players.at(player_id)->buildings) {
-            if (building.second->isThere(point)) {
+            if (building.second->isThere(a, b)) {
                 building.second->select();
                 selectedObjects[building.first] = building.second;
                 success = true;
@@ -111,7 +110,7 @@ void GameControler::leftClick(int player_id, const Point& point) {
             for (auto& player : players) {
                 if (player.second->id == player_id) continue;
                 for (auto& unit : player.second->units) {
-                    if (unit.second->isThere(point)) {
+                    if (unit.second->isThere(a, b)) {
                         unit.second->select();
                         selectedObjects[unit.first] = unit.second;
                         success = true;
@@ -124,7 +123,7 @@ void GameControler::leftClick(int player_id, const Point& point) {
                 for (auto& player : players) {
                     if (player.second->id == player_id) continue;
                     for (auto& building : player.second->buildings) {
-                        if (building.second->isThere(point)) {
+                        if (building.second->isThere(a, b)) {
                             building.second->select();
                             selectedObjects[building.first] = building.second;
                             success = true;
@@ -148,7 +147,7 @@ void GameControler::rightClick(int player_id, const Point& point) {
     for (auto& player : players) {
         if (player.second->id == player_id) continue;
         for (auto& unit : player.second->units) {
-            if (unit.second->isThere(point)) {
+            if (unit.second->isThere(point, point)) {
                 object_at_pos = unit.second;
                 break;
             }
@@ -159,7 +158,7 @@ void GameControler::rightClick(int player_id, const Point& point) {
         for (auto& player : players) {
             if (player.second->id == player_id) continue;
             for (auto& building : player.second->buildings) {
-                if (building.second->isThere(point)) {
+                if (building.second->isThere(point, point)) {
                     object_at_pos = building.second;
                     break;
                 }

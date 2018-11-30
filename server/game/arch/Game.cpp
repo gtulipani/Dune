@@ -73,7 +73,7 @@ void Game::updateModel() {
     for (ClientEvent event : events) {
         switch (event.type) {
             case LEFT_CLICK_EVENT_TYPE: {
-                gameControler->leftClick(event.player_id, event.release_position);
+                gameControler->leftClick(event.player_id, event.click_position, event.release_position);
                 break;
             }
             case RIGHT_CLICK_EVENT_TYPE: {
