@@ -1,20 +1,21 @@
+#include <utility>
+
 #include "PanelButton.h"
 #include "../Area.h"
 
 PanelButton::PanelButton(int width,
                          int height,
-                         Point screen_position,
                          std::string name,
                          SdlTexture* texture,
                          std::vector<int> actions,
                          ClientSpritesSupplier &sprites_supplier) :
         width(width),
         height(height),
-        screen_position(std::move(screen_position)),
         name(std::move(name)),
         texture(texture),
         actions(std::move(actions)),
         sprites_supplier(sprites_supplier),
+        valid(true),
         have_I_changed(false),
         is_being_created(false),
         finished_creating(false),
@@ -22,7 +23,6 @@ PanelButton::PanelButton(int width,
 
 PanelButton::PanelButton(int width,
                          int height,
-                         Point screen_position,
                          std::string name,
                          std::string image_path,
                          std::vector<int> actions,
@@ -30,7 +30,6 @@ PanelButton::PanelButton(int width,
                          ClientSpritesSupplier &sprites_supplier) : PanelButton(
         width,
         height,
-        std::move(screen_position),
         std::move(name),
         new SdlTexture(image_path, window),
         std::move(actions),
@@ -64,6 +63,10 @@ SdlTexture* PanelButton::getProgressTexture() {
     return sprites_supplier[CONSTRUCTION_PERCENTAGE_0];
 }
 
+void PanelButton::locate(const Point& point) {
+    screen_position = point;
+}
+
 void PanelButton::render(int offset_x, int offset_y) {
     Area srcArea(0, 0, BUTTON_ORIGINAL_WIDTH, BUTTON_ORIGINAL_HEIGHT);
     Area destArea(offset_x + screen_position.col, offset_y + screen_position.row, width, height);
@@ -93,8 +96,8 @@ bool PanelButton::hasChanged() const {
     return have_I_changed;
 }
 
-bool PanelButton::hasName(const std::string &name) const {
-    return (this->name == name);
+std::string PanelButton::getName() const {
+    return name;
 }
 
 bool PanelButton::update(int picturable_id, int progress) {
@@ -118,6 +121,18 @@ bool PanelButton::update(int picturable_id, int progress) {
         updated = true;
     }
     return updated;
+}
+
+bool PanelButton::isValid() const {
+    return valid;
+}
+
+void PanelButton::setValid() {
+    valid = true;
+}
+
+void PanelButton::setInvalid() {
+    valid = false;
 }
 
 void PanelButton::disable() {

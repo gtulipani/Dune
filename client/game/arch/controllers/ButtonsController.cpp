@@ -16,19 +16,9 @@
 // Client Libraries
 #include "../buttons/UnitButton.h"
 #include "../buttons/BuildingButton.h"
+#include "../buttons/ButtonsFactory.h"
 #include "RequiresTerrainControllerActionException.h"
-
-#define EAGLE_EYE_Y_OFFSET 20
-#define EAGLE_EYE_X_OFFSET 10
-#define EAGLE_EYE_WIDTH 180
-#define EAGLE_EYE_HEIGHT 220
-
-#define BUILDING_ICON_Y_OFFSET (EAGLE_EYE_Y_OFFSET + EAGLE_EYE_HEIGHT + EAGLE_EYE_Y_OFFSET)
-#define BUILDING_ICON_X_OFFSET 10
-#define BUILDING_ICON_WIDTH 90
-#define BUILDING_ICON_HEIGHT 70
-
-#define BUILDING_ICONS_QUANTITY 4
+#include "ScreenController.h"
 
 ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TerrainController* terrain_controller, std::function<void(TerrainController*, Area)> map_renderer) :
         window(window),
@@ -44,28 +34,9 @@ Point ButtonsController::getRelativePosition(Point point) {
     return {point.row, point.col - this->screen_width_offset};
 }
 
-Point ButtonsController::buildOptionalButtonRelativePosition(int order) {
-    return {BUILDING_ICON_Y_OFFSET + (order * BUILDING_ICON_HEIGHT), BUILDING_ICON_X_OFFSET};
-}
-
-void ButtonsController::loadButtonsPanel() {
-    // Initial light_factory and wind_trap buildings
-    available_buttons.push_back(new BuildingButton(
-            BUILDING_ICON_WIDTH,
-            BUILDING_ICON_HEIGHT,
-            getGlobalPosition(buildOptionalButtonRelativePosition(0)),
-            LIGHT_FACTORY,
-            LIGHT_FACTORY_ICON,
-            {CREATE_LIGHT_FACTORY_TYPE, LOCATE_BUILDING_TYPE},
-            client_sprites_supplier));
-    available_buttons.push_back(new BuildingButton(
-            BUILDING_ICON_WIDTH,
-            BUILDING_ICON_HEIGHT,
-            getGlobalPosition(buildOptionalButtonRelativePosition(1)),
-            WIND_TRAPS,
-            WIND_TRAPS_ICON,
-            {CREATE_WIND_TRAPS_TYPE, LOCATE_BUILDING_TYPE},
-            client_sprites_supplier));
+Point ButtonsController::buildOptionalButtonRelativePosition(int row_order, int col_order) {
+    // Order starts from zero
+    return {PANEL_BUTTON_ICON_Y_OFFSET + ((row_order - 1) * PANEL_BUTTON_ICON_HEIGHT), PANEL_BUTTON_ICON_X_OFFSET * col_order};
 }
 
 void ButtonsController::renderPanelTexture() {
@@ -76,9 +47,9 @@ void ButtonsController::renderPanelTexture() {
     client_sprites_supplier[BACKGROUND]->render(srcArea, destArea);
 
     // Load background image for optional buttons
-    srcArea = Area(0, 0, BUILDING_ICON_WIDTH * 2, BUILDING_ICON_HEIGHT * BUILDING_ICONS_QUANTITY);
-    destArea = Area(BUILDING_ICON_X_OFFSET, BUILDING_ICON_Y_OFFSET, BUILDING_ICON_WIDTH * 2,
-                    BUILDING_ICON_HEIGHT * BUILDING_ICONS_QUANTITY);
+    srcArea = Area(0, 0, PANEL_BUTTON_ICON_WIDTH * 2, PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
+    destArea = Area(PANEL_BUTTON_ICON_X_OFFSET, PANEL_BUTTON_ICON_Y_OFFSET, PANEL_BUTTON_ICON_WIDTH * 2,
+                    PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
     client_sprites_supplier[BUTTONS_BACKGROUND]->render(srcArea, destArea);
 }
 
@@ -99,7 +70,6 @@ void ButtonsController::configure(int screen_width, int screen_height, int scree
     this->panel_texture = new SdlTexture(screen_width, screen_height, this->window->getRenderer());
     this->panel_texture->setAsTarget();
 
-    loadButtonsPanel();
     renderPanelTexture();
 
     this->window->render();
@@ -130,6 +100,54 @@ void ButtonsController::refresh() {
     }
 }
 
+void ButtonsController::locateButtons() {
+    int row = 1;
+    int column = 1;
+
+    std::for_each(available_buttons.begin(), available_buttons.end(), [this, &row, &column](PanelButton *button) {
+        if (row >= PANEL_BUTTON_ICONS_ROWS_QUANTITY) {
+            // Move to the second column
+            column = 2;
+        }
+        button->locate(getGlobalPosition(buildOptionalButtonRelativePosition(row, column)));
+        row++;
+    });
+}
+
+void ButtonsController::updateAvailableObjects(std::vector<std::string>& available_objects) {
+    // First we invalidate the current objects, we'll refresh them with the new ones
+    std::for_each(available_buttons.begin(), available_buttons.end(), [](PanelButton *button) {
+       button->setInvalid();
+    });
+
+    std::for_each(available_objects.begin(), available_objects.end(), [this](const std::string& object) {
+        auto it = std::find_if(available_buttons.begin(), available_buttons.end(), [object](PanelButton *button) {
+            return (button->getName() == object);
+        });
+        if (it == available_buttons.end()) {
+            // New object
+            available_buttons.push_back(ButtonsFactory::createButton(object, client_sprites_supplier));
+            pending_changes = true;
+        } else {
+            (*it)->setValid();
+        }
+    });
+
+    // Delete the invalid ones
+    for (auto it = available_buttons.begin(); it != available_buttons.end(); it++) {
+        if (!(*it)->isValid()) {
+            pending_changes = true;
+            delete *it;
+            available_buttons.erase(it);
+        }
+    }
+
+    // Now must locate all the buttons in the screen
+    if (pending_changes) {
+        locateButtons();
+    }
+}
+
 void ButtonsController::processPicturables(std::vector<Picturable>& picturables) {
     // We sort the picturables leaving the once with less porcentage at the beginning
     std::sort(picturables.begin(), picturables.end(), [](const Picturable &p1, const Picturable &p2) -> bool {
@@ -139,7 +157,7 @@ void ButtonsController::processPicturables(std::vector<Picturable>& picturables)
     // We iterate through the buttons and search for the first appearence for the type, which will be the one with less percentage
     std::for_each(available_buttons.begin(), available_buttons.end(), [this, picturables](PanelButton *button) {
         auto it = std::find_if(picturables.begin(), picturables.end(), [button](const Picturable &picturable) {
-            return button->hasName(picturable.name);
+            return (button->getName() == picturable.name);
         });
         if (it != picturables.end()) {
             if (button->update(it->id, it->porcentage)) {

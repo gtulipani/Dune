@@ -5,9 +5,9 @@
 
 class UnitButton : public PanelButton {
 public:
-    UnitButton(int width, int height, Point screen_position, std::string type, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    UnitButton(int width, int height, std::string type, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
-    UnitButton(int width, int height, Point screen_position, std::string type, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    UnitButton(int width, int height, std::string type, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
 
     void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) override;
 

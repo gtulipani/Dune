@@ -58,6 +58,7 @@ public:
     void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
     void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
 
+    void processAvailableObjects(std::vector<std::string>& available_objects);
     void processPicturables(std::vector<Picturable>& picturables);
 
     ~WindowController() {}

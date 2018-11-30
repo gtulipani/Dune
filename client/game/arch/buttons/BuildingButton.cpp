@@ -6,31 +6,27 @@
 
 BuildingButton::BuildingButton(int width,
                                int height,
-                               Point screen_position,
-                               std::string type,
-                               SdlTexture *texture,
+                               const std::string& type,
+                               int icon_type,
                                std::vector<int> actions,
                                ClientSpritesSupplier &sprites_supplier) : PanelButton(
         width,
         height,
-        std::move(screen_position),
-        std::move(type),
-        texture,
+        type,
+        sprites_supplier[icon_type],
         std::move(actions),
         sprites_supplier) {}
 
 BuildingButton::BuildingButton(int width,
                                int height,
-                               Point screen_position,
-                               std::string type,
-                               int icon_type,
+                               const std::string& type,
+                               SdlTexture *texture,
                                std::vector<int> actions,
-                               ClientSpritesSupplier &sprites_supplier) : BuildingButton(
+                               ClientSpritesSupplier &sprites_supplier) : PanelButton(
         width,
         height,
-        std::move(screen_position),
-        std::move(type),
-        sprites_supplier[icon_type],
+        type,
+        texture,
         std::move(actions),
         sprites_supplier) {}
 

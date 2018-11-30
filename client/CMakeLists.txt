@@ -7,19 +7,21 @@ add_executable(client
     main.cpp
         game/arch/Area.cpp
         game/arch/BlockingQueue.hpp
-        game/arch/controllers/ButtonsController.cpp
         game/arch/Client.cpp
         game/arch/ClientSpritesSupplier.cpp
+        game/arch/SdlPicturable.cpp
+        game/arch/buttons/BuildingButton.cpp
+        game/arch/buttons/PanelButton.cpp
+        game/arch/buttons/UnitButton.cpp
+        game/arch/buttons/ButtonsFactory.cpp
+        game/arch/controllers/ButtonsController.cpp
+        game/arch/controllers/RequiresTerrainControllerActionException.cpp
+        game/arch/controllers/ScreenController.cpp
+        game/arch/controllers/TerrainController.cpp
+        game/arch/controllers/WindowController.cpp
         game/arch/threads/EventsLooperThread.cpp
         game/arch/threads/EventsReceptorThread.cpp
         game/arch/threads/EventsSenderThread.cpp
-        game/arch/buttons/UnitButton.cpp
-        game/arch/buttons/PanelButton.cpp
-        game/arch/buttons/BuildingButton.cpp
-        game/arch/controllers/RequiresTerrainControllerActionException.cpp
-        game/arch/SdlPicturable.cpp
-        game/arch/controllers/TerrainController.cpp
-        game/arch/controllers/WindowController.cpp
         game/sdl/SdlException.cpp
         game/sdl/SdlTexture.cpp
         game/sdl/SdlWindow.cpp)

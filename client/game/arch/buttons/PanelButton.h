@@ -17,23 +17,26 @@ class PanelButton {
 protected:
     int width;
     int height;
-    Point screen_position;
     std::string name;
     SdlTexture *texture;
     std::vector<int> actions;
     ClientSpritesSupplier &sprites_supplier;
+    bool valid;
     bool have_I_changed;
     bool is_being_created;
     bool finished_creating;
     int progress;
 
+    Point screen_position{};
     int picturable_id{};
 
     SdlTexture* getProgressTexture();
 public:
-    PanelButton(int width, int height, Point screen_position, std::string name, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, std::string name, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
 
-    PanelButton(int width, int height, Point screen_position, std::string name, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    PanelButton(int width, int height, std::string name, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+
+    void locate(const Point& point);
 
     void render(int offset_x, int offset_y);
 
@@ -43,7 +46,13 @@ public:
 
     bool hasChanged() const;
 
-    bool hasName(const std::string &type) const;
+    std::string getName() const;
+
+    bool isValid() const;
+
+    void setValid();
+
+    void setInvalid();
 
     void disable();
 

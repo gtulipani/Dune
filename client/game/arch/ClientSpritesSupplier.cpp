@@ -17,15 +17,8 @@ SdlTexture *ClientSpritesSupplier::createTerrainTexture(const std::string& file_
 }
 
 ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
-    // Store main buttons icons textures
-    sprites.emplace(REPAIR_BUTTON_ICON, createPanelTexture("repair_button.png", window));
-    sprites.emplace(SELL_BUTTON_ICON, createPanelTexture("sell_button.png", window));
-    sprites.emplace(STATUS_BUTTON_ICON, createPanelTexture("status_button.png", window));
-    sprites.emplace(GUARD_BUTTON_ICON, createPanelTexture("guard_button.png", window));
-    sprites.emplace(RETREAT_BUTTON_ICON, createPanelTexture("retreat_button.png", window));
-
     // Store buildings icons textures
-    //sprites.emplace(CONSTRUCTION_CENTER_ICON, createButtonTexture("construction_center_icon.png"));
+    sprites.emplace(CONSTRUCTION_CENTER_ICON, createPanelTexture("refinery_icon.png", window)); // need to be updated
     sprites.emplace(WIND_TRAPS_ICON, createPanelTexture("wind_trap_icon.png", window));
     sprites.emplace(REFINERY_ICON, createPanelTexture("refinery_icon.png", window));
     sprites.emplace(ATREIDES_BARRACKS_ICON, createPanelTexture("atreides_barracks_icon.png", window));

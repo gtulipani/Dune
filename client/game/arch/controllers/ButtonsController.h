@@ -38,11 +38,9 @@ private:
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
 
-    // This method is used to calculate the position for each one of the building icons, which are one above each other
-    Point buildOptionalButtonRelativePosition(int order);
+    // This method is used to calculate the position for each one of the panel buttons icons, which are one above each other
+    Point buildOptionalButtonRelativePosition(int row_order, int col_order);
 
-    // Load the initial buttons from the pannel
-    void loadButtonsPanel();
     // Render only once the pannel with the main background images and the main buttons
     void renderPanelTexture();
     // Render the eagle eye map in the panel
@@ -59,6 +57,9 @@ public:
 
     void refresh();
 
+    void locateButtons();
+
+    void updateAvailableObjects(std::vector<std::string>& available_objects);
     void processPicturables(std::vector<Picturable>& picturables);
 
     bool resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,

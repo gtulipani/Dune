@@ -30,7 +30,8 @@ typedef enum ClientEventType {
     CREATE_LIGHT_INFANTRY_TYPE = 15,
     CREATE_HEAVY_INFANTRY_TYPE = 16,
     LOCATE_BUILDING_TYPE = 17,
-    SELL_TYPE = 18
+    SELL_TYPE = 18,
+    CREATE_CONSTRUCTION_CENTER = 19
 } ClientEventType;
 
 struct ClientEvent {

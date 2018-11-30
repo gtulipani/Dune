@@ -8,11 +8,6 @@
 #include "../sdl/SdlTexture.h"
 
 typedef enum ClientSprites {
-    REPAIR_BUTTON_ICON = 0,
-    SELL_BUTTON_ICON = 1,
-    STATUS_BUTTON_ICON = 2,
-    GUARD_BUTTON_ICON = 3,
-    RETREAT_BUTTON_ICON = 4,
     CONSTRUCTION_CENTER_ICON = 5,
     WIND_TRAPS_ICON = 6,
     REFINERY_ICON = 7,

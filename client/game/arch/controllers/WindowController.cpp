@@ -8,21 +8,13 @@
 
 // Client Libraries
 #include "RequiresTerrainControllerActionException.h"
+#include "ScreenController.h"
 
 // SDL Libraries
 #include <SDL_events.h>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
-#define SCREEN_TERRAIN_RATE 0.75
-#define SCREEN_BUTTONS_RATE 0.25
-
-#define SCREEN_TERRAIN_WIDTH int(SCREEN_WIDTH * SCREEN_TERRAIN_RATE)
-#define SCREEN_PANEL_WIDTH int(SCREEN_WIDTH * SCREEN_BUTTONS_RATE)
 
 WindowController::WindowController(SdlWindow* window) :
     window(window),
@@ -105,6 +97,10 @@ void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, Even
 
         }
     }
+}
+
+void WindowController::processAvailableObjects(std::vector<std::string> &available_objects) {
+    this->buttons_controller.updateAvailableObjects(available_objects);
 }
 
 void WindowController::processPicturables(std::vector<Picturable>& picturables) {

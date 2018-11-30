@@ -27,6 +27,8 @@ void EventsLooperThread::pushEvent(int client_event_type, int picturable_id, Poi
 void EventsLooperThread::processServerEvents() {
     std::list<GameStatusEvent> events = game_status_events.popAll();
     std::for_each(events.begin(), events.end(), [this](GameStatusEvent &event){
+        window_controller.processAvailableObjects(event.availableObjects);
+
         // Append both picturables and selectables
         std::vector<Picturable> picturables(event.picturables);
         picturables.insert(
