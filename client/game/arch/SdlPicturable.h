@@ -32,7 +32,7 @@ public:
     bool operator==(const Picturable& other) const;
 
     // Renders itself if it's under the limits
-    void render(int offset_x, int offset_y, int width_limit);
+    void render(int offset_x, int offset_y, int limit_col, int limit_row);
 
     void update(Picturable picturable, SdlTexture *sdlTexture);
 

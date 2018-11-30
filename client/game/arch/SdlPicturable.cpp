@@ -68,7 +68,7 @@ bool SdlPicturable::operator==(const Picturable& other) const {
     return other.id == this->picturable.id;
 }
 
-void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
+void SdlPicturable::render(int offset_x, int offset_y, int limit_col, int limit_row) {
     int originPicturableWidth = PICTURABLE_WIDTH;
     int originPicturableHeight = PICTURABLE_HEIGHT;
 
@@ -81,23 +81,64 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
     int destinyWidth = this->picturable.size.col;
     int destinyHeight = this->picturable.size.row;
 
-    if ((offset_x + picturable.position.col) >= limit_column) {
+    int position_row = picturable.position.row + offset_y;
+    int position_col = picturable.position.col + offset_x;
+
+    // Where will the images be printed
+    int picturable_destiny_row = position_row;
+    int picturable_destiny_col = position_col;
+    int selection_square_destiny_row = position_row;
+    int selection_square_destiny_col = position_col;
+    int health_bar_destiny_row = position_row - (TILE_PIXEL_RATE / 4);
+    int health_bar_destiny_col = position_col;
+
+    // Offset from origin images
+    int picturable_origin_row_offset = 0;
+    int health_bar_origin_row_offset = 0;
+    int selection_square_origin_row_offset = 0;
+
+    if (((position_col) >= limit_col) || ((position_row + picturable.size.row) < limit_row)) {
         // Outside the limits, don't render anything
         return;
-    } else if ((offset_x + picturable.position.col + this->picturable.size.col) >= limit_column) {
-        // A portion of the image is displayed and the other part isn't
-        destinyWidth = (limit_column - offset_x - picturable.position.col);
+    } else {
+        if ((position_col + picturable.size.col) >= limit_col) {
+            // A portion of the width from the image is displayed and the other part isn't
+            destinyWidth = (limit_col - position_col);
 
-        // Display rate from the image
-        float displayRate = (static_cast<float>(destinyWidth)/this->picturable.size.col);
+            // Display rate from the image
+            float displayRate = (static_cast<float>(destinyWidth) / picturable.size.col);
 
-        originPicturableWidth = static_cast<int>(displayRate * this->picturable.size.col);
-        originSelectionSquareWidth = static_cast<int>(displayRate * SELECTION_SQUARE_WIDTH);
-        originHealthBarWidth = static_cast<int>(displayRate * HEALTH_BAR_WIDTH);
+            originPicturableWidth = static_cast<int>(displayRate * PICTURABLE_WIDTH);
+            originSelectionSquareWidth = static_cast<int>(displayRate * SELECTION_SQUARE_WIDTH);
+            originHealthBarWidth = static_cast<int>(displayRate * HEALTH_BAR_WIDTH);
+        }
+        // If (offset_y + position) is between (limit_row - size) and limit_row then it's displayed partially
+        if ((position_row > (limit_row - picturable.size.row)) &&
+                (position_row < limit_row)) {
+            // A portion of the height from the image is displayed and the other part isn't
+            destinyHeight = picturable.size.row + position_row - limit_row;
+
+            // Display rate from the image
+            float displayRate = (static_cast<float>(destinyHeight) / picturable.size.row);
+
+            originPicturableHeight = static_cast<int>(displayRate * PICTURABLE_HEIGHT);
+            originSelectionSquareHeight = static_cast<int>(displayRate * SELECTION_SQUARE_HEIGHT);
+            originHealthBarHeight = static_cast<int>(displayRate * HEALTH_BAR_HEIGHT);
+
+            // The image will be cutted from up down
+            picturable_origin_row_offset = (PICTURABLE_HEIGHT - originPicturableHeight);
+            selection_square_origin_row_offset = (SELECTION_SQUARE_HEIGHT - originSelectionSquareHeight);
+            health_bar_origin_row_offset = (HEALTH_BAR_HEIGHT - originHealthBarHeight);
+
+            // All the images will be offseted
+            picturable_destiny_row = limit_row;
+            selection_square_destiny_row = limit_row;
+            health_bar_destiny_row = limit_row;
+        }
     }
 
-    Area picturableSrcArea(0, 0, originPicturableWidth, originPicturableHeight);
-    Area picturableDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
+    Area picturableSrcArea(0, picturable_origin_row_offset, originPicturableWidth, originPicturableHeight);
+    Area picturableDestArea(picturable_destiny_col, picturable_destiny_row, destinyWidth, destinyHeight);
     if (main_texture == nullptr) {
         std::cout << "Trying to render texture null!" << std::endl;
     } else {
@@ -106,14 +147,13 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_column) {
 
     if (this->picturable.selected) {
         // We must render the selection_square
-        Area selectionSquareSrcArea(0, 0, originSelectionSquareWidth, originSelectionSquareHeight);
-        Area selectionSquareDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y, destinyWidth, destinyHeight);
+        Area selectionSquareSrcArea(0, selection_square_origin_row_offset, originSelectionSquareWidth, originSelectionSquareHeight);
+        Area selectionSquareDestArea(selection_square_destiny_col, selection_square_destiny_row, destinyWidth, destinyHeight);
         sprites_supplier[SELECTION_SQUARE]->render(selectionSquareSrcArea, selectionSquareDestArea);
 
         // We must render the health_bar
-        // We'll eventually use the percentage of age, hardcoding 100% as for now
-        Area healthBarSrcArea(0, 0, originHealthBarWidth, originHealthBarHeight);
-        Area healthBarDestArea((picturable.position.col) + offset_x, (picturable.position.row) + offset_y - (TILE_PIXEL_RATE / 4), destinyWidth, (TILE_PIXEL_RATE / 6));
+        Area healthBarSrcArea(0, health_bar_origin_row_offset, originHealthBarWidth, originHealthBarHeight);
+        Area healthBarDestArea(health_bar_destiny_col, health_bar_destiny_row, destinyWidth, (TILE_PIXEL_RATE / 6));
         getHealthBarTexture()->render(healthBarSrcArea, healthBarDestArea);
     }
 }

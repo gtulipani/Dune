@@ -25,6 +25,8 @@ private:
     int screen_width{};
     int screen_height{};
 
+    int screen_height_offset{};
+
     int terrain_width_tiles{};
     int terrain_height_tiles{};
 
@@ -56,7 +58,7 @@ private:
 public:
     TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
 
-    void configure(Matrix matrix, int window_width, int window_height);
+    void configure(Matrix matrix, int window_width, int window_height, int screen_height_offset);
 
     void fill();
 

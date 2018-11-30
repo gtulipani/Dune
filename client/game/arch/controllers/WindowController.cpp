@@ -19,6 +19,7 @@
 WindowController::WindowController(SdlWindow* window) :
     window(window),
     client_sprites_supplier(window),
+    status_controller(window, client_sprites_supplier),
     terrain_controller(window, client_sprites_supplier),
     buttons_controller(window, client_sprites_supplier, &terrain_controller, &TerrainController::renderEagleEye),
     pending_action(false) {}
@@ -29,8 +30,8 @@ WindowController::WindowController() : WindowController(
 void WindowController::configure(Matrix matrix) {
     this->window->fill();
 
-    this->terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT);
-    this->buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_HEIGHT, SCREEN_TERRAIN_WIDTH);
+    this->terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT, SCREEN_STATUS_HEIGHT);
+    this->buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH);
 }
 
 void WindowController::fill() {

@@ -38,7 +38,6 @@ SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path
     return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path);
 }
 
-
 void TerrainController::buildUnits() {
     // Store buildings textures
     picturables_map[CONSTRUCTION_CENTER][SPRITE_DOWN][0] = createPicturableTexture("construction_center.png");
@@ -124,9 +123,11 @@ void TerrainController::buildTerrains() {
     terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
 }
 
-void TerrainController::configure(Matrix matrix, int screen_width, int screen_height) {
+void TerrainController::configure(Matrix matrix, int screen_width, int screen_height, int screen_height_offset) {
     this->screen_width = screen_width;
     this->screen_height = screen_height;
+
+    this->screen_height_offset = screen_height_offset;
 
     this->terrain_width_tiles = matrix.columns_quantity;
     this->terrain_height_tiles = matrix.rows_quantity;
@@ -154,21 +155,21 @@ void TerrainController::fill() {
 
 void TerrainController::render() {
     Area srcArea(0 - offset_x, 0 - offset_y, screen_width, screen_height);
-    Area destArea(0, 0, screen_width, screen_height);
+    Area destArea(0, screen_height_offset, screen_width, screen_height);
 
     terrain_texture->render(srcArea, destArea);
 
     // Render picturables with priority first
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
         if (sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_width);
+            sdlPicturable->render(offset_x, offset_y, screen_width, screen_height_offset);
         }
     });
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
         if (!sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_width);
+            sdlPicturable->render(offset_x, offset_y, screen_width, screen_height_offset);
         }
     });
 

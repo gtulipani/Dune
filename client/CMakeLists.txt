@@ -17,6 +17,7 @@ add_executable(client
         game/arch/controllers/ButtonsController.cpp
         game/arch/controllers/RequiresTerrainControllerActionException.cpp
         game/arch/controllers/ScreenController.cpp
+        game/arch/controllers/StatusController.cpp
         game/arch/controllers/TerrainController.cpp
         game/arch/controllers/WindowController.cpp
         game/arch/threads/EventsLooperThread.cpp

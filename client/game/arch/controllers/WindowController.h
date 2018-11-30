@@ -11,8 +11,9 @@
 #include "../../sdl/SdlWindow.h"
 #include "../../sdl/SdlTexture.h"
 #include "../SdlPicturable.h"
-#include "TerrainController.h"
 #include "ButtonsController.h"
+#include "TerrainController.h"
+#include "StatusController.h"
 
 typedef enum Controller {
     TERRAIN,
@@ -27,6 +28,7 @@ class WindowController {
 private:
     SdlWindow* window;
     ClientSpritesSupplier client_sprites_supplier;
+    StatusController status_controller;
     TerrainController terrain_controller;
     ButtonsController buttons_controller;
     bool pending_action;
