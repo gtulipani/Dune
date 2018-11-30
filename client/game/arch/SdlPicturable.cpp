@@ -10,8 +10,8 @@
 // Client Libraries
 #include "Area.h"
 
-#define PICTURABLE_WIDTH 80
-#define PICTURABLE_HEIGHT 80
+#define PICTURABLE_WIDTH 90
+#define PICTURABLE_HEIGHT 90
 
 #define HEALTH_BAR_WIDTH 400
 #define HEALTH_BAR_HEIGHT 100
