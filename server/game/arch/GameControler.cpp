@@ -228,21 +228,21 @@ void GameControler::createCosechadora(int player_id) {
 GameStatusEvent GameControler::getStateFor(int player_id) const {
     GameStatusEvent playerState;
 
-    if (players.at(player_id)->changedSelection) {
-        for (const auto& selectedObject : players.at(player_id)->selectedObjects) {
-            playerState.selectedObjects.push_back(selectedObject.second->getState());
-        }
-    }
-
     for (const auto& player : players) {
         for (const auto& unit : player.second->units) {
             if (unit.second->haveYouChanged()) {
                 playerState.picturables.push_back(unit.second->getState());
+                if (players.at(player_id)->selectedObjects.find(unit.first) != players.at(player_id)->selectedObjects.end()) {
+                    playerState.picturables.back().selected = true;
+                }
             }
         }
         for (const auto& building : player.second->buildings) {
             if (building.second->haveYouChanged()) {
                 playerState.picturables.push_back(building.second->getState());
+                if (players.at(player_id)->selectedObjects.find(building.first) != players.at(player_id)->selectedObjects.end()) {
+                    playerState.picturables.back().selected = true;
+                }
             }
         }
         for (const auto& inProgressUnit : player.second->inProgressUnits) {
@@ -261,12 +261,10 @@ GameStatusEvent GameControler::getStateFor(int player_id) const {
             playerState.picturables.push_back(*especia.second);
         }
     }
+
     playerState.especia = players.at(player_id)->especia;
     playerState.energia = players.at(player_id)->energia;
     playerState.availableObjects = gameConfig.getAvailableObjectsFor(*players.at((player_id)));
-    for (auto& selectedObject : players.at(player_id)->selectedObjects) {
-        playerState.selectedObjects.push_back(selectedObject.second->getState());
-    }
 
     return playerState;
 }

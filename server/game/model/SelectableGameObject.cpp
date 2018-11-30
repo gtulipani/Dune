@@ -13,7 +13,7 @@ bool SelectableGameObject::isThere(const Point& pos) const {
 
 void SelectableGameObject::select() {
     selected = true;
-    //haveIChanged = true;
+    haveIChanged = true;
 }
 
 Point SelectableGameObject::getPixelPosition() const {
@@ -22,7 +22,7 @@ Point SelectableGameObject::getPixelPosition() const {
 
 void SelectableGameObject::unselect() {
     selected = false;
-    //haveIChanged = true;
+    haveIChanged = true;
 }
 
 void SelectableGameObject::attack(SelectableGameObject* target) {}
@@ -33,5 +33,5 @@ void SelectableGameObject::recieveAttack(AttackingUnit* enemy, int attackPoints)
 }
 
 Picturable SelectableGameObject::getState() const {
-    return {player.id, id, type, sprite_direction, sprite_motion, selected, pixelPosition, size, health, max_health, 100};
+    return {player.id, id, type, sprite_direction, sprite_motion, false, pixelPosition, size, health, max_health, 100};
 }
