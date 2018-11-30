@@ -9,6 +9,7 @@ class AttackingUnit : public WalkingUnit {
     private:
     int counter = 0;
     SelectableGameObject* target = nullptr;
+    Point targetPos{};
     const Weapon& weapon;
     const int range;
 

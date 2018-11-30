@@ -225,7 +225,7 @@ void GameControler::createCosechadora(int player_id) {
     next_id++;
 }
 
-GameStatusEvent GameControler::getStateFor(int player_id) const {
+std::pair<GameStatusEvent, bool> GameControler::getStateFor(int player_id) const {
     GameStatusEvent playerState;
 
     for (const auto& player : players) {
@@ -266,49 +266,62 @@ GameStatusEvent GameControler::getStateFor(int player_id) const {
     playerState.energia = players.at(player_id)->energia;
     playerState.availableObjects = gameConfig.getAvailableObjectsFor(*players.at((player_id)));
 
-    return playerState;
+    return {playerState, players.at(player_id)->lost};
 }
 
 void GameControler::updateGameObjects() {
-    for (const auto& player : players) {
-        for (auto it = player.second->units.begin(); it != player.second->units.end();) {
+    bool delete_lost_players = true;
+    for (auto it_player = players.begin(); it_player != players.end();) {
+        for (auto it = it_player->second->units.begin(); it != it_player->second->units.end();) {
             if (it->second->isDead()) {
                 delete it->second;
-                it = player.second->units.erase(it);
+                it = it_player->second->units.erase(it);
             } else {
                 it->second->reset();
                 ++it;
             }
         }
-        for (auto it = player.second->buildings.begin(); it != player.second->buildings.end();) {
+        for (auto it = it_player->second->buildings.begin(); it != it_player->second->buildings.end();) {
             if (it->second->isDead()) {
+                if (it->second->getName() == CONSTRUCTION_CENTER) {
+                    processLostPlayer(it_player->first);
+                    delete_lost_players = false; // Will be deleted on the next iteration
+                    break;
+                }
                 delete it->second;
-                it = player.second->buildings.erase(it);
+                it = it_player->second->buildings.erase(it);
             } else {
                 it->second->reset();
                 ++it;
             }
         }
-        for (auto it = player.second->inProgressUnits.begin(); it != player.second->inProgressUnits.end();) {
+        for (auto it = it_player->second->inProgressUnits.begin(); it != it_player->second->inProgressUnits.end();) {
             if (it->second->completed()) {
-                player.second->units[it->first] = (WalkingUnit*)it->second->getObject();
+                it_player->second->units[it->first] = (WalkingUnit*)it->second->getObject();
                 delete it->second;
-                it = player.second->inProgressUnits.erase(it);
+                it = it_player->second->inProgressUnits.erase(it);
             } else {
                 it->second->reset();
                 ++it;
             }
         }
-        for (auto it = player.second->inProgressBuildings.begin(); it != player.second->inProgressBuildings.end();) {
+        for (auto it = it_player->second->inProgressBuildings.begin(); it != it_player->second->inProgressBuildings.end();) {
             if (it->second->completed()) {
-                player.second->buildings[it->first] = (Building*)it->second->getObject();
+                it_player->second->buildings[it->first] = (Building*)it->second->getObject();
                 delete it->second;
-                it = player.second->inProgressBuildings.erase(it);
+                it = it_player->second->inProgressBuildings.erase(it);
             } else {
                 it->second->reset();
                 ++it;
             }
         }
+        if (it_player->second->lost && delete_lost_players) {
+            it_player = players.erase(it_player);
+            delete it_player->second;
+        } else {
+            ++it_player;
+        }
+
     }
 
     for (auto it = especias.begin(); it != especias.end();) {
@@ -324,6 +337,24 @@ void GameControler::updateGameObjects() {
     for (const auto& player : players) {
         player.second->changedSelection = false;
     }
+}
+
+void GameControler::processLostPlayer(int player_id) {
+    players.at(player_id)->lost = true;
+    for (auto& unit : players.at(player_id)->units) {
+        unit.second->kill();
+    }
+    for (auto& building : players.at(player_id)->buildings) {
+        building.second->kill();
+    }
+    for (auto& inProgressUnit : players.at(player_id)->inProgressUnits) {
+        delete inProgressUnit.second;
+    }
+    players.at(player_id)->inProgressUnits.clear();
+    for (auto& inProgressbuilding : players.at(player_id)->inProgressBuildings) {
+        delete inProgressbuilding.second;
+    }
+    players.at(player_id)->inProgressBuildings.clear();
 }
 
 GameControler::~GameControler() {

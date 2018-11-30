@@ -3,6 +3,7 @@
 #include <Tick.h>
 #include <TileUtils.h>
 #include "Weapon.h"
+#include "Map.h"
 
 AttackingUnit::AttackingUnit(Player& player, int id, const std::string& name, int health,
                             const Point& size, const Point& initialPixelPosition,
@@ -17,6 +18,11 @@ bool AttackingUnit::inRange(const Point& pos) const {
 
 void AttackingUnit::attack(SelectableGameObject* enemy) {
     target = enemy;
+    targetPos = target->getPixelPosition();
+    if (!inRange(targetPos)) {
+        Point whereToGo = map.getClosestAvailablePoint(pixelPosition, targetPos);
+        this->WalkingUnit::handleRightClick(whereToGo);
+    }
 }
 
 void AttackingUnit::tick() {
@@ -25,9 +31,9 @@ void AttackingUnit::tick() {
         return;
     }
 
-    Point enemyPos = target->getPixelPosition();
+    Point currentTargetPos = target->getPixelPosition();
 
-    if (inRange(enemyPos)) {
+    if (inRange(currentTargetPos)) {
         std::stack<Point> empty_stack;
         path = empty_stack;
         pixelGoal = pixelPosition;
@@ -37,7 +43,11 @@ void AttackingUnit::tick() {
             if (target->isDead()) target = nullptr;
         }
     } else {
-        this->WalkingUnit::handleRightClick(enemyPos);
+        if (currentTargetPos != targetPos) {
+            targetPos = currentTargetPos;
+            Point whereToGo = map.getClosestAvailablePoint(pixelPosition, targetPos);
+            this->WalkingUnit::handleRightClick(whereToGo);
+        }
         this->WalkingUnit::tick();
     }
 }

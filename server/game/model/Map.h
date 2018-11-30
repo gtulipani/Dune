@@ -38,6 +38,8 @@ public:
     Especia* getEspeciaAt(const Point& pos);
 
     std::vector<Point> getAvailableTilesNear(const Point& pos, unsigned int n);
+
+    Point getClosestAvailablePoint(const Point& pixelStart, const Point& pixelGoal);
 };
 
 #endif

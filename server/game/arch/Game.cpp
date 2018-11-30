@@ -21,23 +21,28 @@
 
 using json = nlohmann::json;
 
-Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients,
+Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& vec_clients,
 const GameConfiguration& gameConfig) :
-events_queue(events_queue), clients(_clients) {
+events_queue(events_queue), vec_clients(vec_clients) {
     map = json_utils::parseAsJson("resources/maps/basic_map.json");
     gameControler = new GameControler(map, gameConfig);
 }
 
 void Game::sendGameConfigurationEvent() {
     int player_id = 0;
-    for (ClientThread* client : clients) {
-        client->send(NotificationEvent(GAME_CONFIGURATION_EVENT));
-        client->send(GameConfigurationEvent(player_id, map.getMatrix()));
+    for (auto& client : clients) {
+        client.second->send(NotificationEvent(GAME_CONFIGURATION_EVENT));
+        client.second->send(GameConfigurationEvent(player_id, map.getMatrix()));
         player_id++;
     }
 }
 
 void Game::start() {
+
+    for (unsigned int i = 0; i < vec_clients.size(); i++) {
+        clients[i] = vec_clients.at(i);
+    }
+
     is_on = true;
     std::cout << "Running..." << std::endl;
 
@@ -98,13 +103,29 @@ void Game::updateModel() {
 
 void Game::updateClients() {
     std::vector<Picturable> state;
+    std::pair<GameStatusEvent, bool> player_state;
     GameStatusEvent statusEvent;
-    for (unsigned int i = 0; i < clients.size(); i++) {
-        statusEvent = gameControler->getStateFor(i);
+    bool player_lost;
+    for (auto it = clients.begin(); it != clients.end();) {
+        player_state = gameControler->getStateFor(it->first);
+        statusEvent = player_state.first;
+        player_lost = player_state.second;
         try {
-            clients.at(i)->send(NotificationEvent(GAME_STATUS_EVENT));
-            clients.at(i)->send(statusEvent);
-        } catch (const SOException& e) {}
+            it->second->send(NotificationEvent(GAME_STATUS_EVENT));
+            it->second->send(statusEvent);
+            if (player_lost) {
+                it->second->send(NotificationEvent(GAME_LOST));
+                it = clients.erase(it);
+            } else {
+                ++it;
+            }
+        } catch (const SOException& e) {
+            ++it;
+        }
+    }
+    if (clients.size() == 1) {
+        clients.begin()->second->send(NotificationEvent(GAME_WON));
+        is_on = false;
     }
 }
 

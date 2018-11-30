@@ -23,7 +23,8 @@ class Game {
     private:
     bool is_on;
     shaque<ClientEvent>& events_queue;
-    const std::vector<ClientThread*>& clients;
+    const std::vector<ClientThread*>& vec_clients;
+    std::map<int, ClientThread*> clients;
     std::list<ClientEvent> events;
 
     Map map;

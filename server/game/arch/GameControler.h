@@ -32,9 +32,11 @@ class GameControler {
 
     void initialize(int number_of_players);
 
+    void processLostPlayer(int player_id);
+
     void tick();
 
-    GameStatusEvent getStateFor(int player_id) const;
+    std::pair<GameStatusEvent, bool> getStateFor(int player_id) const;
 
     void leftClick(int player_id, const Point& point);
 

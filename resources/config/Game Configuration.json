@@ -4,7 +4,7 @@
       "energy": 0,
       "cost": 0,
       "size": {"row": 3, "column": 3},
-      "health": 3000,
+      "health": 30,
       "capacity": 0
     },
     "wind_traps": {

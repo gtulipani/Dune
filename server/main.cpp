@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 	ServerThread server(argv[1]);
 	server.start();
 
-	while (std::cin.peek() != EXIT_CHAR) {}
+	while (std::cin.peek() != EXIT_CHAR && server.isRunning()) {}
 
 	server.stop();
 	server.join();

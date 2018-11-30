@@ -96,6 +96,45 @@ Especia* Map::getEspeciaAt(const Point& pos) {
     return especias.at(tile);
 }
 
+Point Map::getClosestAvailablePoint(const Point& pixelStart, const Point& pixelGoal) {
+    Point tileGoal = tile_utils::getTileFromPixel(pixelGoal);
+    if (mat.at(tileGoal) != EDIFICIOS) return pixelGoal;
+    int i, j;
+    for (i = tileGoal.row; i >= 0 && mat.at(i - 1, tileGoal.col) == EDIFICIOS; i--) {}
+    for (j = tileGoal.col; j >= 0 && mat.at(tileGoal.row, j - 1) == EDIFICIOS; j--) {}
+    Point buildingTopLeft = {i, j};
+    for (i = 0; buildingTopLeft.row + i < mat.rows() && mat.at(buildingTopLeft.row + i, buildingTopLeft.col) == EDIFICIOS; i++) {}
+    for (j = 0; buildingTopLeft.col + j < mat.cols() && mat.at(buildingTopLeft.row, buildingTopLeft.col + j) == EDIFICIOS; j++) {}
+    Point buildingSize = {i, j};
+    buildingTopLeft = {buildingTopLeft.row - 1, buildingTopLeft.col - 1};
+    std::vector<Point> buildingFrontier;
+    for (i = 0; i <= buildingSize.row + 1; i++) {
+        buildingFrontier.emplace_back(buildingTopLeft.row + i, buildingTopLeft.col);
+    }
+    i--;
+    for (j = 1; j <= buildingSize.col + 1; j++) {
+        buildingFrontier.emplace_back(buildingTopLeft.row + i, buildingTopLeft.col + j);
+    }
+    j--;
+    i--;
+    for (; i >= 0; i--) {
+        buildingFrontier.emplace_back(buildingTopLeft.row + i, buildingTopLeft.col + j);
+    }
+    i++;
+    j--;
+    for (; j > 0; j--) {
+        buildingFrontier.emplace_back(buildingTopLeft.row + i, buildingTopLeft.col + j);
+    }
+    Point tileStart = tile_utils::getTileFromPixel(pixelStart);
+    Point clostestPointOnFrontier = buildingFrontier.front();
+    for (const Point& p : buildingFrontier) {
+        if (p.hDistanceTo(tileStart) < clostestPointOnFrontier.hDistanceTo(tileStart)) {
+            clostestPointOnFrontier = p;
+        }
+    }
+    return tile_utils::getTileCenter(clostestPointOnFrontier);
+}
+
 std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int n) {
     /*  ______________________  */
     /* |         BFS          | */

@@ -31,7 +31,7 @@ void to_json(json &j, const Picturable &p) {
             {"max_health",          p.max_health},
             {"porcentage",          p.porcentage}
     };
-    std::cout << j << std::endl;
+    //std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Picturable &p) {
@@ -82,7 +82,7 @@ void to_json(json &j, const ClientEvent &e) {
             {"click_position",  e.click_position},
             {"release_position",  e.release_position}
     };
-    std::cout << j << std::endl;
+    //std::cout << j << std::endl;
 }
 
 void from_json(const json &j, ClientEvent &e) {
