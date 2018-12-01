@@ -20,7 +20,7 @@ add_executable(client
         game/arch/controllers/ButtonsController.cpp
         game/arch/controllers/Controller.cpp
         game/arch/controllers/RequiresExternalControllerActionException.cpp
-        game/arch/controllers/ScreenController.cpp
+        game/arch/ScreenInformation.cpp
         game/arch/controllers/StatusController.cpp
         game/arch/controllers/TerrainController.cpp
         game/arch/controllers/WindowController.cpp

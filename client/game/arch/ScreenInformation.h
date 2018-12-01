@@ -1,5 +1,8 @@
-#ifndef __SCREEN_MANAGER_H__
-#define __SCREEN_MANAGER_H__
+#ifndef __SCREEN_INFORMATION_H__
+#define __SCREEN_INFORMATION_H__
+
+// Commons libraries
+#include <Point.h>
 
 // General Screen configuration
 #define SCREEN_WIDTH 800
@@ -35,9 +38,29 @@
 
 #define PANEL_BUTTON_ICONS_ROWS_QUANTITY 6
 
-class ScreenController {
+typedef enum Movement {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+} Movement;
 
+class ScreenInformation {
+private:
+    int offset_x;
+    int offset_y;
+
+public:
+    ScreenInformation();
+
+    int getOffsetX() const;
+    int getOffsetY() const;
+
+    void setOffsetX(int offset_x);
+    void setOffsetY(int offset_y);
+
+    Point getRelativePoint(int row, int column);
 };
 
 
-#endif //__SCREEN_MANAGER_H__
+#endif //__SCREEN_INFORMATION_H__

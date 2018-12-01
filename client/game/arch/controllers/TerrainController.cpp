@@ -14,7 +14,7 @@
 
 // Client Libraries
 #include "../SdlPicturable.h"
-#include "ScreenController.h"
+#include "../ScreenInformation.h"
 
 // SDL Libraries
 #include <SDL_events.h>
@@ -27,11 +27,12 @@
 #define EAGLE_EYE_SQUARE_ORIGIN_WIDTH 80
 #define EAGLE_EYE_SQUARE_ORIGIN_HEIGHT 80
 
-TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
         window,
         screen_configuration,
         true),
         client_sprites_supplier(client_sprites_supplier),
+        screen_information(screen_manager),
         matrix(matrix),
         terrain_width_tiles(matrix.columns_quantity),
         terrain_height_tiles(matrix.rows_quantity),
@@ -181,8 +182,8 @@ void TerrainController::renderEagleEye() {
     double view_height_rate = (static_cast<double>(destArea.getHeight()) / static_cast<double>(this->terrain_height));
 
     // Resized the offset for the eagle_eye map
-    double x_offset = static_cast<double>(offset_x) * view_width_rate;
-    double y_offset = static_cast<double>(offset_y) * view_height_rate;
+    double x_offset = static_cast<double>(screen_information.getOffsetX()) * view_width_rate;
+    double y_offset = static_cast<double>(screen_information.getOffsetY()) * view_height_rate;
 
     // Calculate the coordinates from the square
     double x_coordinate = static_cast<double>(destArea.getX()) - x_offset;
@@ -242,7 +243,7 @@ void TerrainController::update(const GameStatusEvent &event) {
 }
 
 void TerrainController::render() {
-    Area srcArea(0 - offset_x, 0 - offset_y, screen_configuration.getWidth(), screen_configuration.getHeight());
+    Area srcArea(0 - screen_information.getOffsetX(), 0 - screen_information.getOffsetY(), screen_configuration.getWidth(), screen_configuration.getHeight());
     Area destArea(0, screen_configuration.getHeightOffset(), screen_configuration.getWidth(), screen_configuration.getHeight());
 
     terrain_texture->render(srcArea, destArea);
@@ -250,14 +251,14 @@ void TerrainController::render() {
     // Render picturables with priority first
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
         if (sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_configuration.getWidth(), screen_configuration.getHeightOffset());
+            sdlPicturable->render(screen_information.getOffsetX(), screen_information.getOffsetY(), screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }
     });
 
     // Render the SdlPicturables
     std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
         if (!sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_configuration.getWidth(), screen_configuration.getHeightOffset());
+            sdlPicturable->render(screen_information.getOffsetX(), screen_information.getOffsetY(), screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }
     });
 
@@ -269,31 +270,34 @@ void TerrainController::render() {
 }
 
 void TerrainController::move(enum Movement movement) {
+    int current_x_offset = screen_information.getOffsetX();
+    int current_y_offset = screen_information.getOffsetY();
+
     switch (movement) {
         case UP: {
-            if (offset_y < 0) {
-                offset_y += TILE_PIXEL_RATE;
+            if (current_y_offset < 0) {
+                screen_information.setOffsetY(current_y_offset + TILE_PIXEL_RATE);
                 this->pending_changes = true;
             }
             break;
         }
         case DOWN: {
-            if ((offset_y + this->terrain_height - screen_configuration.getHeight()) > 0) {
-                offset_y -= TILE_PIXEL_RATE;
+            if ((current_y_offset + this->terrain_height - screen_configuration.getHeight()) > 0) {
+                screen_information.setOffsetY(current_y_offset - TILE_PIXEL_RATE);
                 this->pending_changes = true;
             }
             break;
         }
         case LEFT: {
-            if (offset_x < 0) {
-                offset_x += TILE_PIXEL_RATE;
+            if (current_x_offset < 0) {
+                screen_information.setOffsetX(current_x_offset + TILE_PIXEL_RATE);
                 this->pending_changes = true;
             }
             break;
         }
         case RIGHT: {
-            if ((offset_x + this->terrain_width - screen_configuration.getWidth()) > 0) {
-                offset_x -= TILE_PIXEL_RATE;
+            if ((current_x_offset + this->terrain_width - screen_configuration.getWidth()) > 0) {
+                screen_information.setOffsetX(current_x_offset - TILE_PIXEL_RATE);
                 this->pending_changes = true;
             }
             break;
@@ -310,7 +314,7 @@ bool TerrainController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_e
 }
 void TerrainController::parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) {
     if (includes(mouse_event.x, mouse_event.y)) {
-        temporary_position = getRelativePoint(mouse_event.y, mouse_event.x);
+        temporary_position = screen_information.getRelativePoint(mouse_event.y, mouse_event.x);
         clicked = true;
     } else {
         clicked = false;
@@ -321,12 +325,12 @@ void TerrainController::parseMouseRelease(const SDL_MouseButtonEvent &mouse_even
         switch (mouse_event.button) {
             case SDL_BUTTON_LEFT: {
                 push_function(processer, LEFT_CLICK_EVENT_TYPE, 0, temporary_position,
-                              getRelativePoint(mouse_event.y, mouse_event.x));
+                              screen_information.getRelativePoint(mouse_event.y, mouse_event.x));
                 break;
             }
             case SDL_BUTTON_RIGHT: {
                 push_function(processer, RIGHT_CLICK_EVENT_TYPE, 0, temporary_position,
-                              getRelativePoint(mouse_event.y, mouse_event.x));
+                              screen_information.getRelativePoint(mouse_event.y, mouse_event.x));
                 break;
             }
             default:
@@ -334,10 +338,6 @@ void TerrainController::parseMouseRelease(const SDL_MouseButtonEvent &mouse_even
         }
     }
     clicked = false;
-}
-
-Point TerrainController::getRelativePoint(int row, int column) {
-    return {row - this->offset_y, column - this->offset_x};
 }
 
 TerrainController::~TerrainController() {

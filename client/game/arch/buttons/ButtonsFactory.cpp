@@ -7,7 +7,7 @@
 // Client Libraries
 #include "BuildingButton.h"
 #include "UnitButton.h"
-#include "../controllers/ScreenController.h"
+#include "../ScreenInformation.h"
 
 PanelButton* ButtonsFactory::createUnitButton(const std::string& name, int icon, int action, ClientSpritesSupplier &client_sprites_supplier) {
     return new UnitButton(PANEL_BUTTON_ICON_WIDTH, PANEL_BUTTON_ICON_HEIGHT, name, icon, action, client_sprites_supplier);

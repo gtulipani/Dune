@@ -11,10 +11,12 @@
 
 struct SDL_MouseButtonEvent;
 class EventsLooperThread;
+class ScreenInformation;
 
 class TerrainController : public Controller {
 private:
     ClientSpritesSupplier &client_sprites_supplier;
+    ScreenInformation &screen_information;
     Matrix matrix;
     int terrain_width_tiles;
     int terrain_height_tiles;
@@ -25,8 +27,6 @@ private:
     std::map<std::string, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
     SdlTexture *terrain_texture;
 
-    int offset_x{};
-    int offset_y{};
     std::vector<SdlPicturable*> picturables;
 
     Point temporary_position{};
@@ -42,7 +42,7 @@ private:
     SdlTexture *createPicturableTexture(const std::string& file_path);
     SdlTexture *createTerrainTexture(const std::string& file_path);
 public:
-    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
+    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
     void update(const GameStatusEvent &event) override;
 
@@ -53,8 +53,6 @@ public:
     bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
     void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
     void parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
-
-    Point getRelativePoint(int row, int column);
 
     ~TerrainController() override;
 };

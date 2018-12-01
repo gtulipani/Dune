@@ -9,7 +9,7 @@
 
 // Client Libraries
 #include "RequiresExternalControllerActionException.h"
-#include "ScreenController.h"
+#include "../ScreenInformation.h"
 
 // SDL Libraries
 #include <SDL_events.h>
@@ -32,8 +32,8 @@ WindowController::WindowController(const Matrix& matrix) : WindowController(
         matrix) {}
 
 void WindowController::buildControllers(const Matrix& matrix) {
-    controllers.push_back(new ButtonsController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH, 0)));
-    controllers.push_back(new TerrainController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_TERRAIN_WIDTH, SCREEN_TERRAIN_HEIGHT, 0, SCREEN_STATUS_HEIGHT), matrix));
+    controllers.push_back(new ButtonsController(window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH, 0)));
+    controllers.push_back(new TerrainController(window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_TERRAIN_WIDTH, SCREEN_TERRAIN_HEIGHT, 0, SCREEN_STATUS_HEIGHT), matrix));
     controllers.push_back(new StatusController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT, 0, 0)));
 }
 

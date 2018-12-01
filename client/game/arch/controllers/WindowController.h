@@ -11,6 +11,7 @@
 #include "../../sdl/SdlWindow.h"
 #include "../../sdl/SdlTexture.h"
 #include "../SdlPicturable.h"
+#include "../ScreenInformation.h"
 #include "ButtonsController.h"
 #include "TerrainController.h"
 #include "StatusController.h"
@@ -20,6 +21,7 @@ class WindowController : public Controller {
 private:
     std::vector<Controller*> controllers;
     ClientSpritesSupplier client_sprites_supplier;
+    ScreenInformation screen_manager{};
 
     bool pending_action;
 

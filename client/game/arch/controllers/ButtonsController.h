@@ -15,9 +15,12 @@
 #include "../ScreenConfiguration.h"
 #include "Controller.h"
 
+class ScreenInformation;
+
 class ButtonsController : public Controller {
 private:
     ClientSpritesSupplier &client_sprites_supplier;
+    ScreenInformation &screen_information;
     bool clicked;
     bool panel_rendered;
     SdlTexture *panel_texture;
@@ -33,7 +36,6 @@ private:
     void locateButtons();
 
     Point getGlobalPosition(Point point);
-    Point getRelativePosition(Point point);
 
     // This method is used to calculate the position for each one of the panel buttons icons, which are one above each other
     Point buildOptionalButtonRelativePosition(int row_order, int col_order);
@@ -41,7 +43,7 @@ private:
     // Render only once the pannel with the main background images and the main buttons
     void buildPanelTexture();
 public:
-    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
+    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration);
 
     void update(const GameStatusEvent &event) override;
 
@@ -50,8 +52,8 @@ public:
     void move(enum Movement movement) override;
 
     bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
-    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function);
-    void parseMouseRelease(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function);
+    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
+    void parseMouseRelease(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
 
     ~ButtonsController() override;
 };

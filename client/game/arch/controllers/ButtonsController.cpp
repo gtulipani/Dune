@@ -18,13 +18,14 @@
 #include "../buttons/BuildingButton.h"
 #include "../buttons/ButtonsFactory.h"
 #include "RequiresExternalControllerActionException.h"
-#include "ScreenController.h"
+#include "../ScreenInformation.h"
 
-ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration) : Controller(
+ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration) : Controller(
         window,
         screen_configuration,
         true),
         client_sprites_supplier(client_sprites_supplier),
+        screen_information(screen_manager),
         clicked(false),
         panel_rendered(false) {
     buildTerrainTexture();
@@ -42,10 +43,6 @@ void ButtonsController::buildTerrainTexture() {
 
 Point ButtonsController::getGlobalPosition(Point point) {
     return {point.row, point.col + screen_configuration.getWidthOffset()};
-}
-
-Point ButtonsController::getRelativePosition(Point point) {
-    return {point.row, point.col - screen_configuration.getWidthOffset()};
 }
 
 Point ButtonsController::buildOptionalButtonRelativePosition(int row_order, int col_order) {
@@ -178,7 +175,7 @@ bool ButtonsController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_e
     bool resolved = false;
     if (notIncludes(mouse_event.x, mouse_event.y)) {
         // Recheck if was clicked in the correct place (not in the panel)
-        Point position(mouse_event.y, mouse_event.x); // Review this, it's not taking offset into account
+        Point position = screen_information.getRelativePoint(mouse_event.y, mouse_event.x);
         switch (mouse_event.button) {
             case SDL_BUTTON_LEFT: {
                 for (PanelButton *button : available_buttons) {

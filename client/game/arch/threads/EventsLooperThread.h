@@ -1,5 +1,5 @@
-#ifndef __GAME_THREAD_H__
-#define __GAME_THREAD_H__
+#ifndef __EVENTS_LOOPER_THREAD_H__
+#define __EVENTS_LOOPER_THREAD_H__
 
 // Commons Libraries
 #include <Socket.h>
@@ -39,4 +39,4 @@ public:
 };
 
 
-#endif //__GAME_THREAD_H__
+#endif //__EVENTS_LOOPER_THREAD_H__

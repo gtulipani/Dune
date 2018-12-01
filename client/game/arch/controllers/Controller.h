@@ -6,19 +6,13 @@
 
 // Client Libraries
 #include "../ScreenConfiguration.h"
+#include "../ScreenInformation.h"
 
 struct SDL_MouseButtonEvent;
 class Point;
 class EventsLooperThread;
 class SdlWindow;
 class GameStatusEvent;
-
-typedef enum Movement {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-} Movement;
 
 class Controller {
 protected:
