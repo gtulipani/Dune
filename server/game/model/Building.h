@@ -13,8 +13,6 @@ class Building : public SelectableGameObject {
 
     void locateAt(const Point& pos, Map& map);
 
-    const std::string& getName() const;
-
     virtual void handleRightClick(const Point& pos) override;
 };
 

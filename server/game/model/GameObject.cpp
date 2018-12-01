@@ -13,6 +13,10 @@ bool GameObject::haveYouChanged() const {
     return haveIChanged;
 }
 
+const std::string& GameObject::getName() const {
+    return name;
+}
+
 void GameObject::reset() {
     haveIChanged = false;
 }

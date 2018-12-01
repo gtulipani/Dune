@@ -278,6 +278,18 @@ void GameControler::createCosechadora(int player_id) {
     next_id++;
 }
 
+void GameControler::sell(int player_id, int object_id) {
+    if (players.at(player_id)->units.find(object_id) != players.at(player_id)->units.end()) {
+        players.at(player_id)->especia -= gameConfig.getUnitCost(players.at(player_id)->units.at(object_id)->getName()) / 2;
+        players.at(player_id)->units.at(object_id)->kill();
+        return;
+    }
+    if (players.at(player_id)->buildings.find(object_id) != players.at(player_id)->buildings.end()) {
+        players.at(player_id)->especia -= gameConfig.getBuildingCost(players.at(player_id)->buildings.at(object_id)->getName()).first / 2;
+        players.at(player_id)->buildings.at(object_id)->kill();
+    }
+}
+
 std::pair<GameStatusEvent, bool> GameControler::getStateFor(int player_id) const {
     GameStatusEvent playerState;
 
@@ -298,17 +310,19 @@ std::pair<GameStatusEvent, bool> GameControler::getStateFor(int player_id) const
                 }
             }
         }
-        for (const auto& inProgressUnit : player.second->inProgressUnits) {
-            if (inProgressUnit.second->haveYouChanged()) {
-                playerState.picturables.push_back(inProgressUnit.second->getState());
-            }
-        }
-        for (const auto& inProgressBuilding : player.second->inProgressBuildings) {
-            if (inProgressBuilding.second->haveYouChanged()) {
-                playerState.picturables.push_back(inProgressBuilding.second->getState());
-            }
+    }
+
+    for (const auto& inProgressUnit : players.at(player_id)->inProgressUnits) {
+        if (inProgressUnit.second->haveYouChanged()) {
+            playerState.picturables.push_back(inProgressUnit.second->getState());
         }
     }
+    for (const auto& inProgressBuilding : players.at(player_id)->inProgressBuildings) {
+        if (inProgressBuilding.second->haveYouChanged()) {
+            playerState.picturables.push_back(inProgressBuilding.second->getState());
+        }
+    }
+
     for (const auto& especia : especias) {
         if (especia.second->haveYouChanged()) {
             playerState.picturables.push_back(*especia.second);

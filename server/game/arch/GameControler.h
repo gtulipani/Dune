@@ -52,6 +52,8 @@ class GameControler {
 
     void createCosechadora(int player_id);
 
+    void sell(int player_id, int object_id);
+
     void updateGameObjects();
 
     ~GameControler();

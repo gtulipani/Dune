@@ -37,6 +37,8 @@ class GameObject {
 
     virtual Picturable getState() const = 0;
 
+    const std::string& getName() const;
+
     void reset();
 
     virtual ~GameObject() = default;

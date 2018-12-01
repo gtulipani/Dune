@@ -10,10 +10,6 @@ void Building::tick() {}
 
 void Building::handleRightClick(const Point& pos) {}
 
-const std::string& Building::getName() const {
-    return name;
-}
-
 void Building::locateAt(const Point& pos, Map& map) {
     pixelPosition = pos;
     map.update(EDIFICIOS, tile_utils::getTileFromPixel(size), tile_utils::getTileFromPixel(pixelPosition));
