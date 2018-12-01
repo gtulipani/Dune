@@ -40,6 +40,8 @@ public:
     std::vector<Point> getAvailableTilesNear(const Point& pos, unsigned int n);
 
     Point getClosestAvailablePoint(const Point& pixelStart, const Point& pixelGoal);
+
+    bool canIBuildiAt(const Point& pixelPosition, const Point& pixelSize) const;
 };
 
 #endif

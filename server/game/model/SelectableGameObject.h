@@ -19,6 +19,8 @@ class SelectableGameObject : public AliveGameObject {
 
     Point getPixelPosition() const;
 
+    Point getSize() const;
+
     bool isThere(const Point& a, const Point& b) const;
 
     void select();

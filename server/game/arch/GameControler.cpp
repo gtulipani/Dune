@@ -207,6 +207,22 @@ void GameControler::createBuilding(int player_id, const std::string& buildingNam
 }
 
 void GameControler::locateBuildingAt(int player_id, int building_id, const Point& pos) {
+
+    Building* targetBuilding = (Building*)players.at(player_id)->inProgressBuildings.at(building_id)->getObject();
+    Point buildingSize = targetBuilding->getSize();
+    Point downRight = {pos.row + buildingSize.row, pos.col + buildingSize.col};
+
+    if (!map.canIBuildiAt(pos, buildingSize)) return;
+
+    for (const auto& player : players) {
+        for (const auto& unit : player.second->units) {
+            if (unit.second->isThere(pos, downRight)) return;
+        }
+        for (const auto& building : player.second->buildings) {
+            if (building.second->isThere(pos, downRight)) return;
+        }
+    }
+
     if (players.at(player_id)->inProgressBuildings.at(building_id)->completed()) {
         Building* building = (Building*)players.at(player_id)->inProgressBuildings.at(building_id)->getObject();
         delete players.at(player_id)->inProgressBuildings.at(building_id);

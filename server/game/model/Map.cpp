@@ -162,3 +162,16 @@ std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int
     }
     return positions;
 }
+
+bool Map::canIBuildiAt(const Point& pixelPosition, const Point& pixelSize) const {
+    Point pos = tile_utils::getTileFromPixel(pixelPosition);
+    Point size = tile_utils::getTileFromPixel(pixelSize);
+    for (int row = pos.row; row < pos.row + size.row; row++) {
+        if (row >= mat.rows()) return false;
+        for (int col = pos.col; col < pos.col + size.col; col++) {
+            if (col >= mat.cols()) return false;
+            if (mat.at(row, col) != ROCA) return false;
+        }
+    }
+    return true;
+}

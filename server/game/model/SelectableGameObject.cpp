@@ -59,3 +59,7 @@ void SelectableGameObject::recieveAttack(AttackingUnit* enemy, int attackPoints)
 Picturable SelectableGameObject::getState() const {
     return {player.id, id, name, sprite_direction, sprite_motion, false, pixelPosition, size, health, max_health, 100};
 }
+
+Point SelectableGameObject::getSize() const {
+    return size;
+}
