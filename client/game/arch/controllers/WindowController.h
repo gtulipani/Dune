@@ -27,9 +27,9 @@ private:
 
     void buildControllers(const Matrix& matrix);
 public:
-    WindowController(SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
+    WindowController(unsigned int player_id, SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
-    explicit WindowController(const Matrix& matrix);
+    explicit WindowController(unsigned int player_id, const Matrix& matrix);
 
     WindowController(const WindowController &other) = delete;
 

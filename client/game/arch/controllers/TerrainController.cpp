@@ -27,7 +27,8 @@
 #define EAGLE_EYE_SQUARE_ORIGIN_WIDTH 80
 #define EAGLE_EYE_SQUARE_ORIGIN_HEIGHT 80
 
-TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+TerrainController::TerrainController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+        player_id,
         window,
         screen_configuration,
         true),
@@ -53,84 +54,97 @@ void TerrainController::buildTerrains() {
     terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
 }
 
+void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
+    SdlColor *color = player_color::getColor(player_color);
+    if (color != nullptr) {
+        // Store buildings textures
+        picturables_map[CONSTRUCTION_CENTER][SPRITE_DOWN][0][player_color] = createPicturableTexture("construction_center.png", color);
+        picturables_map[WIND_TRAPS][SPRITE_DOWN][0][player_color] = createPicturableTexture("wind_traps.png", color);
+        picturables_map[REFINERY][SPRITE_DOWN][0][player_color] = createPicturableTexture("refinery.png", color);
+        //picturables_map[SPRITE_ATREIDES_BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("atreides_barracks.png", color);
+        //picturables_map[SPRITE_HARKUNNAN_BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("harkunnan_barracks.png", color);
+        picturables_map[BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("ordos_barracks.png", color);
+        picturables_map[LIGHT_FACTORY][SPRITE_DOWN][0][player_color] = createPicturableTexture("light_factory.png", color);
+        picturables_map[SILO][SPRITE_DOWN][0][player_color] = createPicturableTexture("silo.png", color);
+        //picturables_map[PALACE][SPRITE_DOWN][0][player_color] = createPicturableTexture("palace.png", color);
+
+        // Store trike sprites
+        picturables_map[TRIKE][SPRITE_UP][0][player_color] = createPicturableTexture("trike_up.png", color);
+        picturables_map[TRIKE][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("trike_up_right.png", color);
+        picturables_map[TRIKE][SPRITE_RIGHT][0][player_color] = createPicturableTexture("trike_right.png", color);
+        picturables_map[TRIKE][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("trike_down_right.png", color);
+        picturables_map[TRIKE][SPRITE_DOWN][0][player_color] = createPicturableTexture("trike_down.png", color);
+        picturables_map[TRIKE][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("trike_down_left.png", color);
+        picturables_map[TRIKE][SPRITE_LEFT][0][player_color] = createPicturableTexture("trike_left.png", color);
+        picturables_map[TRIKE][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("trike_left_up.png", color);
+
+        // Store harvester sprites
+        picturables_map[HARVESTER][SPRITE_UP][0][player_color] = createPicturableTexture("harvester_up.png", color);
+        picturables_map[HARVESTER][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("harvester_up_right.png", color);
+        picturables_map[HARVESTER][SPRITE_RIGHT][0][player_color] = createPicturableTexture("harvester_right.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("harvester_down_right.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN][0][player_color] = createPicturableTexture("harvester_down.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("harvester_down_left.png", color);
+        picturables_map[HARVESTER][SPRITE_LEFT][0][player_color] = createPicturableTexture("harvester_left.png", color);
+        picturables_map[HARVESTER][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("harvester_left_up.png", color);
+
+        // Store raider sprites
+        picturables_map[RAIDER][SPRITE_UP][0][player_color] = createPicturableTexture("raider_up.png", color);
+        picturables_map[RAIDER][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("raider_up_right.png", color);
+        picturables_map[RAIDER][SPRITE_RIGHT][0][player_color] = createPicturableTexture("raider_right.png", color);
+        picturables_map[RAIDER][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("raider_down_right.png", color);
+        picturables_map[RAIDER][SPRITE_DOWN][0][player_color] = createPicturableTexture("raider_down.png", color);
+        picturables_map[RAIDER][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("raider_down_left.png", color);
+        picturables_map[RAIDER][SPRITE_LEFT][0][player_color] = createPicturableTexture("raider_left.png", color);
+        picturables_map[RAIDER][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("raider_left_up.png", color);
+
+        // Store tank sprites
+        picturables_map[TANK][SPRITE_UP][0][player_color] = createPicturableTexture("tank_up.png", color);
+        picturables_map[TANK][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("tank_up_right.png", color);
+        picturables_map[TANK][SPRITE_RIGHT][0][player_color] = createPicturableTexture("tank_right.png", color);
+        picturables_map[TANK][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("tank_down_right.png", color);
+        picturables_map[TANK][SPRITE_DOWN][0][player_color] = createPicturableTexture("tank_down.png", color);
+        picturables_map[TANK][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("tank_down_left.png", color);
+        picturables_map[TANK][SPRITE_LEFT][0][player_color] = createPicturableTexture("tank_left.png", color);
+        picturables_map[TANK][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("tank_left_up.png", color);
+
+        // Store light infantry sprites
+        /*picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
+
+        // Store heavy infantry sprites
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
+    }
+}
+void TerrainController::buildEspecia(enum PlayerColor player_color) {
+    // Store especia sprites. We don't apply any color on it
+    picturables_map[ESPECIA][SPRITE_DOWN][0][player_color] = createPicturableTexture("especia_100.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][1][player_color] = createPicturableTexture("especia_80.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][2][player_color] = createPicturableTexture("especia_60.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][3][player_color] = createPicturableTexture("especia_40.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][4][player_color] = createPicturableTexture("especia_20.png");
+}
+
 void TerrainController::buildUnits() {
-    // Store buildings textures
-    picturables_map[CONSTRUCTION_CENTER][SPRITE_DOWN][0] = createPicturableTexture("construction_center.png");
-    picturables_map[WIND_TRAPS][SPRITE_DOWN][0] = createPicturableTexture("wind_traps.png");
-    picturables_map[REFINERY][SPRITE_DOWN][0] = createPicturableTexture("refinery.png");
-    //picturables_map[SPRITE_ATREIDES_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("atreides_barracks.png");
-    //picturables_map[SPRITE_HARKUNNAN_BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("harkunnan_barracks.png");
-    picturables_map[BARRACKS][SPRITE_DOWN][0] = createPicturableTexture("ordos_barracks.png");
-    picturables_map[LIGHT_FACTORY][SPRITE_DOWN][0] = createPicturableTexture("light_factory.png");
-    picturables_map[SILO][SPRITE_DOWN][0] = createPicturableTexture("silo.png");
-    //picturables_map[PALACE][SPRITE_DOWN][0] = createPicturableTexture("palace.png");
-
-    // Store trike sprites
-    picturables_map[TRIKE][SPRITE_UP][0] = createPicturableTexture("trike_up.png");
-    picturables_map[TRIKE][SPRITE_UP_RIGHT][0] = createPicturableTexture("trike_up_right.png");
-    picturables_map[TRIKE][SPRITE_RIGHT][0] = createPicturableTexture("trike_right.png");
-    picturables_map[TRIKE][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("trike_down_right.png");
-    picturables_map[TRIKE][SPRITE_DOWN][0] = createPicturableTexture("trike_down.png");
-    picturables_map[TRIKE][SPRITE_DOWN_LEFT][0] = createPicturableTexture("trike_down_left.png");
-    picturables_map[TRIKE][SPRITE_LEFT][0] = createPicturableTexture("trike_left.png");
-    picturables_map[TRIKE][SPRITE_UP_LEFT][0] = createPicturableTexture("trike_left_up.png");
-
-    // Store harvester sprites
-    picturables_map[HARVESTER][SPRITE_UP][0] = createPicturableTexture("harvester_up.png");
-    picturables_map[HARVESTER][SPRITE_UP_RIGHT][0] = createPicturableTexture("harvester_up_right.png");
-    picturables_map[HARVESTER][SPRITE_RIGHT][0] = createPicturableTexture("harvester_right.png");
-    picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("harvester_down_right.png");
-    picturables_map[HARVESTER][SPRITE_DOWN][0] = createPicturableTexture("harvester_down.png");
-    picturables_map[HARVESTER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("harvester_down_left.png");
-    picturables_map[HARVESTER][SPRITE_LEFT][0] = createPicturableTexture("harvester_left.png");
-    picturables_map[HARVESTER][SPRITE_UP_LEFT][0] = createPicturableTexture("harvester_left_up.png");
-
-    // Store raider sprites
-    picturables_map[RAIDER][SPRITE_UP][0] = createPicturableTexture("raider_up.png");
-    picturables_map[RAIDER][SPRITE_UP_RIGHT][0] = createPicturableTexture("raider_up_right.png");
-    picturables_map[RAIDER][SPRITE_RIGHT][0] = createPicturableTexture("raider_right.png");
-    picturables_map[RAIDER][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("raider_down_right.png");
-    picturables_map[RAIDER][SPRITE_DOWN][0] = createPicturableTexture("raider_down.png");
-    picturables_map[RAIDER][SPRITE_DOWN_LEFT][0] = createPicturableTexture("raider_down_left.png");
-    picturables_map[RAIDER][SPRITE_LEFT][0] = createPicturableTexture("raider_left.png");
-    picturables_map[RAIDER][SPRITE_UP_LEFT][0] = createPicturableTexture("raider_left_up.png");
-
-    // Store tank sprites
-    picturables_map[TANK][SPRITE_UP][0] = createPicturableTexture("tank_up.png");
-    picturables_map[TANK][SPRITE_UP_RIGHT][0] = createPicturableTexture("tank_up_right.png");
-    picturables_map[TANK][SPRITE_RIGHT][0] = createPicturableTexture("tank_right.png");
-    picturables_map[TANK][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("tank_down_right.png");
-    picturables_map[TANK][SPRITE_DOWN][0] = createPicturableTexture("tank_down.png");
-    picturables_map[TANK][SPRITE_DOWN_LEFT][0] = createPicturableTexture("tank_down_left.png");
-    picturables_map[TANK][SPRITE_LEFT][0] = createPicturableTexture("tank_left.png");
-    picturables_map[TANK][SPRITE_UP_LEFT][0] = createPicturableTexture("tank_left_up.png");
-
-    // Store light infantry sprites
-    /*picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
-
-    // Store heavy infantry sprites
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-    picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
-
-    // Store especia sprites
-    picturables_map[ESPECIA][SPRITE_DOWN][0] = createPicturableTexture("especia_100.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][1] = createPicturableTexture("especia_80.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][2] = createPicturableTexture("especia_60.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][3] = createPicturableTexture("especia_40.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][4] = createPicturableTexture("especia_20.png");
+    // Iterate over the available colors
+    for (int color = RED; color != YELLOW; color++) {
+        auto player_color = static_cast<PlayerColor>(color);
+        buildUnitsForPlayer(player_color);
+        buildEspecia(player_color);
+    }
 }
 
 void TerrainController::buildTerrainTexture() {
@@ -163,6 +177,12 @@ SdlTexture *TerrainController::createTexture(const std::string& subpath, const s
 
 SdlTexture *TerrainController::createPicturableTexture(const std::string& file_path) {
     return createTexture(PICTURABLES_RESOURCES_SUBPATH, file_path);
+}
+
+SdlTexture *TerrainController::createPicturableTexture(const std::string& file_path, SdlColor *color) {
+    SdlTexture * texture = createPicturableTexture(file_path);
+    texture->setColor(color);
+    return texture;
 }
 
 SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path) {
@@ -216,7 +236,7 @@ void TerrainController::update(const GameStatusEvent &event) {
     // Update/create/delete the picturables
     std::for_each(picturables.begin(), picturables.end(), [this](Picturable &picturable) {
         // Localize texture to be rendered
-        SdlTexture* texture = picturables_map[picturable.name][picturable.sprite_direction][picturable.sprite_motion];
+        SdlTexture* texture = picturables_map[picturable.name][picturable.sprite_direction][picturable.sprite_motion][picturable.player_id];
         if (texture == nullptr) {
             std::cout << "Texture could not been found!" << std::endl;
         } else {
@@ -353,9 +373,15 @@ TerrainController::~TerrainController() {
 
     // Delete all the picturable textures
     for (auto& unit_textures : this->picturables_map) {
+        // Iterate directions
         for (auto& unit_direction : unit_textures.second) {
+            // Iterate motions
             for (auto& unit_motion : unit_direction.second) {
-                delete unit_motion.second;
+                // Iterate colors
+                for (auto& unit_color : unit_motion.second) {
+                    // Iterate colors
+                    delete unit_color.second;
+                }
             }
         }
     }

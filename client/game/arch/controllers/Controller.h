@@ -16,6 +16,7 @@ class GameStatusEvent;
 
 class Controller {
 protected:
+    unsigned int player_id;
     SdlWindow *window;
     ScreenConfiguration screen_configuration;
     bool pending_changes;
@@ -24,7 +25,7 @@ protected:
     bool includes(int x, int y);
 
 public:
-    Controller(SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes);
+    Controller(unsigned int player_id, SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes);
 
     Controller(const Controller &other) = delete;
 

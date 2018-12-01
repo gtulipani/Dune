@@ -6,6 +6,7 @@
 struct SDL_Texture;
 struct SDL_Renderer;
 class SdlWindow;
+class SdlColor;
 class Area;
 
 class SdlTexture {
@@ -31,6 +32,8 @@ public:
     ~SdlTexture();
 
     int render(const Area& src, const Area& dest) const;
+
+    void setColor(SdlColor *color);
 
     void setAsTarget() const;
 private:

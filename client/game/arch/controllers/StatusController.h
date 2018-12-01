@@ -29,9 +29,9 @@ private:
 
     TTF_Font *buildFont();
 public:
-    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font);
+    StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font);
 
-    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
+    StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
 
     void update(const GameStatusEvent &event) override;
 

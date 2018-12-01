@@ -7,7 +7,9 @@
 #include "../../sdl/SdlTexture.h"
 #include "../SdlPicturable.h"
 
+// Client Libraries
 #include "Controller.h"
+#include "../PlayerColor.h"
 
 struct SDL_MouseButtonEvent;
 class EventsLooperThread;
@@ -24,7 +26,8 @@ private:
     int terrain_height;
     bool clicked;
     std::map<int, SdlTexture*> terrains_textures_map;
-    std::map<std::string, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
+    // Map of string Type / int direction / int motion / enum PlayerColor
+    std::map<std::string, std::map<int, std::map<int, std::map<int, SdlTexture*>>>> picturables_map;
     SdlTexture *terrain_texture;
 
     std::vector<SdlPicturable*> picturables;
@@ -34,15 +37,20 @@ private:
     void renderEagleEye();
 
     void buildTerrains();
+    void buildUnitsForPlayer(enum PlayerColor player_color);
+    void buildEspecia(enum PlayerColor player_color);
     void buildUnits();
     void buildTerrainTexture();
     void preloadTerrainMatrix();
 
+    // Creates a texture by the path and subpath received as parameters
     SdlTexture *createTexture(const std::string& subpath, const std::string& file_path);
     SdlTexture *createPicturableTexture(const std::string& file_path);
+    // Creates a texture and assigns a color
+    SdlTexture *createPicturableTexture(const std::string& file_path, SdlColor *color);
     SdlTexture *createTerrainTexture(const std::string& file_path);
 public:
-    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
+    TerrainController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
     void update(const GameStatusEvent &event) override;
 

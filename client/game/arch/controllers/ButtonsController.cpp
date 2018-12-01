@@ -20,7 +20,8 @@
 #include "RequiresExternalControllerActionException.h"
 #include "../ScreenInformation.h"
 
-ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration) : Controller(
+ButtonsController::ButtonsController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration) : Controller(
+        player_id,
         window,
         screen_configuration,
         true),

@@ -1,9 +1,16 @@
 #include "SdlTexture.h"
-#include <SDL_image.h>
+
+// STL Libraries
 #include <string>
 #include <iostream>
+
+// Client Libraries
 #include "SdlWindow.h"
+#include "SdlColor.h"
 #include "SdlException.h"
+
+// SDL Libraries
+#include <SDL_image.h>
 
 SdlTexture::SdlTexture(SDL_Renderer *renderer, SDL_Texture *texture) :
     renderer(renderer),
@@ -92,6 +99,10 @@ int SdlTexture::render(const Area& src, const Area& dest) const {
     };
 
     return SDL_RenderCopy(this->renderer, this->texture, &sdlSrc, &sdlDest);
+}
+
+void SdlTexture::setColor(SdlColor *color) {
+    SDL_SetTextureColorMod(texture, static_cast<Uint8>(color->getR()), static_cast<Uint8>(color->getB()), static_cast<Uint8>(color->getG()));
 }
 
 void SdlTexture::setAsTarget() const {

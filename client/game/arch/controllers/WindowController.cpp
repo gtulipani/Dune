@@ -17,7 +17,8 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-WindowController::WindowController(SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+WindowController::WindowController(unsigned int player_id, SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+        player_id,
         window,
         screen_configuration,
         true),
@@ -26,15 +27,16 @@ WindowController::WindowController(SdlWindow* window, const ScreenConfiguration&
     buildControllers(matrix);
 }
 
-WindowController::WindowController(const Matrix& matrix) : WindowController(
+WindowController::WindowController(unsigned int player_id, const Matrix& matrix) : WindowController(
+        player_id,
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
         ScreenConfiguration(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0),
         matrix) {}
 
 void WindowController::buildControllers(const Matrix& matrix) {
-    controllers.push_back(new ButtonsController(window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH, 0)));
-    controllers.push_back(new TerrainController(window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_TERRAIN_WIDTH, SCREEN_TERRAIN_HEIGHT, 0, SCREEN_STATUS_HEIGHT), matrix));
-    controllers.push_back(new StatusController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT, 0, 0)));
+    controllers.push_back(new ButtonsController(player_id, window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH, 0)));
+    controllers.push_back(new TerrainController(player_id, window, client_sprites_supplier, screen_manager, ScreenConfiguration(SCREEN_TERRAIN_WIDTH, SCREEN_TERRAIN_HEIGHT, 0, SCREEN_STATUS_HEIGHT), matrix));
+    controllers.push_back(new StatusController(player_id, window, client_sprites_supplier, ScreenConfiguration(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT, 0, 0)));
 }
 
 void WindowController::render() {

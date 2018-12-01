@@ -11,6 +11,7 @@ add_executable(client
         game/arch/BlockingQueue.hpp
         game/arch/Client.cpp
         game/arch/ClientSpritesSupplier.cpp
+        game/arch/PlayerColor.cpp
         game/arch/SdlPicturable.cpp
         game/arch/ScreenConfiguration.cpp
         game/arch/buttons/BuildingButton.cpp
@@ -27,6 +28,7 @@ add_executable(client
         game/arch/threads/EventsLooperThread.cpp
         game/arch/threads/EventsReceptorThread.cpp
         game/arch/threads/EventsSenderThread.cpp
+        game/sdl/SdlColor.cpp
         game/sdl/SdlException.cpp
         game/sdl/SdlText.cpp
         game/sdl/SdlTexture.cpp

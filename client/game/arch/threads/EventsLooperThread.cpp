@@ -75,7 +75,7 @@ void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
 
 void EventsLooperThread::configure(unsigned int player_id, const Matrix& matrix) {
     this->player_id = player_id;
-    window_controller = new WindowController(matrix);
+    window_controller = new WindowController(player_id, matrix);
 }
 
 void EventsLooperThread::run() {

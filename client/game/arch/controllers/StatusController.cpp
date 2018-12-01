@@ -27,7 +27,8 @@ TTF_Font *StatusController::buildFont() {
     return font;
 }
 
-StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font) : Controller(
+StatusController::StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font) : Controller(
+        player_id,
         window,
         screen_configuration,
         true),
@@ -39,7 +40,8 @@ StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &cli
         energy_text(new SdlText(window->getRenderer(), font, &color, energy)),
         especia_text(new SdlText(window->getRenderer(), font, &color, especia)) {}
 
-StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration) : StatusController(
+StatusController::StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration) : StatusController(
+        player_id,
         window,
         client_sprites_supplier,
         screen_configuration,
