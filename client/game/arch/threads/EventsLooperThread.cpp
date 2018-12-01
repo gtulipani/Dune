@@ -44,6 +44,14 @@ void EventsLooperThread::processMouseReleaseEvent(SDL_Event &event) {
 void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     auto &key_event = (SDL_KeyboardEvent &) event;
     switch (key_event.keysym.sym) {
+        case SDLK_DELETE: {
+            pushEvent(SELL_TYPE, 0, Point(0,0), Point(0,0));
+            break;
+        }
+        case SDLK_BACKSPACE: {
+            pushEvent(SELL_TYPE, 0, Point(0,0), Point(0,0));
+            break;
+        }
         case SDLK_LEFT: {
             window_controller.move(LEFT);
             break;

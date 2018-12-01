@@ -95,6 +95,9 @@ void Game::updateModel() {
             case LOCATE_BUILDING_TYPE: {
                 gameControler->locateBuildingAt(event.player_id, event.picturable_id, event.release_position);
             }
+            case SELL_TYPE: {
+                // Missing logic
+            }
             default:
                 break;
         }
