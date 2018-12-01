@@ -234,7 +234,6 @@ void GameControler::createBuilding(int player_id, const std::string& buildingNam
 
     std::pair<int, int> cost = gameConfig.getBuildingCost(buildingName);
     players.at(player_id)->especia -= cost.first;
-    players.at(player_id)->energia -= cost.second;
 
     auto* building = gameConfig.getBuilding(*players.at(player_id), next_id, buildingName);
     auto* buildingInProgress = new InProgressGameObject(building, gameConfig.getTiempoBuilding(buildingName));
@@ -243,7 +242,6 @@ void GameControler::createBuilding(int player_id, const std::string& buildingNam
 }
 
 void GameControler::locateBuildingAt(int player_id, int building_id, const Point& pos) {
-
     Building* targetBuilding = (Building*)players.at(player_id)->inProgressBuildings.at(building_id)->getObject();
     Point buildingSize = targetBuilding->getSize();
     Point downRight = {pos.row + buildingSize.row, pos.col + buildingSize.col};
@@ -267,6 +265,9 @@ void GameControler::locateBuildingAt(int player_id, int building_id, const Point
         players.at(player_id)->buildings[building_id] = building;
         players.at(player_id)->buildingsOwnedNames.insert(building->getName());
 
+        std::pair<int, int> cost = gameConfig.getBuildingCost(building->getName());
+        players.at(player_id)->energia -= cost.second;
+
         if (building->getName() == SILO || building->getName() == REFINERY) players.at(player_id)->silosAndRefineries[building_id] = (SiloOrRefinery*)building;
     }
 }
@@ -278,15 +279,19 @@ void GameControler::createCosechadora(int player_id) {
     next_id++;
 }
 
-void GameControler::sell(int player_id, int object_id) {
-    if (players.at(player_id)->units.find(object_id) != players.at(player_id)->units.end()) {
-        players.at(player_id)->especia -= gameConfig.getUnitCost(players.at(player_id)->units.at(object_id)->getName()) / 2;
-        players.at(player_id)->units.at(object_id)->kill();
-        return;
-    }
-    if (players.at(player_id)->buildings.find(object_id) != players.at(player_id)->buildings.end()) {
-        players.at(player_id)->especia -= gameConfig.getBuildingCost(players.at(player_id)->buildings.at(object_id)->getName()).first / 2;
-        players.at(player_id)->buildings.at(object_id)->kill();
+void GameControler::sell(int player_id) {
+    for (auto it = players.at(player_id)->selectedObjects.begin(); it != players.at(player_id)->selectedObjects.end();) {
+        if (it->second->player.id == player_id) {
+            try {
+                players.at(player_id)->especia += gameConfig.getUnitCost(it->second->getName()) / 2;
+            } catch (const std::out_of_range& e) {
+                players.at(player_id)->especia += gameConfig.getBuildingCost(it->second->getName()).second / 2;
+            }
+            it->second->kill();
+            it = players.at(player_id)->selectedObjects.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 

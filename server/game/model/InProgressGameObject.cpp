@@ -4,7 +4,7 @@
 #include <Tick.h>
 
 InProgressGameObject::InProgressGameObject(SelectableGameObject* selectableGameObject, int time_minutes)
-: GameObject(*(GameObject*)selectableGameObject), selectableGameObject(selectableGameObject), ticksUntilCompleted(TO_TICKS(time_minutes*60)) {}
+: GameObject(*(GameObject*)selectableGameObject), selectableGameObject(selectableGameObject), ticksUntilCompleted(time_minutes * 60 * TICKS_PER_SECOND) {}
 
 void InProgressGameObject::tick() {
     if (porcentage >= 100) return;

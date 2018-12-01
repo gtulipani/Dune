@@ -97,7 +97,7 @@ void Game::updateModel() {
                 break;
             }
             case SELL_TYPE: {
-                gameControler->sell(event.player_id, event.picturable_id);
+                gameControler->sell(event.player_id);
                 break;
             }
             default:

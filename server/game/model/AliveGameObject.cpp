@@ -7,6 +7,7 @@ GameObject(player, id, name), health(health), max_health(health) {}
 
 void AliveGameObject::kill() {
     health = 0;
+    haveIChanged = true;
 }
 
 bool AliveGameObject::isDead() const {
