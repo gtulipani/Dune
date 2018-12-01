@@ -24,6 +24,7 @@
 #define PORT_KEY "port"
 #define MAPS_PATH_KEY "maps_path"
 #define UNITS_PROPERTIES_PATH_KEY "units_properties_file_path"
+#define GAME_SIZE_KEY "game_size"
 
 const string MAP_EXTENSION = ".map";
 
@@ -57,13 +58,11 @@ std::vector<std::string> ServerThread::getFilesFromPath(const std::string &path)
 	return files;
 }
 
-#define PLAYERS_PER_GAME 2
-
 ServerThread::ServerThread(const std::string& configMapFilePath) :
 configMap(configMapFilePath),
 gameConfig(configMap.at(UNITS_PROPERTIES_PATH_KEY)),
 mapsList(getFilesFromPath(configMap.at(MAPS_PATH_KEY))),
-accepter(configMap.at(PORT_KEY), PLAYERS_PER_GAME, clients),
+accepter(configMap.at(PORT_KEY), std::stoi(configMap.at(GAME_SIZE_KEY)), clients),
 sharedQueue(m),
 game(sharedQueue, clients, gameConfig) {}
 

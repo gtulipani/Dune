@@ -139,7 +139,7 @@ std::pair<int, int> GameConfiguration::getBuildingCost(const std::string& buildi
     return {buildingsConfig.at(buildingName)->cost, buildingsConfig.at(buildingName)->energy};
 }
 
-#define TIEMPO_CONSTRUCCION_EDIFICIOS 5
+#define TIEMPO_CONSTRUCCION_EDIFICIOS 1
 
 int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const {
     return TIEMPO_CONSTRUCCION_EDIFICIOS;
