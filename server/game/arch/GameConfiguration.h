@@ -70,6 +70,8 @@ class GameConfiguration {
 
     Cosechadora* getCosechadora(Player& player, int id, const Point& intialPos, Map& map) const;
 
+    std::string getCreationBuildingFor(const std::string& unitName) const;
+
     ~GameConfiguration();
 };
 

@@ -87,6 +87,7 @@ GameConfiguration::GameConfiguration(const std::string& config_file_path) {
 std::vector<std::string> GameConfiguration::getAvailableObjectsFor(const Player& player) const {
     std::vector<std::string> availableObjects;
     for (const auto& building : buildingsConfig) {
+        if (building.first == CONSTRUCTION_CENTER) continue;
         if (building.second->cost <= player.especia && building.second->energy <= player.energia) {
             availableObjects.push_back(building.first);
         }
@@ -162,6 +163,12 @@ Vehiculo* GameConfiguration::getVehiculo(Player& player, int id, const Point& in
 Cosechadora* GameConfiguration::getCosechadora(Player& player, int id, const Point& initialPos, Map& map) const {
     const UnitConfig* config = unitsConfig.at(HARVESTER);
     return new Cosechadora(player, id, HARVESTER, config->health, config->pixelSize, initialPos, map, config->speed);
+}
+
+std::string GameConfiguration::getCreationBuildingFor(const std::string& unitName) const {
+    if (unitName == LIGHT_INFANTRY || unitName == HEAVY_INFANTRY) return BARRACKS;
+    if (unitName == TRIKE || unitName == RAIDER) return LIGHT_FACTORY;
+    if (unitName == TANK || unitName == HARVESTER) return HEAVY_FACTORY;
 }
 
 GameConfiguration::~GameConfiguration() {

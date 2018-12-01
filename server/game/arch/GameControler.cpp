@@ -186,14 +186,36 @@ void GameControler::rightClick(int player_id, const Point& point) {
 }
 
 void GameControler::createVehiculo(int player_id, const std::string& unitName) {
-    auto* unit = gameConfig.getVehiculo(*players.at(player_id), next_id, {}, map, unitName);
+    std::string creationBuilding = gameConfig.getCreationBuildingFor(unitName);
+    Point creationBuildingTilePos;
+    for (const auto& building : players.at(player_id)->buildings) {
+        if (building.second->getName() == creationBuilding) {
+            creationBuildingTilePos = tile_utils::getTileFromPixel(building.second->getPixelPosition());
+            break;
+        }
+    }
+
+    std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
+    Point unitPos = tile_utils::getTileTopLeft(pos.back());
+    auto* unit = gameConfig.getVehiculo(*players.at(player_id), next_id, unitPos, map, unitName);
     auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
     players.at(player_id)->inProgressUnits[next_id] = unitInProgress;
     next_id++;
 }
 
 void GameControler::createInfanteria(int player_id, const std::string& unitName) {
-    auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, {}, map, unitName);
+    std::string creationBuilding = gameConfig.getCreationBuildingFor(unitName);
+    Point creationBuildingTilePos;
+    for (const auto& building : players.at(player_id)->buildings) {
+        if (building.second->getName() == creationBuilding) {
+            creationBuildingTilePos = tile_utils::getTileFromPixel(building.second->getPixelPosition());
+            break;
+        }
+    }
+
+    std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
+    Point unitPos = tile_utils::getTileTopLeft(pos.back());
+    auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, unitPos, map, unitName);
     auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(unitName));
     players.at(player_id)->inProgressUnits[next_id] = unitInProgress;
     next_id++;
