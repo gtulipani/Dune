@@ -181,7 +181,9 @@ void GameControler::rightClick(int player_id, const Point& point) {
     } else {
         for (auto& selectedObject : selectedObjects) {
             // Only if they are enemies
-            selectedObject.second->attack(object_at_pos);
+            if (selectedObject.second->player == *players.at(player_id)) {
+                selectedObject.second->attack(object_at_pos);
+            }
         }
     }
 }

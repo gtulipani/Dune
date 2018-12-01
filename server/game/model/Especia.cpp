@@ -35,9 +35,11 @@ void Especia::tryToGetSome(int& especia) {
         health--;
         for (int i = 0; i < ESPECIA_SPRITES; i++) {
             if (health <= ESPECIA_INITIAL_HEALTH - especia_per_sprite_change * i && health > ESPECIA_INITIAL_HEALTH - especia_per_sprite_change * (i + 1)) {
-                sprite_motion = i;
-                haveIChanged = true;
-                break;
+                if (sprite_motion != i) {
+                    sprite_motion = i;
+                    haveIChanged = true;
+                    break;
+                }
             }
         }
     }

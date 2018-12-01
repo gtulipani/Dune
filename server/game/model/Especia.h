@@ -8,7 +8,7 @@ struct Point;
 class Especia : public Picturable {
     private:
     int especia_per_sprite_change;
-    int counter = 0;
+    int counter = 1;
     bool haveIChanged = true;
 
     public:

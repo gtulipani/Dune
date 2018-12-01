@@ -13,7 +13,7 @@ class Map;
 class WalkingUnit : public SelectableGameObject {
     private:
     int ticksPerStep;
-    int counter = 0;
+    int counter = 1;
 
     protected:
     std::stack<Point> path{};

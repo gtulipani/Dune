@@ -105,12 +105,13 @@ void WalkingUnit::stepTo(const Point &pixel) {
 }
 
 void WalkingUnit::handleRightClick(const Point& pos) {
-    pixelGoal = pos;
+    pixelGoal = map.getClosestAvailablePoint(pixelPosition, pos);
     Point goalTile = tile_utils::getTileFromPixel(pixelGoal);
     findPath(goalTile);
 }
 
 void WalkingUnit::findPath(const Point &goal) {
+
     PriorityQueue<Point> frontier;
     std::unordered_map<Point, Point> came_from;
     std::unordered_map<Point, int> cost_so_far;

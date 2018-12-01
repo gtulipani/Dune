@@ -8,7 +8,7 @@ class SelectableGameObject;
 class InProgressGameObject : public GameObject {
     private:
     int porcentage = 0;
-    int counter = 0;
+    int counter = 1;
     SelectableGameObject* selectableGameObject;
     const int ticksUntilCompleted;
 

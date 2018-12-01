@@ -16,7 +16,6 @@ typedef enum {
 } state_t;
 
 class Cosechadora : public WalkingUnit {
-    int counter = 0;
     int especia = 0;
     state_t state = waiting;
     Especia* target;

@@ -15,42 +15,42 @@ Map::Map(const Matrix& mat) : mat(std::move(mat)) {}
 std::vector<Point> Map::getAdyacents(const Point& p) const {
     std::vector<Point> ady;
     if (p.row > 0) {
-        if (mat.at(p.row - 1, p.col) == '0') {
+        if (mat.at(p.row - 1, p.col) != EDIFICIOS) {
             ady.push_back(Point(p.row - 1, p.col));
         }
         if (p.col > 0) {
-            if (mat.at(p.row - 1, p.col - 1) == '0') {
+            if (mat.at(p.row - 1, p.col - 1) != EDIFICIOS) {
                 ady.push_back(Point(p.row - 1, p.col - 1));
             }
         }
         if (p.col < mat.cols() - 1) {
-            if (mat.at(p.row - 1, p.col + 1) == '0') {
+            if (mat.at(p.row - 1, p.col + 1) != EDIFICIOS) {
                 ady.push_back(Point(p.row - 1, p.col + 1));
             }
         }
     }
     if (p.row < mat.rows() - 1) {
-        if (mat.at(p.row + 1, p.col) == '0') {
+        if (mat.at(p.row + 1, p.col) != EDIFICIOS) {
             ady.push_back(Point(p.row + 1, p.col));
         }
         if (p.col > 0) {
-            if (mat.at(p.row + 1, p.col - 1) == '0') {
+            if (mat.at(p.row + 1, p.col - 1) != EDIFICIOS) {
                 ady.push_back(Point(p.row + 1, p.col - 1));
             }
         }
         if (p.col < mat.cols() - 1) {
-            if (mat.at(p.row + 1, p.col + 1) == '0') {
+            if (mat.at(p.row + 1, p.col + 1) != EDIFICIOS) {
                 ady.push_back(Point(p.row + 1, p.col + 1));
             }
         }
     }
     if (p.col > 0) {
-        if (mat.at(p.row, p.col - 1) == '0') {
+        if (mat.at(p.row, p.col - 1) != EDIFICIOS) {
             ady.push_back(Point(p.row, p.col - 1));
         }
     }
     if (p.col < mat.cols() - 1) {
-        if (mat.at(p.row, p.col + 1) == '0') {
+        if (mat.at(p.row, p.col + 1) != EDIFICIOS) {
             ady.push_back(Point(p.row, p.col + 1));
         }
     }

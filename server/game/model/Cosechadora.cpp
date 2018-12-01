@@ -22,9 +22,19 @@ void Cosechadora::tick() {
             if (!target->runOut()) {
                 target->tryToGetSome(especia);
                 if (especia >= ESPECIA_MAX) {
-                    Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                    this->WalkingUnit::handleRightClick(pos);
-                    state = returning;
+                    if (player.silosAndRefineries.empty()) {
+                        state = waiting;
+                    } else {
+                        Point closestPos = player.silosAndRefineries.begin()->second->getPixelPosition();
+                        for (auto& siloOrRefinery : player.silosAndRefineries) {
+                            if (siloOrRefinery.second->getPixelPosition().hDistanceTo(pixelPosition) < closestPos.hDistanceTo(pixelPosition)) {
+                                closestPos = siloOrRefinery.second->getPixelPosition();
+                                store = siloOrRefinery.second;
+                            }
+                        }
+                        this->WalkingUnit::handleRightClick(map.getClosestAvailablePoint(pixelPosition, closestPos));
+                        state = returning;
+                    }
                 }
             } else {
                 if (player.silosAndRefineries.empty()) {

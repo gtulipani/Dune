@@ -7,7 +7,7 @@ class Weapon;
 
 class AttackingUnit : public WalkingUnit {
     private:
-    int counter = 0;
+    int counter = 1;
     SelectableGameObject* target = nullptr;
     Point targetPos{};
     const Weapon& weapon;
