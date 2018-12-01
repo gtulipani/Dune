@@ -7,38 +7,23 @@
 #include "../../sdl/SdlTexture.h"
 #include "../SdlPicturable.h"
 
-class SDL_MouseButtonEvent;
+#include "Controller.h"
+
+struct SDL_MouseButtonEvent;
 class EventsLooperThread;
 
-typedef enum Movement {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-} Movement;
-
-class TerrainController {
+class TerrainController : public Controller {
 private:
-    SdlWindow* window;
     ClientSpritesSupplier &client_sprites_supplier;
-
-    int screen_width{};
-    int screen_height{};
-
-    int screen_height_offset{};
-
-    int terrain_width_tiles{};
-    int terrain_height_tiles{};
-
-    int terrain_width{};
-    int terrain_height{};
-
-    Matrix matrix{};
-
-    SdlTexture *terrain_texture;
-
+    Matrix matrix;
+    int terrain_width_tiles;
+    int terrain_height_tiles;
+    int terrain_width;
+    int terrain_height;
+    bool clicked;
     std::map<int, SdlTexture*> terrains_textures_map;
     std::map<std::string, std::map<int, std::map<int, SdlTexture*>>> picturables_map;
+    SdlTexture *terrain_texture;
 
     int offset_x{};
     int offset_y{};
@@ -46,40 +31,32 @@ private:
 
     Point temporary_position{};
 
-    bool pending_changes{};
+    void renderEagleEye();
+
+    void buildTerrains();
+    void buildUnits();
+    void buildTerrainTexture();
+    void preloadTerrainMatrix();
 
     SdlTexture *createTexture(const std::string& subpath, const std::string& file_path);
     SdlTexture *createPicturableTexture(const std::string& file_path);
     SdlTexture *createTerrainTexture(const std::string& file_path);
-
-    void preloadTerrainMatrix();
-    void buildUnits();
-    void buildTerrains();
 public:
-    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
+    TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
-    void configure(Matrix matrix, int window_width, int window_height, int screen_height_offset);
+    void update(const GameStatusEvent &event) override;
 
-    void fill();
+    void render() override;
 
-    void render();
+    void move(enum Movement movement) override;
 
-    void refresh();
-
-    void renderEagleEye(Area destiny);
-
-    void processPicturables(std::vector<Picturable>& picturables);
+    bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
+    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
+    void parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
 
     Point getRelativePoint(int row, int column);
 
-    void parseMouseClickButton(SDL_MouseButtonEvent &mouse_event);
-
-    void parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                                 std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function);
-
-    bool move(enum Movement movement);
-
-    ~TerrainController();
+    ~TerrainController() override;
 };
 
 

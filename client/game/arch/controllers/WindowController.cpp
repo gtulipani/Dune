@@ -8,7 +8,7 @@
 #include <events/GameStatusEvent.h>
 
 // Client Libraries
-#include "RequiresTerrainControllerActionException.h"
+#include "RequiresExternalControllerActionException.h"
 #include "ScreenController.h"
 
 // SDL Libraries
@@ -17,112 +17,80 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-WindowController::WindowController(SdlWindow* window) :
-    window(window),
-    client_sprites_supplier(window),
-    status_controller(window, client_sprites_supplier),
-    terrain_controller(window, client_sprites_supplier),
-    buttons_controller(window, client_sprites_supplier, &terrain_controller, &TerrainController::renderEagleEye),
-    pending_action(false) {}
-
-WindowController::WindowController() : WindowController(
-        new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)) {}
-
-void WindowController::configure(Matrix matrix) {
-    window->fill();
-
-    terrain_controller.configure(std::move(matrix), SCREEN_TERRAIN_WIDTH, SCREEN_HEIGHT, SCREEN_STATUS_HEIGHT);
-    buttons_controller.configure(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH);
-    status_controller.configure(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT);
+WindowController::WindowController(SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+        window,
+        screen_configuration,
+        true),
+        client_sprites_supplier(window),
+        pending_action(false) {
+    buildControllers(matrix);
 }
 
-void WindowController::fill() {
-    terrain_controller.fill();
-}
+WindowController::WindowController(const Matrix& matrix) : WindowController(
+        new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
+        ScreenConfiguration(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0),
+        matrix) {}
 
-void WindowController::refresh() {
-    terrain_controller.refresh();
-    buttons_controller.refresh();
-    status_controller.refresh();
+void WindowController::buildControllers(const Matrix& matrix) {
+    controllers.push_back(new ButtonsController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_PANEL_WIDTH, SCREEN_PANEL_HEIGHT, SCREEN_TERRAIN_WIDTH, 0)));
+    controllers.push_back(new TerrainController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_TERRAIN_WIDTH, SCREEN_TERRAIN_HEIGHT, 0, SCREEN_STATUS_HEIGHT), matrix));
+    controllers.push_back(new StatusController(window, client_sprites_supplier, ScreenConfiguration(SCREEN_STATUS_WIDTH, SCREEN_STATUS_HEIGHT, 0, 0)));
 }
 
 void WindowController::render() {
-    terrain_controller.render();
-    buttons_controller.render();
-    status_controller.render();
+    std::for_each(controllers.begin(), controllers.end(), [](Controller* controller) {
+        controller->refresh();
+    });
 }
 
 void WindowController::move(enum Movement movement) {
-    if (this->terrain_controller.move(movement)) {
-        this->buttons_controller.move();
-    }
+    std::for_each(controllers.begin(), controllers.end(), [movement](Controller* controller) {
+        controller->move(movement);
+    });
 }
 
-void WindowController::parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {
-    if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
-        // Store where does the Mouse Click take place
-        last_click_event_occurrence = TERRAIN;
-        terrain_controller.parseMouseClickButton(mouse_event);
-    } else {
-        // Store where does the Mouse Click take place
-        last_click_event_occurrence = BUTTONS;
-        buttons_controller.parseMouseClickButton(mouse_event, processer, std::move(push_function));
-    }
+bool WindowController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    return false;
 }
 
-void WindowController::parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {
-    if (mouse_event.x < SCREEN_TERRAIN_WIDTH) {
-        if (last_click_event_occurrence == BUTTONS) {
-            // We clicked on the Panel Section and we released the mouse on the terrain section. Don't do anything
-        } else {
-            last_click_event_occurrence = NONE;
-            if (pending_action) {
-                // Resolve pending action
-                if (buttons_controller.resolvePendingAction(mouse_event, processer, std::move(push_function))) {
-                    pending_action = false;
-                }
-            } else {
-                // Parse terrain event
-                terrain_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
-                pending_action = false;
-            }
+void WindowController::parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) {
+    std::for_each(controllers.begin(), controllers.end(), [mouse_event, processer, push_function](Controller* controller) {
+        controller->parseMouseClick(mouse_event, processer, push_function);
+    });
+}
+
+void WindowController::parseMouseRelease(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) {
+    if (pending_action) {
+        bool action_happened = false;
+        std::for_each(controllers.begin(), controllers.end(), [&action_happened, mouse_event, processer, push_function](Controller* controller) {
+            // We set action_happened as true if any of the controllers resolved an action
+            action_happened = (action_happened || controller->resolvePendingAction(mouse_event, processer, push_function));
+        });
+        if (action_happened) {
+            // If at least one controller resolved a pending action
+            pending_action = false;
         }
     } else {
-        if (last_click_event_occurrence == TERRAIN) {
-            // We clicked on the Terrain Section and we released the mouse on the buttons section. Don't do anything
-        } else {
-            last_click_event_occurrence = NONE;
-            try {
-                buttons_controller.parseMouseReleaseButton(mouse_event, processer, std::move(push_function));
-            } catch (RequiresTerrainControllerActionException& e) {
-                // Action in the TerrainController is required for the action to be completed
-                pending_action = true;
-            }
-
+        try {
+            std::for_each(controllers.begin(), controllers.end(), [mouse_event, processer, push_function](Controller* controller) {
+                controller->parseMouseRelease(mouse_event, processer, push_function);
+            });
+        } catch (RequiresExternalControllerActionException& e) {
+            // Action in another controller is required
+            pending_action = true;
         }
     }
 }
 
 void WindowController::update(const GameStatusEvent &event) {
-    processAvailableObjects(event.availableObjects);
-
-    // Append both picturables and selectables
-    std::vector<Picturable> picturables(event.picturables);
-    picturables.insert(
-            std::end(picturables),
-            std::begin(event.selectedObjects),
-            std::end(event.selectedObjects));
-
-    processPicturables(picturables);
-
-    status_controller.update(event);
+    std::for_each(controllers.begin(), controllers.end(), [event](Controller* controller) {
+        controller->update(event);
+    });
 }
 
-void WindowController::processAvailableObjects(const std::vector<std::string> &available_objects) {
-    this->buttons_controller.updateAvailableObjects(available_objects);
-}
-
-void WindowController::processPicturables(std::vector<Picturable>& picturables) {
-    this->terrain_controller.processPicturables(picturables);
-    this->buttons_controller.processPicturables(picturables);
+WindowController::~WindowController() {
+    // Delete controllers
+    for (auto &controller : controllers) {
+        delete controller;
+    }
 }

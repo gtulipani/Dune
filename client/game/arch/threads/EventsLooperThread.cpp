@@ -27,18 +27,18 @@ void EventsLooperThread::pushEvent(int client_event_type, int picturable_id, con
 void EventsLooperThread::processServerEvents() {
     std::list<GameStatusEvent> events = game_status_events.popAll();
     std::for_each(events.begin(), events.end(), [this](GameStatusEvent &event){
-        window_controller.update(event);
+        window_controller->update(event);
     });
 }
 
 void EventsLooperThread::processMouseClickEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
-    window_controller.parseMouseClick(mouse_event, this, &EventsLooperThread::pushEvent);
+    window_controller->parseMouseClick(mouse_event, this, &EventsLooperThread::pushEvent);
 }
 
 void EventsLooperThread::processMouseReleaseEvent(SDL_Event &event) {
     auto &mouse_event = (SDL_MouseButtonEvent &) event;
-    window_controller.parseMouseRelease(mouse_event, this, &EventsLooperThread::pushEvent);
+    window_controller->parseMouseRelease(mouse_event, this, &EventsLooperThread::pushEvent);
 }
 
 void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
@@ -53,19 +53,19 @@ void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
             break;
         }
         case SDLK_LEFT: {
-            window_controller.move(LEFT);
+            window_controller->move(LEFT);
             break;
         }
         case SDLK_RIGHT: {
-            window_controller.move(RIGHT);
+            window_controller->move(RIGHT);
             break;
         }
         case SDLK_UP: {
-            window_controller.move(UP);
+            window_controller->move(UP);
             break;
         }
         case SDLK_DOWN: {
-            window_controller.move(DOWN);
+            window_controller->move(DOWN);
             break;
         }
         default:
@@ -73,19 +73,19 @@ void EventsLooperThread::processKeyDownEvent(SDL_Event &event) {
     }
 }
 
-void EventsLooperThread::configure(unsigned int player_id, Matrix matrix) {
+void EventsLooperThread::configure(unsigned int player_id, const Matrix& matrix) {
     this->player_id = player_id;
-    this->window_controller.configure(std::move(matrix));
+    window_controller = new WindowController(matrix);
 }
 
 void EventsLooperThread::run() {
     try {
-        window_controller.fill();
+        window_controller->fill();
 
         // Process events received from the socket
         processServerEvents();
 
-        window_controller.render();
+        window_controller->render();
 
         while (this->isRunning()) {
             auto start = std::chrono::steady_clock::now();
@@ -114,7 +114,7 @@ void EventsLooperThread::run() {
 
             processServerEvents();
 
-            window_controller.refresh();
+            window_controller->refresh();
 
             auto end = std::chrono::steady_clock::now();
             auto execution_difference = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

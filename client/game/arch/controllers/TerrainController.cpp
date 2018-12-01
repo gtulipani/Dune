@@ -1,7 +1,8 @@
-#include <utility>
-
 #include "TerrainController.h"
-#include "../SdlPicturable.h"
+
+// STL Libraries
+#include <iostream>
+#include <utility>
 
 // Commons Libraries
 #include <TerrainType.h>
@@ -9,10 +10,14 @@
 #include <Sprites.h>
 #include <UnitsAndBuildings.h>
 #include <events/ClientEvent.h>
+#include <events/GameStatusEvent.h>
+
+// Client Libraries
+#include "../SdlPicturable.h"
+#include "ScreenController.h"
 
 // SDL Libraries
 #include <SDL_events.h>
-#include <iostream>
 
 #define COMMONS_RESOURCES_PATH std::string("resources/images/game/commons/")
 
@@ -22,20 +27,29 @@
 #define EAGLE_EYE_SQUARE_ORIGIN_WIDTH 80
 #define EAGLE_EYE_SQUARE_ORIGIN_HEIGHT 80
 
-TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier) :
-    window(window),
-    client_sprites_supplier(client_sprites_supplier) {}
-
-SdlTexture *TerrainController::createTexture(const std::string& subpath, const std::string& file_path) {
-    return new SdlTexture(COMMONS_RESOURCES_PATH + subpath + file_path, this->window);
+TerrainController::TerrainController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+        window,
+        screen_configuration,
+        true),
+        client_sprites_supplier(client_sprites_supplier),
+        matrix(matrix),
+        terrain_width_tiles(matrix.columns_quantity),
+        terrain_height_tiles(matrix.rows_quantity),
+        terrain_width(matrix.columns_quantity * TILE_PIXEL_RATE),
+        terrain_height(matrix.rows_quantity * TILE_PIXEL_RATE),
+        clicked(false) {
+    buildTerrains();
+    buildUnits();
+    buildTerrainTexture();
 }
 
-SdlTexture *TerrainController::createPicturableTexture(const std::string& file_path) {
-    return createTexture(PICTURABLES_RESOURCES_SUBPATH, file_path);
-}
-
-SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path) {
-    return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path);
+void TerrainController::buildTerrains() {
+    // Store terrain textures
+    terrains_textures_map.emplace(ARENA, createTerrainTexture("Arena.png"));
+    terrains_textures_map.emplace(CIMAS, createTerrainTexture("Cimas.png"));
+    terrains_textures_map.emplace(DUNAS, createTerrainTexture("Dunas.png"));
+    terrains_textures_map.emplace(PRECIPICIOS, createTerrainTexture("Precipicio.png"));
+    terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
 }
 
 void TerrainController::buildUnits() {
@@ -118,32 +132,7 @@ void TerrainController::buildUnits() {
     picturables_map[ESPECIA][SPRITE_DOWN][4] = createPicturableTexture("especia_20.png");
 }
 
-void TerrainController::buildTerrains() {
-    // Store terrain textures
-    terrains_textures_map.emplace(ARENA, createTerrainTexture("Arena.png"));
-    terrains_textures_map.emplace(CIMAS, createTerrainTexture("Cimas.png"));
-    terrains_textures_map.emplace(DUNAS, createTerrainTexture("Dunas.png"));
-    terrains_textures_map.emplace(PRECIPICIOS, createTerrainTexture("Precipicio.png"));
-    terrains_textures_map.emplace(ROCA, createTerrainTexture("Roca.png"));
-}
-
-void TerrainController::configure(Matrix matrix, int screen_width, int screen_height, int screen_height_offset) {
-    this->screen_width = screen_width;
-    this->screen_height = screen_height;
-
-    this->screen_height_offset = screen_height_offset;
-
-    this->terrain_width_tiles = matrix.columns_quantity;
-    this->terrain_height_tiles = matrix.rows_quantity;
-
-    this->terrain_width = matrix.columns_quantity * TILE_PIXEL_RATE;
-    this->terrain_height = matrix.rows_quantity * TILE_PIXEL_RATE;
-
-    this->matrix = std::move(matrix);
-
-    buildTerrains();
-    buildUnits();
-
+void TerrainController::buildTerrainTexture() {
     this->terrain_texture = new SdlTexture(this->terrain_width, this->terrain_height, this->window->getRenderer());
     this->terrain_texture->setAsTarget();
 
@@ -153,41 +142,36 @@ void TerrainController::configure(Matrix matrix, int screen_width, int screen_he
     this->window->setAsTarget();
 }
 
-void TerrainController::fill() {
-    this->window->fill();
-}
-
-void TerrainController::render() {
-    Area srcArea(0 - offset_x, 0 - offset_y, screen_width, screen_height);
-    Area destArea(0, screen_height_offset, screen_width, screen_height);
-
-    terrain_texture->render(srcArea, destArea);
-
-    // Render picturables with priority first
-    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
-        if (sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_width, screen_height_offset);
+void TerrainController::preloadTerrainMatrix() {
+    Area srcArea(0, 0, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
+    // Render the terrain matrix
+    for (int col = 0; col < this->terrain_width_tiles; col++) {
+        for (int row = 0; row < this->terrain_height_tiles; row++) {
+            Area destArea((TILE_PIXEL_RATE * col), (TILE_PIXEL_RATE * row), TILE_PIXEL_RATE, TILE_PIXEL_RATE);
+            auto it = terrains_textures_map.find(matrix.at(row, col));
+            if (it != terrains_textures_map.end()) {
+                it->second->render(srcArea, destArea);
+            }
         }
-    });
-
-    // Render the SdlPicturables
-    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
-        if (!sdlPicturable->hasPriority()) {
-            sdlPicturable->render(offset_x, offset_y, screen_width, screen_height_offset);
-        }
-    });
-
-    window->render();
-    pending_changes = false;
-}
-
-void TerrainController::refresh() {
-    if (pending_changes) {
-        render();
     }
 }
 
-void TerrainController::renderEagleEye(Area destArea) {
+SdlTexture *TerrainController::createTexture(const std::string& subpath, const std::string& file_path) {
+    return new SdlTexture(COMMONS_RESOURCES_PATH + subpath + file_path, this->window);
+}
+
+SdlTexture *TerrainController::createPicturableTexture(const std::string& file_path) {
+    return createTexture(PICTURABLES_RESOURCES_SUBPATH, file_path);
+}
+
+SdlTexture *TerrainController::createTerrainTexture(const std::string& file_path) {
+    return createTexture(TERRAIN_RESOURCES_SUBPATH, file_path);
+}
+
+void TerrainController::renderEagleEye() {
+    // Dest Area is after the terrain area
+    Area destArea(screen_configuration.getWidth() + EAGLE_EYE_X_OFFSET, EAGLE_EYE_Y_OFFSET, EAGLE_EYE_WIDTH, EAGLE_EYE_HEIGHT);
+
     Area terrainSrcArea(0, 0, this->terrain_width, this->terrain_height);
     this->terrain_texture->render(terrainSrcArea, destArea);
 
@@ -205,8 +189,8 @@ void TerrainController::renderEagleEye(Area destArea) {
     double y_coordinate = static_cast<double>(destArea.getY()) - y_offset;
 
     // Recalculate the size
-    double width = static_cast<double>(this->screen_width) * view_width_rate;
-    double height = static_cast<double>(this->screen_height) * view_height_rate;
+    double width = static_cast<double>(screen_configuration.getWidth()) * view_width_rate;
+    double height = static_cast<double>(screen_configuration.getHeight()) * view_height_rate;
 
     Area eagleDestArea(
             static_cast<int>(x_coordinate),
@@ -216,7 +200,14 @@ void TerrainController::renderEagleEye(Area destArea) {
     client_sprites_supplier[EAGLE_EYE_SQUARE]->render(eagleEyeSrcArea, eagleDestArea);
 }
 
-void TerrainController::processPicturables(std::vector<Picturable>& picturables) {
+void TerrainController::update(const GameStatusEvent &event) {
+    // Append both picturables and selectables
+    std::vector<Picturable> picturables(event.picturables);
+    picturables.insert(
+            std::end(picturables),
+            std::begin(event.selectedObjects),
+            std::end(event.selectedObjects));
+
     if (!picturables.empty()) {
         this->pending_changes = true;
     }
@@ -250,101 +241,114 @@ void TerrainController::processPicturables(std::vector<Picturable>& picturables)
     });
 }
 
-Point TerrainController::getRelativePoint(int row, int column) {
-    return {row - this->offset_y, column - this->offset_x};
-}
+void TerrainController::render() {
+    Area srcArea(0 - offset_x, 0 - offset_y, screen_configuration.getWidth(), screen_configuration.getHeight());
+    Area destArea(0, screen_configuration.getHeightOffset(), screen_configuration.getWidth(), screen_configuration.getHeight());
 
-void TerrainController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event) {
-    this->temporary_position = getRelativePoint(mouse_event.y, mouse_event.x);
-}
+    terrain_texture->render(srcArea, destArea);
 
-void TerrainController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
-                                                EventsLooperThread *processer,
-                                                std::function<void(EventsLooperThread *, int,
-                                                                   int, Point, Point)> push_function) {
-    switch (mouse_event.button) {
-        case SDL_BUTTON_LEFT: {
-            push_function(processer, LEFT_CLICK_EVENT_TYPE, {0}, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
-            break;
+    // Render picturables with priority first
+    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
+        if (sdlPicturable->hasPriority()) {
+            sdlPicturable->render(offset_x, offset_y, screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }
-        case SDL_BUTTON_RIGHT: {
-            push_function(processer, RIGHT_CLICK_EVENT_TYPE, {0}, this->temporary_position, getRelativePoint(mouse_event.y, mouse_event.x));
-            break;
+    });
+
+    // Render the SdlPicturables
+    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
+        if (!sdlPicturable->hasPriority()) {
+            sdlPicturable->render(offset_x, offset_y, screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }
-        default:
-            break;
-    }
+    });
+
+    // Render the eagle eye
+    renderEagleEye();
+
+    window->render();
+    pending_changes = false;
 }
 
-bool TerrainController::move(enum Movement movement) {
+void TerrainController::move(enum Movement movement) {
     switch (movement) {
         case UP: {
             if (offset_y < 0) {
                 offset_y += TILE_PIXEL_RATE;
                 this->pending_changes = true;
-                return true;
             }
-            return false;
+            break;
         }
         case DOWN: {
-            if ((offset_y + this->terrain_height - this->screen_height) > 0) {
+            if ((offset_y + this->terrain_height - screen_configuration.getHeight()) > 0) {
                 offset_y -= TILE_PIXEL_RATE;
                 this->pending_changes = true;
-                return true;
             }
-            return false;
+            break;
         }
         case LEFT: {
             if (offset_x < 0) {
                 offset_x += TILE_PIXEL_RATE;
                 this->pending_changes = true;
-                return true;
             }
-            return false;
+            break;
         }
         case RIGHT: {
-            if ((offset_x + this->terrain_width - this->screen_width) > 0) {
+            if ((offset_x + this->terrain_width - screen_configuration.getWidth()) > 0) {
                 offset_x -= TILE_PIXEL_RATE;
                 this->pending_changes = true;
-                return true;
             }
-            return false;
+            break;
         }
         default: {
-            return false;
+            break;
         }
 
     }
 }
 
-void TerrainController::preloadTerrainMatrix() {
-    Area srcArea(0, 0, TILE_PIXEL_RATE, TILE_PIXEL_RATE);
-    // Render the terrain matrix
-    for (int col = 0; col < this->terrain_width_tiles; col++) {
-        for (int row = 0; row < this->terrain_height_tiles; row++) {
-            Area destArea((TILE_PIXEL_RATE * col), (TILE_PIXEL_RATE * row), TILE_PIXEL_RATE, TILE_PIXEL_RATE);
-            auto it = terrains_textures_map.find(matrix.at(row, col));
-            if (it != terrains_textures_map.end()) {
-                it->second->render(srcArea, destArea);
+bool TerrainController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    return false;
+}
+void TerrainController::parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) {
+    if (includes(mouse_event.x, mouse_event.y)) {
+        temporary_position = getRelativePoint(mouse_event.y, mouse_event.x);
+        clicked = true;
+    } else {
+        clicked = false;
+    }
+}
+void TerrainController::parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    if (clicked) {
+        switch (mouse_event.button) {
+            case SDL_BUTTON_LEFT: {
+                push_function(processer, LEFT_CLICK_EVENT_TYPE, 0, temporary_position,
+                              getRelativePoint(mouse_event.y, mouse_event.x));
+                break;
             }
+            case SDL_BUTTON_RIGHT: {
+                push_function(processer, RIGHT_CLICK_EVENT_TYPE, 0, temporary_position,
+                              getRelativePoint(mouse_event.y, mouse_event.x));
+                break;
+            }
+            default:
+                break;
         }
     }
+    clicked = false;
+}
+
+Point TerrainController::getRelativePoint(int row, int column) {
+    return {row - this->offset_y, column - this->offset_x};
 }
 
 TerrainController::~TerrainController() {
-    // Delete the terrain texture
-    if (!this->terrain_texture) {
-        delete this->terrain_texture;
-    }
-
-    // Delete all the picturables
-    for (auto& picturable : this->picturables) {
-        delete picturable;
-    }
-
     // Delete all the terrain textures
     for (auto& terrain_texture : this->terrains_textures_map) {
         delete terrain_texture.second;
+    }
+
+    // Delete the terrain texture
+    if (!this->terrain_texture) {
+        delete this->terrain_texture;
     }
 
     // Delete all the picturable textures
@@ -354,5 +358,10 @@ TerrainController::~TerrainController() {
                 delete unit_motion.second;
             }
         }
+    }
+
+    // Delete all the picturables
+    for (auto& picturable : this->picturables) {
+        delete picturable;
     }
 }

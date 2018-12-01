@@ -20,7 +20,7 @@ private:
     unsigned int player_id{};
     shaque<GameStatusEvent> &game_status_events;
     BlockingQueue<ClientEvent> &output_messages;
-    WindowController window_controller;
+    Controller* window_controller;
     bool &game_ended;
 
     void pushEvent(int client_event_type, int picturable_id, const Point& click_position, const Point& release_position);
@@ -35,7 +35,7 @@ private:
 public:
     EventsLooperThread(shaque<GameStatusEvent> &game_status_events, BlockingQueue<ClientEvent> &output_messages, bool &game_ended);
 
-    void configure(unsigned int player_id, Matrix matrix);
+    void configure(unsigned int player_id, const Matrix& matrix);
 };
 
 

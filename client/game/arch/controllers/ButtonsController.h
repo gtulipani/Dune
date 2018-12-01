@@ -12,28 +12,25 @@
 #include "../../sdl/SdlTexture.h"
 #include "../buttons/PanelButton.h"
 #include "../ClientSpritesSupplier.h"
+#include "../ScreenConfiguration.h"
+#include "Controller.h"
 
-class SDL_MouseButtonEvent;
-class EventsLooperThread;
-class TerrainController;
-
-class ButtonsController {
+class ButtonsController : public Controller {
 private:
-    SdlWindow *window;
     ClientSpritesSupplier &client_sprites_supplier;
-    TerrainController* terrain_controller;
-    std::function<void(TerrainController*, Area)> map_renderer;
-
-    SdlTexture *panel_texture{};
+    bool clicked;
+    bool panel_rendered;
+    SdlTexture *panel_texture;
 
     std::vector<PanelButton*> available_buttons{};
 
-    int screen_width{};
-    int screen_height{};
+    void buildTerrainTexture();
 
-    int screen_width_offset{};
+    void renderPanel();
 
-    bool pending_changes{};
+    void updateAvailableObjects(const std::vector<std::string>& available_objects);
+    void processPicturables(std::vector<Picturable>& picturables);
+    void locateButtons();
 
     Point getGlobalPosition(Point point);
     Point getRelativePosition(Point point);
@@ -42,36 +39,21 @@ private:
     Point buildOptionalButtonRelativePosition(int row_order, int col_order);
 
     // Render only once the pannel with the main background images and the main buttons
-    void renderPanelTexture();
-    // Render the eagle eye map in the panel
-    void renderEagleEye();
+    void buildPanelTexture();
 public:
-    // map_renderer is a function that knows how to render the map on a given area
-    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TerrainController* terrain_controller, std::function<void(TerrainController*, Area)> map_renderer);
+    ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
 
-    void fill();
+    void update(const GameStatusEvent &event) override;
 
-    void configure(int screen_width, int screen_height, int screen_width_offset);
+    void render() override;
 
-    void render();
+    void move(enum Movement movement) override;
 
-    void refresh();
+    bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
+    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function);
+    void parseMouseRelease(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function);
 
-    void locateButtons();
-
-    void updateAvailableObjects(const std::vector<std::string>& available_objects);
-    void processPicturables(std::vector<Picturable>& picturables);
-
-    bool resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                        std::function<void(EventsLooperThread *, int, int, Point,
-                                           Point)> push_function);
-
-    void parseMouseClickButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
-    void parseMouseReleaseButton(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
-
-    void move();
-
-    ~ButtonsController();
+    ~ButtonsController() override;
 };
 
 

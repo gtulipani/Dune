@@ -14,59 +14,37 @@
 #include "ButtonsController.h"
 #include "TerrainController.h"
 #include "StatusController.h"
+#include "Controller.h"
 
-typedef enum Controller {
-    TERRAIN,
-    BUTTONS,
-    NONE
-} Controller;
-
-class SDL_MouseButtonEvent;
-class EventsLooperThread;
-class GameStatusEvent;
-
-class WindowController {
+class WindowController : public Controller {
 private:
-    SdlWindow* window;
+    std::vector<Controller*> controllers;
     ClientSpritesSupplier client_sprites_supplier;
-    StatusController status_controller;
-    TerrainController terrain_controller;
-    ButtonsController buttons_controller;
+
     bool pending_action;
 
-    // Shouldn't be used. It's moved to the terrain_controller
-    Matrix matrix;
-
-    enum Controller last_click_event_occurrence = NONE;
+    void buildControllers(const Matrix& matrix);
 public:
-    WindowController(SdlWindow* window);
+    WindowController(SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
-    WindowController();
+    explicit WindowController(const Matrix& matrix);
 
     WindowController(const WindowController &other) = delete;
 
     // Overloading the assignment by copy
     WindowController &operator=(const WindowController &other) = delete;
 
-    void configure(Matrix matrix);
+    void update(const GameStatusEvent &event) override;
 
-    void fill();
+    void render() override;
 
-    void refresh();
+    void move(enum Movement movement) override;
 
-    void render();
+    bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
+    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
+    void parseMouseRelease(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
 
-    void move(enum Movement movement);
-
-    void parseMouseClick(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
-    void parseMouseRelease(SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function);
-
-    void update(const GameStatusEvent &event);
-
-    void processAvailableObjects(const std::vector<std::string>& available_objects);
-    void processPicturables(std::vector<Picturable>& picturables);
-
-    ~WindowController() {}
+    ~WindowController() override;
 };
 
 

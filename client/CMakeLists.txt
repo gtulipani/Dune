@@ -12,12 +12,14 @@ add_executable(client
         game/arch/Client.cpp
         game/arch/ClientSpritesSupplier.cpp
         game/arch/SdlPicturable.cpp
+        game/arch/ScreenConfiguration.cpp
         game/arch/buttons/BuildingButton.cpp
         game/arch/buttons/PanelButton.cpp
         game/arch/buttons/UnitButton.cpp
         game/arch/buttons/ButtonsFactory.cpp
         game/arch/controllers/ButtonsController.cpp
-        game/arch/controllers/RequiresTerrainControllerActionException.cpp
+        game/arch/controllers/Controller.cpp
+        game/arch/controllers/RequiresExternalControllerActionException.cpp
         game/arch/controllers/ScreenController.cpp
         game/arch/controllers/StatusController.cpp
         game/arch/controllers/TerrainController.cpp

@@ -27,59 +27,23 @@ TTF_Font *StatusController::buildFont() {
     return font;
 }
 
-StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TTF_Font* font) :
-        window(window),
+StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font) : Controller(
+        window,
+        screen_configuration,
+        true),
         client_sprites_supplier(client_sprites_supplier),
         font(font),
         color({255, 255, 255, 0}),
         energy(0),
         especia(0),
-        pending_changes(true) {}
+        energy_text(new SdlText(window->getRenderer(), font, &color, energy)),
+        especia_text(new SdlText(window->getRenderer(), font, &color, especia)) {}
 
-StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier) : StatusController(
+StatusController::StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration) : StatusController(
         window,
         client_sprites_supplier,
+        screen_configuration,
         buildFont()) {}
-
-void StatusController::configure(int screen_width, int screen_height) {
-    this->screen_width = screen_width;
-    this->screen_height = screen_height;
-
-    // White text
-    energy_text = new SdlText(window->getRenderer(), font, &color, energy);
-    especia_text = new SdlText(window->getRenderer(), font, &color, especia);
-}
-
-void StatusController::render() {
-    // Render the main texture containing the status bar
-    Area srcArea(0, 0, STATUS_BAR_ORIGIN_WIDTH, STATUS_BAR_ORIGIN_HEIGHT);
-    Area destArea(0, 0, screen_width, screen_height);
-    client_sprites_supplier[STATUS_BAR]->render(srcArea, destArea);
-
-    // Expected width and height for each digit
-    int expected_digit_width = static_cast<int>(static_cast<float>(screen_width) / 60);
-    int expected_digit_height = static_cast<int>(static_cast<float>(screen_height) / 2);
-
-
-    // Render the energy text
-    int energy_expected_col = static_cast<int>(static_cast<float>(screen_width) * 0.545);
-    int energy_expected_row = static_cast<int>(static_cast<float>(screen_height) / 5);
-    energy_text->render(energy_expected_col, energy_expected_row, expected_digit_width, expected_digit_height);
-
-    // Render the especia text
-    int especia_expected_col = static_cast<int>(static_cast<float>(screen_width) * 0.815);
-    int especia_expected_row = static_cast<int>(static_cast<float>(screen_height) / 5);
-    especia_text->render(especia_expected_col, especia_expected_row, expected_digit_width, expected_digit_height);
-
-    window->render();
-    pending_changes = false;
-}
-
-void StatusController::refresh() {
-    if (pending_changes) {
-        render();
-    }
-}
 
 void StatusController::update(const GameStatusEvent &event) {
     if (energy != event.energy) {
@@ -98,6 +62,39 @@ void StatusController::update(const GameStatusEvent &event) {
         pending_changes = true;
     }
 }
+
+void StatusController::render() {
+    // Render the main texture containing the status bar
+    Area srcArea(0, 0, STATUS_BAR_ORIGIN_WIDTH, STATUS_BAR_ORIGIN_HEIGHT);
+    Area destArea(0, 0, screen_configuration.getWidth(), screen_configuration.getHeight());
+    client_sprites_supplier[STATUS_BAR]->render(srcArea, destArea);
+
+    // Expected width and height for each digit
+    int expected_digit_width = static_cast<int>(static_cast<float>(screen_configuration.getWidth()) / 60);
+    int expected_digit_height = static_cast<int>(static_cast<float>(screen_configuration.getHeight()) / 2);
+
+
+    // Render the energy text
+    int energy_expected_col = static_cast<int>(static_cast<float>(screen_configuration.getWidth()) * 0.545);
+    int energy_expected_row = static_cast<int>(static_cast<float>(screen_configuration.getHeight()) / 5);
+    energy_text->render(energy_expected_col, energy_expected_row, expected_digit_width, expected_digit_height);
+
+    // Render the especia text
+    int especia_expected_col = static_cast<int>(static_cast<float>(screen_configuration.getWidth()) * 0.815);
+    int especia_expected_row = static_cast<int>(static_cast<float>(screen_configuration.getHeight()) / 5);
+    especia_text->render(especia_expected_col, especia_expected_row, expected_digit_width, expected_digit_height);
+
+    window->render();
+    pending_changes = false;
+}
+
+void StatusController::move(enum Movement movement) {}
+
+bool StatusController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    return false;
+}
+void StatusController::parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) {}
+void StatusController::parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {}
 
 StatusController::~StatusController() {
     delete energy_text;

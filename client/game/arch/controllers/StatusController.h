@@ -1,48 +1,49 @@
 #ifndef __STATUS_CONTROLLER_H__
 #define __STATUS_CONTROLLER_H__
 
+// STL Libraries
+#include <functional>
+
 // Client Libraries
 #include "../../sdl/SdlWindow.h"
 #include "../ClientSpritesSupplier.h"
+#include "../ScreenConfiguration.h"
+#include "Controller.h"
 
 // SDL Libraries
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_ttf.h>
 
-class GameStatusEvent;
 class SdlText;
+class Point;
 
-class StatusController {
+class StatusController : public Controller {
 private:
-    SdlWindow* window;
     ClientSpritesSupplier &client_sprites_supplier;
     TTF_Font* font;
     SDL_Color color;
     int energy;
     int especia;
-    bool pending_changes;
-
-    int screen_width{};
-    int screen_height{};
-
     SdlText* energy_text;
     SdlText* especia_text;
 
     TTF_Font *buildFont();
 public:
-    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TTF_Font* font);
+    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font);
 
-    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier);
+    StatusController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
 
-    void configure(int screen_width, int screen_height);
+    void update(const GameStatusEvent &event) override;
 
-    void render();
+    void render() override;
 
-    void refresh();
+    void move(enum Movement movement) override;
 
-    void update(const GameStatusEvent &event);
+    bool resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
+    void parseMouseClick(const SDL_MouseButtonEvent& mouse_event, EventsLooperThread* processer, const std::function<void(EventsLooperThread*, int, int, Point, Point)>& push_function) override;
+    void parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) override;
 
-    ~StatusController();
+    ~StatusController() override;
 };
 
 

@@ -2,7 +2,7 @@
 
 // Client Libraries
 #include "../Area.h"
-#include "../controllers/RequiresTerrainControllerActionException.h"
+#include "../controllers/RequiresExternalControllerActionException.h"
 
 BuildingButton::BuildingButton(int width,
                                int height,
@@ -35,7 +35,7 @@ void BuildingButton::click(EventsLooperThread* processer, std::function<void(Eve
         // If it's not during creation, then it can be clicked
         if (finished_creating) {
             // Action has already been applied therefore I need a second_action
-            throw RequiresTerrainControllerActionException();
+            throw RequiresExternalControllerActionException();
         } else {
             // Pushes first action with the function received as parameter
             push_function(processer, actions[0], 0, screen_position, screen_position);

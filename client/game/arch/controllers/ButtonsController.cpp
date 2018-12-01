@@ -1,12 +1,12 @@
-#include <utility>
-
 #include "ButtonsController.h"
 
 // STL Libraries
 #include <algorithm>
+#include <utility>
 
 // Commons Libraries
 #include <events/ClientEvent.h>
+#include <events/GameStatusEvent.h>
 #include <UnitsAndBuildings.h>
 
 // SDL Libraries
@@ -17,21 +17,35 @@
 #include "../buttons/UnitButton.h"
 #include "../buttons/BuildingButton.h"
 #include "../buttons/ButtonsFactory.h"
-#include "RequiresTerrainControllerActionException.h"
+#include "RequiresExternalControllerActionException.h"
 #include "ScreenController.h"
 
-ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, TerrainController* terrain_controller, std::function<void(TerrainController*, Area)> map_renderer) :
-        window(window),
+ButtonsController::ButtonsController(SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration) : Controller(
+        window,
+        screen_configuration,
+        true),
         client_sprites_supplier(client_sprites_supplier),
-        terrain_controller(terrain_controller),
-        map_renderer(std::move(map_renderer)) {}
+        clicked(false),
+        panel_rendered(false) {
+    buildTerrainTexture();
+}
+
+void ButtonsController::buildTerrainTexture() {
+    panel_texture = new SdlTexture(screen_configuration.getWidth(), screen_configuration.getHeight(), this->window->getRenderer());
+    panel_texture->setAsTarget();
+
+    buildPanelTexture();
+
+    window->render();
+    window->setAsTarget();
+}
 
 Point ButtonsController::getGlobalPosition(Point point) {
-    return {point.row, point.col + this->screen_width_offset};
+    return {point.row, point.col + screen_configuration.getWidthOffset()};
 }
 
 Point ButtonsController::getRelativePosition(Point point) {
-    return {point.row, point.col - this->screen_width_offset};
+    return {point.row, point.col - screen_configuration.getWidthOffset()};
 }
 
 Point ButtonsController::buildOptionalButtonRelativePosition(int row_order, int col_order) {
@@ -39,64 +53,23 @@ Point ButtonsController::buildOptionalButtonRelativePosition(int row_order, int 
     return {PANEL_BUTTON_ICON_Y_OFFSET + ((row_order - 1) * PANEL_BUTTON_ICON_HEIGHT), PANEL_BUTTON_ICON_X_OFFSET * col_order};
 }
 
-void ButtonsController::renderPanelTexture() {
+void ButtonsController::buildPanelTexture() {
     // Now we render the main texture with only the background images and the main buttons
     // Load background image
-    Area srcArea(0, 0, this->screen_width, this->screen_height);
-    Area destArea(0, 0, this->screen_width, this->screen_height);
+    Area srcArea(0, 0, screen_configuration.getWidth(), screen_configuration.getHeight());
+    Area destArea(0, 0, screen_configuration.getWidth(), screen_configuration.getHeight());
     client_sprites_supplier[PANEL_BACKGROUND]->render(srcArea, destArea);
-
-    // Load background image for optional buttons
-    srcArea = Area(0, 0, PANEL_BUTTON_ICON_WIDTH * 2, PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
-    destArea = Area(PANEL_BUTTON_ICON_X_OFFSET, PANEL_BUTTON_ICON_Y_OFFSET, PANEL_BUTTON_ICON_WIDTH * 2,
-                    PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
-    client_sprites_supplier[PANEL_BUTTONS_BACKGROUND]->render(srcArea, destArea);
 }
 
-void ButtonsController::renderEagleEye() {
-    Area destArea(screen_width_offset + EAGLE_EYE_X_OFFSET, EAGLE_EYE_Y_OFFSET, EAGLE_EYE_WIDTH, EAGLE_EYE_HEIGHT);
-    map_renderer(terrain_controller, destArea);
-}
+void ButtonsController::renderPanel() {
+    if (!panel_rendered) {
+        // Render the main texture containing the background image and the main buttons
+        Area srcArea(0, 0, screen_configuration.getWidth(), screen_configuration.getHeight());
+        Area destArea(screen_configuration.getWidthOffset(), 0, screen_configuration.getWidth(), screen_configuration.getHeight());
+        panel_texture->render(srcArea, destArea);
 
-void ButtonsController::fill() {
-    this->window->fill();
-}
-
-void ButtonsController::configure(int screen_width, int screen_height, int screen_width_offset) {
-    this->screen_width = screen_width;
-    this->screen_height = screen_height;
-    this->screen_width_offset = screen_width_offset;
-
-    this->panel_texture = new SdlTexture(screen_width, screen_height, this->window->getRenderer());
-    this->panel_texture->setAsTarget();
-
-    renderPanelTexture();
-
-    this->window->render();
-    this->window->setAsTarget();
-}
-
-void ButtonsController::render() {
-    // Render the main texture containing the background image and the main buttons
-    Area srcArea(0, 0, screen_width, screen_height);
-    Area destArea(screen_width_offset, 0, screen_width, screen_height);
-    panel_texture->render(srcArea, destArea);
-
-    // Render the eagle eye map
-    renderEagleEye();
-
-    // Render each one of the available buttons
-    std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton *button) {
-        button->render(0, 0);
-    });
-
-    window->render();
-    pending_changes = false;
-}
-
-void ButtonsController::refresh() {
-    if (pending_changes) {
-        render();
+        window->render();
+        panel_rendered = true;
     }
 }
 
@@ -113,6 +86,38 @@ void ButtonsController::locateButtons() {
         row++;
     });
 }
+
+void ButtonsController::update(const GameStatusEvent &event) {
+    // Append both picturables and selectables
+    std::vector<Picturable> picturables(event.picturables);
+    picturables.insert(
+            std::end(picturables),
+            std::begin(event.selectedObjects),
+            std::end(event.selectedObjects));
+
+    updateAvailableObjects(event.availableObjects);
+    processPicturables(picturables);
+}
+
+void ButtonsController::render() {
+    renderPanel();
+
+    // Load background image for optional buttons
+    Area srcArea = Area(0, 0, PANEL_BUTTON_ICON_WIDTH * 2, PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
+    Area destArea = Area(screen_configuration.getWidthOffset() + PANEL_BUTTON_ICON_X_OFFSET, PANEL_BUTTON_ICON_Y_OFFSET, PANEL_BUTTON_ICON_WIDTH * 2,
+                         PANEL_BUTTON_ICON_HEIGHT * PANEL_BUTTON_ICONS_ROWS_QUANTITY);
+    client_sprites_supplier[PANEL_BUTTONS_BACKGROUND]->render(srcArea, destArea);
+
+    // Render each one of the available buttons
+    std::for_each(available_buttons.begin(), available_buttons.end(), [&](PanelButton *button) {
+        button->render(0, 0);
+    });
+
+    window->render();
+    pending_changes = false;
+}
+
+void ButtonsController::move(enum Movement movement) {}
 
 void ButtonsController::updateAvailableObjects(const std::vector<std::string>& available_objects) {
     // First we invalidate the current objects, we'll refresh them with the new ones
@@ -168,72 +173,69 @@ void ButtonsController::processPicturables(std::vector<Picturable>& picturables)
     });
 }
 
-bool ButtonsController::resolvePendingAction(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                    std::function<void(EventsLooperThread *, int, int, Point,
-                                       Point)> push_function) {
-    Point position(mouse_event.y, mouse_event.x); // Review this, it's not taking offset into account
-    switch (mouse_event.button) {
-        case SDL_BUTTON_LEFT: {
-            bool resolved = false;
-            for (PanelButton *button : available_buttons) {
-                if (button->isWaitingForAction()) {
-                    // Pass the new event info to the button and mark it as resolved
-                    button->resolve(position, processer, push_function);
-                    if (button->hasChanged()) {
-                        this->pending_changes = true;
-                    }
-                    resolved = true;
-                }
-            }
-            return resolved;
-        }
-        case SDL_BUTTON_RIGHT: {
-            return false;
-        }
-        default:
-            return false;
-    }
-}
-
-void ButtonsController::parseMouseClickButton(SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer,
-                                              std::function<void(EventsLooperThread *, int, int, Point,
-                                                                 Point)> push_function) {}
-
-void ButtonsController::parseMouseReleaseButton(SDL_MouseButtonEvent &mouse_event,
-                                                EventsLooperThread *processer,
-                                                std::function<void(EventsLooperThread *, int, int, Point,
-                                                                   Point)> push_function) {
-    Point position(mouse_event.y, mouse_event.x);
-    switch (mouse_event.button) {
-        case SDL_BUTTON_LEFT: {
-            // Most likely a click on a building icon
-            for (PanelButton *button : available_buttons) {
-                if (button->includesPosition(position) && button->includesExternalAction()) {
-                    // We are sending an action, so we are not going to use the positions for now
-                    button->click(processer, push_function);
-                    if (button->hasChanged()) {
-                        this->pending_changes = true;
+bool ButtonsController::resolvePendingAction(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    clicked = false;
+    bool resolved = false;
+    if (notIncludes(mouse_event.x, mouse_event.y)) {
+        // Recheck if was clicked in the correct place (not in the panel)
+        Point position(mouse_event.y, mouse_event.x); // Review this, it's not taking offset into account
+        switch (mouse_event.button) {
+            case SDL_BUTTON_LEFT: {
+                for (PanelButton *button : available_buttons) {
+                    if (button->isWaitingForAction()) {
+                        // Pass the new event info to the button and mark it as resolved
+                        button->resolve(position, processer, push_function);
+                        if (button->hasChanged()) {
+                            this->pending_changes = true;
+                        }
+                        resolved = true;
                     }
                 }
+                break;
             }
+            case SDL_BUTTON_RIGHT: {
+                break;
+            }
+            default:
+                break;
         }
-        case SDL_BUTTON_RIGHT: {
-            break;
-        }
-        default:
-            break;
     }
+    return resolved;
 }
-
-void ButtonsController::move() {
-    renderEagleEye();
+void ButtonsController::parseMouseClick(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    clicked = includes(mouse_event.x, mouse_event.y);
+}
+void ButtonsController::parseMouseRelease(const SDL_MouseButtonEvent &mouse_event, EventsLooperThread *processer, const std::function<void(EventsLooperThread *, int, int, Point, Point)>& push_function) {
+    if (clicked) {
+        Point position(mouse_event.y, mouse_event.x);
+        switch (mouse_event.button) {
+            case SDL_BUTTON_LEFT: {
+                // Most likely a click on a building icon
+                for (PanelButton *button : available_buttons) {
+                    if (button->includesPosition(position) && button->includesExternalAction()) {
+                        // We are sending an action, so we are not going to use the positions for now
+                        button->click(processer, push_function);
+                        if (button->hasChanged()) {
+                            this->pending_changes = true;
+                        }
+                    }
+                }
+            }
+            case SDL_BUTTON_RIGHT: {
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    clicked = false;
 }
 
 ButtonsController::~ButtonsController() {
-    if (!this->panel_texture) {
-        delete this->panel_texture;
-    }
+    // Delete main texture
+    delete panel_texture;
 
+    // Delete buttons
     for (auto &button : this->available_buttons) {
         delete button;
     }
