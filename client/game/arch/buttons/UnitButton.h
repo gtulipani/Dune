@@ -5,15 +5,15 @@
 
 class UnitButton : public PanelButton {
 public:
-    UnitButton(int width, int height, std::string type, SdlTexture *texture, std::vector<int> actions, ClientSpritesSupplier &sprites_supplier);
+    UnitButton(int width, int height, const std::string& type, int icon_type, int action, ClientSpritesSupplier &sprites_supplier);
 
-    UnitButton(int width, int height, std::string type, std::string image_path, std::vector<int> actions, SdlWindow* window, ClientSpritesSupplier &sprites_supplier);
+    UnitButton(int width, int height, const std::string& type, SdlTexture *texture, int action, ClientSpritesSupplier &sprites_supplier);
 
     void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) override;
 
     bool isWaitingForAction() const override;
 
-    void resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) override;
+    void resolve(const Point& position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) override;
 
     ~UnitButton() override = default;
 };

@@ -1,3 +1,4 @@
+#include <events/ClientEvent.h>
 #include "UnitButton.h"
 
 // Client Libraries
@@ -5,35 +6,41 @@
 
 UnitButton::UnitButton(int width,
                        int height,
-                       std::string type,
-                       SdlTexture* texture,
-                       std::vector<int> actions,
+                       const std::string& type,
+                       int icon_type,
+                       int action,
                        ClientSpritesSupplier &sprites_supplier) : PanelButton(
-       width,
-       height,
-       std::move(type),
-       texture,
-       std::move(actions),
-       sprites_supplier) {}
+        width,
+        height,
+        type,
+        sprites_supplier[icon_type],
+        {action},
+        sprites_supplier) {}
+
 
 UnitButton::UnitButton(int width,
                        int height,
-                       std::string type,
-                       std::string image_path,
-                       std::vector<int> actions,
-                       SdlWindow *window,
-                       ClientSpritesSupplier &sprites_supplier) : UnitButton(
-        width,
-        height,
-        std::move(type),
-        new SdlTexture(image_path, window),
-        std::move(actions),
-        sprites_supplier) {}
+                       const std::string& type,
+                       SdlTexture* texture,
+                       int action,
+                       ClientSpritesSupplier &sprites_supplier) : PanelButton(
+       width,
+       height,
+       type,
+       texture,
+       {action},
+       sprites_supplier) {}
 
-void UnitButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {}
+void UnitButton::click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) {
+    if (!is_being_created) {
+        // If it's not during creation, then it can be clicked
+        push_function(processer, actions[0], 0, screen_position, screen_position);
+        disable();
+    }
+}
 
 bool UnitButton::isWaitingForAction() const {
     return false;
 }
 
-void UnitButton::resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) {}
+void UnitButton::resolve(const Point& position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) {}

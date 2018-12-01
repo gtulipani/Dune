@@ -60,7 +60,7 @@ public:
 
     virtual void click(EventsLooperThread* processer, std::function<void(EventsLooperThread*, int, int, Point, Point)> push_function) = 0;
 
-    virtual void resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) = 0;
+    virtual void resolve(const Point& position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) = 0;
 
     virtual bool isWaitingForAction() const = 0;
 

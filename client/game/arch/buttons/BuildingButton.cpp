@@ -44,8 +44,8 @@ void BuildingButton::click(EventsLooperThread* processer, std::function<void(Eve
     }
 }
 
-void BuildingButton::resolve(Point position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) {
-    push_function(processer, actions[1], picturable_id, std::move(position), Point(0,0));
+void BuildingButton::resolve(const Point& position, EventsLooperThread *processer, std::function<void(EventsLooperThread *, int, int, Point, Point)> push_function) {
+    push_function(processer, actions[1], picturable_id, position, position);
 }
 
 bool BuildingButton::isWaitingForAction() const {

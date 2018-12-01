@@ -23,7 +23,7 @@ private:
     WindowController window_controller;
     bool &game_ended;
 
-    void pushEvent(int client_event_type, int picturable_id, Point click_position, Point release_position);
+    void pushEvent(int client_event_type, int picturable_id, const Point& click_position, const Point& release_position);
     void processServerEvents();
 
     void processMouseClickEvent(SDL_Event &event);

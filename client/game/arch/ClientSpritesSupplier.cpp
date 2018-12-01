@@ -26,7 +26,7 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     sprites.emplace(CONSTRUCTION_CENTER_ICON, createPanelTexture("refinery_icon.png", window)); // need to be updated
     sprites.emplace(WIND_TRAPS_ICON, createPanelTexture("wind_trap_icon.png", window));
     sprites.emplace(REFINERY_ICON, createPanelTexture("refinery_icon.png", window));
-    sprites.emplace(ATREIDES_BARRACKS_ICON, createPanelTexture("atreides_barracks_icon.png", window));
+    sprites.emplace(BARRACKS_ICON, createPanelTexture("atreides_barracks_icon.png", window));
     sprites.emplace(HARKONNEN_BARRACKS_ICON, createPanelTexture("harkonnen_barracks_icon.png", window));
     sprites.emplace(ORDOS_BARRACKS_ICON, createPanelTexture("ordos_barracks_icon.png", window));
     sprites.emplace(LIGHT_FACTORY_ICON, createPanelTexture("light_factory_icon.png", window));
@@ -39,7 +39,7 @@ ClientSpritesSupplier::ClientSpritesSupplier(SdlWindow *window) {
     sprites.emplace(HEAVY_INFANTRY_ICON, createPanelTexture("heavy_infantry_icon.png", window));
     sprites.emplace(TRIKE_ICON, createPanelTexture("trike_icon.png", window));
     sprites.emplace(RAIDER_ICON, createPanelTexture("raider_icon.png", window));
-    sprites.emplace(ATREIDES_TANK_ICON, createPanelTexture("atreides_tank_icon.png", window));
+    sprites.emplace(TANK_ICON, createPanelTexture("atreides_tank_icon.png", window));
     sprites.emplace(HARKONNEN_TANK_ICON, createPanelTexture("harkonnen_tank_icon.png", window));
     sprites.emplace(ORDOS_TANK_ICON, createPanelTexture("ordos_tank_icon.png", window));
     sprites.emplace(HARVESTER_ICON, createPanelTexture("harvester_icon.png", window));

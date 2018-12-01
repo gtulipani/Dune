@@ -6,6 +6,8 @@
 
 class ButtonsFactory {
 private:
+    static PanelButton* createUnitButton(const std::string& name, int icon, int action, ClientSpritesSupplier &client_sprites_supplier);
+
     static PanelButton* createBuildingButton(const std::string& name, int icon, int action, ClientSpritesSupplier &client_sprites_supplier);
 
 public:
