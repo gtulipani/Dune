@@ -195,6 +195,9 @@ void GameControler::createVehiculo(int player_id, const std::string& unitName) {
         }
     }
 
+    int cost = gameConfig.getUnitCost(unitName);
+    players.at(player_id)->especia -= cost;
+
     std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
     Point unitPos = tile_utils::getTileTopLeft(pos.back());
     auto* unit = gameConfig.getVehiculo(*players.at(player_id), next_id, unitPos, map, unitName);
@@ -213,6 +216,9 @@ void GameControler::createInfanteria(int player_id, const std::string& unitName)
         }
     }
 
+    int cost = gameConfig.getUnitCost(unitName);
+    players.at(player_id)->especia -= cost;
+
     std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
     Point unitPos = tile_utils::getTileTopLeft(pos.back());
     auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, unitPos, map, unitName);
@@ -222,6 +228,11 @@ void GameControler::createInfanteria(int player_id, const std::string& unitName)
 }
 
 void GameControler::createBuilding(int player_id, const std::string& buildingName) {
+
+    std::pair<int, int> cost = gameConfig.getBuildingCost(buildingName);
+    players.at(player_id)->especia -= cost.first;
+    players.at(player_id)->energia -= cost.second;
+
     auto* building = gameConfig.getBuilding(*players.at(player_id), next_id, buildingName);
     auto* buildingInProgress = new InProgressGameObject(building, gameConfig.getTiempoBuilding(buildingName));
     players.at(player_id)->inProgressBuildings[next_id] = buildingInProgress;

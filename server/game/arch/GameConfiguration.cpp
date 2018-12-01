@@ -134,6 +134,10 @@ const std::map<std::string, std::vector<SpriteType>> OBJECT_SPRITES_MAP = {
     {HEAVY_INFANTRY, {SPRITE_HEAVY_INFANTRY}}
 };
 
+std::pair<int, int> GameConfiguration::getBuildingCost(const std::string& buildingName) const {
+    return {buildingsConfig.at(buildingName)->cost, buildingsConfig.at(buildingName)->energy};
+}
+
 #define TIEMPO_CONSTRUCCION_EDIFICIOS 5
 
 int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const {
@@ -144,6 +148,10 @@ Building* GameConfiguration::getBuilding(Player& player, int id, const std::stri
     const BuildingConfig* config = buildingsConfig.at(CONSTRUCTION_CENTER);
     Point pixelSize = {config->tileSize.row * TILE_PIXEL_RATE, config->tileSize.col * TILE_PIXEL_RATE};
     return new Building(player, id, buildingName, config->health, pixelSize);
+}
+
+int GameConfiguration::getUnitCost(const std::string& unitName) const {
+    return unitsConfig.at(unitName)->cost;
 }
 
 int GameConfiguration::getTiempoUnit(const std::string& unitName) const {

@@ -58,9 +58,13 @@ class GameConfiguration {
 
     std::vector<std::string> getAvailableObjectsFor(const Player& player) const;
 
+    std::pair<int, int> getBuildingCost(const std::string& buildingName) const;
+
     int getTiempoBuilding(const std::string& buildingName) const;
 
     Building* getBuilding(Player& player, int id, const std::string& buildingName) const;
+
+    int getUnitCost(const std::string& unitName) const;
 
     int getTiempoUnit(const std::string& unitName) const;
 

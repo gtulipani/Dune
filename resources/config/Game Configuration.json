@@ -8,7 +8,7 @@
       "capacity": 0
     },
     "wind_traps": {
-      "energy": 0,
+      "energy": -500,
       "cost": 800,
       "size": {"row": 3, "column": 3},
       "health": 500,
