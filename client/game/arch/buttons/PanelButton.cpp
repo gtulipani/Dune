@@ -123,8 +123,9 @@ bool PanelButton::update(int picturable_id, int progress) {
     return updated;
 }
 
-bool PanelButton::isValid() const {
-    return valid;
+bool PanelButton::canBeDeleted() const {
+    // It can be deleted if it's not valid anymore, if it's not being created and if it's not waiting for being located
+    return (!valid && !is_being_created && !finished_creating);
 }
 
 void PanelButton::setValid() {

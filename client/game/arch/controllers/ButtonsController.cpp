@@ -140,7 +140,7 @@ void ButtonsController::updateAvailableObjects(const std::vector<std::string>& a
 
     // Delete the invalid ones
     for (auto it = available_buttons.begin(); it != available_buttons.end(); it++) {
-        if (!(*it)->isValid()) {
+        if ((*it)->canBeDeleted()) {
             pending_changes = true;
             delete *it;
             available_buttons.erase(it);

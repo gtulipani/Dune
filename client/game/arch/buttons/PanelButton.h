@@ -48,7 +48,7 @@ public:
 
     std::string getName() const;
 
-    bool isValid() const;
+    bool canBeDeleted() const;
 
     void setValid();
 
