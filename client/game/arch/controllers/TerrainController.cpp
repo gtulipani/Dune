@@ -96,7 +96,7 @@ void TerrainController::buildUnits() {
     picturables_map[RAIDER][SPRITE_UP_LEFT][0] = createPicturableTexture("raider_left_up.png");
 
     // Store tank sprites
-    /*picturables_map[TANK][SPRITE_UP][0] = createPicturableTexture("tank_up.png");
+    picturables_map[TANK][SPRITE_UP][0] = createPicturableTexture("tank_up.png");
     picturables_map[TANK][SPRITE_UP_RIGHT][0] = createPicturableTexture("tank_up_right.png");
     picturables_map[TANK][SPRITE_RIGHT][0] = createPicturableTexture("tank_right.png");
     picturables_map[TANK][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("tank_down_right.png");
@@ -106,7 +106,7 @@ void TerrainController::buildUnits() {
     picturables_map[TANK][SPRITE_UP_LEFT][0] = createPicturableTexture("tank_left_up.png");
 
     // Store light infantry sprites
-    picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
+    /*picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
     picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
     picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
     picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
