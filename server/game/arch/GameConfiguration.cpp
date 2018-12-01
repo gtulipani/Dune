@@ -8,6 +8,7 @@
 #include "../model/Vehiculo.h"
 #include "../model/Cosechadora.h"
 #include "../model/Building.h"
+#include "../model/SiloOrRefinery.h"
 
 #include <UnitsAndBuildings.h>
 
@@ -145,8 +146,11 @@ int GameConfiguration::getTiempoBuilding(const std::string& buildingName) const 
 }
 
 Building* GameConfiguration::getBuilding(Player& player, int id, const std::string& buildingName) const {
-    const BuildingConfig* config = buildingsConfig.at(CONSTRUCTION_CENTER);
+    const BuildingConfig* config = buildingsConfig.at(buildingName);
     Point pixelSize = {config->tileSize.row * TILE_PIXEL_RATE, config->tileSize.col * TILE_PIXEL_RATE};
+    if (buildingName == SILO || buildingName == REFINERY) {
+        return new SiloOrRefinery(player, id, buildingName, config->health, pixelSize, config->capacity);
+    }
     return new Building(player, id, buildingName, config->health, pixelSize);
 }
 
@@ -177,6 +181,7 @@ std::string GameConfiguration::getCreationBuildingFor(const std::string& unitNam
     if (unitName == LIGHT_INFANTRY || unitName == HEAVY_INFANTRY) return BARRACKS;
     if (unitName == TRIKE || unitName == RAIDER) return LIGHT_FACTORY;
     if (unitName == TANK || unitName == HARVESTER) return HEAVY_FACTORY;
+    return CONSTRUCTION_CENTER;
 }
 
 GameConfiguration::~GameConfiguration() {

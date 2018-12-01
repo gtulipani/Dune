@@ -9,16 +9,19 @@ class WalkingUnit;
 class AttackingUnit;
 class Building;
 class InProgressGameObject;
+class SiloOrRefinery;
 
 struct Player {
     const int id;
     std::map<int, SelectableGameObject*> selectedObjects{};
     std::map<int, WalkingUnit*> units{};
     std::map<int, Building*> buildings{};
+    std::map<int, SiloOrRefinery*> silosAndRefineries{};
     std::map<int, InProgressGameObject*> inProgressUnits;
     std::map<int, InProgressGameObject*> inProgressBuildings;
     std::set<std::string> buildingsOwnedNames{};
     int especia = 1000;
+    int especiaCapacity = 1000;
     int energia = 0;
     bool changedSelection = false;
     bool lost = false;

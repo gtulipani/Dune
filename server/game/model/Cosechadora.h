@@ -4,6 +4,7 @@
 #include "WalkingUnit.h"
 
 class Especia;
+class SiloOrRefinery;
 
 const int ESPECIA_MAX = 200;
 
@@ -19,6 +20,7 @@ class Cosechadora : public WalkingUnit {
     int especia = 0;
     state_t state = waiting;
     Especia* target;
+    SiloOrRefinery* store;
 
     public:
     Cosechadora(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition,

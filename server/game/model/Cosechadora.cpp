@@ -4,6 +4,7 @@
 #include "Map.h"
 
 #include "Especia.h"
+#include "SiloOrRefinery.h"
 
 Cosechadora::Cosechadora(Player& player, int id, const std::string& name, int health, const Point& size, const Point& initialPixelPosition,
                 Map& map, int movespeed) :
@@ -26,17 +27,26 @@ void Cosechadora::tick() {
                     state = returning;
                 }
             } else {
-                Point pos = map.findClosestRefineria(tile_utils::getTileFromPixel(pixelPosition));
-                this->WalkingUnit::handleRightClick(pos);
-                state = returning;
+                if (player.silosAndRefineries.empty()) {
+                    state = waiting;
+                } else {
+                    Point closestPos = player.silosAndRefineries.begin()->second->getPixelPosition();
+                    for (auto& siloOrRefinery : player.silosAndRefineries) {
+                        if (siloOrRefinery.second->getPixelPosition().hDistanceTo(pixelPosition) < closestPos.hDistanceTo(pixelPosition)) {
+                            closestPos = siloOrRefinery.second->getPixelPosition();
+                            store = siloOrRefinery.second;
+                        }
+                    }
+                    this->WalkingUnit::handleRightClick(map.getClosestAvailablePoint(pixelPosition, closestPos));
+                    state = returning;
+                }
             }
             break;
         case returning:
             this->WalkingUnit::tick();
             if (pixelPosition == pixelGoal) {
-                player.addEspecia(ESPECIA_MAX);
-                especia = 0;
-                if (target->runOut()) {
+                bool success = store->tryToStoreSome(especia);
+                if (target->runOut() || !success) {
                     state = waiting;
                 } else {
                     this->WalkingUnit::handleRightClick(target->getPosition());

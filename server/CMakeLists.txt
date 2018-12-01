@@ -20,6 +20,7 @@ add_executable(server
         game/model/WalkingUnit.cpp
         game/model/AttackingUnit.cpp
         game/model/Building.cpp
+        game/model/SiloOrRefinery.cpp
         game/model/Cosechadora.cpp
         game/model/Vehiculo.cpp
         game/model/Infanteria.cpp

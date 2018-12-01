@@ -17,6 +17,7 @@
 #include "../model/Infanteria.h"
 #include "../model/Especia.h"
 #include "../model/Building.h"
+#include "../model/SiloOrRefinery.h"
 #include "../model/InProgressGameObject.h"
 
 GameControler::GameControler(Map& map, const GameConfiguration& gameConfig) :
@@ -263,6 +264,8 @@ void GameControler::locateBuildingAt(int player_id, int building_id, const Point
         building->locateAt(pos, map);
         players.at(player_id)->buildings[building_id] = building;
         players.at(player_id)->buildingsOwnedNames.insert(building->getName());
+
+        if (building->getName() == SILO || building->getName() == REFINERY) players.at(player_id)->silosAndRefineries[building_id] = (SiloOrRefinery*)building;
     }
 }
 
@@ -335,6 +338,10 @@ void GameControler::updateGameObjects() {
                     processLostPlayer(it_player->first);
                     delete_lost_players = false; // Will be deleted on the next iteration
                     break;
+                }
+                if (it->second->getName() == SILO || it->second->getName() == REFINERY) {
+                    delete it_player->second->silosAndRefineries.at(it->first);
+                    it_player->second->silosAndRefineries.erase(it->first);
                 }
                 delete it->second;
                 it = it_player->second->buildings.erase(it);
