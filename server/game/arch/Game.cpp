@@ -88,6 +88,10 @@ void Game::updateModel() {
                 gameControler->createBuilding(event.player_id, REFINERY);
                 break;
             }
+            case CREATE_BARRACKS_TYPE: {
+                gameControler->createBuilding(event.player_id, BARRACKS);
+                break;
+            }
             case CREATE_LIGHT_FACTORY_TYPE: {
                 gameControler->createBuilding(event.player_id, LIGHT_FACTORY);
                 break;

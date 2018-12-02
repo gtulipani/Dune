@@ -27,7 +27,7 @@ PanelButton* ButtonsFactory::createButton(const std::string& name, ClientSprites
     } else if (name == REFINERY) {
         return createBuildingButton(REFINERY, REFINERY_ICON, CREATE_REFINERY_TYPE, client_sprites_supplier);
     } else if (name == BARRACKS) {
-        return createBuildingButton(BARRACKS, BARRACKS_ICON, CREATE_ATREIDES_BARRACKS_TYPEv, client_sprites_supplier);
+        return createBuildingButton(BARRACKS, BARRACKS_ICON, CREATE_BARRACKS_TYPE, client_sprites_supplier);
     } else if (name == LIGHT_FACTORY) {
         return createBuildingButton(LIGHT_FACTORY, LIGHT_FACTORY_ICON, CREATE_LIGHT_FACTORY_TYPE, client_sprites_supplier);
     } else if (name == HEAVY_FACTORY) {

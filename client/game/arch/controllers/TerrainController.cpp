@@ -61,12 +61,10 @@ void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
         picturables_map[CONSTRUCTION_CENTER][SPRITE_DOWN][0][player_color] = createPicturableTexture("construction_center.png", color);
         picturables_map[WIND_TRAPS][SPRITE_DOWN][0][player_color] = createPicturableTexture("wind_traps.png", color);
         picturables_map[REFINERY][SPRITE_DOWN][0][player_color] = createPicturableTexture("refinery.png", color);
-        //picturables_map[SPRITE_ATREIDES_BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("atreides_barracks.png", color);
-        //picturables_map[SPRITE_HARKUNNAN_BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("harkunnan_barracks.png", color);
-        picturables_map[BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("ordos_barracks.png", color);
+        picturables_map[BARRACKS][SPRITE_DOWN][0][player_color] = createPicturableTexture("barracks.png", color);
         picturables_map[LIGHT_FACTORY][SPRITE_DOWN][0][player_color] = createPicturableTexture("light_factory.png", color);
+        picturables_map[HEAVY_FACTORY][SPRITE_DOWN][0][player_color] = createPicturableTexture("heavy_factory.png", color);
         picturables_map[SILO][SPRITE_DOWN][0][player_color] = createPicturableTexture("silo.png", color);
-        //picturables_map[PALACE][SPRITE_DOWN][0][player_color] = createPicturableTexture("palace.png", color);
 
         // Store trike sprites
         picturables_map[TRIKE][SPRITE_UP][0][player_color] = createPicturableTexture("trike_up.png", color);
@@ -77,16 +75,6 @@ void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
         picturables_map[TRIKE][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("trike_down_left.png", color);
         picturables_map[TRIKE][SPRITE_LEFT][0][player_color] = createPicturableTexture("trike_left.png", color);
         picturables_map[TRIKE][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("trike_left_up.png", color);
-
-        // Store harvester sprites
-        picturables_map[HARVESTER][SPRITE_UP][0][player_color] = createPicturableTexture("harvester_up.png", color);
-        picturables_map[HARVESTER][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("harvester_up_right.png", color);
-        picturables_map[HARVESTER][SPRITE_RIGHT][0][player_color] = createPicturableTexture("harvester_right.png", color);
-        picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("harvester_down_right.png", color);
-        picturables_map[HARVESTER][SPRITE_DOWN][0][player_color] = createPicturableTexture("harvester_down.png", color);
-        picturables_map[HARVESTER][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("harvester_down_left.png", color);
-        picturables_map[HARVESTER][SPRITE_LEFT][0][player_color] = createPicturableTexture("harvester_left.png", color);
-        picturables_map[HARVESTER][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("harvester_left_up.png", color);
 
         // Store raider sprites
         picturables_map[RAIDER][SPRITE_UP][0][player_color] = createPicturableTexture("raider_up.png", color);
@@ -107,6 +95,16 @@ void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
         picturables_map[TANK][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("tank_down_left.png", color);
         picturables_map[TANK][SPRITE_LEFT][0][player_color] = createPicturableTexture("tank_left.png", color);
         picturables_map[TANK][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("tank_left_up.png", color);
+
+        // Store harvester sprites
+        picturables_map[HARVESTER][SPRITE_UP][0][player_color] = createPicturableTexture("harvester_up.png", color);
+        picturables_map[HARVESTER][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("harvester_up_right.png", color);
+        picturables_map[HARVESTER][SPRITE_RIGHT][0][player_color] = createPicturableTexture("harvester_right.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("harvester_down_right.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN][0][player_color] = createPicturableTexture("harvester_down.png", color);
+        picturables_map[HARVESTER][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("harvester_down_left.png", color);
+        picturables_map[HARVESTER][SPRITE_LEFT][0][player_color] = createPicturableTexture("harvester_left.png", color);
+        picturables_map[HARVESTER][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("harvester_left_up.png", color);
 
         // Store light infantry sprites
         /*picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
