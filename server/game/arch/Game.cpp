@@ -72,24 +72,60 @@ void Game::collectEvents() {
 void Game::updateModel() {
     for (ClientEvent event : events) {
         switch (event.type) {
-            case LEFT_CLICK_EVENT_TYPE: {
-                gameControler->leftClick(event.player_id, event.click_position, event.release_position);
-                break;
-            }
             case RIGHT_CLICK_EVENT_TYPE: {
                 gameControler->rightClick(event.player_id, event.release_position);
                 break;
             }
-            case CREATE_TRIKE_TYPE: {
-                gameControler->createVehiculo(event.player_id, TRIKE);
+            case LEFT_CLICK_EVENT_TYPE: {
+                gameControler->leftClick(event.player_id, event.click_position, event.release_position);
+                break;
+            }
+            case CREATE_WIND_TRAPS_TYPE: {
+                gameControler->createBuilding(event.player_id, WIND_TRAPS);
+                break;
+            }
+            case CREATE_REFINERY_TYPE: {
+                gameControler->createBuilding(event.player_id, REFINERY);
                 break;
             }
             case CREATE_LIGHT_FACTORY_TYPE: {
                 gameControler->createBuilding(event.player_id, LIGHT_FACTORY);
                 break;
             }
-            case CREATE_WIND_TRAPS_TYPE: {
-                gameControler->createBuilding(event.player_id, WIND_TRAPS);
+            case CREATE_HEAVY_FACTORY_TYPE: {
+                gameControler->createBuilding(event.player_id, HEAVY_FACTORY);
+                break;
+            }
+            case CREATE_SILO_TYPE: {
+                gameControler->createBuilding(event.player_id, SILO);
+                break;
+            }
+            /*case CREATE_PALACE_TYPE: {
+                gameControler->createBuilding(event.player_id, PALACE);
+                break;
+            } Review that there isn't any palace constant */
+            case CREATE_TRIKE_TYPE: {
+                gameControler->createVehiculo(event.player_id, TRIKE);
+                break;
+            }
+            case CREATE_HARVESTER_TYPE: {
+                gameControler->createVehiculo(event.player_id, HARVESTER);
+                break;
+            }
+            case CREATE_RAIDER_TYPE: {
+                gameControler->createVehiculo(event.player_id, RAIDER);
+                break;
+            }
+            case CREATE_TANK_TYPE: {
+                gameControler->createVehiculo(event.player_id, TANK);
+                break;
+            }
+            case CREATE_LIGHT_INFANTRY_TYPE: {
+                gameControler->createInfanteria(event.player_id, LIGHT_INFANTRY);
+                break;
+            }
+            case CREATE_HEAVY_INFANTRY_TYPE: {
+                gameControler->createInfanteria(event.player_id, HEAVY_INFANTRY);
                 break;
             }
             case LOCATE_BUILDING_TYPE: {

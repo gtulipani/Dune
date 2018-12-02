@@ -130,8 +130,6 @@ void ButtonsController::updateAvailableObjects(const std::vector<std::string>& a
         });
         if (it == available_buttons.end()) {
             // New object
-            std::cout << "Adding new button!" << std::endl;
-            std::cout << object << std::endl;
             available_buttons.push_back(ButtonsFactory::createButton(object, client_sprites_supplier));
             pending_changes = true;
         } else {
