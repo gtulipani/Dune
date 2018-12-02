@@ -9,14 +9,14 @@
 #include "../ScreenInformation.h"
 
 struct SDL_MouseButtonEvent;
-class Point;
+struct Point;
 class EventsLooperThread;
 class SdlWindow;
 class GameStatusEvent;
 
 class Controller {
 protected:
-    unsigned int player_id;
+    int player_id;
     SdlWindow *window;
     ScreenConfiguration screen_configuration;
     bool pending_changes;
@@ -25,7 +25,7 @@ protected:
     bool includes(int x, int y);
 
 public:
-    Controller(unsigned int player_id, SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes);
+    Controller(int player_id, SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes);
 
     Controller(const Controller &other) = delete;
 

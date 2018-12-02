@@ -3,7 +3,7 @@
 // Client Libraries
 #include "../../sdl/SdlWindow.h"
 
-Controller::Controller(unsigned int player_id, SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes) :
+Controller::Controller(int player_id, SdlWindow *window, const ScreenConfiguration& screen_configuration, bool pending_changes) :
         player_id(player_id),
         window(window),
         screen_configuration(screen_configuration),

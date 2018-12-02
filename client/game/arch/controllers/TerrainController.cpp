@@ -27,7 +27,7 @@
 #define EAGLE_EYE_SQUARE_ORIGIN_WIDTH 80
 #define EAGLE_EYE_SQUARE_ORIGIN_HEIGHT 80
 
-TerrainController::TerrainController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+TerrainController::TerrainController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
         player_id,
         window,
         screen_configuration,

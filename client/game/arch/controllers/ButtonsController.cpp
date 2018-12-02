@@ -3,6 +3,7 @@
 // STL Libraries
 #include <algorithm>
 #include <utility>
+#include <iostream>
 
 // Commons Libraries
 #include <events/ClientEvent.h>
@@ -20,7 +21,7 @@
 #include "RequiresExternalControllerActionException.h"
 #include "../ScreenInformation.h"
 
-ButtonsController::ButtonsController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration) : Controller(
+ButtonsController::ButtonsController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration) : Controller(
         player_id,
         window,
         screen_configuration,
@@ -129,6 +130,8 @@ void ButtonsController::updateAvailableObjects(const std::vector<std::string>& a
         });
         if (it == available_buttons.end()) {
             // New object
+            std::cout << "Adding new button!" << std::endl;
+            std::cout << object << std::endl;
             available_buttons.push_back(ButtonsFactory::createButton(object, client_sprites_supplier));
             pending_changes = true;
         } else {
@@ -137,11 +140,14 @@ void ButtonsController::updateAvailableObjects(const std::vector<std::string>& a
     });
 
     // Delete the invalid ones
-    for (auto it = available_buttons.begin(); it != available_buttons.end(); it++) {
-        if ((*it)->canBeDeleted()) {
+    auto button_it = available_buttons.begin();
+    while (button_it != available_buttons.end()) {
+        if ((*button_it)->canBeDeleted()) {
             pending_changes = true;
-            delete *it;
-            available_buttons.erase(it);
+            delete (*button_it);
+            available_buttons.erase(button_it); // Erase already increments pointer
+        } else {
+            button_it++;
         }
     }
 
@@ -159,14 +165,15 @@ void ButtonsController::processPicturables(std::vector<Picturable>& picturables)
 
     // We iterate through the buttons and search for the first appearence for the type, which will be the one with less percentage
     std::for_each(available_buttons.begin(), available_buttons.end(), [this, picturables](PanelButton *button) {
-        auto it = std::find_if(picturables.begin(), picturables.end(), [button](const Picturable &picturable) {
-            return (button->getName() == picturable.name);
+        auto it = std::find_if(picturables.begin(), picturables.end(), [button, this](const Picturable &picturable) {
+            // When the building/unit is located we do receive it, so we need to make sure to only update buttons
+            // with our player_id
+            return (button->getName() == picturable.name) && (player_id == picturable.player_id);
         });
         if (it != picturables.end()) {
             if (button->update(it->id, it->porcentage)) {
                 pending_changes = true;
             }
-
         }
     });
 }

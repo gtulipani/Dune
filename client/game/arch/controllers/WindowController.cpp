@@ -17,7 +17,7 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-WindowController::WindowController(unsigned int player_id, SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
+WindowController::WindowController(int player_id, SdlWindow* window, const ScreenConfiguration& screen_configuration, const Matrix& matrix) : Controller(
         player_id,
         window,
         screen_configuration,
@@ -27,7 +27,7 @@ WindowController::WindowController(unsigned int player_id, SdlWindow* window, co
     buildControllers(matrix);
 }
 
-WindowController::WindowController(unsigned int player_id, const Matrix& matrix) : WindowController(
+WindowController::WindowController(int player_id, const Matrix& matrix) : WindowController(
         player_id,
         new SdlWindow(WINDOW_WIDTH, WINDOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
         ScreenConfiguration(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0),

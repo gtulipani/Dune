@@ -15,7 +15,7 @@
 #include <SDL2/SDL_ttf.h>
 
 class SdlText;
-class Point;
+struct Point;
 
 class StatusController : public Controller {
 private:
@@ -29,9 +29,9 @@ private:
 
     TTF_Font *buildFont();
 public:
-    StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font);
+    StatusController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration, TTF_Font* font);
 
-    StatusController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
+    StatusController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, const ScreenConfiguration& screen_configuration);
 
     void update(const GameStatusEvent &event) override;
 

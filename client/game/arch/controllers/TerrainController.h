@@ -50,7 +50,7 @@ private:
     SdlTexture *createPicturableTexture(const std::string& file_path, SdlColor *color);
     SdlTexture *createTerrainTexture(const std::string& file_path);
 public:
-    TerrainController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
+    TerrainController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration, const Matrix& matrix);
 
     void update(const GameStatusEvent &event) override;
 

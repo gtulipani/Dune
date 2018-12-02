@@ -43,7 +43,7 @@ private:
     // Render only once the pannel with the main background images and the main buttons
     void buildPanelTexture();
 public:
-    ButtonsController(unsigned int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration);
+    ButtonsController(int player_id, SdlWindow *window, ClientSpritesSupplier &client_sprites_supplier, ScreenInformation &screen_manager, const ScreenConfiguration& screen_configuration);
 
     void update(const GameStatusEvent &event) override;
 
