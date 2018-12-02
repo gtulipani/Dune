@@ -42,6 +42,8 @@ public:
     Point getClosestAvailablePoint(const Point& pixelStart, const Point& pixelGoal);
 
     bool canIBuildiAt(const Point& pixelPosition, const Point& pixelSize) const;
+
+    Especia* findNearEspecia(const Point& pixelPosition) const;
 };
 
 #endif

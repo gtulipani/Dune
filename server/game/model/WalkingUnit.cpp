@@ -75,7 +75,7 @@ void WalkingUnit::step() {
             }
         } else {
             /* Si el proximo no es la meta final, debo ir al centro del tile. */
-            Point goalPixel = tile_utils::getTileCenter(nextTile);
+            Point goalPixel = tile_utils::getTileTopLeft(nextTile);
             stepTo(goalPixel);
             if (tilePosition != tile_utils::getTileFromPixel(pixelPosition)) {
                 /*  Solo hago el cambio de tile cuando llegue al centro, para

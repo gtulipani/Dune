@@ -100,11 +100,11 @@ Point Map::getClosestAvailablePoint(const Point& pixelStart, const Point& pixelG
     Point tileGoal = tile_utils::getTileFromPixel(pixelGoal);
     if (mat.at(tileGoal) != EDIFICIOS) return pixelGoal;
     int i, j;
-    for (i = tileGoal.row; i >= 0 && mat.at(i - 1, tileGoal.col) == EDIFICIOS; i--) {}
-    for (j = tileGoal.col; j >= 0 && mat.at(tileGoal.row, j - 1) == EDIFICIOS; j--) {}
+    for (i = tileGoal.row; i >= 0 && (mat.at(i - 1, tileGoal.col) == EDIFICIOS || mat.at(i - 1, tileGoal.col) == CIMAS || mat.at(i - 1, tileGoal.col) == PRECIPICIOS); i--) {}
+    for (j = tileGoal.col; j >= 0 && (mat.at(tileGoal.row, j - 1) == EDIFICIOS || mat.at(tileGoal.row, j - 1) == CIMAS || mat.at(tileGoal.row, j - 1) == PRECIPICIOS); j--) {}
     Point buildingTopLeft = {i, j};
-    for (i = 0; buildingTopLeft.row + i < mat.rows() && mat.at(buildingTopLeft.row + i, buildingTopLeft.col) == EDIFICIOS; i++) {}
-    for (j = 0; buildingTopLeft.col + j < mat.cols() && mat.at(buildingTopLeft.row, buildingTopLeft.col + j) == EDIFICIOS; j++) {}
+    for (i = 0; buildingTopLeft.row + i < mat.rows() && (mat.at(buildingTopLeft.row + i, buildingTopLeft.col) == EDIFICIOS || mat.at(buildingTopLeft.row + i, buildingTopLeft.col) == CIMAS || mat.at(buildingTopLeft.row + i, buildingTopLeft.col) == PRECIPICIOS); i++) {}
+    for (j = 0; buildingTopLeft.col + j < mat.cols() && (mat.at(buildingTopLeft.row, buildingTopLeft.col + j) == EDIFICIOS || mat.at(buildingTopLeft.row, buildingTopLeft.col + j) == CIMAS || mat.at(buildingTopLeft.row, buildingTopLeft.col + j) == PRECIPICIOS); j++) {}
     Point buildingSize = {i, j};
     buildingTopLeft = {buildingTopLeft.row - 1, buildingTopLeft.col - 1};
     std::vector<Point> buildingFrontier;
@@ -154,7 +154,7 @@ std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int
             if (set.find(ady) != set.end()) continue;
             set.insert(ady);
             queue.push(ady);
-            if (mat.at(ady) == ARENA) {
+            if (mat.at(ady) == ARENA || mat.at(ady) == DUNAS || mat.at(ady) == ROCA) {
                 positions.push_back(ady);
                 if (positions.size() >= n) return positions;
             }
@@ -174,4 +174,17 @@ bool Map::canIBuildiAt(const Point& pixelPosition, const Point& pixelSize) const
         }
     }
     return true;
+}
+
+
+#define ESPECIA_SEARCH_RADIUS 10
+
+Especia* Map::findNearEspecia(const Point& pixelPosition) const {
+    Point tilePosition = tile_utils::getTileFromPixel(pixelPosition);
+    for (auto& especia : especias) {
+        if (tile_utils::getTileFromPixel(especia.second->getPosition()).hDistanceTo(tilePosition) < ESPECIA_SEARCH_RADIUS) {
+            return especia.second;
+        }
+    }
+    return nullptr;
 }

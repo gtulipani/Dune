@@ -59,7 +59,13 @@ void Cosechadora::tick() {
             if (pixelPosition == pixelGoal) {
                 bool success = store->tryToStoreSome(especia);
                 if (target->runOut() || !success) {
-                    state = waiting;
+                    target = map.findNearEspecia(target->getPosition());
+                    if (target == nullptr) {
+                        state = waiting;
+                    } else {
+                        this->WalkingUnit::handleRightClick(target->getPosition());
+                        state = going;
+                    }
                 } else {
                     this->WalkingUnit::handleRightClick(target->getPosition());
                     state = going;
