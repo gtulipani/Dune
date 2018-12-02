@@ -5,8 +5,8 @@
 #include <Point.h>
 
 // General Screen configuration
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
 
 // Terrain-panel rate
 #define SCREEN_TERRAIN_RATE 0.75
