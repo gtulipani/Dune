@@ -47,13 +47,6 @@ void GameControler::initializePlayers(int number_of_players) {
             next_id++;
         }
     }
-
-    SiloOrRefinery* silo = (SiloOrRefinery*)gameConfig.getBuilding(*players.at(0), next_id, SILO);
-    players.at(0)->buildings[next_id] = silo;
-    players.at(0)->buildingsOwnedNames.insert(silo->getName());
-    players.at(0)->silosAndRefineries[next_id] = silo;
-    silo->locateAt({160, 160}, map);
-    next_id++;
 }
 
 void GameControler::initialize(int number_of_players) {

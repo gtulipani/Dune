@@ -100,10 +100,6 @@ void Game::updateModel() {
                 gameControler->createBuilding(event.player_id, SILO);
                 break;
             }
-            /*case CREATE_PALACE_TYPE: {
-                gameControler->createBuilding(event.player_id, PALACE);
-                break;
-            } Review that there isn't any palace constant */
             case CREATE_TRIKE_TYPE: {
                 gameControler->createVehiculo(event.player_id, TRIKE);
                 break;
