@@ -127,15 +127,16 @@ void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
         picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
         picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
         picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
+        delete color;
     }
 }
-void TerrainController::buildEspecia(enum PlayerColor player_color) {
+void TerrainController::buildEspecia() {
     // Store especia sprites. We don't apply any color on it
-    picturables_map[ESPECIA][SPRITE_DOWN][0][player_color] = createPicturableTexture("especia_100.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][1][player_color] = createPicturableTexture("especia_80.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][2][player_color] = createPicturableTexture("especia_60.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][3][player_color] = createPicturableTexture("especia_40.png");
-    picturables_map[ESPECIA][SPRITE_DOWN][4][player_color] = createPicturableTexture("especia_20.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][0][NO_PLAYER] = createPicturableTexture("especia_100.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][1][NO_PLAYER] = createPicturableTexture("especia_80.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][2][NO_PLAYER] = createPicturableTexture("especia_60.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][3][NO_PLAYER] = createPicturableTexture("especia_40.png");
+    picturables_map[ESPECIA][SPRITE_DOWN][4][NO_PLAYER] = createPicturableTexture("especia_20.png");
 }
 
 void TerrainController::buildUnits() {
@@ -143,8 +144,8 @@ void TerrainController::buildUnits() {
     for (int color = RED; color != YELLOW; color++) {
         auto player_color = static_cast<PlayerColor>(color);
         buildUnitsForPlayer(player_color);
-        buildEspecia(player_color);
     }
+    buildEspecia();
 }
 
 void TerrainController::buildTerrainTexture() {

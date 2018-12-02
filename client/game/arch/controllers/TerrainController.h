@@ -38,7 +38,7 @@ private:
 
     void buildTerrains();
     void buildUnitsForPlayer(enum PlayerColor player_color);
-    void buildEspecia(enum PlayerColor player_color);
+    void buildEspecia();
     void buildUnits();
     void buildTerrainTexture();
     void preloadTerrainMatrix();

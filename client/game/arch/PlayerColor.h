@@ -4,6 +4,7 @@
 #include "../sdl/SdlColor.h"
 
 typedef enum PlayerColor {
+    NO_PLAYER = -1,
     RED = 0,
     GREEN = 1,
     BLUE = 2,
