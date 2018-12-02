@@ -1,5 +1,7 @@
 #include "PathingAlgorithms.h"
 
+#include <algorithm>
+
 #include <TileUtils.h>
 #include <PriorityQueue.h>
 
@@ -20,9 +22,10 @@ std::stack<Point> pathing::findPath(const Map& map,
     return {};
 }
 
+
 static std::vector<Point> getPointsInLine(const Point& a, const Point& b) {
     std::vector<Point> pointsInLine;
-    Point d = {b.row - a.row, b.col - b.row};
+    Point d = {b.row - a.row, b.col - a.col};
     Point d1 = {::abs(d.row), ::abs(d.col)};
     Point p = {2 * d1.col - d1.row, 2 * d1.row - d1.col};
     Point x, e;
@@ -77,18 +80,8 @@ static std::vector<Point> getPointsInLine(const Point& a, const Point& b) {
             pointsInLine.push_back(x);
         }
     }
-}
-
-#include <iostream>
-
-int main() {
-    Point a = {2, 3};
-    Point b = {8, 16};
-
-    std::vector<Point> line = getPointsInLine(a, b);
-    for (const Point& p : line) {
-        std::cout << "(" << p.row << ", " << p.col << "), ";
-    }
+    if (pointsInLine.back() != b) std::reverse(pointsInLine.begin(), pointsInLine.end());
+    return pointsInLine;
 }
 
 /* Finds tile pathing */

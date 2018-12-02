@@ -23,9 +23,6 @@
 GameControler::GameControler(Map& map, const GameConfiguration& gameConfig) :
  map(map), gameConfig(gameConfig) {}
 
-const int CONSTRUCTION_CENTER_HEALTH = 1000;
-const Point CONSTRUCTION_CENTER_SIZE = {3 * TILE_PIXEL_RATE, 3 * TILE_PIXEL_RATE};
-
 void GameControler::initializePlayers(int number_of_players) {
     for (int i = 0; i < number_of_players; i++) {
         Point constructionCenterPosition = tile_utils::getTileTopLeft(map.constructionCenterPositions.at(i));
@@ -50,6 +47,13 @@ void GameControler::initializePlayers(int number_of_players) {
             next_id++;
         }
     }
+
+    SiloOrRefinery* silo = (SiloOrRefinery*)gameConfig.getBuilding(*players.at(0), next_id, SILO);
+    players.at(0)->buildings[next_id] = silo;
+    players.at(0)->buildingsOwnedNames.insert(silo->getName());
+    players.at(0)->silosAndRefineries[next_id] = silo;
+    silo->locateAt({160, 160}, map);
+    next_id++;
 }
 
 void GameControler::initialize(int number_of_players) {
@@ -258,17 +262,16 @@ void GameControler::locateBuildingAt(int player_id, int building_id, const Point
     }
 
     if (players.at(player_id)->inProgressBuildings.at(building_id)->completed()) {
-        Building* building = (Building*)players.at(player_id)->inProgressBuildings.at(building_id)->getObject();
         delete players.at(player_id)->inProgressBuildings.at(building_id);
         players.at(player_id)->inProgressBuildings.erase(building_id);
-        building->locateAt(pos, map);
-        players.at(player_id)->buildings[building_id] = building;
-        players.at(player_id)->buildingsOwnedNames.insert(building->getName());
+        targetBuilding->locateAt(pos, map);
+        players.at(player_id)->buildings[building_id] = targetBuilding;
+        players.at(player_id)->buildingsOwnedNames.insert(targetBuilding->getName());
 
-        std::pair<int, int> cost = gameConfig.getBuildingCost(building->getName());
+        std::pair<int, int> cost = gameConfig.getBuildingCost(targetBuilding->getName());
         players.at(player_id)->energia -= cost.second;
 
-        if (building->getName() == SILO || building->getName() == REFINERY) players.at(player_id)->silosAndRefineries[building_id] = (SiloOrRefinery*)building;
+        if (targetBuilding->getName() == SILO || targetBuilding->getName() == REFINERY) players.at(player_id)->silosAndRefineries[building_id] = (SiloOrRefinery*)targetBuilding;
     }
 }
 

@@ -132,7 +132,7 @@ Point Map::getClosestAvailablePoint(const Point& pixelStart, const Point& pixelG
             clostestPointOnFrontier = p;
         }
     }
-    return tile_utils::getTileCenter(clostestPointOnFrontier);
+    return tile_utils::getTileTopLeft(clostestPointOnFrontier);
 }
 
 std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int n) {

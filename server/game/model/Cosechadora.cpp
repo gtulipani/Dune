@@ -25,7 +25,8 @@ void Cosechadora::tick() {
                     if (player.silosAndRefineries.empty()) {
                         state = waiting;
                     } else {
-                        Point closestPos = player.silosAndRefineries.begin()->second->getPixelPosition();
+                        store = player.silosAndRefineries.begin()->second;
+                        Point closestPos = store->getPixelPosition();
                         for (auto& siloOrRefinery : player.silosAndRefineries) {
                             if (siloOrRefinery.second->getPixelPosition().hDistanceTo(pixelPosition) < closestPos.hDistanceTo(pixelPosition)) {
                                 closestPos = siloOrRefinery.second->getPixelPosition();
@@ -40,7 +41,8 @@ void Cosechadora::tick() {
                 if (player.silosAndRefineries.empty()) {
                     state = waiting;
                 } else {
-                    Point closestPos = player.silosAndRefineries.begin()->second->getPixelPosition();
+                    store = player.silosAndRefineries.begin()->second;
+                    Point closestPos = store->getPixelPosition();
                     for (auto& siloOrRefinery : player.silosAndRefineries) {
                         if (siloOrRefinery.second->getPixelPosition().hDistanceTo(pixelPosition) < closestPos.hDistanceTo(pixelPosition)) {
                             closestPos = siloOrRefinery.second->getPixelPosition();
