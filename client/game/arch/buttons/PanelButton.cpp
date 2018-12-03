@@ -1,7 +1,10 @@
 #include <utility>
+#include <iostream>
 
 #include "PanelButton.h"
 #include "../Area.h"
+
+#define INVALID_PICTURABLE_ID -1
 
 PanelButton::PanelButton(int width,
                          int height,
@@ -19,7 +22,8 @@ PanelButton::PanelButton(int width,
         have_I_changed(false),
         is_being_created(false),
         finished_creating(false),
-        progress(100) {}
+        progress(100),
+        picturable_id(INVALID_PICTURABLE_ID) {}
 
 PanelButton::PanelButton(int width,
                          int height,
@@ -102,23 +106,34 @@ std::string PanelButton::getName() const {
 
 bool PanelButton::update(int picturable_id, int progress) {
     bool updated = false;
-    this->picturable_id = picturable_id;
-    // Means that I had already finished creating it and I received it anyways. So it means it was located
-    if ((progress == 100) && (finished_creating)) {
-        this->finished_creating = false;
+    if ((this->picturable_id == INVALID_PICTURABLE_ID) && (progress == 0)) {
+        // Didn't receive a picturable_id yet and it's being created, must set it
         updated = true;
+        this->picturable_id = picturable_id;
     }
 
-    // Means that the progress has changed from the last time
-    if (this->progress != progress) {
-        // Means that I finished creating the picturable and I'm waiting for another action
-        if (progress == 100) {
-            this->finished_creating = true;
-            this->is_being_created = false;
+    if (this->picturable_id == picturable_id) {
+        // Only update it if the ids are the same
+
+        // Means that I had already finished creating it and I received it anyways. So it means it was located
+        if ((progress == 100) && (finished_creating)) {
+            this->finished_creating = false;
+            updated = true;
+            // We set the picturable_id back to -1 to be able to reuse it in the future
+            this->picturable_id = INVALID_PICTURABLE_ID;
         }
-        this->progress = progress;
-        this->have_I_changed = true;
-        updated = true;
+
+        // Means that the progress has changed from the last time
+        if (this->progress != progress) {
+            // Means that I finished creating the picturable and I'm waiting for another action
+            if (progress == 100) {
+                this->finished_creating = true;
+                this->is_being_created = false;
+            }
+            this->progress = progress;
+            this->have_I_changed = true;
+            updated = true;
+        }
     }
     return updated;
 }

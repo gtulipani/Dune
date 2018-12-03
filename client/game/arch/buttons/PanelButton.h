@@ -26,9 +26,9 @@ protected:
     bool is_being_created;
     bool finished_creating;
     int progress;
+    int picturable_id;
 
     Point screen_position{};
-    int picturable_id{};
 
     SdlTexture* getProgressTexture();
 public:

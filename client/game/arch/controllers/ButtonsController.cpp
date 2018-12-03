@@ -49,7 +49,7 @@ Point ButtonsController::getGlobalPosition(Point point) {
 
 Point ButtonsController::buildOptionalButtonRelativePosition(int row_order, int col_order) {
     // Order starts from zero
-    return {PANEL_BUTTON_ICON_Y_OFFSET + ((row_order - 1) * PANEL_BUTTON_ICON_HEIGHT), PANEL_BUTTON_ICON_X_OFFSET * col_order};
+    return {PANEL_BUTTON_ICON_Y_OFFSET + ((row_order - 1) * PANEL_BUTTON_ICON_HEIGHT), PANEL_BUTTON_ICON_X_OFFSET + (PANEL_BUTTON_ICON_WIDTH * (col_order - 1))};
 }
 
 void ButtonsController::buildPanelTexture() {
@@ -77,9 +77,10 @@ void ButtonsController::locateButtons() {
     int column = 1;
 
     std::for_each(available_buttons.begin(), available_buttons.end(), [this, &row, &column](PanelButton *button) {
-        if (row >= PANEL_BUTTON_ICONS_ROWS_QUANTITY) {
+        if (row > PANEL_BUTTON_ICONS_ROWS_QUANTITY) {
             // Move to the second column
             column = 2;
+            row = 1;
         }
         button->locate(getGlobalPosition(buildOptionalButtonRelativePosition(row, column)));
         row++;
