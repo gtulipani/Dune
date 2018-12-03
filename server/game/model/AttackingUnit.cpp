@@ -53,8 +53,9 @@ void AttackingUnit::tick() {
 }
 
 void AttackingUnit::recieveAttack(AttackingUnit* enemy, int attackPoints) {
+    if (enemy->isDead()) return;
     if (target == nullptr) {
-        target = enemy;
+        this->attack(enemy);
     }
     this->SelectableGameObject::recieveAttack(enemy, attackPoints);
 }
