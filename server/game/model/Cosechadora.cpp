@@ -40,7 +40,7 @@ void Cosechadora::tick() {
                 }
             } else {
                 if (player.silosAndRefineries.empty()) {
-                    target == nullptr;
+                    target = nullptr;
                     state = waiting;
                 } else {
                     store = player.silosAndRefineries.begin()->second;
