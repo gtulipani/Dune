@@ -23,9 +23,7 @@ using json = nlohmann::json;
 
 Game::Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& vec_clients,
 const GameConfiguration& gameConfig) :
-events_queue(events_queue), vec_clients(vec_clients) {
-    map = json_utils::parseAsJson("resources/maps/new_map.json");
-    gameControler = new GameControler(map, gameConfig);
+events_queue(events_queue), vec_clients(vec_clients), gameConfig(gameConfig) {
 }
 
 void Game::sendGameConfigurationEvent() {
@@ -37,7 +35,10 @@ void Game::sendGameConfigurationEvent() {
     }
 }
 
-void Game::start() {
+void Game::start(const std::string& map_path) {
+    
+    map = json_utils::parseAsJson(map_path);
+    gameControler = new GameControler(map, gameConfig);
 
     for (unsigned int i = 0; i < vec_clients.size(); i++) {
         clients[i] = vec_clients.at(i);

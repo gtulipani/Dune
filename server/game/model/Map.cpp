@@ -163,7 +163,7 @@ std::vector<Point> Map::getAvailableTilesNear(const Point& tilePos, unsigned int
     return positions;
 }
 
-bool Map::canIBuildiAt(const Point& pixelPosition, const Point& pixelSize) const {
+bool Map::canIBuildAt(const Point& pixelPosition, const Point& pixelSize) const {
     Point pos = tile_utils::getTileFromPixel(pixelPosition);
     Point size = tile_utils::getTileFromPixel(pixelSize);
     for (int row = pos.row; row < pos.row + size.row; row++) {

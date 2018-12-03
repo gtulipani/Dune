@@ -26,6 +26,7 @@ class Game {
     const std::vector<ClientThread*>& vec_clients;
     std::map<int, ClientThread*> clients;
     std::list<ClientEvent> events;
+    const GameConfiguration& gameConfig;
 
     Map map;
     GameControler* gameControler;
@@ -41,7 +42,7 @@ class Game {
     public:
     Game(shaque<ClientEvent>& events_queue, const std::vector<ClientThread*>& _clients, const GameConfiguration& gameConfig);
 
-    void start();
+    void start(const std::string& map_path);
 
     void stop();
 

@@ -243,7 +243,7 @@ void GameControler::locateBuildingAt(int player_id, int building_id, const Point
     Point buildingSize = targetBuilding->getSize();
     Point downRight = {pos.row + buildingSize.row, pos.col + buildingSize.col};
 
-    if (!map.canIBuildiAt(pos, buildingSize)) return;
+    if (!map.canIBuildAt(pos, buildingSize)) return;
 
     for (const auto& player : players) {
         for (const auto& unit : player.second->units) {

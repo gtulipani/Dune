@@ -23,7 +23,6 @@ class ServerThread : public Thread {
 private:
 	ConfigMap configMap;
 	GameConfiguration gameConfig;
-	std::vector<std::string> mapsList;
 	std::vector<ClientThread*> clients;
 	Accepter accepter;
 	std::mutex m;
