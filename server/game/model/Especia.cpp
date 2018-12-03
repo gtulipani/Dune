@@ -15,8 +15,7 @@ Picturable(-1, id, ESPECIA, DEFAULT_SPRITE_DIRECTION, DEFAULT_SPRITE_MOTION, fal
 }
 
 Point Especia::getPosition() const {
-    using namespace tile_utils;
-    return getTileTopLeft(getTileFromPixel(position));
+    return position;
 }
 
 bool Especia::haveYouChanged() const {

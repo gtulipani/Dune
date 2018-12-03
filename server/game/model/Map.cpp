@@ -182,6 +182,7 @@ bool Map::canIBuildAt(const Point& pixelPosition, const Point& pixelSize) const 
 Especia* Map::findNearEspecia(const Point& pixelPosition) const {
     Point tilePosition = tile_utils::getTileFromPixel(pixelPosition);
     for (auto& especia : especias) {
+        if (tile_utils::getTileFromPixel(especia.second->getPosition()) == tile_utils::getTileFromPixel(pixelPosition)) continue;
         if (tile_utils::getTileFromPixel(especia.second->getPosition()).hDistanceTo(tilePosition) < ESPECIA_SEARCH_RADIUS) {
             return especia.second;
         }

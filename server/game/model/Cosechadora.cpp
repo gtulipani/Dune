@@ -23,6 +23,7 @@ void Cosechadora::tick() {
                 target->tryToGetSome(especia);
                 if (especia >= ESPECIA_MAX) {
                     if (player.silosAndRefineries.empty()) {
+                        target = nullptr;
                         state = waiting;
                     } else {
                         store = player.silosAndRefineries.begin()->second;
@@ -39,6 +40,7 @@ void Cosechadora::tick() {
                 }
             } else {
                 if (player.silosAndRefineries.empty()) {
+                    target == nullptr;
                     state = waiting;
                 } else {
                     store = player.silosAndRefineries.begin()->second;
@@ -58,7 +60,10 @@ void Cosechadora::tick() {
             this->WalkingUnit::tick();
             if (pixelPosition == pixelGoal) {
                 bool success = store->tryToStoreSome(especia);
-                if (target->runOut() || !success) {
+                if (!success) {
+                    target = nullptr;
+                    state = waiting;
+                } else if (target->runOut()) {
                     target = map.findNearEspecia(target->getPosition());
                     if (target == nullptr) {
                         state = waiting;
