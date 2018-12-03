@@ -177,7 +177,7 @@ bool Map::canIBuildAt(const Point& pixelPosition, const Point& pixelSize) const 
 }
 
 
-#define ESPECIA_SEARCH_RADIUS 10
+#define ESPECIA_SEARCH_RADIUS 5
 
 Especia* Map::findNearEspecia(const Point& pixelPosition) const {
     Point tilePosition = tile_utils::getTileFromPixel(pixelPosition);

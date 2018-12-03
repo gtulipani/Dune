@@ -47,6 +47,14 @@ void GameControler::initializePlayers(int number_of_players) {
             next_id++;
         }
     }
+
+    auto* silo = gameConfig.getBuilding(*players.at(0), next_id, SILO);
+    silo->locateAt({11 * 31, 31 * 32}, map);
+    players.at(0)->buildings[next_id] = silo;
+    players.at(0)->buildingsOwnedNames.insert(SILO);
+    players.at(0)->silosAndRefineries[next_id] = (SiloOrRefinery*)silo;
+    next_id++;
+
 }
 
 void GameControler::initialize(int number_of_players) {
@@ -91,6 +99,7 @@ void GameControler::leftClick(int player_id, const Point& a, const Point& b) {
             unit.second->select();
             selectedObjects[unit.first] = unit.second;
             success = true;
+            if (a == b) break;
         }
     }
     if (!success) {
