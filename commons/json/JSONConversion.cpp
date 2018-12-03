@@ -31,11 +31,9 @@ void to_json(json &j, const Picturable &p) {
             {"max_health",          p.max_health},
             {"porcentage",          p.porcentage}
     };
-    //std::cout << j << std::endl;
 }
 
 void from_json(const json &j, Picturable &p) {
-    std::cout << j << std::endl;
     j.at("player_id").get_to(p.player_id);
     j.at("id").get_to(p.id);
     j.at("name").get_to(p.name);
@@ -82,11 +80,9 @@ void to_json(json &j, const ClientEvent &e) {
             {"click_position",  e.click_position},
             {"release_position",  e.release_position}
     };
-    //std::cout << j << std::endl;
 }
 
 void from_json(const json &j, ClientEvent &e) {
-    std::cout << j << std::endl;
     j.at("player_id").get_to(e.player_id);
     j.at("type").get_to(e.type);
     j.at("picturable_id").get_to(e.picturable_id);

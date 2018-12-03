@@ -97,7 +97,7 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_col, int limit_
     int health_bar_origin_row_offset = 0;
     int selection_square_origin_row_offset = 0;
 
-    if (((position_col) >= limit_col) || ((position_row + picturable.size.row) < limit_row)) {
+    if (((position_col) >= limit_col) || ((position_row + picturable.size.row) <= limit_row)) {
         // Outside the limits, don't render anything
         return;
     } else {
