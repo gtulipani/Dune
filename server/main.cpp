@@ -39,6 +39,16 @@ int main(int argc, char *argv[]) {
 
 	// Server receives a key-value file with the configuration
 	ServerThread server(argv[1]);
+	try {
+		server.start();
+	} catch (const std::runtime_error& e) {
+		std::cerr << "Runtime error: " << e.what() << std::endl;
+	} catch (const std::exception& e) {
+		std::cerr << "Unexpected error occurred..." << std::endl;
+	} catch (...) {
+		std::cerr << "Something weird happened..." << std::endl;
+	}
+
 
 	while (std::cin.peek() != EXIT_CHAR) {}
 
