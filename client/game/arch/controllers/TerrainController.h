@@ -37,7 +37,9 @@ private:
     void renderEagleEye();
 
     void buildTerrains();
+    void buildBuilding(const std::string &building_name, enum PlayerColor player_color, SdlColor *color);
     void buildVehicle(const std::string &building_name, enum PlayerColor player_color, SdlColor *color);
+    void buildUnit(const std::string &vehicle_name, enum PlayerColor player_color, SdlColor *color);
     void buildPicturablesForColor(enum PlayerColor player_color);
     void buildEspecia();
     void buildPicturables();
