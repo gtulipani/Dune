@@ -1,4 +1,4 @@
-#include "SdlPicturable.h"
+#include "ClientPicturable.h"
 
 // STL Libraries
 #include <iostream>
@@ -19,7 +19,7 @@
 #define SELECTION_SQUARE_WIDTH 400
 #define SELECTION_SQUARE_HEIGHT 400
 
-int SdlPicturable::recalculateWidth(int destinyWidth, int originalWidth) {
+int ClientPicturable::recalculateWidth(int destinyWidth, int originalWidth) {
     // Calculate how much of the original image we'll render
     float displayRate = (static_cast<float>(destinyWidth)/originalWidth);
 
@@ -27,16 +27,16 @@ int SdlPicturable::recalculateWidth(int destinyWidth, int originalWidth) {
     return static_cast<int>(displayRate * originalWidth);
 }
 
-SdlPicturable::SdlPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier) :
+ClientPicturable::ClientPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier) :
         picturable(std::move(picturable)),
         main_texture(sdlTexture),
         sprites_supplier(sprites_supplier) {
     if (sdlTexture == nullptr) {
-        std::cout << "Constructing SdlPicturable with texture null!" << std::endl;
+        std::cout << "Constructing ClientPicturable with texture null!" << std::endl;
     }
 }
 
-SdlPicturable::SdlPicturable(SdlPicturable &&other) noexcept : SdlPicturable(
+ClientPicturable::ClientPicturable(ClientPicturable &&other) noexcept : ClientPicturable(
         std::move(other.picturable),
         other.main_texture,
         other.sprites_supplier) {
@@ -45,7 +45,7 @@ SdlPicturable::SdlPicturable(SdlPicturable &&other) noexcept : SdlPicturable(
     }
 }
 
-SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
+ClientPicturable &ClientPicturable::operator=(ClientPicturable &&other) noexcept {
     if (this == &other) {
         return *this; // other is myself!
     }
@@ -64,11 +64,11 @@ SdlPicturable &SdlPicturable::operator=(SdlPicturable &&other) noexcept {
     return *this;
 }
 
-bool SdlPicturable::operator==(const Picturable& other) const {
+bool ClientPicturable::operator==(const Picturable& other) const {
     return other.id == this->picturable.id;
 }
 
-void SdlPicturable::render(int offset_x, int offset_y, int limit_col, int limit_row) {
+void ClientPicturable::render(int offset_x, int offset_y, int limit_col, int limit_row) {
     int originPicturableWidth = PICTURABLE_WIDTH;
     int originPicturableHeight = PICTURABLE_HEIGHT;
 
@@ -158,7 +158,7 @@ void SdlPicturable::render(int offset_x, int offset_y, int limit_col, int limit_
     }
 }
 
-void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
+void ClientPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
     if (sdlTexture == nullptr) {
         std::cout << "Updating texture to null!" << std::endl;
     }
@@ -166,11 +166,11 @@ void SdlPicturable::update(Picturable picturable, SdlTexture *sdlTexture) {
     this->main_texture = sdlTexture;
 }
 
-bool SdlPicturable::hasPriority() const {
+bool ClientPicturable::hasPriority() const {
     return (picturable.name == ESPECIA);
 }
 
-SdlTexture *SdlPicturable::getHealthBarTexture() {
+SdlTexture *ClientPicturable::getHealthBarTexture() {
     float health_rate = (static_cast<float>(this->picturable.health) / static_cast<float>(this->picturable.max_health));
     if (health_rate > 0.9) {
         return sprites_supplier[HEALTH_100];

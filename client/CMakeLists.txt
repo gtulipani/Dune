@@ -10,9 +10,10 @@ add_executable(client
         game/arch/Area.cpp
         game/arch/BlockingQueue.hpp
         game/arch/Client.cpp
+        game/arch/ClientPicturable.cpp
         game/arch/ClientSpritesSupplier.cpp
         game/arch/PlayerColor.cpp
-        game/arch/SdlPicturable.cpp
+        game/arch/ScreenInformation.cpp
         game/arch/ScreenConfiguration.cpp
         game/arch/buttons/BuildingButton.cpp
         game/arch/buttons/PanelButton.cpp
@@ -21,7 +22,6 @@ add_executable(client
         game/arch/controllers/ButtonsController.cpp
         game/arch/controllers/Controller.cpp
         game/arch/controllers/RequiresExternalControllerActionException.cpp
-        game/arch/ScreenInformation.cpp
         game/arch/controllers/StatusController.cpp
         game/arch/controllers/TerrainController.cpp
         game/arch/controllers/WindowController.cpp

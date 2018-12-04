@@ -14,6 +14,7 @@
 struct SDL_MouseButtonEvent;
 class EventsLooperThread;
 class ScreenInformation;
+class ClientPicturable;
 
 class TerrainController : public Controller {
 private:

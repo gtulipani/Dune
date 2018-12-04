@@ -8,7 +8,7 @@
 #include "../sdl/SdlTexture.h"
 #include "ClientSpritesSupplier.h"
 
-class SdlPicturable {
+class ClientPicturable {
 private:
     Picturable picturable;
     SdlTexture *main_texture;
@@ -17,17 +17,17 @@ private:
     // Recalculates the width to render from the image, based on a rate between the original width and the destiny
     int recalculateWidth(int destinyWidth, int originalWidth);
 public:
-    SdlPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier);
+    ClientPicturable(Picturable picturable, SdlTexture *sdlTexture, ClientSpritesSupplier &sprites_supplier);
 
-    SdlPicturable(const SdlPicturable &other) = delete;
+    ClientPicturable(const ClientPicturable &other) = delete;
 
-    SdlPicturable(SdlPicturable &&other) noexcept;
+    ClientPicturable(ClientPicturable &&other) noexcept;
 
     // Overloading the assignment by copy
-    SdlPicturable &operator=(const SdlPicturable &other) = delete;
+    ClientPicturable &operator=(const ClientPicturable &other) = delete;
 
     // Overloading the assignment by movement
-    SdlPicturable &operator=(SdlPicturable &&other) noexcept;
+    ClientPicturable &operator=(ClientPicturable &&other) noexcept;
 
     bool operator==(const Picturable& other) const;
 
