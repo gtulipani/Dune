@@ -16,6 +16,11 @@ bool AttackingUnit::inRange(const Point& pos) const {
     return (int)::abs(pos.row - pixelPosition.row) <= range && (int)::abs(pos.col - pixelPosition.col) <= range;
 }
 
+void AttackingUnit::handleRightClick(const Point& pos) {
+    target = nullptr;
+    this->WalkingUnit::handleRightClick(pos);
+}
+
 void AttackingUnit::attack(SelectableGameObject* enemy) {
     target = enemy;
     targetPos = target->getPixelPosition();

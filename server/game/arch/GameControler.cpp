@@ -47,7 +47,6 @@ void GameControler::initializePlayers(int number_of_players) {
             next_id++;
         }
     }
-
     /*
     auto* silo = gameConfig.getBuilding(*players.at(0), next_id, SILO);
     silo->locateAt({11 * 31, 31 * 32}, map);
@@ -56,7 +55,6 @@ void GameControler::initializePlayers(int number_of_players) {
     players.at(0)->silosAndRefineries[next_id] = (SiloOrRefinery*)silo;
     next_id++;
     */
-
 }
 
 void GameControler::initialize(int number_of_players) {
@@ -226,10 +224,10 @@ void GameControler::createInfanteria(int player_id, const std::string& unitName)
             break;
         }
     }
-
+    
     int cost = gameConfig.getUnitCost(unitName);
     players.at(player_id)->especia -= cost;
-
+    
     std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
     Point unitPos = tile_utils::getTileTopLeft(pos.back());
     auto* unit = gameConfig.getInfanteria(*players.at(player_id), next_id, unitPos, map, unitName);
@@ -280,9 +278,23 @@ void GameControler::locateBuildingAt(int player_id, int building_id, const Point
 }
 
 void GameControler::createCosechadora(int player_id) {
-    auto* cosechadora = gameConfig.getCosechadora(*players.at(player_id), next_id, {}, map);
-    auto* cosechadoraInProgress = new InProgressGameObject(cosechadora, gameConfig.getTiempoUnit(HARVESTER));
-    players.at(player_id)->inProgressUnits[next_id] = cosechadoraInProgress;
+    std::string creationBuilding = gameConfig.getCreationBuildingFor(HARVESTER);
+    Point creationBuildingTilePos;
+    for (const auto& building : players.at(player_id)->buildings) {
+        if (building.second->getName() == creationBuilding) {
+            creationBuildingTilePos = tile_utils::getTileFromPixel(building.second->getPixelPosition());
+            break;
+        }
+    }
+
+    int cost = gameConfig.getUnitCost(HARVESTER);
+    players.at(player_id)->especia -= cost;
+
+    std::vector<Point> pos = map.getAvailableTilesNear(creationBuildingTilePos, 1);
+    Point unitPos = tile_utils::getTileTopLeft(pos.back());
+    auto* unit = gameConfig.getCosechadora(*players.at(player_id), next_id, unitPos, map);
+    auto* unitInProgress = new InProgressGameObject(unit, gameConfig.getTiempoUnit(HARVESTER));
+    players.at(player_id)->inProgressUnits[next_id] = unitInProgress;
     next_id++;
 }
 

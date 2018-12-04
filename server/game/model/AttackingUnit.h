@@ -24,6 +24,8 @@ class AttackingUnit : public WalkingUnit {
     virtual void recieveAttack(AttackingUnit* enemy, int attackPoints) override;
 
     virtual void tick() override;
+
+    virtual void handleRightClick(const Point& pos) override;
 };
 
 #endif
