@@ -107,24 +107,105 @@ void TerrainController::buildUnitsForPlayer(enum PlayerColor player_color) {
         picturables_map[HARVESTER][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("harvester_left_up.png", color);
 
         // Store light infantry sprites
-        /*picturables_map[LIGHT_INFANTRY][SPRITE_UP][0] = createPicturableTexture("light_infantry_up.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("light_infantry_up_right.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("light_infantry_right.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("light_infantry_down_right.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("light_infantry_down.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("light_infantry_down_left.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP][0][player_color] = createPicturableTexture("light_infantry_up_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP][1][player_color] = createPicturableTexture("light_infantry_up_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP][2][player_color] = createPicturableTexture("light_infantry_up_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP][3][player_color] = createPicturableTexture("light_infantry_up_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP][4][player_color] = createPicturableTexture("light_infantry_up_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("light_infantry_up_right_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][1][player_color] = createPicturableTexture("light_infantry_up_right_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][2][player_color] = createPicturableTexture("light_infantry_up_right_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][3][player_color] = createPicturableTexture("light_infantry_up_right_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_RIGHT][4][player_color] = createPicturableTexture("light_infantry_up_right_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][0][player_color] = createPicturableTexture("light_infantry_right_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][1][player_color] = createPicturableTexture("light_infantry_right_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][2][player_color] = createPicturableTexture("light_infantry_right_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][3][player_color] = createPicturableTexture("light_infantry_right_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_RIGHT][4][player_color] = createPicturableTexture("light_infantry_right_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("light_infantry_down_right_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][1][player_color] = createPicturableTexture("light_infantry_down_right_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][2][player_color] = createPicturableTexture("light_infantry_down_right_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][3][player_color] = createPicturableTexture("light_infantry_down_right_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_RIGHT][4][player_color] = createPicturableTexture("light_infantry_down_right_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][0][player_color] = createPicturableTexture("light_infantry_down_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][1][player_color] = createPicturableTexture("light_infantry_down_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][2][player_color] = createPicturableTexture("light_infantry_down_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][3][player_color] = createPicturableTexture("light_infantry_down_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN][4][player_color] = createPicturableTexture("light_infantry_down_4.png");
+
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("light_infantry_down_left_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][1][player_color] = createPicturableTexture("light_infantry_down_left_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][2][player_color] = createPicturableTexture("light_infantry_down_left_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][3][player_color] = createPicturableTexture("light_infantry_down_left_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_DOWN_LEFT][4][player_color] = createPicturableTexture("light_infantry_down_left_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][0][player_color] = createPicturableTexture("light_infantry_left_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][1][player_color] = createPicturableTexture("light_infantry_left_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][2][player_color] = createPicturableTexture("light_infantry_left_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][3][player_color] = createPicturableTexture("light_infantry_left_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_LEFT][4][player_color] = createPicturableTexture("light_infantry_left_4.png");
+
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("light_infantry_left_up_0.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][1][player_color] = createPicturableTexture("light_infantry_left_up_1.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][2][player_color] = createPicturableTexture("light_infantry_left_up_2.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][3][player_color] = createPicturableTexture("light_infantry_left_up_3.png");
+        picturables_map[LIGHT_INFANTRY][SPRITE_UP_LEFT][4][player_color] = createPicturableTexture("light_infantry_left_up_4.png");
 
         // Store heavy infantry sprites
-        picturables_map[HEAVY_INFANTRY][SPRITE_UP][0] = createPicturableTexture("heavy_infantry_up.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0] = createPicturableTexture("heavy_infantry_up_right.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0] = createPicturableTexture("heavy_infantry_right.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0] = createPicturableTexture("heavy_infantry_down_right.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0] = createPicturableTexture("heavy_infantry_down.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0] = createPicturableTexture("heavy_infantry_down_left.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0] = createPicturableTexture("light_infantry_left.png");
-        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0] = createPicturableTexture("light_infantry_left_up.png");*/
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][0][player_color] = createPicturableTexture("heavy_infantry_up_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][1][player_color] = createPicturableTexture("heavy_infantry_up_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][2][player_color] = createPicturableTexture("heavy_infantry_up_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][3][player_color] = createPicturableTexture("heavy_infantry_up_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP][4][player_color] = createPicturableTexture("heavy_infantry_up_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][0][player_color] = createPicturableTexture("heavy_infantry_up_right_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][1][player_color] = createPicturableTexture("heavy_infantry_up_right_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][2][player_color] = createPicturableTexture("heavy_infantry_up_right_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][3][player_color] = createPicturableTexture("heavy_infantry_up_right_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_RIGHT][4][player_color] = createPicturableTexture("heavy_infantry_up_right_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][0][player_color] = createPicturableTexture("heavy_infantry_right_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][1][player_color] = createPicturableTexture("heavy_infantry_right_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][2][player_color] = createPicturableTexture("heavy_infantry_right_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][3][player_color] = createPicturableTexture("heavy_infantry_right_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_RIGHT][4][player_color] = createPicturableTexture("heavy_infantry_right_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][0][player_color] = createPicturableTexture("heavy_infantry_down_right_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][1][player_color] = createPicturableTexture("heavy_infantry_down_right_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][2][player_color] = createPicturableTexture("heavy_infantry_down_right_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][3][player_color] = createPicturableTexture("heavy_infantry_down_right_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_RIGHT][4][player_color] = createPicturableTexture("heavy_infantry_down_right_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][0][player_color] = createPicturableTexture("heavy_infantry_down_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][1][player_color] = createPicturableTexture("heavy_infantry_down_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][2][player_color] = createPicturableTexture("heavy_infantry_down_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][3][player_color] = createPicturableTexture("heavy_infantry_down_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN][4][player_color] = createPicturableTexture("heavy_infantry_down_4.png");
+
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][0][player_color] = createPicturableTexture("heavy_infantry_down_left_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][1][player_color] = createPicturableTexture("heavy_infantry_down_left_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][2][player_color] = createPicturableTexture("heavy_infantry_down_left_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][3][player_color] = createPicturableTexture("heavy_infantry_down_left_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_DOWN_LEFT][4][player_color] = createPicturableTexture("heavy_infantry_down_left_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][0][player_color] = createPicturableTexture("heavy_infantry_left_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][1][player_color] = createPicturableTexture("heavy_infantry_left_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][2][player_color] = createPicturableTexture("heavy_infantry_left_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][3][player_color] = createPicturableTexture("heavy_infantry_left_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_LEFT][4][player_color] = createPicturableTexture("heavy_infantry_left_4.png");
+
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][0][player_color] = createPicturableTexture("heavy_infantry_left_up_0.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][1][player_color] = createPicturableTexture("heavy_infantry_left_up_1.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][2][player_color] = createPicturableTexture("heavy_infantry_left_up_2.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][3][player_color] = createPicturableTexture("heavy_infantry_left_up_3.png");
+        picturables_map[HEAVY_INFANTRY][SPRITE_UP_LEFT][4][player_color] = createPicturableTexture("heavy_infantry_left_up_4.png");
+
         delete color;
     }
 }

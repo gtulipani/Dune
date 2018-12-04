@@ -110,7 +110,7 @@ void Game::updateModel() {
                 break;
             }
             case CREATE_HARVESTER_TYPE: {
-                gameControler->createVehiculo(event.player_id, HARVESTER);
+                gameControler->createCosechadora(event.player_id);
                 break;
             }
             case CREATE_RAIDER_TYPE: {
