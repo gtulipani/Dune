@@ -64,7 +64,7 @@ void TerrainController::buildBuilding(const std::string &building_name, enum Pla
 
 void TerrainController::buildVehicle(const std::string &vehicle_name, enum PlayerColor player_color, SdlColor *color) {
     // Iterate over the available directions
-    for (int dir = SPRITE_UP; dir != SPRITE_UP_LEFT; dir++) {
+    for (int dir = SPRITE_UP; dir <= SPRITE_UP_LEFT; dir++) {
         auto direction = static_cast<Direction>(dir);
         picturables_map[vehicle_name][direction][0][player_color] = createPicturableTexture(
                 vehicle_name +
@@ -76,7 +76,7 @@ void TerrainController::buildVehicle(const std::string &vehicle_name, enum Playe
 
 void TerrainController::buildUnit(const std::string &unit_name, enum PlayerColor player_color, SdlColor *color) {
     // Iterate over the available directions
-    for (int dir = SPRITE_UP; dir != SPRITE_UP_LEFT; dir++) {
+    for (int dir = SPRITE_UP; dir <= SPRITE_UP_LEFT; dir++) {
         auto direction = static_cast<Direction>(dir);
         // Iterate over the available motion
         for (int motion = 0; motion <= MAX_MOTION; motion++) {
