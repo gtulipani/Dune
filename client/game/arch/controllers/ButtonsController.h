@@ -27,7 +27,7 @@ private:
 
     std::vector<PanelButton*> available_buttons{};
 
-    void buildTerrainTexture();
+    void buildTexture();
 
     void renderPanel();
 

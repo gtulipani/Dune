@@ -30,10 +30,10 @@ ButtonsController::ButtonsController(int player_id, SdlWindow *window, ClientSpr
         screen_information(screen_manager),
         clicked(false),
         panel_rendered(false) {
-    buildTerrainTexture();
+    buildTexture();
 }
 
-void ButtonsController::buildTerrainTexture() {
+void ButtonsController::buildTexture() {
     panel_texture = new SdlTexture(screen_configuration.getWidth(), screen_configuration.getHeight(), this->window->getRenderer());
     panel_texture->setAsTarget();
 
