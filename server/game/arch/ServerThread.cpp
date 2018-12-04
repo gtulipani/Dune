@@ -21,11 +21,6 @@
 #include "Accepter.h"
 #include "Game.h"
 
-#define PORT_KEY "port"
-#define MAP_PATH_KEY "map_path"
-#define UNITS_PROPERTIES_PATH_KEY "units_properties_file_path"
-#define GAME_SIZE_KEY "game_size"
-
 ServerThread::ServerThread(const std::string& configMapFilePath) :
 configMap(configMapFilePath),
 gameConfig(configMap.at(UNITS_PROPERTIES_PATH_KEY)),

@@ -19,6 +19,11 @@
 
 using json = nlohmann::json;
 
+#define PORT_KEY "port"
+#define MAP_PATH_KEY "map_path"
+#define UNITS_PROPERTIES_PATH_KEY "units_properties_file_path"
+#define GAME_SIZE_KEY "game_size"
+
 class ServerThread : public Thread {
 private:
 	ConfigMap configMap;
