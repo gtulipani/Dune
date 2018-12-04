@@ -10,7 +10,7 @@
 // Client Libraries
 #include "../../sdl/SdlWindow.h"
 #include "../../sdl/SdlTexture.h"
-#include "../SdlPicturable.h"
+#include "../ClientPicturable.h"
 #include "../ScreenInformation.h"
 #include "ButtonsController.h"
 #include "TerrainController.h"

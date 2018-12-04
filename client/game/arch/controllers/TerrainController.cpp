@@ -13,7 +13,7 @@
 #include <events/GameStatusEvent.h>
 
 // Client Libraries
-#include "../SdlPicturable.h"
+#include "../ClientPicturable.h"
 #include "../ScreenInformation.h"
 
 // SDL Libraries
@@ -227,7 +227,7 @@ void TerrainController::update(const GameStatusEvent &event) {
         } else {
 
             auto picturable_it = std::find_if(this->picturables.begin(), this->picturables.end(),
-                                              [&](SdlPicturable *sdlPicturable) {
+                                              [&](ClientPicturable *sdlPicturable) {
                                                   return ((*sdlPicturable) == picturable);
                                               });
             if (picturable_it != this->picturables.end()) {
@@ -240,8 +240,8 @@ void TerrainController::update(const GameStatusEvent &event) {
                     (*picturable_it)->update(picturable, texture);
                 }
             } else {
-                // Create a new SdlPicturable
-                this->picturables.push_back(new SdlPicturable(picturable, texture, this->client_sprites_supplier));
+                // Create a new ClientPicturable
+                this->picturables.push_back(new ClientPicturable(picturable, texture, this->client_sprites_supplier));
             }
         }
     });
@@ -254,14 +254,14 @@ void TerrainController::render() {
     terrain_texture->render(srcArea, destArea);
 
     // Render picturables with priority first
-    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
+    std::for_each(picturables.begin(), picturables.end(), [&](ClientPicturable *sdlPicturable) {
         if (sdlPicturable->hasPriority()) {
             sdlPicturable->render(screen_information.getOffsetX(), screen_information.getOffsetY(), screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }
     });
 
     // Render the SdlPicturables
-    std::for_each(picturables.begin(), picturables.end(), [&](SdlPicturable *sdlPicturable) {
+    std::for_each(picturables.begin(), picturables.end(), [&](ClientPicturable *sdlPicturable) {
         if (!sdlPicturable->hasPriority()) {
             sdlPicturable->render(screen_information.getOffsetX(), screen_information.getOffsetY(), screen_configuration.getWidth(), screen_configuration.getHeightOffset());
         }

@@ -13,7 +13,7 @@
 #include <events/ClientEvent.h>
 
 // Client Libraries
-#include "../SdlPicturable.h"
+#include "../ClientPicturable.h"
 #include "EventsLooperThread.h"
 #include "../../sdl/SdlTexture.h"
 #include "../../sdl/SdlWindow.h"

@@ -5,7 +5,7 @@
 #include <Matrix.h>
 #include "../../sdl/SdlWindow.h"
 #include "../../sdl/SdlTexture.h"
-#include "../SdlPicturable.h"
+#include "../ClientPicturable.h"
 
 // Client Libraries
 #include "Controller.h"
@@ -30,7 +30,7 @@ private:
     std::map<std::string, std::map<int, std::map<int, std::map<int, SdlTexture*>>>> picturables_map;
     SdlTexture *terrain_texture;
 
-    std::vector<SdlPicturable*> picturables;
+    std::vector<ClientPicturable*> picturables;
 
     Point temporary_position{};
 
